@@ -1,8 +1,11 @@
+import Layout from "@components/layout";
 import type { NextPage } from "next";
 
 const Home: NextPage = () => {
   return (
-    <h1 className="text-3xl font-bold text-red-400 underline">Hello world!</h1>
+    <Layout>
+      <div>안녕</div>
+    </Layout>
   );
 };
 
