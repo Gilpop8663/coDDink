@@ -19,9 +19,11 @@ export default function Header() {
         </div>
       </div>
       <div className="flex space-x-2">
-        <div className="cursor-pointer rounded-full border px-4 py-2 text-sm font-semibold transition-colors hover:bg-gray-100">
-          로그인
-        </div>
+        <Link href="/user/login">
+          <a className="cursor-pointer rounded-full border px-4 py-2 text-sm font-semibold transition-colors hover:bg-gray-100">
+            로그인
+          </a>
+        </Link>
         <Link href="/user/create">
           <a className="cursor-pointer rounded-full border bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700">
             등록
