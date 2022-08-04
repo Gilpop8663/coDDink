@@ -27,7 +27,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (check) {
     //유효한 회원
-
+    
     req.session.user = {
       id: user.id,
     };

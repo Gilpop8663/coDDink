@@ -179,7 +179,7 @@ export default function Create() {
             “계정 만들기”를 클릭함으로써 사용 약관 및 개인정보보호 정책을
             읽었으며 이에 동의한다고 확인합니다.
           </span>
-          <Button value="계정 만들기"></Button>
+          <Button kind="blue" value="계정 만들기"></Button>
         </form>
       </div>
     </div>

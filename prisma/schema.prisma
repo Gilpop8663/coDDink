@@ -20,4 +20,22 @@ model idea_user{
   avatar String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  portfolio idea_portfolio[]
+}
+
+model idea_portfolio{
+  id Int @id @default(autoincrement())
+  user idea_user @relation(fields: [userId],references: [id],onDelete: Cascade)
+  userId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title String
+  tags String
+  tools String
+  category String
+  visible Boolean
+  description String @db.MediumText
+  owner String
+  like Int
+
 }

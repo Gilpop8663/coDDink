@@ -23,6 +23,7 @@ interface ILoginProps {
 interface EmailResult {
   ok: boolean;
   message: string;
+  avatar?: string;
 }
 
 interface MutationResult {
@@ -129,7 +130,7 @@ export default function Login() {
               {errors.email && (
                 <ErrorMessage>{errors.email.message}</ErrorMessage>
               )}
-              <Button value="계속"></Button>
+              <Button kind="blue" value="계속"></Button>
               <div className="relative flex items-center justify-center">
                 <div className="mt-10 h-[0.1px] w-full bg-gray-300"></div>
                 <div className="absolute top-7 bg-white px-2">또는</div>
@@ -172,7 +173,15 @@ export default function Login() {
                 암호를 입력해 주십시오.
               </span>
               <div className="mt-8 flex items-center">
-                <div className="mr-4 h-16 w-16 rounded-full bg-slate-500"></div>
+                <div className="mr-4 h-16 w-16 rounded-full bg-slate-500">
+                  <Image
+                    className="rounded-full"
+                    src={mailData?.avatar!}
+                    alt="avatar"
+                    width={500}
+                    height={500}
+                  ></Image>
+                </div>
                 <div className="flex flex-col">
                   <span className="text-xs">개인 계정</span>
                   <span className="mt-1 text-sm">{curEmail}</span>
@@ -196,7 +205,7 @@ export default function Login() {
               {errors.password && (
                 <ErrorMessage>{errors.password.message}</ErrorMessage>
               )}
-              <Button value="계속"></Button>
+              <Button kind="blue" value="계속"></Button>
 
               <hr className="mt-12" />
               <span

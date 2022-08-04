@@ -1,14 +1,21 @@
+import { idea_user } from "@prisma/client";
 import React from "react";
 import Header from "./header";
 
 interface LayoutProps {
+  isLogin: boolean | undefined;
+  profile?: idea_user;
   children: React.ReactNode;
 }
 
-export default function Layout({ children }: LayoutProps) {
+export default function Layout({
+  isLogin = false,
+  profile,
+  children,
+}: LayoutProps) {
   return (
     <div>
-      <Header />
+      <Header isLogin={isLogin} profile={profile} />
       <div className="pt-16">{children}</div>
     </div>
   );
