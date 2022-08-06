@@ -6,7 +6,7 @@ import useSWR from "swr";
 export interface useUserState {
   data?: {
     ok: boolean;
-    profile: idea_user;
+    profile?: idea_user;
   };
   error?: any;
 }
@@ -18,7 +18,7 @@ export default function useUser() {
   useEffect(() => {
     // 로그인 하지 않았는데 Private 링크로 갔을 시 로그인 페이지로 이동
     if (data && !data.ok) {
-      router.replace("/login");
+      router.replace("/user/login");
     }
   }, [router, data]);
   return { user: data?.profile, isLoading: !data && !error };

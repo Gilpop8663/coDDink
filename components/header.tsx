@@ -19,8 +19,6 @@ interface LogoutResult {
 export default function Header({ isLogin, profile }: HeaderProps) {
   const router = useRouter();
   const path = router.pathname;
-  console.log(isLogin);
-  console.log(path);
   const [isWorkOn, setIsWorkOn] = useState(false);
   const [isProfileOn, setIsProfileOn] = useState(false);
   const [logout, { loading, error }] = useMutation("/api/users/logout");
@@ -116,7 +114,7 @@ export default function Header({ isLogin, profile }: HeaderProps) {
             >
               <Button kind="white" value="내 작업 공유"></Button>
               {isWorkOn && (
-                <div className="absolute top-10  w-[450px] rounded-md border bg-white p-5 shadow-md ">
+                <div className="absolute top-8  w-[450px] rounded-md border bg-white p-5 shadow-md ">
                   <Link href="/portfolio/editor">
                     <a className="mb-3 flex w-auto  cursor-pointer items-center justify-between rounded-md border border-blue-200 bg-[#F5F8FF] p-2 text-blue-600 transition-all hover:bg-[#DEE8FF]">
                       <span className="flex h-10 items-center justify-center ">

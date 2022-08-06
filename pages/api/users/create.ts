@@ -10,7 +10,6 @@ async function handler(
   res: NextApiResponse<ResponseType>
 ) {
   const { email, name, password, policy } = req.body;
-  console.log(req.body);
   const salt = await bcrypt.genSalt(saltRounds); // salt 생성
 
   const hashedPW = await bcrypt.hash(password, salt);
@@ -30,8 +29,6 @@ async function handler(
       avatar: avatarURL[number],
     },
   });
-
-  console.log(user);
 
   res.json({
     ok: true,

@@ -14,13 +14,18 @@ declare module "iron-session" {
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   // console.log(req.body);
 
+  if (req.session.user === undefined) {
+    res.json({
+      ok: false,
+    });
+    return res.status(200).end();
+  }
+
   const profile = await client.idea_user.findUnique({
     where: {
       id: req.session.user?.id,
     },
   });
-
-  console.log(profile);
 
   res.json({
     ok: true,

@@ -20,10 +20,10 @@ model idea_user{
   avatar String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  portfolio idea_portfolio[]
+  portfolio idea_project[]
 }
 
-model idea_portfolio{
+model idea_project{
   id Int @id @default(autoincrement())
   user idea_user @relation(fields: [userId],references: [id],onDelete: Cascade)
   userId Int
@@ -37,5 +37,6 @@ model idea_portfolio{
   description String @db.MediumText
   owner String
   like Int
-
+  view Int
+  avatar String
 }

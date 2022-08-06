@@ -12,8 +12,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     },
   });
 
-  console.log("유서임", user);
-
   if (!user) {
     // 이메일이 틀린 경우
     res.json({

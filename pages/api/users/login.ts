@@ -13,8 +13,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     },
   });
 
-  console.log(user);
-
   if (!user) {
     // 이메일이 틀린 경우
     res.json({
@@ -27,7 +25,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (check) {
     //유효한 회원
-    
+
     req.session.user = {
       id: user.id,
     };
