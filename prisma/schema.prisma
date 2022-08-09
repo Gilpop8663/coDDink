@@ -21,6 +21,7 @@ model idea_user{
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   portfolio idea_project[]
+  like idea_like[]
 }
 
 model idea_project{
@@ -36,7 +37,20 @@ model idea_project{
   visible Boolean
   description String @db.MediumText
   owner String
-  like Int
+  like idea_like[]
   view Int
   avatar String
+  
+}
+
+model idea_like{
+  id Int @id @default(autoincrement())
+  user idea_user @relation(fields: [userId],references: [id],onDelete: Cascade)
+  userId Int
+  project idea_project @relation(fields: [projectId],references: [id],onDelete: Cascade)
+  projectId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+
 }

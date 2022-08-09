@@ -49,16 +49,7 @@ const Editor: NextPage = () => {
   const onValid = (value: UplaodProps) => {
     if (loading) return;
 
-    if (value.owner === "") {
-      uploadProjects({
-        ...value,
-        visible: isPublic,
-        owner: user?.name,
-        avatar: user?.avatar,
-      });
-    } else {
-      uploadProjects({ ...value, visible: isPublic });
-    }
+    uploadProjects({ ...value, visible: isPublic });
   };
 
   const onFileChange = (event: ChangeEvent<HTMLInputElement>) => {

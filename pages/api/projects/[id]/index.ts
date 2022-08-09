@@ -1,0 +1,56 @@
+import { NextApiRequest, NextApiResponse } from "next";
+import withHandler from "@libs/server/withHandler";
+import client from "@libs/server/client";
+import { withApiSession } from "@libs/server/withSession";
+import { profile } from "console";
+
+async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const {
+    query: { id },
+    session: { user },
+  } = req;
+  const project = await client.idea_project.findUnique({
+    where: {
+      id: Number(id),
+    },
+    include: {
+      _count: {
+        select: {
+          like: true,
+        },
+      },
+      user: {
+        select: {
+          avatar: true,
+          name: true,
+        },
+      },
+    },
+  });
+  const relatedProjects = await client.idea_project.findMany({
+    where: {
+      userId: project?.userId,
+      AND: {
+        id: {
+          not: project?.id,
+        },
+      },
+    },
+  });
+
+  const isLiked = Boolean(
+    await client.idea_like.findFirst({
+      where: {
+        projectId: Number(id),
+        userId: user?.id,
+      },
+      select: {
+        id: true,
+      },
+    })
+  );
+
+  res.json({ ok: true, project, relatedProjects, isLiked });
+}
+
+export default withApiSession(withHandler({ methods: ["GET"], handler }));
