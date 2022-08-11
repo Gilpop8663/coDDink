@@ -17,12 +17,26 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       _count: {
         select: {
           like: true,
+          comments: true,
         },
       },
       user: {
         select: {
+          id: true,
           avatar: true,
           name: true,
+        },
+      },
+      comments: {
+        orderBy: { createdAt: "desc" },
+        include: {
+          user: {
+            select: {
+              avatar: true,
+              name: true,
+              id: true,
+            },
+          },
         },
       },
     },

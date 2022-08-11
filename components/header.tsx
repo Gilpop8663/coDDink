@@ -10,13 +10,20 @@ import Button from "./button";
 interface HeaderProps {
   isLogin: boolean;
   profile?: idea_user;
+  kind?: "normal" | "profile";
+  userId: number | undefined;
 }
 
 interface LogoutResult {
   ok: boolean;
 }
 
-export default function Header({ isLogin, profile }: HeaderProps) {
+export default function Header({
+  isLogin,
+  profile,
+  kind,
+  userId,
+}: HeaderProps) {
   const router = useRouter();
   const path = router.pathname;
   const [isWorkOn, setIsWorkOn] = useState(false);
@@ -25,6 +32,7 @@ export default function Header({ isLogin, profile }: HeaderProps) {
 
   const onLogoutClick = () => {
     logout({});
+    router.reload();
   };
 
   const onMouseOver = () => {
@@ -42,7 +50,12 @@ export default function Header({ isLogin, profile }: HeaderProps) {
   };
 
   return (
-    <div className="fixed z-10 flex h-16 w-full items-center justify-between border-b bg-white px-6">
+    <div
+      className={cls(
+        "fixed z-10 flex h-16 w-full items-center justify-between border-b px-6",
+        kind === "profile" ? "bg-black/0 text-white" : "bg-white text-black"
+      )}
+    >
       <div className="item-center flex h-16 space-x-5 py-5">
         <Link href="/">
           <a className="cursor-pointer text-lg font-bold">로고</a>
@@ -108,7 +121,7 @@ export default function Header({ isLogin, profile }: HeaderProps) {
         ) : (
           <div className="flex items-center pr-48">
             <div
-              className="relative mr-48 flex justify-center"
+              className="relative mr-48 flex justify-center rounded-full bg-white text-black"
               onMouseOver={onMouseOver}
               onMouseOut={onMouseLeave}
             >
@@ -239,9 +252,11 @@ export default function Header({ isLogin, profile }: HeaderProps) {
                   </div>
                   <div className="my-4 h-[0.5px] w-[350px] bg-gray-200"></div>
 
-                  <div className="flex w-full cursor-pointer justify-center rounded-md py-2 text-sm font-semibold transition-colors hover:bg-gray-100">
-                    프로필 관리
-                  </div>
+                  <Link href={`/profile/${userId}`}>
+                    <a className="flex w-full cursor-pointer justify-center rounded-md py-2 text-sm font-semibold transition-colors hover:bg-gray-100">
+                      프로필 관리
+                    </a>
+                  </Link>
                   <div
                     onClick={onLogoutClick}
                     className="flex w-full cursor-pointer justify-center rounded-md py-2 text-sm font-semibold transition-colors hover:bg-gray-100"

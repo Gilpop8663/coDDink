@@ -112,6 +112,7 @@ export default function Create() {
               type="email"
               required
               name="email"
+              placeholder="example@abcdefg.com"
               register={register("email", {
                 required: "이메일 주소를 입력해 주십시오.",
                 pattern: {
@@ -130,6 +131,7 @@ export default function Create() {
               type="text"
               required
               name="name"
+              placeholder=""
               register={register("name", {
                 required: "이름을 입력해 주십시오",
                 minLength: {

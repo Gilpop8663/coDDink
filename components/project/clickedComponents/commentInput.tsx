@@ -3,13 +3,19 @@ import NextButton from "@components/upload/nextButton";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { UseFormRegisterReturn } from "react-hook-form";
 
 interface CommentInputProps {
   id: number;
   avatar: string;
+  register: UseFormRegisterReturn;
 }
 
-export default function CommentInput({ avatar, id }: CommentInputProps) {
+export default function CommentInput({
+  avatar,
+  id,
+  register,
+}: CommentInputProps) {
   return (
     <>
       <div className="grid grid-cols-10">
@@ -25,7 +31,10 @@ export default function CommentInput({ avatar, id }: CommentInputProps) {
           </a>
         </Link>
         <div className="col-span-9">
-          <TextArea placeholder="이 프로젝트에 대해 어떻게 생각하십니까?"></TextArea>
+          <TextArea
+            register={register}
+            placeholder="이 프로젝트에 대해 어떻게 생각하십니까?"
+          ></TextArea>
         </div>
       </div>
       <div className="mt-2 w-24 self-end text-sm">

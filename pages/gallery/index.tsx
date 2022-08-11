@@ -8,7 +8,11 @@ const Gallery: NextPage = () => {
   const { data, error }: useUserState = useSWR("/api/users/me");
 
   return (
-    <Layout isLogin={data && data.ok} profile={data?.profile}>
+    <Layout
+      isLogin={data && data.ok}
+      profile={data?.profile}
+      userId={data?.profile?.id}
+    >
       <div>안녕</div>
     </Layout>
   );

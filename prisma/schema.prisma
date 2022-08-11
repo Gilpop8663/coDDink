@@ -22,6 +22,10 @@ model idea_user{
   updatedAt DateTime @updatedAt
   portfolio idea_project[]
   like idea_like[]
+  comments idea_comment[]
+  followers idea_follow[] @relation(name:"followerUser") 
+  followings idea_follow[] @relation(name:"followingUser")
+  record Record[]
 }
 
 model idea_project{
@@ -40,7 +44,8 @@ model idea_project{
   like idea_like[]
   view Int
   avatar String
-  
+  comments idea_comment[]
+  record Record[]
 }
 
 model idea_like{
@@ -52,5 +57,42 @@ model idea_like{
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+}
 
+model idea_comment{
+  id Int @id @default(autoincrement())
+  user idea_user @relation(fields: [userId],references: [id],onDelete: Cascade)
+  userId Int
+  project idea_project @relation(fields: [projectId],references: [id],onDelete: Cascade)
+  projectId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  comment String @db.MediumText
+}
+
+model idea_follow{
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  follower idea_user @relation(name:"followerUser",fields: [followerId],references: [id],onDelete: Cascade)
+  followerId Int
+  following idea_user @relation(name:"followingUser",fields: [followingId],references: [id],onDelete: Cascade)
+  followingId Int
+}
+
+model Record{
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  project idea_project @relation(fields: [projectId],references: [id],onDelete: Cascade)
+  projectId Int
+  user idea_user @relation(fields: [userId],references: [id],onDelete: Cascade)
+  userId Int
+  kind Kind
+}
+
+enum Kind{
+  Work
+  Moodboard
+  Like
 }

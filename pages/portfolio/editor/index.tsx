@@ -98,7 +98,7 @@ const Editor: NextPage = () => {
   }, [data, router]);
 
   return (
-    <Layout isLogin={true} profile={user}>
+    <Layout isLogin={true} profile={user} userId={user?.id}>
       <form action="" onSubmit={handleSubmit(onValid)}>
         <div className="absolute top-0 grid h-screen w-full grid-rows-1 bg-black">
           <div className="row-span-1 mt-16 grid w-full grid-cols-6 grid-rows-1 gap-4 bg-gray-100 p-5">
@@ -291,7 +291,7 @@ const Editor: NextPage = () => {
               )}
               onClick={onSetting}
             ></div>
-            <div className="z-50 h-4/5  w-1/2 min-w-[900px] rounded-md border bg-white">
+            <div className="z-50  w-1/2 min-w-[900px] rounded-md border bg-white">
               <div className="grid h-full w-full grid-cols-5 p-8">
                 <div className="col-span-2 rounded-l-md border bg-gray-50 p-8">
                   <div>
@@ -461,7 +461,7 @@ const Editor: NextPage = () => {
                     placeholder="이름 또는 사용자 이름으로 공동 소유자 추가"
                     register={register("owner", { required: false })}
                   />
-                  <div className="mt-12 flex items-end justify-end space-x-4">
+                  <div className="my-12 flex items-end justify-end space-x-4">
                     <NextButton
                       label="취소"
                       color="white"

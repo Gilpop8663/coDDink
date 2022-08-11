@@ -17,7 +17,7 @@ export default function NextButton({
     <>
       {color === "white" && (
         <div
-          className="flex w-full cursor-pointer justify-center rounded-full  py-1 px-2 font-semibold text-gray-400 transition-colors hover:underline"
+          className=" flex w-full cursor-pointer justify-center rounded-full  py-1 px-2 font-semibold text-gray-400 transition-colors hover:underline"
           onClick={onClick}
         >
           {label}
@@ -41,7 +41,7 @@ export default function NextButton({
       )}
       {color === "gray" && (
         <button
-          className="flex w-full cursor-pointer justify-center rounded-full border bg-white py-1 px-2 font-semibold text-black transition-colors hover:bg-gray-100"
+          className="flex w-full cursor-pointer justify-center rounded-full border bg-white bg-white py-1 px-2 font-semibold text-black transition-colors hover:bg-gray-100"
           onClick={onClick}
         >
           {label}
