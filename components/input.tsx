@@ -9,6 +9,7 @@ interface InputProps {
   placeholder?: string;
   required?: boolean;
   onClick?: () => void;
+  [key: string]: any;
 }
 
 export default function Input({
@@ -19,6 +20,7 @@ export default function Input({
   required = false,
   placeholder,
   onClick,
+  ...rest
 }: InputProps) {
   return (
     <div className="mt-4">
@@ -32,6 +34,7 @@ export default function Input({
         id={name}
         type={type}
         className="w-full border-b-2 py-2 transition-colors focus:border-blue-500 focus:outline-none"
+        {...rest}
       />
     </div>
   );
