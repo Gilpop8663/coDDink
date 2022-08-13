@@ -18,6 +18,20 @@ model idea_user{
   name String
   password String
   avatar String?
+  job String?
+  company String?
+  country String?
+  city String?
+  URL String?
+  Facebook String?
+  Youtube String?
+  Github String?
+  Twitter String?
+  Instagram String?
+  LinkedIn String?
+  Twitch String?
+  Dribble String?
+  introduce String? @db.MediumText
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   portfolio idea_project[]
@@ -26,6 +40,7 @@ model idea_user{
   followers idea_follow[] @relation(name:"followerUser") 
   followings idea_follow[] @relation(name:"followingUser")
   record Record[]
+  moodboards idea_moodboard[]
 }
 
 model idea_project{
@@ -46,6 +61,8 @@ model idea_project{
   avatar String
   comments idea_comment[]
   record Record[]
+  moodboard idea_moodboard @relation(fields: [moodboardId],references: [id],onDelete: Cascade)
+  moodboardId Int @default(1)
 }
 
 model idea_like{
@@ -90,6 +107,18 @@ model Record{
   userId Int
   kind Kind
 }
+
+
+model idea_moodboard{
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title String
+  user idea_user @relation(fields: [userId],references: [id],onDelete: Cascade)
+  userId Int
+  projects idea_project[]
+}
+
 
 enum Kind{
   Work

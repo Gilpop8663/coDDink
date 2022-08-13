@@ -30,7 +30,7 @@ export default function NextButton({
         </div>
       )}
       {color === "blue" && (
-        <div
+        <button
           className={cls(
             `text-${size}`,
             "flex w-full cursor-pointer justify-center rounded-full bg-blue-600 py-1 px-2 font-semibold text-white transition-colors hover:bg-blue-700"
@@ -38,7 +38,7 @@ export default function NextButton({
           onClick={onClick}
         >
           {label}
-        </div>
+        </button>
       )}
       {color === "green" && (
         <button

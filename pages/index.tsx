@@ -19,6 +19,15 @@ export interface ProjectWithCountWithUser extends idea_project {
     name: string;
   };
 }
+export interface LikeProjectWithCountWithUser extends idea_project {
+  _count: {
+    like: number;
+  };
+  user: {
+    avatar: string;
+    name: string;
+  };
+}
 
 export interface CommentWithUser extends idea_comment {
   user: {
@@ -70,11 +79,13 @@ const Home: NextPage = () => {
     formState: { errors },
   } = useForm<CommentProps>();
 
+  const isGallery = path.slice(1, 8) === "gallery";
+
   const clickedId = path.slice(9);
   const { data, error }: useUserState = useSWR("/api/users/me");
   const { data: projectsData } = useSWR<ProjectsResponse>("/api/projects");
   const { data: detailData, mutate } = useSWR<DetailProjectResponse | null>(
-    clickedId ? `/api/projects/${clickedId}` : null
+    isGallery ? `/api/projects/${clickedId}` : null
   );
   const [toggleLike, { loading: likeLoading }] = useMutation(
     `/api/projects/${clickedId}/like`

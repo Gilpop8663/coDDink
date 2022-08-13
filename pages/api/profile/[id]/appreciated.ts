@@ -7,19 +7,26 @@ import { profile } from "console";
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { id },
-    session: { user },
   } = req;
-  const userInfo = await client.idea_user.findUnique({
+
+  const projects = await client.idea_like.findMany({
     where: {
-      id: Number(id),
+      userId: Number(id),
+    },
+    include: {
+      project: {
+        include: { _count: { select: { like: true } } },
+      },
+      user: {
+        select: {
+          avatar: true,
+          name: true,
+        },
+      },
     },
   });
 
-  if (!userInfo) {
-    return res.status(404).json({ ok: false });
-  }
-
-  res.json({ ok: true, userInfo });
+  res.json({ ok: true, projects });
 }
 
 export default withApiSession(withHandler({ methods: ["GET"], handler }));

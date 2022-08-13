@@ -11,8 +11,14 @@ export interface useUserState {
   error?: any;
 }
 
+interface ProfileResponse {
+  ok: boolean;
+  profile: idea_user;
+}
+
 export default function useUser() {
-  const { data, error }: useUserState = useSWR("/api/users/me");
+  const { data, error }: useUserState =
+    useSWR<ProfileResponse>("/api/users/me");
   const router = useRouter();
 
   useEffect(() => {

@@ -1,12 +1,23 @@
 import Layout from "@components/layout";
+import CategoryButton from "@components/profile/categoryButton";
+import ClickedProject from "@components/project/clickedProject";
 import ProjectItem from "@components/project/projectItem";
 import NextButton from "@components/upload/nextButton";
+import useMutation from "@libs/client/useMutation";
 import { useUserState } from "@libs/client/useUser";
-import { idea_user } from "@prisma/client";
+import { idea_like, idea_project, idea_user } from "@prisma/client";
 import type { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import {
+  CommentProps,
+  CommentResponse,
+  DetailProjectResponse,
+  ProjectWithCountWithUser,
+} from "pages";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import useSWR from "swr";
 
 interface ProfileResponse {
@@ -14,14 +25,146 @@ interface ProfileResponse {
   userInfo: idea_user;
 }
 
+interface UserProjectsResponse {
+  ok: boolean;
+  projects: ProjectWithCountWithUser[];
+}
+
+interface ProjectWithCount extends idea_project {
+  _count: { like: number };
+}
+
+interface LikeProjectWithCountWithUser extends idea_like {
+  project: ProjectWithCount;
+  user: {
+    name: string;
+    avatar: string;
+  };
+}
+
+interface LikeProjectResponse {
+  ok: boolean;
+  projects: LikeProjectWithCountWithUser[];
+}
+
+interface ToggleResponse {
+  ok: boolean;
+}
+
 const Profile: NextPage = () => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<CommentProps>();
   const { data, error }: useUserState = useSWR("/api/users/me");
   const router = useRouter();
+  const path = router.asPath;
+  const isGallery = path.slice(1, 8) === "gallery";
+
+  const isAppreciated = path.slice(-11) === "appreciated";
   const { data: userData } = useSWR<ProfileResponse | null>(
     router.query.id ? `/api/users/${router.query.id}` : null
   );
 
-  console.log(userData);
+  const { data: userProjects } = useSWR<UserProjectsResponse>(
+    router.query.id ? `/api/profile/${router.query.id}/projects` : null
+  );
+
+  const { data: likeProjects } = useSWR<LikeProjectResponse>(
+    isAppreciated ? `/api/profile/${router.query.id}/appreciated` : null
+  );
+
+  const [kind, setKind] = useState<"projects" | "moodboards" | "appreciated">(
+    "projects"
+  );
+
+  const onMoodboardClick = () => {
+    setKind("moodboards");
+    router.push(
+      { pathname: "/profile/[id]", query: { id: router.query.id } },
+      `/profile/${router.query.id}/moodboards`
+    );
+  };
+
+  const onProjectClick = () => {
+    setKind("projects");
+    router.push(
+      { pathname: "/profile/[id]", query: { id: router.query.id } },
+      `/profile/${router.query.id}/projects`
+    );
+  };
+
+  const onAppreciatedClick = () => {
+    router.push(
+      { pathname: "/profile/[id]", query: { id: router.query.id } },
+      `/profile/${router.query.id}/appreciated`
+    );
+    setKind("appreciated");
+  };
+
+  const onBoxClicked = (id: number) => {
+    router.push(
+      { pathname: "/profile/[id]", query: { id: router.query.id } },
+      `/gallery/${id}`
+    );
+  };
+
+  console.log(isAppreciated);
+
+  const clickedId = path.slice(9);
+
+  const { data: detailData, mutate } = useSWR<DetailProjectResponse | null>(
+    isGallery ? `/api/projects/${clickedId}` : null
+  );
+  const [toggleLike, { data: toggleData, loading: likeLoading }] =
+    useMutation<ToggleResponse>(`/api/projects/${clickedId}/like`);
+
+  const [sendComment, { data: commentData, loading: commentLoading }] =
+    useMutation<CommentResponse>(
+      `/api/projects/${detailData?.project?.id}/comment`
+    );
+
+  const onCommentValid = (value: CommentProps) => {
+    if (commentLoading) return;
+    sendComment(value);
+  };
+
+  const onLikeClick = () => {
+    if (!detailData) return;
+    mutate(
+      {
+        ...detailData,
+        project: {
+          ...detailData.project,
+          _count: {
+            ...detailData.project._count,
+            like: detailData.isLiked
+              ? detailData.project._count.like - 1
+              : detailData.project._count.like + 1,
+          },
+        },
+        isLiked: !detailData.isLiked,
+      },
+      false
+    );
+    if (likeLoading) return;
+    toggleLike({});
+  };
+
+  useEffect(() => {
+    if (userData && !userData.ok) {
+      router.push("/");
+    }
+  }, [router, userData]);
+
+  useEffect(() => {
+    if (commentData && commentData.ok) {
+      reset();
+      mutate();
+    }
+  }, [commentData, reset, mutate, toggleData]);
 
   return (
     <Layout
@@ -43,7 +186,7 @@ const Profile: NextPage = () => {
             ></Image>
           </div>
           <div className="self-center text-2xl font-semibold">
-            {userData?.userInfo.name}
+            {userData?.userInfo?.name}
           </div>
           <div className="mt-3 flex flex-col items-center text-sm text-gray-500">
             <span>3D artist</span>
@@ -69,7 +212,7 @@ const Profile: NextPage = () => {
             </Link>
           </div>
           <div className="my-8 w-full space-y-2">
-            <Link href={`/profile/${userData?.userInfo.id}/editor`}>
+            <Link href={`/profile/${userData?.userInfo?.id}/editor`}>
               <a>
                 <NextButton color="blue" label="내 프로필 편집"></NextButton>
               </a>
@@ -260,29 +403,78 @@ const Profile: NextPage = () => {
         <div className="relative top-48 w-full pl-14">
           <div className="w-full">
             <div className="flex space-x-3">
-              <span className="cursor-pointer rounded-full bg-black py-2 px-4 text-sm font-semibold text-white">
-                작업
-              </span>
-              <span className="cursor-pointer rounded-full bg-white py-2 px-4 text-sm font-semibold text-black transition-colors hover:bg-gray-100">
-                무드보드
-              </span>
-              <span className="cursor-pointer rounded-full bg-white py-2 px-4 text-sm font-semibold text-black transition-colors hover:bg-gray-100">
-                평가
-              </span>
+              <CategoryButton
+                onClick={onProjectClick}
+                label="작업"
+                isSame={kind === "projects"}
+              />
+              {/* <CategoryButton
+                onClick={onMoodboardClick}
+                label="무드보드"
+                isSame={kind === "moodboards"}
+              /> */}
+              <CategoryButton
+                onClick={onAppreciatedClick}
+                label="평가"
+                isSame={kind === "appreciated"}
+              />
             </div>
             <div className="mt-6 grid w-full grid-cols-4 gap-6">
-              {/* <ProjectItem />
-              <ProjectItem />
-              <ProjectItem />
-              <ProjectItem />
-              <ProjectItem />
-              <ProjectItem />
-              <ProjectItem />
-              <ProjectItem /> */}
+              {kind === "projects" &&
+                userProjects?.projects?.map((item) => (
+                  <ProjectItem
+                    key={item.id}
+                    title={item.title}
+                    id={item.id}
+                    likes={item._count?.like}
+                    views={1}
+                    owner={item.user.name}
+                    avatar={item.user.avatar}
+                    userId={item.userId}
+                    onClick={() => onBoxClicked(item.id)}
+                  />
+                ))}
+              {kind === "appreciated" &&
+                likeProjects?.projects?.map((item) => (
+                  <ProjectItem
+                    key={item.project.id}
+                    title={item.project.title}
+                    id={item.project.id}
+                    likes={item.project._count?.like}
+                    views={1}
+                    owner={item.user.name}
+                    avatar={item.user.avatar}
+                    userId={item.userId}
+                    onClick={() => onBoxClicked(item.projectId)}
+                  />
+                ))}
             </div>
           </div>
         </div>
       </div>
+      {detailData && (
+        <ClickedProject
+          kind="home"
+          onLikeClick={onLikeClick}
+          title={detailData?.project.title}
+          id={detailData?.project.id}
+          likes={detailData?.project._count.like}
+          views={detailData.project.view}
+          owner={detailData.project.user.name}
+          avatar={detailData.project.user.avatar}
+          userId={detailData.project.userId}
+          createdAt={detailData.project.createdAt}
+          isLiked={detailData.isLiked}
+          commentCount={detailData.project._count.comments}
+          projectComments={detailData.project.comments}
+          currentUserId={data?.profile?.id}
+          onCommentValid={onCommentValid}
+          isLogin={data && data.ok}
+          register={register}
+          handleSubmit={handleSubmit}
+          errors={errors}
+        />
+      )}
     </Layout>
   );
 };
