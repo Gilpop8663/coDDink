@@ -52,7 +52,7 @@ export default function Header({
   return (
     <div
       className={cls(
-        "fixed z-10 flex h-16 w-full items-center justify-between border-b px-6",
+        "fixed z-20 flex h-16 w-full items-center justify-between border-b px-6",
         kind === "profile" ? "bg-black/0 text-white" : "bg-white text-black"
       )}
     >
@@ -226,15 +226,17 @@ export default function Header({
               onMouseOver={onProfileOver}
               onMouseOut={onProfileLeave}
             >
-              <Image
-                className="rounded-full"
-                src={profile?.avatar!}
-                width={50}
-                height={50}
-                alt="avatar"
-              ></Image>
+              {profile && (
+                <Image
+                  className="rounded-full"
+                  src={profile?.avatar!}
+                  width={50}
+                  height={50}
+                  alt="avatar"
+                ></Image>
+              )}
               {isProfileOn && (
-                <div className="absolute top-6  flex w-[350px] flex-col items-center rounded-md border bg-white p-5 shadow-md">
+                <div className="absolute top-6  flex w-[350px] flex-col items-center rounded-md border bg-white p-5 text-black shadow-md">
                   <div className="z-10 flex h-24 w-24 cursor-pointer rounded-full bg-black ring-2 ring-gray-300">
                     <Image
                       className="rounded-full hover:opacity-90"

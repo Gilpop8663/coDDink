@@ -5,6 +5,7 @@ import CategoryTabMenu from "@components/profile/categoryTabMenu";
 import ProfileWeb from "@components/profile/profileWeb";
 import TextArea from "@components/textArea";
 import NextButton from "@components/upload/nextButton";
+import UploadButton from "@components/uploadButton";
 import useMutation from "@libs/client/useMutation";
 import useUser, { useUserState } from "@libs/client/useUser";
 import type { NextPage } from "next";
@@ -39,6 +40,7 @@ export interface FormProps {
   LinkedIn?: string;
   Twitch?: string;
   Dribble?: string;
+  avatar?: FileList;
 }
 
 interface StatesProps {
@@ -61,6 +63,8 @@ const ProfileEditor: NextPage = () => {
     formState: { errors },
   } = useForm<FormProps>();
 
+  const [avatarPreveiw, setAvatarPreview] = useState("");
+
   const [isChange, setIsChange] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [countryName, setCountryName] = useState("");
@@ -68,7 +72,11 @@ const ProfileEditor: NextPage = () => {
   const selectRef = useRef<HTMLSelectElement>(null);
   const [updateProfile, { loading }] = useMutation("/api/profile");
 
+  const avatar = watch("avatar");
+
   const onValid = (value: FormProps) => {
+    console.log(value.avatar);
+    return;
     if (loading) return;
     const newValue = { ...value, country: countryName, city: cityName };
     updateProfile(newValue);
@@ -175,6 +183,14 @@ const ProfileEditor: NextPage = () => {
     setCountryName(selectRef.current.value);
   }, [isChange, locationData?.parseContent?.states]);
 
+  useEffect(() => {
+    if (avatar && avatar.length > 0) {
+      const file = avatar[0];
+      setAvatarPreview(URL.createObjectURL(file));
+    }
+    console.log(avatarPreveiw);
+  }, [avatar]);
+
   return (
     <Layout isLogin={true} profile={user} userId={user?.id}>
       <form onSubmit={handleSubmit(onValid)}>
@@ -217,26 +233,11 @@ const ProfileEditor: NextPage = () => {
               <div className="border bg-white p-8">
                 <h6 className="text-sm font-semibold">기본 정보</h6>
                 <div className="mt-2 flex">
-                  <div className="mt-4 flex flex-col border-r pr-8">
-                    <div className="h-24 w-24 cursor-pointer rounded-full bg-orange-200"></div>
-                    <div className="mt-2 flex cursor-pointer items-center text-blue-600">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                        />
-                      </svg>
-                      <div className="text-sm">업로드</div>
-                    </div>
-                  </div>
+                  <UploadButton
+                    previewImage={avatarPreveiw}
+                    register={register("avatar")}
+                    kind="profile"
+                  ></UploadButton>
                   <div className="flex flex-col px-8">
                     <Input
                       register={register("name", {

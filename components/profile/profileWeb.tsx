@@ -11,7 +11,7 @@ interface ProfileWebProps {
   register?: UseFormRegisterReturn;
   label?: string | undefined | null;
   watchData: string | undefined;
-  setValue: () => void;
+  setValue: (target: string, value: string) => void;
 }
 
 export default function ProfileWeb({
