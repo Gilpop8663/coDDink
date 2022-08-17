@@ -79,7 +79,7 @@ export default function ClickedProject({
     >
       {kind === "home" && (
         <div
-          className="fixed top-0 left-0 z-10 h-screen w-screen bg-black opacity-90"
+          className="fixed top-0 left-0 z-20 h-screen w-screen bg-black opacity-90"
           onClick={onBackClick}
         ></div>
       )}

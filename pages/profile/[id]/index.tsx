@@ -5,6 +5,7 @@ import ProjectItem from "@components/project/projectItem";
 import NextButton from "@components/upload/nextButton";
 import useMutation from "@libs/client/useMutation";
 import { useUserState } from "@libs/client/useUser";
+import { makeImageURL } from "@libs/client/utils";
 import { idea_like, idea_project, idea_user } from "@prisma/client";
 import type { NextPage } from "next";
 import Image from "next/image";
@@ -179,7 +180,7 @@ const Profile: NextPage = () => {
           <div className="mb-6 h-24 w-24 self-center">
             <Image
               className="rounded-full"
-              src={userData?.userInfo?.avatar!}
+              src={makeImageURL(userData?.userInfo?.avatar!, "smAvatar")}
               alt="avatar"
               width={250}
               height={250}

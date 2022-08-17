@@ -17,8 +17,8 @@ async function handler(
   const number = Math.floor(Math.random() * 2);
 
   const avatarURL = [
-    "https://user-images.githubusercontent.com/80146176/182609032-d9dec753-1824-459c-950a-a15a2a65c1f1.jpg",
-    "https://user-images.githubusercontent.com/80146176/182609043-0ea710ef-45c0-4c42-8da7-ce1f89ab3e86.jpg",
+    "https://imagedelivery.net/mPhC7i6OFJEhfh-kdGX8yQ/f0787368-2456-4b9e-6ae4-a8841f70b300/public",
+    "https://imagedelivery.net/mPhC7i6OFJEhfh-kdGX8yQ/8b9dd122-cda2-4183-e41e-2c8d9259ac00/public",
   ];
 
   const user = await client.idea_user.create({

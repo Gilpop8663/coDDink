@@ -1,3 +1,4 @@
+import { makeImageURL } from "@libs/client/utils";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -16,7 +17,7 @@ export default function OwnerTab({ userId, avatar, owner }: OwnerProps) {
         <Link href={`/profile/${userId}`}>
           <a className=" mr-4 cursor-pointer">
             <Image
-              src={avatar}
+              src={makeImageURL(avatar, "smAvatar")}
               alt="profile"
               width={40}
               height={40}

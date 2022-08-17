@@ -1,3 +1,4 @@
+import { makeImageURL } from "@libs/client/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -51,7 +52,7 @@ export default function ProjectItem({
               <div className="h-4 w-4 rounded-full bg-orange-500">
                 <Image
                   className="rounded-full"
-                  src={avatar}
+                  src={makeImageURL(avatar, "smAvatar")}
                   height={50}
                   width={50}
                   alt="avatar"

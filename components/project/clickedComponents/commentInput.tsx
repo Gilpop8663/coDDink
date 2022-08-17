@@ -1,5 +1,6 @@
 import TextArea from "@components/textArea";
 import NextButton from "@components/upload/nextButton";
+import { makeImageURL } from "@libs/client/utils";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -22,7 +23,7 @@ export default function CommentInput({
         <Link href={`/gallery/${id}`}>
           <a className="col-span-1 mr-4 cursor-pointer">
             <Image
-              src={avatar}
+              src={makeImageURL(avatar, "smAvatar")}
               alt="profile"
               width={50}
               height={50}

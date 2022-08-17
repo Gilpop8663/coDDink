@@ -2,6 +2,18 @@ export function cls(...classnames: string[]) {
   return classnames.join(" ");
 }
 
+interface makeImageURLProps {
+  id: string | null;
+  variants?: "public" | "bigAvatar" | "smAvatar";
+}
+
+export function makeImageURL(
+  id: string,
+  variants?: "public" | "bigAvatar" | "smAvatar"
+) {
+  return `https://imagedelivery.net/mPhC7i6OFJEhfh-kdGX8yQ/${id}/${variants}`;
+}
+
 export function timeForToday(time: Date) {
   const pastTime = new Date(time);
   const curTime = new Date();

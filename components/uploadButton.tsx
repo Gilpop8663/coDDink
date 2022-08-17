@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React, { ChangeEvent } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 
@@ -38,10 +39,14 @@ export default function UploadButton({
       {kind === "profile" && (
         <label htmlFor="picture" className="mt-4 flex flex-col border-r pr-8">
           {previewImage ? (
-            <img
-              src={previewImage}
-              className="h-24 w-24 cursor-pointer rounded-full bg-orange-200"
-            />
+            <div className="relative h-24 w-24">
+              <Image
+                src={previewImage}
+                layout="fill"
+                alt="previewAvatar"
+                className="h-24 w-24 cursor-pointer rounded-full bg-orange-200"
+              />
+            </div>
           ) : (
             <div className="h-24 w-24 cursor-pointer rounded-full bg-orange-200"></div>
           )}

@@ -41,6 +41,8 @@ model idea_user{
   followings idea_follow[] @relation(name:"followingUser")
   record Record[]
   moodboards idea_moodboard[]
+  streams idea_stream[]
+  messages idea_message[]
 }
 
 model idea_project{
@@ -95,6 +97,34 @@ model idea_follow{
   followerId Int
   following idea_user @relation(name:"followingUser",fields: [followingId],references: [id],onDelete: Cascade)
   followingId Int
+}
+
+model idea_stream{
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title String
+  description String
+  user idea_user @relation(fields: [userId],references: [id],onDelete: Cascade)
+  userId Int
+  tools String?
+  messages idea_message[]
+  cloudflareId String
+  cloudflareUrl String
+  cloudflareKey String
+
+}
+
+model idea_message{
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user idea_user @relation(fields: [userId],references: [id],onDelete: Cascade)
+  userId Int
+  message String @db.MediumText
+  stream idea_stream @relation(fields: [streamId],references: [id],onDelete: Cascade)
+  streamId Int
+  
 }
 
 model Record{

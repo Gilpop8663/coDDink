@@ -1,4 +1,4 @@
-import { cls } from "@libs/client/utils";
+import { cls, makeImageURL } from "@libs/client/utils";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -24,7 +24,7 @@ export default function ClickedHeader({
         <Link href={`/profile/${userId}`}>
           <a>
             <Image
-              src={avatar}
+              src={makeImageURL(avatar, "smAvatar")}
               className="cursor-pointer rounded-full hover:opacity-90"
               height={40}
               width={40}

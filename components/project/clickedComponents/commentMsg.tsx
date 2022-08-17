@@ -1,4 +1,4 @@
-import { timeForToday } from "@libs/client/utils";
+import { makeImageURL, timeForToday } from "@libs/client/utils";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -27,7 +27,7 @@ export default function CommentMsg({
           <Link href={`/profile/${id}`}>
             <a className="mr-4 flex">
               <Image
-                src={avatar}
+                src={makeImageURL(avatar, "smAvatar")}
                 alt="avatar"
                 width={50}
                 height={50}

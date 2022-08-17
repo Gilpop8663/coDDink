@@ -1,5 +1,5 @@
 import useMutation from "@libs/client/useMutation";
-import { cls } from "@libs/client/utils";
+import { cls, makeImageURL } from "@libs/client/utils";
 import { idea_user } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
@@ -73,7 +73,7 @@ export default function Header({
           </Link>
         )}
 
-        <Link href="/galleries">
+        <Link href="/gallery">
           <a
             className={cls(
               path === "/galleries" ? "border-b-2 border-gray-800" : "",
@@ -171,10 +171,36 @@ export default function Header({
                       </div>
                     </a>
                   </Link>
+                  <Link href="/live/upload">
+                    <div className="flex w-auto cursor-pointer  items-center justify-between rounded-md border border-blue-200 bg-[#F5F8FF] p-2 text-blue-600 transition-all hover:bg-[#DEE8FF]">
+                      <span className="flex h-10 items-center justify-center ">
+                        <div className="border-r border-r-blue-200 px-2">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                            />
+                          </svg>
+                        </div>
 
-                  <div className="flex w-auto cursor-pointer  items-center justify-between rounded-md border border-blue-200 bg-[#F5F8FF] p-2 text-blue-600 transition-all hover:bg-[#DEE8FF]">
-                    <span className="flex h-10 items-center justify-center ">
-                      <div className="border-r border-r-blue-200 px-2">
+                        <div className="ml-4 flex flex-col">
+                          <div className="text-sm font-semibold">
+                            라이브스트림
+                          </div>
+                          <div className="text-xs">
+                            데스크탑에서 라이브 방송
+                          </div>
+                        </div>
+                      </span>
+                      <div className="pr-2">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-5 w-5"
@@ -186,35 +212,12 @@ export default function Header({
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
-                            d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3"
                           />
                         </svg>
                       </div>
-
-                      <div className="ml-4 flex flex-col">
-                        <div className="text-sm font-semibold">
-                          라이브스트림
-                        </div>
-                        <div className="text-xs">데스크탑에서 라이브 방송</div>
-                      </div>
-                    </span>
-                    <div className="pr-2">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M14 5l7 7m0 0l-7 7m7-7H3"
-                        />
-                      </svg>
                     </div>
-                  </div>
+                  </Link>
                 </div>
               )}
             </div>
@@ -229,7 +232,7 @@ export default function Header({
               {profile && (
                 <Image
                   className="rounded-full"
-                  src={profile?.avatar!}
+                  src={makeImageURL(profile?.avatar!, "smAvatar")}
                   width={50}
                   height={50}
                   alt="avatar"
@@ -240,7 +243,7 @@ export default function Header({
                   <div className="z-10 flex h-24 w-24 cursor-pointer rounded-full bg-black ring-2 ring-gray-300">
                     <Image
                       className="rounded-full hover:opacity-90"
-                      src={profile?.avatar!}
+                      src={makeImageURL(profile?.avatar!, "bigAvatar")}
                       width={180}
                       height={180}
                       alt="avatar"

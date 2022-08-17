@@ -24,6 +24,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       LinkedIn,
       Twitch,
       Dribble,
+      avatarId,
     },
   } = req;
 
@@ -50,7 +51,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     },
   });
 
-  console.log(updateUser);
+  if (avatarId) {
+    await client.idea_user.update({
+      where: {
+        id: user?.id,
+      },
+      data: {
+        avatar: avatarId,
+      },
+    });
+  }
 
   res.json({ ok: true });
 }

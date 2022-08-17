@@ -14,6 +14,7 @@ import { create } from "domain";
 import { watch } from "fs";
 import InputPassword from "@components/inputPassword";
 import Input from "@components/input";
+import { makeImageURL } from "@libs/client/utils";
 
 interface ILoginProps {
   email: string;
@@ -176,7 +177,7 @@ export default function Login() {
                 <div className="mr-4 h-16 w-16 rounded-full bg-slate-500">
                   <Image
                     className="rounded-full"
-                    src={mailData?.avatar!}
+                    src={makeImageURL(mailData?.avatar!, "bigAvatar")}
                     alt="avatar"
                     width={500}
                     height={500}

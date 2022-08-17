@@ -8,6 +8,7 @@ import NextButton from "@components/upload/nextButton";
 import UploadButton from "@components/uploadButton";
 import useMutation from "@libs/client/useMutation";
 import useUser, { useUserState } from "@libs/client/useUser";
+import { makeImageURL } from "@libs/client/utils";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -74,12 +75,26 @@ const ProfileEditor: NextPage = () => {
 
   const avatar = watch("avatar");
 
-  const onValid = (value: FormProps) => {
-    console.log(value.avatar);
-    return;
+  const onValid = async (value: FormProps) => {
     if (loading) return;
     const newValue = { ...value, country: countryName, city: cityName };
-    updateProfile(newValue);
+    if (value.avatar && value.avatar.length > 0 && user) {
+      const { uploadURL } = await (await fetch("/api/files")).json();
+      const form = new FormData();
+      form.append("file", value.avatar[0], user?.id.toString());
+      const {
+        result: { id },
+      } = await (
+        await fetch(uploadURL, {
+          method: "POST",
+          body: form,
+        })
+      ).json();
+
+      updateProfile({ newValue, avatarId: id });
+    } else {
+      updateProfile(newValue);
+    }
     mutate();
   };
 
@@ -146,6 +161,7 @@ const ProfileEditor: NextPage = () => {
     if (user?.LinkedIn) setValue("LinkedIn", user?.LinkedIn);
     if (user?.Twitch) setValue("Twitch", user?.Twitch);
     if (user?.Dribble) setValue("Dribble", user?.Dribble);
+    if (user?.avatar) setAvatarPreview(makeImageURL(user?.avatar, "bigAvatar"));
   }, [user, setValue]);
 
   useEffect(() => {
