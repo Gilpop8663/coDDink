@@ -28,6 +28,7 @@ export default function UploadButton({
         >
           {children}
           <input
+            multiple
             id="attatchment"
             className="hidden"
             type="file"

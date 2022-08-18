@@ -18,7 +18,7 @@ export default function Layout({
   userId,
 }: LayoutProps) {
   return (
-    <div>
+    <div className="scrollbar-hide">
       <Header isLogin={isLogin} profile={profile} kind={kind} userId={userId} />
       <div className="pt-16">{children}</div>
     </div>

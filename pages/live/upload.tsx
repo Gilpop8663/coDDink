@@ -3,8 +3,10 @@ import Input from "@components/input";
 import Layout from "@components/layout";
 import useMutation from "@libs/client/useMutation";
 import useUser, { useUserState } from "@libs/client/useUser";
+import { idea_stream } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 
@@ -14,14 +16,27 @@ interface FormProps {
   tools: string;
 }
 
+interface StreamResponse {
+  ok: boolean;
+  stream: idea_stream;
+}
+
 const LiveUpload: NextPage = () => {
+  const router = useRouter();
   const { user, isLoading } = useUser();
   const { register, handleSubmit } = useForm<FormProps>();
-  const [createStream, { loading, data, error }] = useMutation("/api/streams");
+  const [createStream, { loading, data, error }] =
+    useMutation<StreamResponse>("/api/streams");
   const onValid = (value: FormProps) => {
     if (loading) return;
     createStream(value);
   };
+
+  useEffect(() => {
+    if (data && data.ok) {
+      router.push(`/live/${data.stream.id}`);
+    }
+  }, [data, router]);
 
   return (
     <Layout isLogin={true} profile={user} userId={user?.id}>
