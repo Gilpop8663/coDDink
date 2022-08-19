@@ -7,8 +7,9 @@ interface UploadProps {
   label?: string;
   children?: React.ReactNode;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
-  register: UseFormRegisterReturn;
+  register?: UseFormRegisterReturn;
   previewImage?: string;
+  onClick?: () => void;
 }
 
 export default function UploadButton({
@@ -18,6 +19,7 @@ export default function UploadButton({
   onChange,
   register,
   previewImage,
+  onClick,
 }: UploadProps) {
   return (
     <div className="flex flex-col items-center">
@@ -29,14 +31,16 @@ export default function UploadButton({
           {children}
           <input
             multiple
+            onChange={onChange}
             id="attatchment"
             className="hidden"
             type="file"
             accept="image/*"
-            {...register}
+            // {...register}
           />
         </label>
       )}
+
       {kind === "profile" && (
         <label htmlFor="picture" className="mt-4 flex flex-col border-r pr-8">
           {previewImage ? (
@@ -79,7 +83,10 @@ export default function UploadButton({
         </label>
       )}
       {kind === "text" && (
-        <div className="flex h-24 w-24 cursor-pointer items-center justify-center rounded-full bg-blue-100 text-blue-600 transition-colors duration-200 hover:bg-blue-600 hover:text-white">
+        <div
+          onClick={onClick}
+          className="flex h-24 w-24 cursor-pointer items-center justify-center rounded-full bg-blue-100 text-blue-600 transition-colors duration-200 hover:bg-blue-600 hover:text-white"
+        >
           {children}
         </div>
       )}

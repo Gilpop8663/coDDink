@@ -5,6 +5,7 @@ import EditFirstScreen from "@components/portfolio/editFirstScreen";
 import EditSidebar from "@components/portfolio/editSidebar";
 import PreviewImage from "@components/portfolio/previewImage";
 import SubUploadButton from "@components/subUploadButton";
+import TextArea from "@components/textArea";
 import NextButton from "@components/upload/nextButton";
 import UploadInput from "@components/upload/uploadInput";
 import UploadButton from "@components/uploadButton";
@@ -78,8 +79,8 @@ const Editor: NextPage = () => {
     });
   };
 
-  const onAddTextArea = () => {
-    setTextId((prev) => prev + 1);
+  const onAddTextArea = (idx?: number) => {
+    setContent((prev) => [...prev, { kind: "text", description: "" }]);
   };
 
   const onSetting = () => {
@@ -95,30 +96,35 @@ const Editor: NextPage = () => {
     setIsVisible(false);
   };
 
-  const onPreviewImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onPreviewImage = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    idx?: number
+  ) => {
     const {
       target: { files },
     } = e;
     if (!files) return;
 
-    console.log(files);
     const n = files.length;
-    const arr = [];
-    const reader = new FileReader();
+    const arr: ContentProps[] = [];
     for (let i = 0; i < n; i++) {
-      const file = reader.readAsDataURL(files[i]);
-
-      arr.push({ kind: "image", description: file });
-      // console.log(images[i]);
+      arr.push({ kind: "image", description: URL.createObjectURL(files[i]) });
     }
 
-    reader.onloadend = (e: any) => {
-      const {
-        currentTarget: { result },
-      } = e;
-      // console.log(result);
-      setContent((prev) => [...prev, { kind: "image", description: result }]);
-    };
+    console.log(idx);
+    if (!idx && idx !== 0) {
+      setContent((prev) => [...prev, ...arr]);
+    } else {
+      if (idx === 0) {
+        setContent((prev) => [...arr, ...prev]);
+      } else {
+        setContent((prev) => [
+          ...prev.slice(0, idx),
+          ...arr,
+          ...prev.slice(idx),
+        ]);
+      }
+    }
   };
 
   useEffect(() => {
@@ -155,19 +161,31 @@ const Editor: NextPage = () => {
               )}
             >
               {content.length === 0 ? (
-                <EditFirstScreen register={register} />
+                <EditFirstScreen
+                  register={register}
+                  onPreviewImage={onPreviewImage}
+                  onAddTextArea={onAddTextArea}
+                />
               ) : (
                 <div className=" flex w-full flex-col space-y-9 px-16 py-12">
                   {content &&
                     content.map((item, idx) => (
-                      <div key={idx} className="h-screen w-full px-32">
+                      <div
+                        key={idx}
+                        className={cls(
+                          content.length === 1 ? "h-screen" : "",
+                          "w-full"
+                        )}
+                      >
                         {item.kind === "image" && (
                           <PreviewImage
+                            onPreviewImage={onPreviewImage}
                             src={item.description}
                             idx={idx}
                             onClearClick={onClearAttatchment}
                           />
                         )}
+                        {item.kind === "text" && <TextArea kind="upload" />}
                       </div>
                     ))}
                 </div>

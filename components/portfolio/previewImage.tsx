@@ -1,3 +1,5 @@
+import SubUploadButton from "@components/subUploadButton";
+import UploadButton from "@components/uploadButton";
 import { cls } from "@libs/client/utils";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -6,12 +8,17 @@ interface PreviewImageProps {
   src: string;
   idx: number;
   onClearClick: (idx: number) => void;
+  onPreviewImage: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    idx?: number
+  ) => void;
 }
 
 export default function PreviewImage({
   src,
   idx,
   onClearClick,
+  onPreviewImage,
 }: PreviewImageProps) {
   const [isEditOver, setIsEditOver] = useState(false);
   const [isCreateOver, setIsCreateOver] = useState(false);
@@ -22,7 +29,7 @@ export default function PreviewImage({
     setIsEditOver((prev) => !prev);
   };
   return (
-    <>
+    <div className="h-screen">
       <div
         onMouseOver={onCreateHover}
         onMouseOut={onCreateHover}
@@ -31,6 +38,11 @@ export default function PreviewImage({
         {isCreateOver && (
           <div className="z-10 flex items-center space-x-3 rounded-md bg-gray-900 py-2 px-8 text-white">
             <span>미디어 삽입:</span>
+            <SubUploadButton
+              idx={idx}
+              kind="miniImage"
+              onChange={(e) => onPreviewImage(e, idx)}
+            ></SubUploadButton>
             <div className="cursor-pointer rounded-md p-1 hover:bg-gray-400">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -123,6 +135,6 @@ export default function PreviewImage({
           alt="image"
         ></Image>
       </div>
-    </>
+    </div>
   );
 }

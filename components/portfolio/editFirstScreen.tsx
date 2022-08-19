@@ -5,16 +5,27 @@ import { UseFormRegister } from "react-hook-form";
 
 interface EditFirstScreenProps {
   register: UseFormRegister<UploadProps>;
+  onPreviewImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onAddTextArea: () => void;
 }
 
-export default function EditFirstScreen({ register }: EditFirstScreenProps) {
+export default function EditFirstScreen({
+  register,
+  onPreviewImage,
+  onAddTextArea,
+}: EditFirstScreenProps) {
   return (
     <>
       <h3 className="relative bottom-32 text-2xl text-gray-400">
         프로젝트를 업로드 해보세요 :
       </h3>
       <div className="absolute flex space-x-5">
-        <UploadButton register={register("images")} kind="image" label="이미지">
+        <UploadButton
+          register={register("images")}
+          onChange={onPreviewImage}
+          kind="image"
+          label="이미지"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"
@@ -30,7 +41,12 @@ export default function EditFirstScreen({ register }: EditFirstScreenProps) {
             />
           </svg>
         </UploadButton>
-        <UploadButton kind="text" label="텍스트" register={register("posts")}>
+        <UploadButton
+          kind="text"
+          label="텍스트"
+          register={register("posts")}
+          onClick={onAddTextArea}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"
