@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import withHandler from "@libs/server/withHandler";
 import client from "@libs/server/client";
 import { withApiSession } from "@libs/server/withSession";
+import { ContentProps } from "pages/portfolio/editor";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
@@ -38,6 +39,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         tools,
         visible,
         avatar,
+        content,
       },
       session: { user },
     } = req;
@@ -59,6 +61,22 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           },
         },
       },
+    });
+
+    content.forEach(async (item: ContentProps) => {
+      if (item.description === "") return;
+      const projectContent = await client.idea_projectContent.create({
+        data: {
+          kind: item.kind,
+          imageSrc: item.kind === "image" ? item.imageSrc : null,
+          content: item.kind === "text" ? item.description : null,
+          project: {
+            connect: {
+              id: project.id,
+            },
+          },
+        },
+      });
     });
 
     res.json({

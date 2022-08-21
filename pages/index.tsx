@@ -3,7 +3,11 @@ import ClickedProject from "@components/project/clickedProject";
 import ProjectItem from "@components/project/projectItem";
 import useMutation from "@libs/client/useMutation";
 import { useUserState } from "@libs/client/useUser";
-import { idea_comment, idea_project } from "@prisma/client";
+import {
+  idea_comment,
+  idea_project,
+  idea_projectContent,
+} from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -47,6 +51,7 @@ export interface ProjectWithComment extends idea_project {
     name: string;
   };
   comments: CommentWithUser[];
+  contents: idea_projectContent[];
 }
 
 interface ProjectsResponse {
@@ -157,6 +162,7 @@ const Home: NextPage = () => {
         {detailData && (
           <ClickedProject
             kind="home"
+            contents={detailData.project.contents}
             onLikeClick={onLikeClick}
             title={detailData?.project.title}
             id={detailData?.project.id}

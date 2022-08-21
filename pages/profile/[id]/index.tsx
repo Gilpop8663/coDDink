@@ -456,6 +456,7 @@ const Profile: NextPage = () => {
       {detailData && (
         <ClickedProject
           kind="home"
+          contents={detailData.project.contents}
           onLikeClick={onLikeClick}
           title={detailData?.project.title}
           id={detailData?.project.id}

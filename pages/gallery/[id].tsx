@@ -66,6 +66,8 @@ const Gallery: NextPage = () => {
     }
   }, [commentData, reset, mutate]);
 
+  console.log(detailData);
+
   return (
     <Layout
       isLogin={data && data.ok}
@@ -76,6 +78,7 @@ const Gallery: NextPage = () => {
         {detailData && (
           <ClickedProject
             kind="gallery"
+            contents={detailData.project.contents}
             onLikeClick={onLikeClick}
             title={detailData?.project.title}
             id={detailData?.project.id}

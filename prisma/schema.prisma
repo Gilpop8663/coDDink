@@ -65,6 +65,7 @@ model idea_project{
   record Record[]
   moodboard idea_moodboard @relation(fields: [moodboardId],references: [id],onDelete: Cascade)
   moodboardId Int @default(1)
+  contents idea_projectContent[]
 }
 
 model idea_like{
@@ -149,6 +150,20 @@ model idea_moodboard{
   projects idea_project[]
 }
 
+
+model idea_projectContent{
+  id Int @id @default(autoincrement())
+  project idea_project @relation(fields: [projectId],references: [id],onDelete: Cascade)
+  projectId Int
+  kind contentKind
+  content String? @db.LongText
+  imageSrc String?
+}
+
+enum contentKind{
+  text
+  image
+}
 
 enum Kind{
   Work

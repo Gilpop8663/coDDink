@@ -1,6 +1,6 @@
 import useMutation from "@libs/client/useMutation";
-import { cls } from "@libs/client/utils";
-import { idea_comment } from "@prisma/client";
+import { cls, makeImageURL } from "@libs/client/utils";
+import { idea_comment, idea_projectContent } from "@prisma/client";
 import { useRouter } from "next/router";
 import { CommentProps, CommentWithUser } from "pages";
 import { useState } from "react";
@@ -18,6 +18,7 @@ import CommentInput from "./clickedComponents/commentInput";
 import OwnerTab from "./clickedComponents/ownerTab";
 import CommentMsg from "./clickedComponents/commentMsg";
 import ClickedLoginInfo from "./clickedComponents/clickedLoginInfo";
+import Image from "next/image";
 
 interface ItemProps {
   kind: "home" | "gallery";
@@ -28,6 +29,7 @@ interface ItemProps {
   owner: string;
   avatar: string;
   userId: number;
+  contents: idea_projectContent[];
   createdAt: Date;
   onLikeClick: () => void;
   onClick?: () => void;
@@ -62,6 +64,7 @@ export default function ClickedProject({
   isLogin,
   register,
   handleSubmit,
+  contents,
   errors,
 }: ItemProps) {
   const router = useRouter();
@@ -97,7 +100,28 @@ export default function ClickedProject({
           userId={userId}
         ></ClickedHeader>
         <div className="w-[1400px]">
-          <div className="h-[1080px] bg-white"></div>
+          <div className="flex flex-col items-center space-y-8 bg-white px-24 py-16">
+            {contents.map((item) => (
+              <div
+                key={item.id}
+                className={cls(item.kind === "image" ? "h-screen w-full" : "")}
+              >
+                {item.kind === "image" && (
+                  <div className="relative h-5/6 w-full  ">
+                    <Image
+                      className="object-contain"
+                      alt={item.id.toString()}
+                      layout="fill"
+                      src={makeImageURL(item.imageSrc!, "public")}
+                    ></Image>
+                  </div>
+                )}
+                {item.kind === "text" && (
+                  <div className="relative whitespace-pre">{item.content}</div>
+                )}
+              </div>
+            ))}
+          </div>
           <ClickedFooter
             onLikeClick={onLikeClick}
             createdAt={createdAt}

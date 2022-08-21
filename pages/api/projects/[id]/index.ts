@@ -27,6 +27,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           name: true,
         },
       },
+      contents: true,
       comments: {
         orderBy: { createdAt: "desc" },
         include: {

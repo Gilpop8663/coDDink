@@ -8,12 +8,14 @@ interface EditSidebarProps {
   onSetting: () => void;
   register: UseFormRegister<UploadProps>;
   onPreviewImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onAddTextArea: () => void;
 }
 
 export default function EditSidebar({
   onSetting,
   register,
   onPreviewImage,
+  onAddTextArea,
 }: EditSidebarProps) {
   return (
     <div className="grid-cols-1">
@@ -43,7 +45,7 @@ export default function EditSidebar({
                 />
               </svg>
             </SubUploadButton>
-            <SubUploadButton label="텍스트">
+            <SubUploadButton label="텍스트" onClick={onAddTextArea}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6"
