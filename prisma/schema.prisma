@@ -43,6 +43,7 @@ model idea_user{
   moodboards idea_moodboard[]
   streams idea_stream[]
   messages idea_message[]
+  jointOwner idea_projectOwner[]
 }
 
 model idea_project{
@@ -52,15 +53,15 @@ model idea_project{
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   title String
-  tags String
-  tools String
-  category String
+  tags idea_projectTag[]
+  tools idea_projectTool[]
+  category idea_projectCategory[]
   visible Boolean
   description String @db.MediumText
-  owner String
+  thumbnail String
+  owner idea_projectOwner[]
   like idea_like[]
   view Int
-  avatar String
   comments idea_comment[]
   record Record[]
   moodboard idea_moodboard @relation(fields: [moodboardId],references: [id],onDelete: Cascade)
@@ -158,6 +159,46 @@ model idea_projectContent{
   kind contentKind
   content String? @db.LongText
   imageSrc String?
+  fontSize String?
+  alignText String?
+}
+
+model idea_projectTag{
+  id Int @id @default(autoincrement())
+  project idea_project @relation(fields: [projectId],references: [id],onDelete: Cascade)
+  projectId Int
+  name String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model idea_projectTool{
+  id Int @id @default(autoincrement())
+  project idea_project @relation(fields: [projectId],references: [id],onDelete: Cascade)
+  projectId Int
+  name String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model idea_projectCategory{
+  id Int @id @default(autoincrement())
+  project idea_project @relation(fields: [projectId],references: [id],onDelete: Cascade)
+  projectId Int
+  name String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model idea_projectOwner{
+  id Int @id @default(autoincrement())
+  project idea_project @relation(fields: [projectId],references: [id],onDelete: Cascade)
+  projectId Int
+  name String
+  user idea_user @relation(fields: [userId],references: [id],onDelete: Cascade)
+  userId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum contentKind{

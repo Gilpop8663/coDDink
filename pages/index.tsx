@@ -96,6 +96,8 @@ const Home: NextPage = () => {
     `/api/projects/${clickedId}/like`
   );
 
+  console.log(projectsData);
+
   const [sendComment, { data: commentData, loading: commentLoading }] =
     useMutation<CommentResponse>(
       `/api/projects/${detailData?.project.id}/comment`
@@ -162,7 +164,7 @@ const Home: NextPage = () => {
         {detailData && (
           <ClickedProject
             kind="home"
-            contents={detailData.project.contents}
+            contents={detailData?.project.contents}
             onLikeClick={onLikeClick}
             title={detailData?.project.title}
             id={detailData?.project.id}

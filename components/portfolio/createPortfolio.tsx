@@ -1,30 +1,43 @@
 import ErrorMessage from "@components/error";
 import NextButton from "@components/upload/nextButton";
 import UploadInput from "@components/upload/uploadInput";
+import UploadButton from "@components/uploadButton";
 import { cls } from "@libs/client/utils";
-import { UploadProps } from "pages/portfolio/editor";
+import { idea_user } from "@prisma/client";
+import Image from "next/image";
+import { UploadProps, UserDataProps } from "pages/portfolio/editor";
 import React from "react";
-import { FieldErrorsImpl, UseFormRegister } from "react-hook-form";
+import {
+  DeepRequired,
+  FieldErrorsImpl,
+  UseFormRegister,
+} from "react-hook-form";
 
 interface CreatePortfoiloProps {
   register: UseFormRegister<UploadProps>;
-  errors: FieldErrorsImpl<{
-    title: string;
-    tags: string;
-    tools: string;
-    category: string;
-    visible: boolean;
-    description: string;
-    owner: string;
-    images: FileList;
-    posts: string[];
-    code: string;
-  }>;
+  errors: FieldErrorsImpl<DeepRequired<UploadProps>>;
   onSetting: () => void;
   isVisible: boolean;
   isPublic: boolean;
   onPublicClick: (value: boolean) => void;
   onVisibleClick: () => void;
+  onKeyPress: (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    kind: "tags" | "category" | "tools" | "owner"
+  ) => void;
+  tagArr: string[];
+  categoryArr: string[];
+  toolArr: string[];
+  deleteContentTags: (
+    e: React.MouseEvent<SVGSVGElement, MouseEvent>,
+    kind: "tags" | "category" | "tools" | "owner" | string,
+    idx: number
+  ) => void;
+  userData: UserDataProps[] | undefined;
+  onUserClick: (e: React.MouseEvent, item: UserDataProps) => void;
+  ownerArr: UserDataProps[];
+  thumbnailSrc: string | undefined;
+  onThumbnailImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function CreatePortfolio({
@@ -35,6 +48,16 @@ export default function CreatePortfolio({
   onPublicClick,
   onVisibleClick,
   isPublic,
+  onKeyPress,
+  tagArr,
+  categoryArr,
+  deleteContentTags,
+  toolArr,
+  userData,
+  onUserClick,
+  ownerArr,
+  thumbnailSrc,
+  onThumbnailImage,
 }: CreatePortfoiloProps) {
   return (
     <div className="fixed top-0 z-30 flex h-screen w-screen items-center justify-center">
@@ -44,18 +67,38 @@ export default function CreatePortfolio({
         )}
         onClick={onSetting}
       ></div>
-      <div className="z-50  w-1/2 min-w-[900px] rounded-md border bg-white">
-        <div className="grid h-full w-full grid-cols-5 p-8">
-          <div className="col-span-2 rounded-l-md border bg-gray-50 p-8">
-            <div>
+      <div className="z-50 h-5/6  w-1/2 min-w-[900px] rounded-md border bg-white">
+        <div className="grid h-fit w-full grid-cols-5 p-8">
+          <div className="col-span-2  h-4/5  rounded-l-md border bg-gray-50 p-8">
+            <div className="">
               <span className="mr-2 text-sm font-semibold">프로젝트 표지</span>
               <span className="text-sm text-gray-300">(필수)</span>
-              <div className="m-auto mt-4 flex h-56 items-center justify-center border border-dashed border-gray-300 px-16">
-                <NextButton color="blue" label="이미지 업로드" />
+              <div className="relative m-auto mt-4 flex h-56 items-center justify-center border border-dashed border-gray-300 px-16">
+                {!thumbnailSrc ? (
+                  <UploadButton
+                    onChange={onThumbnailImage}
+                    kind="thumbnail"
+                  ></UploadButton>
+                ) : (
+                  <>
+                    <Image
+                      src={thumbnailSrc}
+                      alt="thumbnail"
+                      className="rounded-sm object-cover p-2"
+                      layout="fill"
+                    ></Image>
+                    <div className="absolute -bottom-12 left-2 z-10">
+                      <UploadButton
+                        onChange={onThumbnailImage}
+                        kind="changeThumb"
+                      ></UploadButton>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
-          <div className="col-span-3 rounded-r-md border-r border-t border-b bg-white px-6">
+          <div className="col-span-3 h-4/5  overflow-y-scroll rounded-r-md border-r border-t border-b bg-white px-6">
             <UploadInput
               label="프로젝트 제목"
               name="title"
@@ -81,6 +124,9 @@ export default function CreatePortfolio({
             <UploadInput
               label="프로젝트 태그"
               name="tags"
+              contentArr={tagArr}
+              onKeyPress={(e) => onKeyPress(e, "tags")}
+              deleteContentTags={deleteContentTags}
               type="text"
               required={false}
               subLabel="(최대 10개)"
@@ -92,6 +138,9 @@ export default function CreatePortfolio({
               label="사용 툴"
               name="tools"
               type="text"
+              contentArr={toolArr}
+              deleteContentTags={deleteContentTags}
+              onKeyPress={(e) => onKeyPress(e, "tools")}
               required={false}
               placeholder="사용하신 프레임워크 또는 라이브러리 또는 언어는 무엇입니까?"
               register={register("tools")}
@@ -102,6 +151,9 @@ export default function CreatePortfolio({
               subLabel="(필수)"
               name="category"
               type="text"
+              deleteContentTags={deleteContentTags}
+              contentArr={categoryArr}
+              onKeyPress={(e) => onKeyPress(e, "category")}
               placeholder="EX) 플랫폼, 판매 , 일상, 홍보, 클론코딩, 게임 , 커뮤니티 등"
               register={register("category", {
                 required: "이 필드는 필수 입력란입니다.",
@@ -111,7 +163,7 @@ export default function CreatePortfolio({
               <ErrorMessage>{errors.category.message}</ErrorMessage>
             )}
             <label
-              className="relative top-2 text-xs font-semibold"
+              className="relative top-2 z-10 text-xs font-semibold"
               htmlFor="visible"
             >
               가시성
@@ -211,6 +263,11 @@ export default function CreatePortfolio({
               required={false}
               placeholder="이름 또는 사용자 이름으로 공동 소유자 추가"
               register={register("owner", { required: false })}
+              userData={userData}
+              onUserClick={onUserClick}
+              userArr={ownerArr}
+              onKeyPress={(e) => onKeyPress(e, "owner")}
+              deleteContentTags={deleteContentTags}
             />
             <div className="my-12 flex items-end justify-end space-x-4">
               <NextButton

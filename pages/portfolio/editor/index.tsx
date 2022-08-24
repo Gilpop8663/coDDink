@@ -14,13 +14,14 @@ import UploadButton from "@components/uploadButton";
 import useMutation from "@libs/client/useMutation";
 import useUser, { useUserState } from "@libs/client/useUser";
 import { cls } from "@libs/client/utils";
-import { idea_project } from "@prisma/client";
+import { idea_project, idea_user } from "@prisma/client";
 import type { NextPage } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
+import { v4 as uuidv4 } from "uuid";
 
 export interface UploadProps {
   title: string;
@@ -44,6 +45,9 @@ export interface ContentProps {
   kind: "image" | "text";
   description: string;
   imageSrc?: string;
+  id: string;
+  fontSize?: string;
+  alignText?: string;
 }
 
 interface CFImageResult {
@@ -57,25 +61,57 @@ interface CFImageResult {
   messages: [];
 }
 
-interface ContentsProps {}
+interface UserSearchResponse {
+  ok: boolean;
+  user: UserDataProps[];
+}
+
+export interface UserDataProps {
+  id: number;
+  name: string;
+  avatar: string;
+}
+
+interface thumbnailProps {
+  description: string;
+  imageSrc: string;
+}
 
 const Editor: NextPage = () => {
   const router = useRouter();
   const {
     register,
     watch,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<UploadProps>();
   const { user, isLoading } = useUser();
   const [textId, setTextId] = useState(0);
+  const [tagArr, setTagArr] = useState<string[]>([]);
+  const [ownerArr, setOwnerArr] = useState<UserDataProps[]>([]);
+  const [categoryArr, setCategoryArr] = useState<string[]>([]);
+  const [toolArr, setToolArr] = useState<string[]>([]);
   const [isSetting, setIsSetting] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isPublic, setIsPublic] = useState(true);
   const [content, setContent] = useState<ContentProps[]>([]);
   const [isUpload, setIsUpload] = useState(false);
+  const [thumbnail, setThumbnail] = useState<thumbnailProps | null>(null);
   const [uploadProjects, { loading, error, data }] =
     useMutation<UploadProjectMutation>("/api/projects");
+  const ownerValue = watch("owner");
+  const { data: userData, mutate } = useSWR<UserSearchResponse>(
+    ownerValue !== "" ? `/api/users/search?name=${ownerValue}` : ""
+  );
+
+  const tagValue = watch("tags");
+  const categoryValue = watch("category");
+  const toolValue = watch("tools");
+
+  // const { data: tagData, error: tagError } = useSWR(
+  //   `/api/projects/tags?value=${tagValue}`
+  // );
 
   const cfImageUpload = async (file: File) => {
     const { uploadURL } = await (await fetch("/api/files")).json();
@@ -101,6 +137,13 @@ const Editor: NextPage = () => {
       content: content,
       visible: true,
       avatar: user?.avatar,
+      tagArr: tagArr,
+      categoryArr: categoryArr,
+      toolArr: toolArr,
+      ownerArr: [
+        { name: user?.name, avatar: user?.avatar, id: user?.id },
+        ...ownerArr,
+      ],
     };
 
     uploadProjects(newValue);
@@ -113,8 +156,44 @@ const Editor: NextPage = () => {
     });
   };
 
-  const onAddTextArea = (idx?: number) => {
-    setContent((prev) => [...prev, { kind: "text", description: "" }]);
+  const onAddTextArea = (e: React.MouseEvent<HTMLDivElement>, idx?: number) => {
+    const newContent: ContentProps = {
+      kind: "text",
+      description: "",
+      id: uuidv4(),
+      fontSize: "text-base",
+      alignText: "text-left",
+    };
+    if (!idx && idx !== 0) {
+      setContent((prev) => [...prev, newContent]);
+    } else {
+      if (idx === 0) {
+        setContent((prev) => [newContent, ...prev]);
+      } else {
+        setContent((prev) => [
+          ...prev.slice(0, idx),
+          newContent,
+          ...prev.slice(idx),
+        ]);
+      }
+    }
+  };
+
+  const onChange = async (e: ChangeEvent<HTMLTextAreaElement>, idx: number) => {
+    if (!e.target) return;
+    // setCurrentValue(e.target.value);
+
+    setContent((prev) => {
+      const curValue = { ...prev[idx], description: e.target.value };
+
+      const newContent = [
+        ...prev.slice(0, idx),
+        curValue,
+        ...prev.slice(idx + 1),
+      ];
+
+      return newContent;
+    });
   };
 
   const onSetting = () => {
@@ -128,6 +207,23 @@ const Editor: NextPage = () => {
   const onPublicClick = (value: boolean) => {
     setIsPublic(value);
     setIsVisible(false);
+  };
+
+  const onThumbnailImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {
+      target: { files },
+    } = e;
+    if (!files) return;
+
+    const file = files[0];
+    console.log(file);
+
+    const imageSrc = await cfImageUpload(file);
+
+    setThumbnail({
+      description: URL.createObjectURL(file),
+      imageSrc: imageSrc,
+    });
   };
 
   const onPreviewImage = async (
@@ -150,24 +246,116 @@ const Editor: NextPage = () => {
         kind: "image",
         description: URL.createObjectURL(files[i]),
         imageSrc: imageSrc,
+        id: uuidv4(),
       });
     }
 
-    console.log(arr);
     if (!idx && idx !== 0) {
       setContent((prev) => [...prev, ...arr]);
     } else {
       if (idx === 0) {
         setContent((prev) => [...arr, ...prev]);
       } else {
-        setContent((prev) => [
-          ...prev.slice(0, idx),
-          ...arr,
-          ...prev.slice(idx),
-        ]);
+        setContent((prev) => {
+          const newArr = [...prev.slice(0, idx), ...arr, ...prev.slice(idx)];
+
+          return newArr;
+        });
       }
     }
     setIsUpload(false);
+  };
+
+  const onKeyPress = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    kind: "tags" | "category" | "tools" | "owner"
+  ) => {
+    if (e.key === "Enter") {
+      if (kind === "tags") {
+        if (tagValue === "" || tagArr.length >= 10) return;
+        setTagArr((prev) => [...prev, tagValue]);
+        setValue("tags", "");
+      } else if (kind === "category") {
+        if (categoryValue === "" || categoryArr.length >= 10) return;
+        setCategoryArr((prev) => [...prev, categoryValue]);
+        setValue("category", "");
+      } else if (kind === "tools") {
+        if (toolValue === "" || toolArr.length >= 10) return;
+        setToolArr((prev) => [...prev, toolValue]);
+        setValue("tools", "");
+      }
+    } else if (e.keyCode === 8) {
+      if (kind === "tags") {
+        if (tagValue !== "") return;
+        setTagArr((prev) => [...prev.slice(0, -1)]);
+      } else if (kind === "category") {
+        if (categoryValue !== "") return;
+        setCategoryArr((prev) => [...prev.slice(0, -1)]);
+      } else if (kind === "tools") {
+        if (toolValue !== "") return;
+        setToolArr((prev) => [...prev.slice(0, -1)]);
+      } else if (kind === "owner") {
+        if (ownerValue !== "") return;
+        setOwnerArr((prev) => [...prev.slice(0, -1)]);
+      }
+    }
+  };
+
+  const deleteContentTags = (
+    e: React.MouseEvent<SVGSVGElement, MouseEvent>,
+    kind: "tags" | "category" | "tools" | "owner" | string,
+    idx: number
+  ) => {
+    if (kind === "tags") {
+      setTagArr((prev) => {
+        let newContent;
+        if (idx === 0) {
+          newContent = [...prev.slice(idx + 1)];
+        } else {
+          newContent = [...prev.slice(0, idx), ...prev.slice(idx + 1)];
+        }
+        return newContent;
+      });
+    } else if (kind === "category") {
+      setCategoryArr((prev) => {
+        let newContent;
+        if (idx === 0) {
+          newContent = [...prev.slice(idx + 1)];
+        } else {
+          newContent = [...prev.slice(0, idx), ...prev.slice(idx + 1)];
+        }
+        return newContent;
+      });
+    } else if (kind === "tools") {
+      setToolArr((prev) => {
+        let newContent;
+        if (idx === 0) {
+          newContent = [...prev.slice(idx + 1)];
+        } else {
+          newContent = [...prev.slice(0, idx), ...prev.slice(idx + 1)];
+        }
+        return newContent;
+      });
+    } else if (kind === "owner") {
+      setOwnerArr((prev) => {
+        let newContent;
+        if (idx === 0) {
+          newContent = [...prev.slice(idx + 1)];
+        } else {
+          newContent = [...prev.slice(0, idx), ...prev.slice(idx + 1)];
+        }
+        return newContent;
+      });
+    }
+  };
+
+  const onUserClick = (e: React.MouseEvent, item: UserDataProps) => {
+    if (ownerValue === "" || ownerArr.length >= 10) return;
+    setOwnerArr((prev) => {
+      const newOnwer = [...prev, item];
+      return newOnwer;
+    });
+    setValue("owner", "");
   };
 
   useEffect(() => {
@@ -175,6 +363,26 @@ const Editor: NextPage = () => {
       router.push(`/gallery/${data?.project.id}`);
     }
   }, [data, router]);
+
+  useEffect(() => {
+    document.addEventListener(
+      "keydown",
+      function (event) {
+        if (event.keyCode === 13) {
+          event.preventDefault();
+        }
+      },
+      true
+    );
+  }, []);
+
+  useEffect(() => {
+    console.log(userData);
+  }, [userData]);
+
+  useEffect(() => {
+    console.log(thumbnail);
+  }, [thumbnail]);
 
   // useEffect(() => {
   //   if (images && images.length > 0) {
@@ -219,7 +427,7 @@ const Editor: NextPage = () => {
                   {content &&
                     content.map((item, idx) => (
                       <div
-                        key={idx}
+                        key={item.id}
                         className={cls(
                           content.length === 1 ? "h-screen" : "",
                           "w-full"
@@ -227,6 +435,7 @@ const Editor: NextPage = () => {
                       >
                         {item.kind === "image" && (
                           <PreviewImage
+                            onAddTextArea={onAddTextArea}
                             onPreviewImage={onPreviewImage}
                             src={item.description}
                             idx={idx}
@@ -234,7 +443,14 @@ const Editor: NextPage = () => {
                           />
                         )}
                         {item.kind === "text" && (
-                          <PreviewText setContent={setContent} idx={idx} />
+                          <PreviewText
+                            onAddTextArea={onAddTextArea}
+                            onPreviewImage={onPreviewImage}
+                            setContent={setContent}
+                            idx={idx}
+                            textValue={item.description}
+                            onChange={(e) => onChange(e, idx)}
+                          />
                         )}
                       </div>
                     ))}
@@ -251,6 +467,14 @@ const Editor: NextPage = () => {
         </div>
         {isSetting && (
           <CreatePortfolio
+            onThumbnailImage={onThumbnailImage}
+            thumbnailSrc={thumbnail?.description}
+            onUserClick={onUserClick}
+            userData={userData?.user}
+            categoryArr={categoryArr}
+            toolArr={toolArr}
+            tagArr={tagArr}
+            onKeyPress={onKeyPress}
             register={register}
             errors={errors}
             isVisible={isVisible}
@@ -258,6 +482,8 @@ const Editor: NextPage = () => {
             onSetting={onSetting}
             onPublicClick={onPublicClick}
             onVisibleClick={onVisibleClick}
+            deleteContentTags={deleteContentTags}
+            ownerArr={ownerArr}
           />
         )}
       </form>

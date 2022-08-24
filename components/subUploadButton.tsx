@@ -6,7 +6,7 @@ interface UploadProps {
   label?: string;
   children?: React.ReactNode;
   onChange?: (event: ChangeEvent<HTMLInputElement>, idx?: number) => void;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
   idx?: number;
   register?: UseFormRegisterReturn;
 }

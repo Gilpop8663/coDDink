@@ -6,7 +6,7 @@ import { UseFormRegister } from "react-hook-form";
 interface EditFirstScreenProps {
   register: UseFormRegister<UploadProps>;
   onPreviewImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onAddTextArea: () => void;
+  onAddTextArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
 }
 
 export default function EditFirstScreen({
