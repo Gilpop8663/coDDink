@@ -138,7 +138,10 @@ export default function UploadButton({
         </div>
       )}
       {kind === "code" && (
-        <div className="flex h-24 w-24 cursor-pointer items-center justify-center rounded-full bg-blue-100 text-blue-600 transition-colors duration-200 hover:bg-blue-600 hover:text-white">
+        <div
+          onClick={onClick}
+          className="flex h-24 w-24 cursor-pointer items-center justify-center rounded-full bg-blue-100 text-blue-600 transition-colors duration-200 hover:bg-blue-600 hover:text-white"
+        >
           {children}
         </div>
       )}

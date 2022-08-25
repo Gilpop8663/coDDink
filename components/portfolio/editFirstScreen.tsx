@@ -7,12 +7,14 @@ interface EditFirstScreenProps {
   register: UseFormRegister<UploadProps>;
   onPreviewImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onAddTextArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
+  onAddCodeArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
 }
 
 export default function EditFirstScreen({
   register,
   onPreviewImage,
   onAddTextArea,
+  onAddCodeArea,
 }: EditFirstScreenProps) {
   return (
     <>
@@ -62,7 +64,12 @@ export default function EditFirstScreen({
             />
           </svg>
         </UploadButton>
-        <UploadButton kind="code" label="임베드" register={register("code")}>
+        <UploadButton
+          kind="code"
+          label="임베드"
+          register={register("code")}
+          onClick={onAddCodeArea}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"

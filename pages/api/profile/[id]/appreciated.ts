@@ -15,12 +15,21 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     },
     include: {
       project: {
-        include: { _count: { select: { like: true } } },
-      },
-      user: {
-        select: {
-          avatar: true,
-          name: true,
+        include: {
+          _count: { select: { like: true } },
+          owner: {
+            select: {
+              name: true,
+              userId: true,
+              user: {
+                select: {
+                  avatar: true,
+                  city: true,
+                  country: true,
+                },
+              },
+            },
+          },
         },
       },
     },

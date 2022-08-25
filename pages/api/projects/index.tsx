@@ -19,6 +19,19 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             like: true,
           },
         },
+        owner: {
+          select: {
+            name: true,
+            userId: true,
+            user: {
+              select: {
+                avatar: true,
+                city: true,
+                country: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -52,10 +65,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       session: { user },
     } = req;
 
-    console.log(content);
-
-    return;
-
     const project = await client.idea_project.create({
       data: {
         title,
@@ -77,8 +86,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         data: {
           kind: item.kind,
           imageSrc: item.kind === "image" ? item.imageSrc : null,
-          content: item.kind === "text" ? item.description : null,
-          fontSize: item.kind === "text" ? item.fontSize : null,
+          content: item.kind !== "image" ? item.description : null,
+          fontSize: item.kind !== "image" ? item.fontSize : null,
           alignText: item.kind === "text" ? item.alignText : null,
           project: {
             connect: {

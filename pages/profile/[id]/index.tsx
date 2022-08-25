@@ -15,6 +15,7 @@ import {
   CommentProps,
   CommentResponse,
   DetailProjectResponse,
+  OwnerProps,
   ProjectWithCountWithUser,
 } from "pages";
 import { useEffect, useState } from "react";
@@ -33,14 +34,11 @@ interface UserProjectsResponse {
 
 interface ProjectWithCount extends idea_project {
   _count: { like: number };
+  owner: OwnerProps[];
 }
 
 interface LikeProjectWithCountWithUser extends idea_like {
   project: ProjectWithCount;
-  user: {
-    name: string;
-    avatar: string;
-  };
 }
 
 interface LikeProjectResponse {
@@ -112,8 +110,6 @@ const Profile: NextPage = () => {
     );
   };
 
-  console.log(isAppreciated);
-
   const clickedId = path.slice(9);
 
   const { data: detailData, mutate } = useSWR<DetailProjectResponse | null>(
@@ -167,6 +163,8 @@ const Profile: NextPage = () => {
     }
   }, [commentData, reset, mutate, toggleData]);
 
+  console.log(userProjects?.projects[0].owner);
+
   return (
     <Layout
       isLogin={data && data.ok}
@@ -215,11 +213,11 @@ const Profile: NextPage = () => {
           <div className="my-8 w-full space-y-2">
             <Link href={`/profile/${userData?.userInfo?.id}/editor`}>
               <a>
-                <NextButton color="blue" label="내 프로필 편집"></NextButton>
+                <NextButton color="blueDiv" label="내 프로필 편집"></NextButton>
               </a>
             </Link>
-            <NextButton color="blue" label="팔로우"></NextButton>
-            <NextButton color="gray" label="메세지"></NextButton>
+            <NextButton color="blueDiv" label="팔로우"></NextButton>
+            <NextButton color="grayBtn" label="메세지"></NextButton>
           </div>
           <div className="flex w-full items-center justify-between">
             <span>프로젝트 보기</span>
@@ -424,29 +422,25 @@ const Profile: NextPage = () => {
               {kind === "projects" &&
                 userProjects?.projects?.map((item) => (
                   <ProjectItem
+                    thumbnail={item.thumbnail}
                     key={item.id}
                     title={item.title}
-                    id={item.id}
-                    likes={item._count?.like}
+                    likes={item._count.like}
                     views={1}
-                    owner={item.user.name}
-                    avatar={item.user.avatar}
-                    userId={item.userId}
+                    owner={item.owner}
                     onClick={() => onBoxClicked(item.id)}
                   />
                 ))}
               {kind === "appreciated" &&
                 likeProjects?.projects?.map((item) => (
                   <ProjectItem
-                    key={item.project.id}
+                    thumbnail={item.project.thumbnail}
+                    key={item.id}
                     title={item.project.title}
-                    id={item.project.id}
-                    likes={item.project._count?.like}
+                    likes={item.project._count.like}
                     views={1}
-                    owner={item.user.name}
-                    avatar={item.user.avatar}
-                    userId={item.userId}
-                    onClick={() => onBoxClicked(item.projectId)}
+                    owner={item.project.owner}
+                    onClick={() => onBoxClicked(item.id)}
                   />
                 ))}
             </div>
@@ -462,7 +456,7 @@ const Profile: NextPage = () => {
           id={detailData?.project.id}
           likes={detailData?.project._count.like}
           views={detailData.project.view}
-          owner={detailData.project.user.name}
+          owner={detailData.project.owner}
           avatar={detailData.project.user.avatar}
           userId={detailData.project.userId}
           createdAt={detailData.project.createdAt}

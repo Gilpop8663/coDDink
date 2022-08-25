@@ -2,7 +2,7 @@ import useMutation from "@libs/client/useMutation";
 import { cls, makeImageURL } from "@libs/client/utils";
 import { idea_comment, idea_projectContent } from "@prisma/client";
 import { useRouter } from "next/router";
-import { CommentProps, CommentWithUser } from "pages";
+import { CommentProps, CommentWithUser, OwnerProps } from "pages";
 import { useState } from "react";
 import {
   DeepRequired,
@@ -26,7 +26,7 @@ interface ItemProps {
   id: number;
   likes: number;
   views: number;
-  owner: string;
+  owner: OwnerProps[];
   avatar: string;
   userId: number;
   contents: idea_projectContent[];
@@ -67,6 +67,7 @@ export default function ClickedProject({
   contents,
   errors,
 }: ItemProps) {
+  console.log(owner);
   const router = useRouter();
 
   const onBackClick = () => {

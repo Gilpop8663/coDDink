@@ -22,7 +22,18 @@ export interface ProjectWithCountWithUser extends idea_project {
     avatar: string;
     name: string;
   };
+  owner: OwnerProps[];
 }
+export interface OwnerProps {
+  name: string;
+  userId: number;
+  user: {
+    avatar: string;
+    city: string;
+    country: string;
+  };
+}
+
 export interface LikeProjectWithCountWithUser extends idea_project {
   _count: {
     like: number;
@@ -50,6 +61,7 @@ export interface ProjectWithComment extends idea_project {
     avatar: string;
     name: string;
   };
+  owner: OwnerProps[];
   comments: CommentWithUser[];
   contents: idea_projectContent[];
 }
@@ -141,6 +153,8 @@ const Home: NextPage = () => {
     }
   }, [commentData, reset, mutate]);
 
+  console.log(detailData?.project.owner);
+
   return (
     <Layout
       isLogin={data && data.ok}
@@ -150,14 +164,12 @@ const Home: NextPage = () => {
       <div className="grid grid-cols-5 gap-6 px-6 py-6">
         {projectsData?.projects?.map((item) => (
           <ProjectItem
+            thumbnail={item.thumbnail}
             key={item.id}
             title={item.title}
-            id={item.id}
             likes={item._count.like}
             views={1}
-            owner={item.user.name}
-            avatar={item.user.avatar}
-            userId={item.userId}
+            owner={item.owner}
             onClick={() => onBoxClicked(item.id)}
           />
         ))}
@@ -170,7 +182,7 @@ const Home: NextPage = () => {
             id={detailData?.project.id}
             likes={detailData?.project._count.like}
             views={detailData.project.view}
-            owner={detailData.project.user.name}
+            owner={detailData.project.owner}
             avatar={detailData.project.user.avatar}
             userId={detailData.project.userId}
             createdAt={detailData.project.createdAt}

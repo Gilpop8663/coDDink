@@ -2,7 +2,13 @@ import { cls } from "@libs/client/utils";
 import React, { ChangeEvent } from "react";
 
 interface UploadProps {
-  color: "blue" | "green" | "white" | "gray";
+  color:
+    | "blueBtn"
+    | "greenBtn"
+    | "whiteDiv"
+    | "grayBtn"
+    | "greenDiv"
+    | "blueDiv";
   label: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   [key: string]: any;
@@ -18,7 +24,7 @@ export default function NextButton({
 }: UploadProps) {
   return (
     <>
-      {color === "white" && (
+      {color === "whiteDiv" && (
         <div
           className={cls(
             `text-${size}`,
@@ -29,7 +35,7 @@ export default function NextButton({
           {label}
         </div>
       )}
-      {color === "blue" && (
+      {color === "blueBtn" && (
         <button
           className={cls(
             `text-${size}`,
@@ -40,7 +46,18 @@ export default function NextButton({
           {label}
         </button>
       )}
-      {color === "green" && (
+      {color === "blueDiv" && (
+        <div
+          className={cls(
+            `text-${size}`,
+            "flex w-full cursor-pointer justify-center rounded-full bg-blue-600 py-1 px-2 font-semibold text-white transition-colors hover:bg-blue-700"
+          )}
+          onClick={onClick}
+        >
+          {label}
+        </div>
+      )}
+      {color === "greenBtn" && (
         <button
           className={cls(
             `text-${size}`,
@@ -51,7 +68,20 @@ export default function NextButton({
           {label}
         </button>
       )}
-      {color === "gray" && (
+
+      {color === "greenDiv" && (
+        <div
+          className={cls(
+            `text-${size}`,
+            "flex w-full cursor-pointer justify-center rounded-full bg-green-600 py-1 px-2 font-semibold text-white transition-colors hover:bg-green-700"
+          )}
+          onClick={onClick}
+        >
+          {label}
+        </div>
+      )}
+
+      {color === "grayBtn" && (
         <button
           className={cls(
             `text-${size}`,

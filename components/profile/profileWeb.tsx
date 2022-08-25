@@ -130,7 +130,7 @@ export default function ProfileWeb({
           <NextButton
             onClick={onClick}
             size="xs"
-            color="blue"
+            color="blueBtn"
             label="링크"
           ></NextButton>
         </div>

@@ -84,7 +84,7 @@ const Gallery: NextPage = () => {
             id={detailData?.project.id}
             likes={detailData?.project._count.like}
             views={detailData.project.view}
-            owner={detailData.project.user.name}
+            owner={detailData.project.owner}
             avatar={detailData.project.user.avatar}
             userId={detailData.project.userId}
             createdAt={detailData.project.createdAt}

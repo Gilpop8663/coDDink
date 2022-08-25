@@ -9,6 +9,7 @@ interface EditSidebarProps {
   register: UseFormRegister<UploadProps>;
   onPreviewImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onAddTextArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
+  onAddCodeArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
 }
 
 export default function EditSidebar({
@@ -16,6 +17,7 @@ export default function EditSidebar({
   register,
   onPreviewImage,
   onAddTextArea,
+  onAddCodeArea,
 }: EditSidebarProps) {
   return (
     <div className="grid-cols-1">
@@ -61,7 +63,7 @@ export default function EditSidebar({
                 />
               </svg>
             </SubUploadButton>
-            <SubUploadButton label="임베드">
+            <SubUploadButton label="임베드" onClick={onAddCodeArea}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6"
@@ -104,8 +106,8 @@ export default function EditSidebar({
           </SubUploadButton>
         </div>
         <div className="mt-20 space-y-4 border bg-white py-7 px-4 shadow-md">
-          <NextButton color="green" label="계속" onClick={onSetting} />
-          <NextButton label="초안으로 저장" color="blue" />
+          <NextButton color="greenDiv" label="계속" onClick={onSetting} />
+          <NextButton label="초안으로 저장" color="blueDiv" />
           <div className="mt-4 flex justify-center text-gray-400">
             <svg
               xmlns="http://www.w3.org/2000/svg"

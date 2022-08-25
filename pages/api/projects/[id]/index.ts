@@ -20,6 +20,19 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           comments: true,
         },
       },
+      owner: {
+        select: {
+          name: true,
+          userId: true,
+          user: {
+            select: {
+              avatar: true,
+              city: true,
+              country: true,
+            },
+          },
+        },
+      },
       user: {
         select: {
           id: true,
@@ -64,6 +77,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       },
     })
   );
+
+  console.log(project);
 
   res.json({ ok: true, project, relatedProjects, isLiked });
 }

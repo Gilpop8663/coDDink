@@ -161,6 +161,7 @@ model idea_projectContent{
   imageSrc String?
   fontSize String?
   alignText String?
+  language String?
 }
 
 model idea_projectTag{
@@ -204,6 +205,7 @@ model idea_projectOwner{
 enum contentKind{
   text
   image
+  code
 }
 
 enum Kind{

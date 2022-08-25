@@ -19,10 +19,17 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           like: true,
         },
       },
-      user: {
+      owner: {
         select: {
-          avatar: true,
           name: true,
+          userId: true,
+          user: {
+            select: {
+              avatar: true,
+              city: true,
+              country: true,
+            },
+          },
         },
       },
     },

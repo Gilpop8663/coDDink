@@ -8,12 +8,14 @@ interface MiniUploadMenuProps {
     idx?: number
   ) => void;
   onAddTextArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
+  onAddCodeArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
 }
 
 export default function MiniUploadMenu({
   idx,
   onPreviewImage,
   onAddTextArea,
+  onAddCodeArea,
 }: MiniUploadMenuProps) {
   const [isCreateOver, setIsCreateOver] = useState(false);
   const onCreateHover = () => {
@@ -53,7 +55,10 @@ export default function MiniUploadMenu({
               />
             </svg>
           </div>
-          <div className="cursor-pointer rounded-md p-1 hover:bg-gray-400">
+          <div
+            onClick={(e) => onAddCodeArea(e, idx)}
+            className="cursor-pointer rounded-md p-1 hover:bg-gray-400"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6"

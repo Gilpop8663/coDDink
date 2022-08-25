@@ -215,13 +215,13 @@ const ProfileEditor: NextPage = () => {
             <a className="w-40">
               <NextButton
                 size="sm"
-                color="green"
+                color="greenDiv"
                 label="프로필로 돌아가기"
               ></NextButton>
             </a>
           </Link>
           <div className="w-40">
-            <NextButton size="sm" color="blue" label="저장하기"></NextButton>
+            <NextButton size="sm" color="blueBtn" label="저장하기"></NextButton>
           </div>
         </div>
         <div className=" flex justify-center bg-slate-100 px-28 pt-28 pb-96 ">

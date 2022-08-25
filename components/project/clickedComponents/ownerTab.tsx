@@ -1,15 +1,16 @@
 import { makeImageURL } from "@libs/client/utils";
 import Image from "next/image";
 import Link from "next/link";
+import { OwnerProps } from "pages";
 import React from "react";
 
-interface OwnerProps {
+interface OwnerTabProps {
   userId: number;
   avatar: string;
-  owner: string;
+  owner: OwnerProps[];
 }
 
-export default function OwnerTab({ userId, avatar, owner }: OwnerProps) {
+export default function OwnerTab({ userId, avatar, owner }: OwnerTabProps) {
   return (
     <div className="flex flex-col border bg-white p-8">
       <span className="text-xs font-semibold">소유자</span>
@@ -25,7 +26,7 @@ export default function OwnerTab({ userId, avatar, owner }: OwnerProps) {
             ></Image>
           </a>
         </Link>
-        <span className="font-semibold">{owner}</span>
+        <span className="font-semibold">{owner[0].name}</span>
       </div>
     </div>
   );

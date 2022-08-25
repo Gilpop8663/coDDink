@@ -4,6 +4,7 @@ import CreatePortfolio from "@components/portfolio/createPortfolio";
 import EditFirstScreen from "@components/portfolio/editFirstScreen";
 import EditMenu from "@components/portfolio/editMenu";
 import EditSidebar from "@components/portfolio/editSidebar";
+import PreviewCode from "@components/portfolio/previewCode";
 import PreviewImage from "@components/portfolio/previewImage";
 import PreviewText from "@components/portfolio/previewText";
 import SubUploadButton from "@components/subUploadButton";
@@ -34,6 +35,7 @@ export interface UploadProps {
   images: FileList;
   posts: string[];
   code: string;
+  thumbnail: FileList;
 }
 
 interface UploadProjectMutation {
@@ -42,12 +44,13 @@ interface UploadProjectMutation {
 }
 
 export interface ContentProps {
-  kind: "image" | "text";
+  kind: "image" | "text" | "code";
   description: string;
   imageSrc?: string;
   id: string;
   fontSize?: string;
   alignText?: string;
+  language?: string;
 }
 
 interface CFImageResult {
@@ -83,6 +86,8 @@ const Editor: NextPage = () => {
     register,
     watch,
     setValue,
+    setError,
+    clearErrors,
     handleSubmit,
     formState: { errors },
   } = useForm<UploadProps>();
@@ -140,6 +145,7 @@ const Editor: NextPage = () => {
       tagArr: tagArr,
       categoryArr: categoryArr,
       toolArr: toolArr,
+      thumbnail: thumbnail?.imageSrc,
       ownerArr: [
         { name: user?.name, avatar: user?.avatar, id: user?.id },
         ...ownerArr,
@@ -164,6 +170,30 @@ const Editor: NextPage = () => {
       fontSize: "text-base",
       alignText: "text-left",
     };
+    if (!idx && idx !== 0) {
+      setContent((prev) => [...prev, newContent]);
+    } else {
+      if (idx === 0) {
+        setContent((prev) => [newContent, ...prev]);
+      } else {
+        setContent((prev) => [
+          ...prev.slice(0, idx),
+          newContent,
+          ...prev.slice(idx),
+        ]);
+      }
+    }
+  };
+
+  const onAddCodeArea = (e: React.MouseEvent<HTMLDivElement>, idx?: number) => {
+    const newContent: ContentProps = {
+      kind: "code",
+      description: "",
+      id: uuidv4(),
+      language: "jsx",
+      fontSize: "text-base",
+    };
+
     if (!idx && idx !== 0) {
       setContent((prev) => [...prev, newContent]);
     } else {
@@ -369,7 +399,9 @@ const Editor: NextPage = () => {
       "keydown",
       function (event) {
         if (event.keyCode === 13) {
-          event.preventDefault();
+          if (!event.shiftKey) {
+            event.preventDefault();
+          }
         }
       },
       true
@@ -377,12 +409,17 @@ const Editor: NextPage = () => {
   }, []);
 
   useEffect(() => {
-    console.log(userData);
-  }, [userData]);
+    if (!thumbnail) {
+      setError("thumbnail", {
+        type: "required",
+        message: "프로젝트 표지는 필수입니다.",
+      });
+    } else {
+      clearErrors("thumbnail");
+    }
 
-  useEffect(() => {
     console.log(thumbnail);
-  }, [thumbnail]);
+  }, [thumbnail, setError, clearErrors]);
 
   // useEffect(() => {
   //   if (images && images.length > 0) {
@@ -421,6 +458,7 @@ const Editor: NextPage = () => {
                   register={register}
                   onPreviewImage={onPreviewImage}
                   onAddTextArea={onAddTextArea}
+                  onAddCodeArea={onAddCodeArea}
                 />
               ) : (
                 <div className=" flex w-full flex-col px-16 py-12">
@@ -429,7 +467,7 @@ const Editor: NextPage = () => {
                       <div
                         key={item.id}
                         className={cls(
-                          content.length === 1 ? "h-screen" : "",
+                          content.length === 1 ? "" : "",
                           "w-full"
                         )}
                       >
@@ -437,6 +475,7 @@ const Editor: NextPage = () => {
                           <PreviewImage
                             onAddTextArea={onAddTextArea}
                             onPreviewImage={onPreviewImage}
+                            onAddCodeArea={onAddCodeArea}
                             src={item.description}
                             idx={idx}
                             onClearClick={onClearAttatchment}
@@ -444,13 +483,27 @@ const Editor: NextPage = () => {
                         )}
                         {item.kind === "text" && (
                           <PreviewText
+                            onClearClick={onClearAttatchment}
                             onAddTextArea={onAddTextArea}
                             onPreviewImage={onPreviewImage}
+                            onAddCodeArea={onAddCodeArea}
                             setContent={setContent}
                             idx={idx}
                             textValue={item.description}
                             onChange={(e) => onChange(e, idx)}
                           />
+                        )}
+                        {item.kind === "code" && (
+                          <PreviewCode
+                            onClearClick={onClearAttatchment}
+                            textValue={item.description}
+                            onAddTextArea={onAddTextArea}
+                            onPreviewImage={onPreviewImage}
+                            onAddCodeArea={onAddCodeArea}
+                            setContent={setContent}
+                            idx={idx}
+                            onChange={(e) => onChange(e, idx)}
+                          ></PreviewCode>
                         )}
                       </div>
                     ))}
@@ -462,6 +515,7 @@ const Editor: NextPage = () => {
               register={register}
               onSetting={onSetting}
               onAddTextArea={onAddTextArea}
+              onAddCodeArea={onAddCodeArea}
             />
           </div>
         </div>

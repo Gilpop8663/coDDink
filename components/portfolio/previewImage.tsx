@@ -15,6 +15,7 @@ interface PreviewImageProps {
     idx?: number
   ) => void;
   onAddTextArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
+  onAddCodeArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
 }
 
 export default function PreviewImage({
@@ -23,6 +24,7 @@ export default function PreviewImage({
   onClearClick,
   onPreviewImage,
   onAddTextArea,
+  onAddCodeArea,
 }: PreviewImageProps) {
   const [isEditOver, setIsEditOver] = useState(false);
 
@@ -35,6 +37,7 @@ export default function PreviewImage({
         onAddTextArea={onAddTextArea}
         idx={idx}
         onPreviewImage={onPreviewImage}
+        onAddCodeArea={onAddCodeArea}
       />
 
       <div className="relative h-5/6 w-full border-blue-600 hover:border">

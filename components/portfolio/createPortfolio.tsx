@@ -84,7 +84,7 @@ export default function CreatePortfolio({
                     <Image
                       src={thumbnailSrc}
                       alt="thumbnail"
-                      className="rounded-sm object-cover p-2"
+                      className="rounded-sm object-contain p-2"
                       layout="fill"
                     ></Image>
                     <div className="absolute -bottom-12 left-2 z-10">
@@ -96,6 +96,9 @@ export default function CreatePortfolio({
                   </>
                 )}
               </div>
+              {errors.thumbnail && (
+                <ErrorMessage>{errors.thumbnail.message}</ErrorMessage>
+              )}
             </div>
           </div>
           <div className="col-span-3 h-4/5  overflow-y-scroll rounded-r-md border-r border-t border-b bg-white px-6">
@@ -140,6 +143,7 @@ export default function CreatePortfolio({
               type="text"
               contentArr={toolArr}
               deleteContentTags={deleteContentTags}
+              subLabel="(최대 10개)"
               onKeyPress={(e) => onKeyPress(e, "tools")}
               required={false}
               placeholder="사용하신 프레임워크 또는 라이브러리 또는 언어는 무엇입니까?"
@@ -148,7 +152,7 @@ export default function CreatePortfolio({
 
             <UploadInput
               label="이 프로젝트를 어떤 범주로 분류하시겠습니까?"
-              subLabel="(필수)"
+              subLabel="(필수 , 최대 10개)"
               name="category"
               type="text"
               deleteContentTags={deleteContentTags}
@@ -156,7 +160,10 @@ export default function CreatePortfolio({
               onKeyPress={(e) => onKeyPress(e, "category")}
               placeholder="EX) 플랫폼, 판매 , 일상, 홍보, 클론코딩, 게임 , 커뮤니티 등"
               register={register("category", {
-                required: "이 필드는 필수 입력란입니다.",
+                required:
+                  categoryArr.length === 0
+                    ? "이 필드는 필수 입력란입니다."
+                    : false,
               })}
             />
             {errors.category && (
@@ -272,11 +279,11 @@ export default function CreatePortfolio({
             <div className="my-12 flex items-end justify-end space-x-4">
               <NextButton
                 label="취소"
-                color="white"
+                color="whiteDiv"
                 onClick={onSetting}
               ></NextButton>
-              <NextButton label="초안으로 저장" color="blue"></NextButton>
-              <NextButton label="게시" color="green"></NextButton>
+              <NextButton label="초안으로 저장" color="blueBtn"></NextButton>
+              <NextButton label="게시" color="greenBtn"></NextButton>
             </div>
           </div>
         </div>

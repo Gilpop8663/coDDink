@@ -22,7 +22,9 @@ interface PreivewTextProps {
   ) => void;
   textValue: string;
   onAddTextArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
+  onAddCodeArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
   onChange: ChangeEventHandler<HTMLTextAreaElement>;
+  onClearClick: (idx: number) => void;
   [key: string]: any;
 }
 
@@ -35,6 +37,8 @@ export default function PreivewText({
   onPreviewImage,
   textValue,
   onChange,
+  onAddCodeArea,
+  onClearClick,
   ...rest
 }: PreivewTextProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -136,6 +140,7 @@ export default function PreivewText({
     >
       {(isWrite || textValue.length > 0) && (
         <MiniUploadMenu
+          onAddCodeArea={onAddCodeArea}
           onAddTextArea={onAddTextArea}
           idx={idx}
           onPreviewImage={onPreviewImage}
@@ -223,6 +228,26 @@ export default function PreivewText({
               />
             </svg>
           </div>
+          <div
+            className="cursor-pointer"
+            title="삭제하기"
+            onClick={() => onClearClick(idx)}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="h-6 w-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </div>
         </div>
       )}
       <div className={cls("flex h-fit justify-center ")}>
@@ -232,11 +257,12 @@ export default function PreivewText({
           id={name}
           value={textValue}
           onChange={onChange}
+          autoFocus
           placeholder={"여기에 텍스트 입력..."}
           className={cls(
             fontSize && `${fontSize} placeholder:${fontSize}`,
             alignText && `${alignText}`,
-            "h-fit w-4/5 resize-none justify-center border-blue-600  scrollbar-hide placeholder:text-xl hover:border focus:border focus:outline-none"
+            "h-fit w-4/5 resize-none justify-center whitespace-pre-wrap  border-blue-600 scrollbar-hide placeholder:text-xl hover:border focus:border focus:outline-none"
           )}
           {...rest}
         ></textarea>

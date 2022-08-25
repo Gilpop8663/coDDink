@@ -18,6 +18,7 @@ export default function EditMenu({
 }: EditMenuProps) {
   return (
     <div
+      title="옵션"
       className={cls(
         kind === "Image" ? "relative h-5/6 w-full" : "h-12 w-4/5",
         "border-blue-600 hover:border"
