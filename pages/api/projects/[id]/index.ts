@@ -78,8 +78,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     })
   );
 
-  console.log(project);
-
   res.json({ ok: true, project, relatedProjects, isLiked });
 }
 

@@ -64,7 +64,7 @@ export default function PreivewText({
     setFontSize(e.target.value);
 
     setContent((prev) => {
-      const curContent = { ...prev[idx], fontSize: fontSize };
+      const curContent = { ...prev[idx], fontSize: e.target.value };
 
       let newContent;
 
@@ -85,16 +85,12 @@ export default function PreivewText({
   };
 
   const onAlignText = (kind: number) => {
-    if (kind === 1) {
-      setAlignText("text-left");
-    } else if (kind === 2) {
-      setAlignText("text-center");
-    } else if (kind === 3) {
-      setAlignText("text-right");
-    }
+    const result =
+      kind === 1 ? "text-left" : kind === 2 ? "text-center" : "text-right";
+    setAlignText(result);
 
     setContent((prev) => {
-      const curContent = { ...prev[idx], alignText: alignText };
+      const curContent = { ...prev[idx], alignText: result };
 
       let newContent;
 

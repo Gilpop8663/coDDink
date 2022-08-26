@@ -3,22 +3,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { OwnerProps } from "pages";
 import React from "react";
+import OwnerInfo from "../ownerInfo";
 
 interface ItemProps {
   kind: "home" | "gallery";
   title: string;
-  avatar: string;
-  userId: number;
   owner: OwnerProps[];
 }
 
-export default function ClickedHeader({
-  kind,
-  title,
-  avatar,
-  userId,
-  owner,
-}: ItemProps) {
+export default function ClickedHeader({ kind, title, owner }: ItemProps) {
   console.log(owner);
   return (
     <div className={cls(kind === "home" ? "text-white" : "text-black", "flex")}>
@@ -37,9 +30,10 @@ export default function ClickedHeader({
         <div className="ml-3 flex flex-col">
           <span className="font-semibold">{title}</span>
           <div className="flex items-center space-x-2 text-sm">
-            <Link href={`/profile/${owner[0].userId}`}>
+            <OwnerInfo kind="detail" owner={owner}></OwnerInfo>
+            {/* <Link href={`/profile/${owner[0].userId}`}>
               <a className="cursor-pointer hover:underline">{owner[0].name}</a>
-            </Link>
+            </Link> */}
             <span>&bull;</span>
             <span className="cursor-pointer hover:underline">팔로우</span>
           </div>

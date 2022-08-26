@@ -89,6 +89,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           content: item.kind !== "image" ? item.description : null,
           fontSize: item.kind !== "image" ? item.fontSize : null,
           alignText: item.kind === "text" ? item.alignText : null,
+          language: item.kind === "code" ? item.language : null,
           project: {
             connect: {
               id: project.id,

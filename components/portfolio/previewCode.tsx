@@ -59,7 +59,7 @@ export default function PreviewCode({
     setLanguage(e.currentTarget.value);
 
     setContent((prev) => {
-      const curContent = { ...prev[idx], language: language };
+      const curContent = { ...prev[idx], language: e.currentTarget.value };
 
       let newContent;
 
@@ -81,7 +81,7 @@ export default function PreviewCode({
     setFontSize(e.target.value);
 
     setContent((prev) => {
-      const curContent = { ...prev[idx], fontSize: fontSize };
+      const curContent = { ...prev[idx], fontSize: e.target.value };
 
       let newContent;
 
@@ -104,7 +104,11 @@ export default function PreviewCode({
   }, [language]);
 
   return (
-    <div className="relative" onMouseOut={onOutArea} onMouseOver={onOverArea}>
+    <div
+      className="relative mt-16"
+      onMouseOut={onOutArea}
+      onMouseOver={onOverArea}
+    >
       {isOver && (
         <div className="absolute -top-4 flex items-center justify-between space-x-2 rounded-md bg-gray-700 px-4 py-2 text-white">
           <select
@@ -261,6 +265,7 @@ export default function PreviewCode({
         className={cls(fontSize && `${fontSize}`, "bg-[#f5f5f5] p-4 font-mono")}
       >
         <CodeEditor
+          autoFocus
           style={{
             fontSize:
               fontSize === "text-2xl"

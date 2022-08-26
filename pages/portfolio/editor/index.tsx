@@ -136,7 +136,7 @@ const Editor: NextPage = () => {
 
   const onValid = async (value: UploadProps) => {
     if (loading) return;
-    console.log(content);
+    // console.log(content);
     const newValue = {
       ...value,
       content: content,
@@ -420,6 +420,10 @@ const Editor: NextPage = () => {
 
     console.log(thumbnail);
   }, [thumbnail, setError, clearErrors]);
+
+  useEffect(() => {
+    console.log(content);
+  }, [content]);
 
   // useEffect(() => {
   //   if (images && images.length > 0) {

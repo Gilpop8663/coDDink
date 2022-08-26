@@ -19,6 +19,7 @@ import OwnerTab from "./clickedComponents/ownerTab";
 import CommentMsg from "./clickedComponents/commentMsg";
 import ClickedLoginInfo from "./clickedComponents/clickedLoginInfo";
 import Image from "next/image";
+import ClickedCodeView from "./clickedComponents/clickedCodeView";
 
 interface ItemProps {
   kind: "home" | "gallery";
@@ -67,7 +68,7 @@ export default function ClickedProject({
   contents,
   errors,
 }: ItemProps) {
-  console.log(owner);
+  console.log(contents);
   const router = useRouter();
 
   const onBackClick = () => {
@@ -93,35 +94,48 @@ export default function ClickedProject({
           "relative top-5 z-20 flex flex-col"
         )}
       >
-        <ClickedHeader
-          kind={kind}
-          title={title}
-          owner={owner}
-          avatar={avatar}
-          userId={userId}
-        ></ClickedHeader>
+        <ClickedHeader kind={kind} title={title} owner={owner}></ClickedHeader>
         <div className="w-[1400px]">
-          <div className="flex flex-col items-center space-y-8 bg-white px-24 py-16">
-            {contents.map((item) => (
-              <div
-                key={item.id}
-                className={cls(item.kind === "image" ? "h-screen w-full" : "")}
-              >
-                {item.kind === "image" && (
-                  <div className="relative h-5/6 w-full  ">
-                    <Image
-                      className="object-contain"
-                      alt={item.id.toString()}
-                      layout="fill"
-                      src={makeImageURL(item.imageSrc!, "public")}
-                    ></Image>
-                  </div>
-                )}
-                {item.kind === "text" && (
-                  <div className="relative whitespace-pre">{item.content}</div>
-                )}
-              </div>
-            ))}
+          <div className="flex flex-col  space-y-8 bg-white px-24 py-16">
+            {contents.map((item) => {
+              const contentFontSize = item.fontSize;
+              return (
+                <div
+                  key={item.id}
+                  className={cls(
+                    item.kind === "image" ? "h-screen w-full" : ""
+                  )}
+                >
+                  {item.kind === "image" && (
+                    <div className="relative h-5/6 w-full  ">
+                      <Image
+                        className="object-contain"
+                        alt={item.id.toString()}
+                        layout="fill"
+                        src={makeImageURL(item.imageSrc!, "public")}
+                      ></Image>
+                    </div>
+                  )}
+                  {item.kind === "text" && (
+                    <div
+                      className={cls(
+                        `${item?.fontSize} ${item?.alignText}`,
+                        "relative whitespace-pre"
+                      )}
+                    >
+                      {item.content}
+                    </div>
+                  )}
+                  {item.kind === "code" && (
+                    <ClickedCodeView
+                      content={item.content}
+                      language={item.language}
+                      fontSize={item.fontSize}
+                    ></ClickedCodeView>
+                  )}
+                </div>
+              );
+            })}
           </div>
           <ClickedFooter
             onLikeClick={onLikeClick}
