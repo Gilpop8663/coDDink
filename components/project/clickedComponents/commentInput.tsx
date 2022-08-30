@@ -21,7 +21,7 @@ export default function CommentInput({
     <>
       <div className="grid grid-cols-10">
         <Link href={`/gallery/${id}`}>
-          <a className="col-span-1 mr-4 cursor-pointer">
+          <a className="col-span-1 mr-4 mt-4 cursor-pointer">
             <Image
               src={makeImageURL(avatar, "smAvatar")}
               alt="profile"
@@ -31,7 +31,7 @@ export default function CommentInput({
             ></Image>
           </a>
         </Link>
-        <div className="col-span-9">
+        <div className="col-span-9 w-full">
           <TextArea
             register={register}
             placeholder="이 프로젝트에 대해 어떻게 생각하십니까?"

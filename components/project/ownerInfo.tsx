@@ -8,9 +8,10 @@ import React, { useState } from "react";
 interface InfoProps {
   kind: "home" | "detail";
   owner: OwnerProps[];
+  path: "home" | "gallery";
 }
 
-export default function OwnerInfo({ kind, owner }: InfoProps) {
+export default function OwnerInfo({ kind, owner, path }: InfoProps) {
   const [isOwnerTouch, setIsOwnerTouch] = useState(false);
   const onOwnerTouch = () => {
     setIsOwnerTouch((prev) => !prev);
@@ -25,13 +26,13 @@ export default function OwnerInfo({ kind, owner }: InfoProps) {
       )}
     >
       {owner.length === 1 ? (
-        <Link href={`/profile/${owner[0].userId}`}>
+        <Link href={`/profile/${owner[0]?.userId}`}>
           <a className="flex items-center">
             {kind === "home" && (
               <div className="h-4 w-4 rounded-full bg-orange-500">
                 <Image
                   className="rounded-full"
-                  src={makeImageURL(owner[0].user.avatar, "smAvatar")}
+                  src={makeImageURL(owner[0]?.user?.avatar, "smAvatar")}
                   height={50}
                   width={50}
                   alt="avatar"
@@ -45,7 +46,12 @@ export default function OwnerInfo({ kind, owner }: InfoProps) {
         <div className="relative">
           <div className="relative flex cursor-pointer items-center hover:underline">
             <span
-              className={cls(kind === "home" ? "text-xs" : "text-sm", "mr-1 ")}
+              className={cls(
+                path === "gallery" || kind === "home"
+                  ? "text-xs text-gray-700"
+                  : "text-sm text-white",
+                "mr-1 "
+              )}
             >
               여러 소유자
             </span>
@@ -55,7 +61,12 @@ export default function OwnerInfo({ kind, owner }: InfoProps) {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="h-4 w-4"
+              className={cls(
+                path === "gallery" || kind === "home"
+                  ? "text-xs text-gray-700"
+                  : "text-white",
+                "h-4 w-4"
+              )}
             >
               <path
                 strokeLinecap="round"
@@ -65,7 +76,7 @@ export default function OwnerInfo({ kind, owner }: InfoProps) {
             </svg>
           </div>
           {isOwnerTouch && (
-            <div className="absolute top-6 w-96 rounded-md border bg-white p-2 text-gray-700 shadow-md transition-all">
+            <div className="absolute top-6 z-10 w-96 rounded-md border bg-white p-2 text-gray-700 shadow-md transition-all">
               {owner.map((item, idx) => (
                 <div
                   key={idx}
@@ -75,7 +86,7 @@ export default function OwnerInfo({ kind, owner }: InfoProps) {
                     <Link href={`/profile/${item.userId}`}>
                       <a className="relative mr-2 h-10 w-10 cursor-pointer rounded-full bg-black">
                         <Image
-                          src={makeImageURL(item.user.avatar, "smAvatar")}
+                          src={makeImageURL(item?.user?.avatar, "smAvatar")}
                           alt="userAvater"
                           layout="fill"
                           className=" rounded-full object-cover transition-all hover:opacity-90"

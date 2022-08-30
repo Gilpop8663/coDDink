@@ -120,8 +120,10 @@ const Editor: NextPage = () => {
 
   const cfImageUpload = async (file: File) => {
     const { uploadURL } = await (await fetch("/api/files")).json();
+
     const form = new FormData();
     form.append("file", file);
+
     const {
       result: { id },
     }: CFImageResult = await (
@@ -249,7 +251,7 @@ const Editor: NextPage = () => {
     console.log(file);
 
     const imageSrc = await cfImageUpload(file);
-
+    console.log(imageSrc);
     setThumbnail({
       description: URL.createObjectURL(file),
       imageSrc: imageSrc,

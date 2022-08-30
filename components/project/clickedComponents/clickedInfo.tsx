@@ -1,5 +1,5 @@
 import { cls } from "@libs/client/utils";
-import React from "react";
+import React, { useState } from "react";
 
 interface ItemProps {
   kind: "footer" | "sidebar";
@@ -8,6 +8,7 @@ interface ItemProps {
   views: number;
   comments: number;
   createdAt: Date;
+  description: string;
 }
 
 export default function ClickedInfo({
@@ -17,14 +18,33 @@ export default function ClickedInfo({
   likes,
   views,
   comments,
+  description,
 }: ItemProps) {
+  const [isDetail, setIsDetail] = useState(false);
   const year = new Date(createdAt).getFullYear();
   const month = new Date(createdAt).getMonth() + 1;
   const day = new Date(createdAt).getDate();
+
+  const onDescriptionClick = () => {
+    setIsDetail((prev) => !prev);
+  };
   return (
     <>
       {kind === "sidebar" && (
-        <h4 className="mb-4 text-base font-semibold text-black">{title}</h4>
+        <div className="mb-4 flex flex-col space-y-4">
+          <h4 className="text-base font-semibold text-black">{title}</h4>
+          <p className="text-sm text-gray-600">
+            {isDetail ? description : description.slice(0, 100)}
+          </p>
+          {description.length > 100 && (
+            <span
+              onClick={onDescriptionClick}
+              className="cursor-pointer text-xs font-semibold text-gray-500"
+            >
+              {isDetail ? "간단히 보기" : "자세히 보기"}
+            </span>
+          )}
+        </div>
       )}
       {kind === "footer" && (
         <h4 className="mt-4 text-2xl font-semibold text-white">{title}</h4>

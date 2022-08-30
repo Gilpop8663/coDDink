@@ -1,8 +1,20 @@
 import useMutation from "@libs/client/useMutation";
 import { cls, makeImageURL } from "@libs/client/utils";
-import { idea_comment, idea_projectContent } from "@prisma/client";
+import {
+  idea_comment,
+  idea_project,
+  idea_projectCategory,
+  idea_projectContent,
+  idea_projectTag,
+  idea_projectTool,
+} from "@prisma/client";
 import { useRouter } from "next/router";
-import { CommentProps, CommentWithUser, OwnerProps } from "pages";
+import {
+  CommentProps,
+  CommentWithUser,
+  OwnerProps,
+  ProjectWithCountWithUser,
+} from "pages";
 import { useState } from "react";
 import {
   DeepRequired,
@@ -20,6 +32,9 @@ import CommentMsg from "./clickedComponents/commentMsg";
 import ClickedLoginInfo from "./clickedComponents/clickedLoginInfo";
 import Image from "next/image";
 import ClickedCodeView from "./clickedComponents/clickedCodeView";
+import ClickedSideInfos from "./clickedComponents/clickedSideInfos";
+import ProjectItem from "./projectItem";
+import ClickedRelatedItem from "./clickedComponents/clickedRelatedItem";
 
 interface ItemProps {
   kind: "home" | "gallery";
@@ -43,6 +58,11 @@ interface ItemProps {
   register: UseFormRegister<CommentProps>;
   handleSubmit: UseFormHandleSubmit<CommentProps>;
   errors: FieldErrorsImpl<DeepRequired<CommentProps>>;
+  tools: idea_projectTool[];
+  category: idea_projectCategory[];
+  tags: idea_projectTag[];
+  relatedData: ProjectWithCountWithUser[];
+  description: string;
 }
 
 export default function ClickedProject({
@@ -53,7 +73,6 @@ export default function ClickedProject({
   views,
   owner,
   avatar,
-  userId,
   onClick,
   onLikeClick,
   createdAt,
@@ -62,10 +81,15 @@ export default function ClickedProject({
   projectComments,
   currentUserId,
   onCommentValid,
+  tools,
+  category,
+  tags,
   isLogin,
   register,
   handleSubmit,
   contents,
+  relatedData,
+  description,
   errors,
 }: ItemProps) {
   console.log(contents);
@@ -73,6 +97,14 @@ export default function ClickedProject({
 
   const onBackClick = () => {
     router.back();
+  };
+
+  const onHomeRelatedClicked = (id: number) => {
+    router.push(`/`, `/gallery/${id}`, { shallow: true });
+  };
+
+  const onGalleryRelatedClicked = (id: number) => {
+    router.push(`/gallery/${id}`);
   };
 
   return (
@@ -84,7 +116,7 @@ export default function ClickedProject({
     >
       {kind === "home" && (
         <div
-          className="fixed top-0 left-0 z-20 h-screen w-screen bg-black opacity-90"
+          className="fixed top-0 left-0 z-20 h-screen w-screen bg-black/80"
           onClick={onBackClick}
         ></div>
       )}
@@ -146,6 +178,19 @@ export default function ClickedProject({
             comments={commentCount}
             isLiked={isLiked}
           />
+          <div className="relative grid grid-cols-4 gap-4 bg-[#191919] py-20 px-10">
+            {relatedData.map((item, idx) => (
+              <ClickedRelatedItem
+                onClick={
+                  kind === "home"
+                    ? () => onHomeRelatedClicked(item.id)
+                    : () => onGalleryRelatedClicked(item.id)
+                }
+                data={item}
+                key={item.id}
+              />
+            ))}
+          </div>
           <div className="mb-24 border bg-gray-100 p-24">
             <div className="grid grid-cols-7 gap-7">
               <div className="col-span-5 ">
@@ -187,12 +232,8 @@ export default function ClickedProject({
                   </div>
                 )}
               </div>
-              <div className="col-span-2">
-                <OwnerTab
-                  avatar={avatar}
-                  userId={userId}
-                  owner={owner}
-                ></OwnerTab>
+              <div className="col-span-2 flex flex-col space-y-4">
+                <OwnerTab owner={owner}></OwnerTab>
                 <div className="mt-4 border bg-white p-8">
                   <ClickedInfo
                     kind="sidebar"
@@ -201,8 +242,18 @@ export default function ClickedProject({
                     createdAt={createdAt}
                     likes={likes}
                     views={views}
+                    description={description}
                   ></ClickedInfo>
                 </div>
+                {tools.length > 0 && (
+                  <ClickedSideInfos data={tools} label="툴" />
+                )}
+                {category.length > 0 && (
+                  <ClickedSideInfos data={category} label="크리에이티브 분야" />
+                )}
+                {tags.length > 0 && (
+                  <ClickedSideInfos data={tags} label="태그" />
+                )}
               </div>
             </div>
           </div>

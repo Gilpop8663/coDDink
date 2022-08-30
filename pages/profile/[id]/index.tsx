@@ -450,7 +450,7 @@ const Profile: NextPage = () => {
       {detailData && (
         <ClickedProject
           kind="home"
-          contents={detailData.project.contents}
+          contents={detailData?.project.contents}
           onLikeClick={onLikeClick}
           title={detailData?.project.title}
           id={detailData?.project.id}
@@ -469,6 +469,11 @@ const Profile: NextPage = () => {
           register={register}
           handleSubmit={handleSubmit}
           errors={errors}
+          tools={detailData.project.tools}
+          category={detailData.project.category}
+          tags={detailData.project.tags}
+          relatedData={detailData.relatedProjects}
+          description={detailData.project.description}
         />
       )}
     </Layout>

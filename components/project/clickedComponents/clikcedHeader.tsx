@@ -30,7 +30,7 @@ export default function ClickedHeader({ kind, title, owner }: ItemProps) {
         <div className="ml-3 flex flex-col">
           <span className="font-semibold">{title}</span>
           <div className="flex items-center space-x-2 text-sm">
-            <OwnerInfo kind="detail" owner={owner}></OwnerInfo>
+            <OwnerInfo kind="detail" path={kind} owner={owner}></OwnerInfo>
             {/* <Link href={`/profile/${owner[0].userId}`}>
               <a className="cursor-pointer hover:underline">{owner[0].name}</a>
             </Link> */}

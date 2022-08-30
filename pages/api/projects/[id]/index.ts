@@ -53,6 +53,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           },
         },
       },
+      tools: true,
+      tags: true,
+      category: true,
     },
   });
   const relatedProjects = await client.idea_project.findMany({
@@ -61,6 +64,27 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       AND: {
         id: {
           not: project?.id,
+        },
+      },
+    },
+    take: 4,
+    include: {
+      _count: {
+        select: {
+          like: true,
+        },
+      },
+      owner: {
+        select: {
+          name: true,
+          userId: true,
+          user: {
+            select: {
+              avatar: true,
+              city: true,
+              country: true,
+            },
+          },
         },
       },
     },

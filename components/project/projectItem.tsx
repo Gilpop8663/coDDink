@@ -50,7 +50,7 @@ export default function ProjectItem({
           layout="fill"
         ></Image>
         {isContentTouch && (
-          <div className="absolute bottom-0 flex h-16 w-full items-center rounded-md bg-gradient-to-t from-black/30 to-gray-600/0 px-4">
+          <div className="absolute bottom-0 flex h-16 w-full items-center rounded-md bg-gradient-to-t from-black/60 to-gray-600/0 px-4">
             <span className="relative top-2 font-semibold text-white hover:underline">
               {title}
             </span>
@@ -62,7 +62,7 @@ export default function ProjectItem({
         // onMouseOut={onOwnerTouch}
         className="mt-2 flex items-center justify-between pb-2"
       >
-        <OwnerInfo kind="home" owner={owner}></OwnerInfo>
+        <OwnerInfo path="home" kind="home" owner={owner}></OwnerInfo>
 
         <div className="flex items-center space-x-2">
           <div className="flex items-center">

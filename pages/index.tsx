@@ -6,7 +6,10 @@ import { useUserState } from "@libs/client/useUser";
 import {
   idea_comment,
   idea_project,
+  idea_projectCategory,
   idea_projectContent,
+  idea_projectTag,
+  idea_projectTool,
 } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -64,6 +67,9 @@ export interface ProjectWithComment extends idea_project {
   owner: OwnerProps[];
   comments: CommentWithUser[];
   contents: idea_projectContent[];
+  category: idea_projectCategory[];
+  tools: idea_projectTool[];
+  tags: idea_projectTag[];
 }
 
 interface ProjectsResponse {
@@ -74,7 +80,7 @@ interface ProjectsResponse {
 export interface DetailProjectResponse {
   ok: boolean;
   project: ProjectWithComment;
-  relatedProjects: idea_project[];
+  relatedProjects: ProjectWithCountWithUser[];
   isLiked: boolean;
 }
 
@@ -195,6 +201,11 @@ const Home: NextPage = () => {
             register={register}
             handleSubmit={handleSubmit}
             errors={errors}
+            tools={detailData.project.tools}
+            category={detailData.project.category}
+            tags={detailData.project.tags}
+            relatedData={detailData.relatedProjects}
+            description={detailData.project.description}
           />
         )}
       </div>

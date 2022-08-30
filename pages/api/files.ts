@@ -6,7 +6,7 @@ import { withApiSession } from "@libs/server/withSession";
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const response = await (
     await fetch(
-      `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLAR_ACCOUNT_ID}/images/v2/direct_upload`,
+      `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLAR_ACCOUNT_ID}/images/v1/direct_upload`,
       {
         method: "POST",
         headers: {

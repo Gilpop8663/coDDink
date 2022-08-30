@@ -97,6 +97,11 @@ const Gallery: NextPage = () => {
             register={register}
             handleSubmit={handleSubmit}
             errors={errors}
+            tools={detailData.project.tools}
+            category={detailData.project.category}
+            tags={detailData.project.tags}
+            relatedData={detailData.relatedProjects}
+            description={detailData.project.description}
           />
         )}
       </div>
