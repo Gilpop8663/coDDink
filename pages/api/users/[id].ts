@@ -13,6 +13,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     where: {
       id: Number(id),
     },
+    include: {
+      _count: {
+        select: {
+          portfolio: true,
+          followers: true,
+          followings: true,
+          like: true,
+        },
+      },
+    },
   });
 
   if (!userInfo) {

@@ -34,6 +34,8 @@ model idea_user{
   introduce String? @db.MediumText
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  bannerSrc String?
+  bannerPosition String?
   portfolio idea_project[]
   like idea_like[]
   comments idea_comment[]

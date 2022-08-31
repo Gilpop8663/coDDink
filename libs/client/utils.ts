@@ -1,3 +1,5 @@
+import { CFImageResult } from "pages/portfolio/editor";
+
 export function cls(...classnames: string[]) {
   return classnames.join(" ");
 }
@@ -9,9 +11,17 @@ interface makeImageURLProps {
 
 export function makeImageURL(
   id: string,
-  variants?: "public" | "bigAvatar" | "smAvatar"
+  variants?: "public" | "bigAvatar" | "smAvatar" | "banner"
 ) {
   return `https://imagedelivery.net/mPhC7i6OFJEhfh-kdGX8yQ/${id}/${variants}`;
+}
+
+export function timeConverter(time: Date) {
+  const converterTime = new Date(time);
+  const year = converterTime.getFullYear();
+  const month = converterTime.getMonth();
+  const date = converterTime.getDate();
+  return `${year}년 ${month}월 ${date}일`;
 }
 
 export function timeForToday(time: Date) {
@@ -65,3 +75,21 @@ export function timeForToday(time: Date) {
 
   return `${betweenTimeYear}년 전`;
 }
+
+export const cfImageUpload = async (file: File) => {
+  const { uploadURL } = await (await fetch("/api/files")).json();
+
+  const form = new FormData();
+  form.append("file", file);
+
+  const {
+    result: { id },
+  }: CFImageResult = await (
+    await fetch(uploadURL, {
+      method: "POST",
+      body: form,
+    })
+  ).json();
+
+  return id;
+};

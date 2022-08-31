@@ -53,7 +53,7 @@ export interface ContentProps {
   language?: string;
 }
 
-interface CFImageResult {
+export interface CFImageResult {
   result: {
     id: string;
     uploadURL: string;

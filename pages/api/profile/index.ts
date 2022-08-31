@@ -16,6 +16,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       city,
       URL,
       introduce,
+      banner,
       Facebook,
       Youtube,
       Github,
@@ -27,6 +28,19 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       avatarId,
     },
   } = req;
+
+  console.log(banner);
+  if (banner) {
+    await client.idea_user.update({
+      where: { id: user?.id },
+      data: {
+        bannerSrc: banner.imageSrc,
+        bannerPosition: banner.position,
+      },
+    });
+
+    return res.json({ ok: true });
+  }
 
   const updateUser = await client.idea_user.update({
     where: {

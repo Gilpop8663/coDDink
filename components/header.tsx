@@ -240,15 +240,17 @@ export default function Header({
               )}
               {isProfileOn && (
                 <div className="absolute top-6  flex w-[350px] flex-col items-center rounded-md border bg-white p-5 text-black shadow-md">
-                  <div className="z-10 flex h-24 w-24 cursor-pointer rounded-full bg-black ring-2 ring-gray-300">
-                    <Image
-                      className="rounded-full hover:opacity-90"
-                      src={makeImageURL(profile?.avatar!, "bigAvatar")}
-                      width={180}
-                      height={180}
-                      alt="avatar"
-                    ></Image>
-                  </div>
+                  <Link href={`/profile/${userId}`}>
+                    <a className="z-10 flex h-24 w-24 cursor-pointer rounded-full bg-black ring-2 ring-gray-300">
+                      <Image
+                        className="rounded-full hover:opacity-90"
+                        src={makeImageURL(profile?.avatar!, "bigAvatar")}
+                        width={180}
+                        height={180}
+                        alt="avatar"
+                      ></Image>
+                    </a>
+                  </Link>
                   <div className="mt-4 text-lg font-semibold">
                     {profile?.name}
                   </div>
