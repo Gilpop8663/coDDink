@@ -7,6 +7,7 @@ interface LayoutProps {
   profile?: idea_user;
   children: React.ReactNode;
   kind?: "normal" | "profile";
+  isTop?: boolean;
   userId: number | undefined;
 }
 
@@ -16,10 +17,17 @@ export default function Layout({
   children,
   kind = "normal",
   userId,
+  isTop,
 }: LayoutProps) {
   return (
     <div className="">
-      <Header isLogin={isLogin} profile={profile} kind={kind} userId={userId} />
+      <Header
+        isTop={isTop}
+        isLogin={isLogin}
+        profile={profile}
+        kind={kind}
+        userId={userId}
+      />
       <div className="pt-16">{children}</div>
     </div>
   );

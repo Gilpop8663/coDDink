@@ -2,6 +2,7 @@ import useMutation from "@libs/client/useMutation";
 import { cls, makeImageURL } from "@libs/client/utils";
 import {
   idea_comment,
+  idea_follow,
   idea_project,
   idea_projectCategory,
   idea_projectContent,
@@ -63,6 +64,9 @@ interface ItemProps {
   tags: idea_projectTag[];
   relatedData: ProjectWithCountWithUser[];
   description: string;
+  onFollowClick: (id: number) => void;
+  loginId: number | undefined;
+  followingData: idea_follow[] | undefined;
 }
 
 export default function ClickedProject({
@@ -91,8 +95,10 @@ export default function ClickedProject({
   relatedData,
   description,
   errors,
+  onFollowClick,
+  loginId,
+  followingData,
 }: ItemProps) {
-  console.log(contents);
   const router = useRouter();
 
   const onBackClick = () => {
@@ -126,7 +132,14 @@ export default function ClickedProject({
           "relative top-5 z-20 flex flex-col"
         )}
       >
-        <ClickedHeader kind={kind} title={title} owner={owner}></ClickedHeader>
+        <ClickedHeader
+          followingData={followingData}
+          loginId={loginId}
+          onFollowClick={onFollowClick}
+          kind={kind}
+          title={title}
+          owner={owner}
+        ></ClickedHeader>
         <div className="w-[1400px]">
           <div className="flex flex-col  space-y-8 bg-white px-24 py-16">
             {contents.map((item) => {
@@ -178,19 +191,21 @@ export default function ClickedProject({
             comments={commentCount}
             isLiked={isLiked}
           />
-          <div className="relative grid grid-cols-4 gap-4 bg-[#191919] py-20 px-10">
-            {relatedData.map((item, idx) => (
-              <ClickedRelatedItem
-                onClick={
-                  kind === "home"
-                    ? () => onHomeRelatedClicked(item.id)
-                    : () => onGalleryRelatedClicked(item.id)
-                }
-                data={item}
-                key={item.id}
-              />
-            ))}
-          </div>
+          {relatedData.length > 0 && (
+            <div className="relative grid grid-cols-4 gap-4 bg-[#191919] py-20 px-10">
+              {relatedData.map((item, idx) => (
+                <ClickedRelatedItem
+                  onClick={
+                    kind === "home"
+                      ? () => onHomeRelatedClicked(item.id)
+                      : () => onGalleryRelatedClicked(item.id)
+                  }
+                  data={item}
+                  key={item.id}
+                />
+              ))}
+            </div>
+          )}
           <div className="mb-24 border bg-gray-100 p-24">
             <div className="grid grid-cols-7 gap-7">
               <div className="col-span-5 ">

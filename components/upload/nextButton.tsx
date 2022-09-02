@@ -1,5 +1,5 @@
 import { cls } from "@libs/client/utils";
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useState } from "react";
 
 interface UploadProps {
   color:
@@ -8,7 +8,8 @@ interface UploadProps {
     | "whiteDiv"
     | "grayBtn"
     | "greenDiv"
-    | "blueDiv";
+    | "blueDiv"
+    | "followDelBtn";
   label: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   [key: string]: any;
@@ -21,7 +22,12 @@ export default function NextButton({
   onChange,
   onClick,
   size = "base",
+  onFollowClick,
 }: UploadProps) {
+  const [isOver, setIsOver] = useState(false);
+  const onMouseOver = () => {
+    setIsOver((prev) => !prev);
+  };
   return (
     <>
       {color === "whiteDiv" && (
@@ -85,11 +91,25 @@ export default function NextButton({
         <button
           className={cls(
             `text-${size}`,
-            "flex w-full cursor-pointer justify-center rounded-full border bg-white bg-white py-1 px-2 font-semibold text-black transition-colors hover:bg-gray-100"
+            "flex w-full cursor-pointer justify-center rounded-full border  bg-white py-1 px-2 font-semibold text-black transition-colors hover:bg-gray-100"
           )}
           onClick={onClick}
         >
           {label}
+        </button>
+      )}
+      {color === "followDelBtn" && (
+        <button
+          onMouseOver={onMouseOver}
+          onMouseOut={onMouseOver}
+          className={cls(
+            `text-${size}`,
+
+            "flex w-full cursor-pointer justify-center rounded-full border bg-white  py-1 px-2 font-semibold text-black transition-colors hover:bg-red-600 hover:text-white"
+          )}
+          onClick={onClick}
+        >
+          {isOver ? "팔로우 취소" : "팔로잉"}
         </button>
       )}
     </>

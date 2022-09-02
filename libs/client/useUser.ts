@@ -1,19 +1,25 @@
-import { idea_user } from "@prisma/client";
+import { idea_follow, idea_user } from "@prisma/client";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import useSWR from "swr";
 
+interface userWithFollow extends idea_user {
+  followers: idea_follow[];
+  followings: idea_follow[];
+}
+
 export interface useUserState {
   data?: {
     ok: boolean;
-    profile?: idea_user;
+    profile?: userWithFollow;
   };
   error?: any;
+  mutate: any;
 }
 
-interface ProfileResponse {
+export interface ProfileResponse {
   ok: boolean;
-  profile: idea_user;
+  profile: userWithFollow;
 }
 
 export default function useUser() {

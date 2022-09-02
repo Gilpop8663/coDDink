@@ -25,6 +25,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     where: {
       id: req.session.user?.id,
     },
+    include: {
+      followers: true,
+      followings: true,
+    },
   });
 
   res.json({

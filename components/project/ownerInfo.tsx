@@ -1,5 +1,6 @@
 import NextButton from "@components/upload/nextButton";
 import { cls, makeImageURL } from "@libs/client/utils";
+import { idea_follow } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { OwnerProps } from "pages";
@@ -9,17 +10,31 @@ interface InfoProps {
   kind: "home" | "detail";
   owner: OwnerProps[];
   path: "home" | "gallery";
+  onFollowClick: (id: number) => void;
+  loginId: number | undefined;
+  followingData: idea_follow[] | undefined;
 }
 
-export default function OwnerInfo({ kind, owner, path }: InfoProps) {
+export default function OwnerInfo({
+  kind,
+  owner,
+  path,
+  onFollowClick,
+  loginId,
+  followingData,
+}: InfoProps) {
   const [isOwnerTouch, setIsOwnerTouch] = useState(false);
-  const onOwnerTouch = () => {
-    setIsOwnerTouch((prev) => !prev);
+  const onOwnerOut = () => {
+    setIsOwnerTouch(false);
   };
+  const onOwnerOver = () => {
+    setIsOwnerTouch(true);
+  };
+  // console.log(follwingData);
   return (
     <div
-      onMouseOver={onOwnerTouch}
-      onMouseOut={onOwnerTouch}
+      onMouseOver={onOwnerOver}
+      onMouseOut={onOwnerOut}
       className={cls(
         kind === "detail" ? "text-white" : "text-gray-700",
         "mt-2 flex items-center pb-2 text-sm font-semibold"
@@ -39,11 +54,20 @@ export default function OwnerInfo({ kind, owner, path }: InfoProps) {
                 ></Image>
               </div>
             )}
-            <span className="ml-1 hover:underline">{owner[0].name}</span>
+            <span
+              className={cls(
+                path === "gallery" || kind === "home"
+                  ? "text-xs text-gray-700"
+                  : "text-sm text-white",
+                "mr-1 hover:underline"
+              )}
+            >
+              {owner[0].name}
+            </span>
           </a>
         </Link>
       ) : (
-        <div className="relative">
+        <div className="relative" onMouseOver={onOwnerOver}>
           <div className="relative flex cursor-pointer items-center hover:underline">
             <span
               className={cls(
@@ -123,13 +147,27 @@ export default function OwnerInfo({ kind, owner, path }: InfoProps) {
                       )}
                     </div>
                   </div>
-                  <div className="">
-                    <NextButton
-                      size="xs"
-                      color="blueBtn"
-                      label="팔로우"
-                    ></NextButton>
-                  </div>
+                  {loginId !== item.userId && (
+                    <div className="">
+                      {followingData?.find(
+                        (ele) => ele.followerId === item.userId
+                      ) ? (
+                        <NextButton
+                          onClick={() => onFollowClick(item.userId)}
+                          size="xs"
+                          color="followDelBtn"
+                          label={"팔로잉"}
+                        ></NextButton>
+                      ) : (
+                        <NextButton
+                          onClick={() => onFollowClick(item.userId)}
+                          size="xs"
+                          color="blueBtn"
+                          label={"팔로우"}
+                        ></NextButton>
+                      )}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

@@ -12,6 +12,7 @@ interface HeaderProps {
   profile?: idea_user;
   kind?: "normal" | "profile";
   userId: number | undefined;
+  isTop?: boolean;
 }
 
 interface LogoutResult {
@@ -23,6 +24,7 @@ export default function Header({
   profile,
   kind,
   userId,
+  isTop,
 }: HeaderProps) {
   const router = useRouter();
   const path = router.pathname;
@@ -52,8 +54,10 @@ export default function Header({
   return (
     <div
       className={cls(
-        "fixed z-20 flex h-16 w-full items-center justify-between border-b px-6",
-        kind === "profile" ? "bg-black/0 text-white" : "bg-white text-black"
+        "fixed z-20 flex h-16 w-full items-center justify-between border-b px-6 transition-all",
+        isTop && kind === "profile"
+          ? "bg-black/0 text-white"
+          : "bg-white text-black"
       )}
     >
       <div className="item-center flex h-16 space-x-5 py-5">

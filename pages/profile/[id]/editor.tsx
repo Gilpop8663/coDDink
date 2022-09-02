@@ -72,11 +72,13 @@ const ProfileEditor: NextPage = () => {
   const [cityData, setCityData] = useState<StatesProps[]>([]);
   const selectRef = useRef<HTMLSelectElement>(null);
   const [updateProfile, { loading }] = useMutation("/api/profile");
+  const [isSave, setIsSave] = useState(false);
 
   const avatar = watch("avatar");
 
   const onValid = async (value: FormProps) => {
     if (loading) return;
+    setIsSave(true);
     const newValue = { ...value, country: countryName, city: cityName };
     if (value.avatar && value.avatar.length > 0 && user) {
       const { uploadURL } = await (await fetch("/api/files")).json();
@@ -96,6 +98,9 @@ const ProfileEditor: NextPage = () => {
       updateProfile(newValue);
     }
     mutate();
+    setTimeout(() => {
+      setIsSave(false);
+    }, 3000);
   };
 
   const { data: locationData } = useSWR<LocationResponse>(
@@ -222,6 +227,11 @@ const ProfileEditor: NextPage = () => {
           </Link>
           <div className="w-40">
             <NextButton size="sm" color="blueBtn" label="저장하기"></NextButton>
+          </div>
+          <div className="absolute flex justify-center text-xs">
+            <span className="relative left-64">
+              {isSave ? "변경 내용이 저장되었습니다." : ""}
+            </span>
           </div>
         </div>
         <div className=" flex justify-center bg-slate-100 px-28 pt-28 pb-96 ">

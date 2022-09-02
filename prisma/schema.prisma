@@ -36,6 +36,7 @@ model idea_user{
   updatedAt DateTime @updatedAt
   bannerSrc String?
   bannerPosition String?
+  view idea_projectView[]
   portfolio idea_project[]
   like idea_like[]
   comments idea_comment[]
@@ -63,7 +64,7 @@ model idea_project{
   thumbnail String
   owner idea_projectOwner[]
   like idea_like[]
-  view Int
+  view idea_projectView[]
   comments idea_comment[]
   record Record[]
   moodboard idea_moodboard @relation(fields: [moodboardId],references: [id],onDelete: Cascade)
@@ -198,6 +199,16 @@ model idea_projectOwner{
   project idea_project @relation(fields: [projectId],references: [id],onDelete: Cascade)
   projectId Int
   name String
+  user idea_user @relation(fields: [userId],references: [id],onDelete: Cascade)
+  userId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model idea_projectView{
+  id Int @id @default(autoincrement())
+  project idea_project @relation(fields: [projectId],references: [id],onDelete: Cascade)
+  projectId Int
   user idea_user @relation(fields: [userId],references: [id],onDelete: Cascade)
   userId Int
   createdAt DateTime @default(now())

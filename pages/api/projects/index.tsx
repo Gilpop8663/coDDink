@@ -17,6 +17,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         _count: {
           select: {
             like: true,
+            view: true,
           },
         },
         owner: {
@@ -71,7 +72,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         description,
         visible,
         thumbnail,
-        view: 0,
         user: {
           connect: {
             id: user?.id,

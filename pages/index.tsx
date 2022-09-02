@@ -2,7 +2,7 @@ import Layout from "@components/layout";
 import ClickedProject from "@components/project/clickedProject";
 import ProjectItem from "@components/project/projectItem";
 import useMutation from "@libs/client/useMutation";
-import { useUserState } from "@libs/client/useUser";
+import { ProfileResponse, useUserState } from "@libs/client/useUser";
 import {
   idea_comment,
   idea_project,
@@ -20,6 +20,7 @@ import useSWR from "swr";
 export interface ProjectWithCountWithUser extends idea_project {
   _count: {
     like: number;
+    view: number;
   };
   user: {
     avatar: string;
@@ -59,6 +60,7 @@ export interface ProjectWithComment extends idea_project {
   _count: {
     like: number;
     comments: number;
+    view: number;
   };
   user: {
     avatar: string;
@@ -94,6 +96,11 @@ export interface CommentResponse {
 
 const Home: NextPage = () => {
   const router = useRouter();
+  const {
+    data,
+    error,
+    mutate: userMutate,
+  } = useSWR<ProfileResponse>("/api/users/me");
   const path = router.asPath;
   const {
     register,
@@ -104,8 +111,16 @@ const Home: NextPage = () => {
 
   const isGallery = path.slice(1, 8) === "gallery";
 
+  const [sendFollow, { data: followData, loading: followLoading }] =
+    useMutation<CommentResponse>("/api/users/follow");
+
+  const onFollowClick = (id: number) => {
+    if (followLoading) return;
+    sendFollow({ id: id, myId: data?.profile?.id });
+  };
+
   const clickedId = path.slice(9);
-  const { data, error }: useUserState = useSWR("/api/users/me");
+
   const { data: projectsData } = useSWR<ProjectsResponse>("/api/projects");
   const { data: detailData, mutate } = useSWR<DetailProjectResponse | null>(
     isGallery ? `/api/projects/${clickedId}` : null
@@ -114,12 +129,13 @@ const Home: NextPage = () => {
     `/api/projects/${clickedId}/like`
   );
 
-  console.log(projectsData);
-
   const [sendComment, { data: commentData, loading: commentLoading }] =
     useMutation<CommentResponse>(
       `/api/projects/${detailData?.project.id}/comment`
     );
+
+  const [sendView, { loading: viewLoading, data: viewData }] =
+    useMutation("/api/projects/view");
 
   const onCommentValid = (value: CommentProps) => {
     if (commentLoading) return;
@@ -149,6 +165,7 @@ const Home: NextPage = () => {
   };
 
   const onBoxClicked = (id: number) => {
+    sendView({ projectId: id });
     router.push(`/`, `/gallery/${id}`, { shallow: true });
   };
 
@@ -159,7 +176,11 @@ const Home: NextPage = () => {
     }
   }, [commentData, reset, mutate]);
 
-  console.log(detailData?.project.owner);
+  useEffect(() => {
+    if (followData && followData.ok) {
+      userMutate();
+    }
+  }, [followData, userMutate]);
 
   return (
     <Layout
@@ -170,24 +191,30 @@ const Home: NextPage = () => {
       <div className="grid grid-cols-5 gap-6 px-6 py-6">
         {projectsData?.projects?.map((item) => (
           <ProjectItem
+            followingData={data?.profile?.followings}
+            loginId={data?.profile?.id}
             thumbnail={item.thumbnail}
             key={item.id}
             title={item.title}
             likes={item._count.like}
-            views={1}
+            views={item._count.view}
             owner={item.owner}
             onClick={() => onBoxClicked(item.id)}
+            onFollowClick={onFollowClick}
           />
         ))}
         {detailData && (
           <ClickedProject
+            followingData={data?.profile?.followings}
+            loginId={data?.profile?.id}
+            onFollowClick={onFollowClick}
             kind="home"
             contents={detailData?.project.contents}
             onLikeClick={onLikeClick}
             title={detailData?.project.title}
             id={detailData?.project.id}
             likes={detailData?.project._count.like}
-            views={detailData.project.view}
+            views={detailData.project._count.view}
             owner={detailData.project.owner}
             avatar={detailData.project.user.avatar}
             userId={detailData.project.userId}

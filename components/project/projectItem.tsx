@@ -1,7 +1,7 @@
 import NextButton from "@components/upload/nextButton";
 import UploadButton from "@components/uploadButton";
 import { makeImageURL } from "@libs/client/utils";
-import { idea_projectOwner } from "@prisma/client";
+import { idea_follow, idea_projectOwner } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { OwnerProps } from "pages";
@@ -15,6 +15,9 @@ interface ItemProps {
   owner: OwnerProps[];
   thumbnail: string;
   onClick: () => void;
+  onFollowClick: (id: number) => void;
+  loginId: number | undefined;
+  followingData: idea_follow[] | undefined;
 }
 
 export default function ProjectItem({
@@ -24,6 +27,9 @@ export default function ProjectItem({
   owner,
   thumbnail,
   onClick,
+  onFollowClick,
+  loginId,
+  followingData,
 }: ItemProps) {
   const [isContentTouch, setIsContentTouch] = useState(false);
   const [isOwnerTouch, setIsOwnerTouch] = useState(false);
@@ -62,7 +68,14 @@ export default function ProjectItem({
         // onMouseOut={onOwnerTouch}
         className="mt-2 flex items-center justify-between pb-2"
       >
-        <OwnerInfo path="home" kind="home" owner={owner}></OwnerInfo>
+        <OwnerInfo
+          followingData={followingData}
+          onFollowClick={onFollowClick}
+          path="home"
+          kind="home"
+          owner={owner}
+          loginId={loginId}
+        ></OwnerInfo>
 
         <div className="flex items-center space-x-2">
           <div className="flex items-center">

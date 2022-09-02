@@ -18,6 +18,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         select: {
           like: true,
           comments: true,
+          view: true,
         },
       },
       owner: {

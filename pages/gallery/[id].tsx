@@ -19,10 +19,18 @@ const Gallery: NextPage = () => {
     formState: { errors },
   } = useForm<CommentProps>();
 
-  const { data, error }: useUserState = useSWR("/api/users/me");
+  const { data, error, mutate: userMutate } = useSWR("/api/users/me");
   const { data: detailData, mutate } = useSWR<DetailProjectResponse | null>(
     router.query.id ? `/api/projects/${router.query.id}` : null
   );
+  const [sendFollow, { data: followData, loading: followLoading }] =
+    useMutation<CommentResponse>("/api/users/follow");
+
+  const onFollowClick = (id: number) => {
+    if (followLoading) return;
+    sendFollow({ id: id, myId: data?.profile?.id });
+  };
+
   const [toggleLike, { loading: likeLoading }] = useMutation(
     `/api/projects/${router.query.id}/like`
   );
@@ -66,7 +74,11 @@ const Gallery: NextPage = () => {
     }
   }, [commentData, reset, mutate]);
 
-  console.log(detailData);
+  useEffect(() => {
+    if (followData && followData.ok) {
+      userMutate();
+    }
+  }, [followData, userMutate]);
 
   return (
     <Layout
@@ -77,13 +89,16 @@ const Gallery: NextPage = () => {
       <div className="bg-zinc-50">
         {detailData && (
           <ClickedProject
+            followingData={data?.profile?.followings}
+            loginId={data?.profile?.id}
+            onFollowClick={onFollowClick}
             kind="gallery"
             contents={detailData.project.contents}
             onLikeClick={onLikeClick}
             title={detailData?.project.title}
             id={detailData?.project.id}
             likes={detailData?.project._count.like}
-            views={detailData.project.view}
+            views={detailData.project._count.view}
             owner={detailData.project.owner}
             avatar={detailData.project.user.avatar}
             userId={detailData.project.userId}

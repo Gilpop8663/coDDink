@@ -11,7 +11,12 @@ import {
   makeImageURL,
   timeConverter,
 } from "@libs/client/utils";
-import { idea_like, idea_project, idea_user } from "@prisma/client";
+import {
+  idea_follow,
+  idea_like,
+  idea_project,
+  idea_user,
+} from "@prisma/client";
 import type { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -76,6 +81,7 @@ const Profile: NextPage = () => {
     reset,
     formState: { errors },
   } = useForm<CommentProps>();
+  const [isTop, setIsTop] = useState(true);
   const [updateProfile, { loading, data: ProfileData }] =
     useMutation<ToggleResponse>("/api/profile");
   const [banner, setBanner] = useState<BannerProps>({
@@ -85,7 +91,7 @@ const Profile: NextPage = () => {
   const [isBannerLoading, setIsBannerLoading] = useState(false);
   const [isBannerOver, setIsBannerOver] = useState(false);
   const [isBannerClick, setIsBannerClick] = useState(false);
-  const { data, error }: useUserState = useSWR("/api/users/me");
+  const { data, error, mutate: myDataMutate } = useSWR("/api/users/me");
   const router = useRouter();
   const path = router.asPath;
   const isGallery = path.slice(1, 8) === "gallery";
@@ -106,6 +112,17 @@ const Profile: NextPage = () => {
   const [kind, setKind] = useState<"projects" | "moodboards" | "appreciated">(
     "projects"
   );
+
+  const [sendView, { loading: viewLoading, data: viewData }] =
+    useMutation("/api/projects/view");
+
+  const [sendFollow, { data: followData, loading: followLoading }] =
+    useMutation<CommentResponse>("/api/users/follow");
+
+  const onFollowClick = (id: number | undefined) => {
+    if (followLoading || !id) return;
+    sendFollow({ id: id, myId: data?.profile?.id });
+  };
 
   const onBannerMouseOver = (kind: number) => {
     if (kind === 1) {
@@ -140,6 +157,7 @@ const Profile: NextPage = () => {
   };
 
   const onBoxClicked = (id: number) => {
+    sendView({ projectId: id });
     router.push(
       { pathname: "/profile/[id]", query: { id: router.query.id } },
       `/gallery/${id}`
@@ -255,12 +273,35 @@ const Profile: NextPage = () => {
     }
   }, [ProfileData, userMutate]);
 
+  const handleFollow = () => {
+    if (window.scrollY !== 0) {
+      setIsTop(false);
+    } else {
+      setIsTop(true);
+    }
+  };
+  useEffect(() => {
+    window.addEventListener("scroll", handleFollow);
+
+    return () => {
+      window.removeEventListener("scroll", handleFollow);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (followData && followData.ok) {
+      myDataMutate();
+      userMutate();
+    }
+  }, [followData, myDataMutate, userMutate]);
+
   return (
     <Layout
       isLogin={data && data.ok}
       profile={data?.profile}
       userId={data?.profile?.id}
       kind="profile"
+      isTop={isTop}
     >
       {(loading || isBannerLoading) && (
         <div className="absolute top-0 z-20 flex h-[260px]  w-screen items-center justify-center text-3xl text-white">
@@ -288,6 +329,7 @@ const Profile: NextPage = () => {
           <Image
             src={makeImageURL(userData.userInfo?.bannerSrc, "banner")}
             alt="bannerr"
+            priority={true}
             layout="fill"
             className={cls(
               `${userData.userInfo.bannerPosition}`,
@@ -485,7 +527,21 @@ const Profile: NextPage = () => {
             )}
             {userData?.userInfo.id !== data?.profile?.id && (
               <>
-                <NextButton color="blueDiv" label="팔로우"></NextButton>
+                {data?.profile?.followings?.find(
+                  (ele: idea_follow) => ele.followerId === userData?.userInfo.id
+                ) ? (
+                  <NextButton
+                    onClick={() => onFollowClick(userData?.userInfo.id)}
+                    color="followDelBtn"
+                    label={"팔로잉"}
+                  ></NextButton>
+                ) : (
+                  <NextButton
+                    onClick={() => onFollowClick(userData?.userInfo.id)}
+                    color="blueBtn"
+                    label={"팔로우"}
+                  ></NextButton>
+                )}
                 <NextButton color="grayBtn" label="메세지"></NextButton>
               </>
             )}
@@ -742,6 +798,9 @@ const Profile: NextPage = () => {
               {kind === "projects" &&
                 userProjects?.projects?.map((item) => (
                   <ProjectItem
+                    followingData={data?.profile?.followings}
+                    loginId={data?.profile?.id}
+                    onFollowClick={onFollowClick}
                     thumbnail={item.thumbnail}
                     key={item.id}
                     title={item.title}
@@ -754,6 +813,9 @@ const Profile: NextPage = () => {
               {kind === "appreciated" &&
                 likeProjects?.projects?.map((item) => (
                   <ProjectItem
+                    followingData={data?.profile?.followings}
+                    loginId={data?.profile?.id}
+                    onFollowClick={onFollowClick}
                     thumbnail={item.project.thumbnail}
                     key={item.id}
                     title={item.project.title}
@@ -769,13 +831,16 @@ const Profile: NextPage = () => {
       </div>
       {detailData && (
         <ClickedProject
+          followingData={data?.profile?.followings}
+          loginId={data?.profile?.id}
+          onFollowClick={onFollowClick}
           kind="home"
           contents={detailData?.project.contents}
           onLikeClick={onLikeClick}
           title={detailData?.project.title}
           id={detailData?.project.id}
           likes={detailData?.project._count.like}
-          views={detailData.project.view}
+          views={detailData.project._count.view}
           owner={detailData.project.owner}
           avatar={detailData.project.user.avatar}
           userId={detailData.project.userId}
