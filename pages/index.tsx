@@ -116,6 +116,7 @@ const Home: NextPage = () => {
 
   const onFollowClick = (id: number) => {
     if (followLoading) return;
+    if (!data?.profile) return;
     sendFollow({ id: id, myId: data?.profile?.id });
   };
 
@@ -144,6 +145,7 @@ const Home: NextPage = () => {
 
   const onLikeClick = () => {
     if (!detailData) return;
+    if (!data?.profile) return;
     mutate(
       {
         ...detailData,

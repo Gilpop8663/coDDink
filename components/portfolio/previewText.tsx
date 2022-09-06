@@ -68,8 +68,6 @@ export default function PreivewText({
 
       let newContent;
 
-      console.log(curContent);
-
       if (idx === 0) {
         newContent = [curContent, ...prev.slice(idx + 1)];
       } else {

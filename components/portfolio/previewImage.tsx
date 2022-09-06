@@ -7,7 +7,7 @@ import EditMenu from "./editMenu";
 import MiniUploadMenu from "./miniUploadMenu";
 
 interface PreviewImageProps {
-  src: string;
+  src: string | null;
   idx: number;
   onClearClick: (idx: number) => void;
   onPreviewImage: (

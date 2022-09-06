@@ -66,7 +66,7 @@ export default function EditFirstScreen({
         </UploadButton>
         <UploadButton
           kind="code"
-          label="임베드"
+          label="코드"
           register={register("code")}
           onClick={onAddCodeArea}
         >

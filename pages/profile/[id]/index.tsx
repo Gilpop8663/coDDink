@@ -1,6 +1,7 @@
 import Layout from "@components/layout";
 import CategoryButton from "@components/profile/categoryButton";
 import ClickedProject from "@components/project/clickedProject";
+import ProjectDraftItem from "@components/project/projectDraftItem";
 import ProjectItem from "@components/project/projectItem";
 import NextButton from "@components/upload/nextButton";
 import useMutation from "@libs/client/useMutation";
@@ -97,21 +98,29 @@ const Profile: NextPage = () => {
   const isGallery = path.slice(1, 8) === "gallery";
 
   const isAppreciated = path.slice(-11) === "appreciated";
+
+  const isDraftPath = path.slice(-6) === "drafts";
   const { data: userData, mutate: userMutate } = useSWR<ProfileResponse | null>(
     router.query.id ? `/api/users/${router.query.id}` : null
   );
 
-  const { data: userProjects } = useSWR<UserProjectsResponse>(
-    router.query.id ? `/api/profile/${router.query.id}/projects` : null
-  );
+  const { data: userProjects, mutate: projectMutate } =
+    useSWR<UserProjectsResponse>(
+      router.query.id ? `/api/profile/${router.query.id}/projects` : null
+    );
 
   const { data: likeProjects } = useSWR<LikeProjectResponse>(
     isAppreciated ? `/api/profile/${router.query.id}/appreciated` : null
   );
 
-  const [kind, setKind] = useState<"projects" | "moodboards" | "appreciated">(
-    "projects"
-  );
+  const { data: draftProjects, mutate: draftMutate } =
+    useSWR<UserProjectsResponse>(
+      isDraftPath ? `/api/profile/${router.query.id}/drafts` : null
+    );
+
+  const [kind, setKind] = useState<
+    "projects" | "moodboards" | "appreciated" | "drafts"
+  >("projects");
 
   const [sendView, { loading: viewLoading, data: viewData }] =
     useMutation("/api/projects/view");
@@ -132,11 +141,19 @@ const Profile: NextPage = () => {
     }
   };
 
-  const onMoodboardClick = () => {
-    setKind("moodboards");
+  // const onMoodboardClick = () => {
+  //   setKind("moodboards");
+  //   router.push(
+  //     { pathname: "/profile/[id]", query: { id: router.query.id } },
+  //     `/profile/${router.query.id}/moodboards`
+  //   );
+  // };
+
+  const onDraftsClick = () => {
+    setKind("drafts");
     router.push(
       { pathname: "/profile/[id]", query: { id: router.query.id } },
-      `/profile/${router.query.id}/moodboards`
+      `/profile/${router.query.id}/drafts`
     );
   };
 
@@ -176,6 +193,10 @@ const Profile: NextPage = () => {
     useMutation<CommentResponse>(
       `/api/projects/${detailData?.project?.id}/comment`
     );
+
+  const [deleteProject, { data: deleteData }] = useMutation<CommentResponse>(
+    "/api/projects/delete"
+  );
 
   const onCommentValid = (value: CommentProps) => {
     if (commentLoading) return;
@@ -254,6 +275,15 @@ const Profile: NextPage = () => {
     updateProfile({ banner: { imageSrc: "", position: "" } });
   };
 
+  const onDraftRouterClick = (id: number) => {
+    router.push(`/portfolio/editor?project_id=${id}`);
+  };
+
+  const onProjectDeleteClick = (id: number) => {
+    console.log("되긴하니");
+    deleteProject({ projectId: id });
+  };
+
   useEffect(() => {
     if (userData && !userData.ok) {
       router.push("/");
@@ -294,6 +324,12 @@ const Profile: NextPage = () => {
       userMutate();
     }
   }, [followData, myDataMutate, userMutate]);
+
+  useEffect(() => {
+    if (deleteData && deleteData.ok) {
+      draftMutate();
+    }
+  }, [deleteData, draftMutate]);
 
   return (
     <Layout
@@ -783,11 +819,11 @@ const Profile: NextPage = () => {
                 label="작업"
                 isSame={kind === "projects"}
               />
-              {/* <CategoryButton
-                onClick={onMoodboardClick}
-                label="무드보드"
-                isSame={kind === "moodboards"}
-              /> */}
+              <CategoryButton
+                onClick={onDraftsClick}
+                label="초안"
+                isSame={kind === "drafts"}
+              />
               <CategoryButton
                 onClick={onAppreciatedClick}
                 label="평가"
@@ -808,6 +844,22 @@ const Profile: NextPage = () => {
                     views={1}
                     owner={item.owner}
                     onClick={() => onBoxClicked(item.id)}
+                  />
+                ))}
+              {kind === "drafts" &&
+                draftProjects?.projects?.map((item) => (
+                  <ProjectDraftItem
+                    followingData={data?.profile?.followings}
+                    loginId={data?.profile?.id}
+                    onFollowClick={onFollowClick}
+                    thumbnail={item.thumbnail}
+                    key={item.id}
+                    title={item.title}
+                    likes={item._count.like}
+                    views={1}
+                    owner={item.owner}
+                    onClick={() => onDraftRouterClick(item.id)}
+                    onProjectDeleteClick={() => onProjectDeleteClick(item.id)}
                   />
                 ))}
               {kind === "appreciated" &&

@@ -4,7 +4,6 @@ import client from "@libs/server/client";
 import { withApiSession } from "@libs/server/withSession";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  // console.log(req.body);
   const { email } = req.body;
   const user = await client.idea_user.findUnique({
     where: {

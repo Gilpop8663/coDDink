@@ -39,6 +39,7 @@ export default function MiniUploadMenu({
           <div
             onClick={(e) => onAddTextArea(e, idx)}
             className="cursor-pointer rounded-md p-1 hover:bg-gray-400"
+            title="텍스트"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -58,6 +59,7 @@ export default function MiniUploadMenu({
           <div
             onClick={(e) => onAddCodeArea(e, idx)}
             className="cursor-pointer rounded-md p-1 hover:bg-gray-400"
+            title="코드"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

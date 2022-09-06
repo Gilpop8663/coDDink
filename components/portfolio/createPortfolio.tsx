@@ -2,7 +2,7 @@ import ErrorMessage from "@components/error";
 import NextButton from "@components/upload/nextButton";
 import UploadInput from "@components/upload/uploadInput";
 import UploadButton from "@components/uploadButton";
-import { cls } from "@libs/client/utils";
+import { cls, makeImageURL } from "@libs/client/utils";
 import { idea_user } from "@prisma/client";
 import Image from "next/image";
 import { UploadProps, UserDataProps } from "pages/portfolio/editor";
@@ -38,6 +38,9 @@ interface CreatePortfoiloProps {
   ownerArr: UserDataProps[];
   thumbnailSrc: string | undefined;
   onThumbnailImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onDraftClick: () => void;
+  isDraft: boolean;
+  isThumbnailLoading: boolean;
 }
 
 export default function CreatePortfolio({
@@ -58,6 +61,9 @@ export default function CreatePortfolio({
   ownerArr,
   thumbnailSrc,
   onThumbnailImage,
+  onDraftClick,
+  isDraft,
+  isThumbnailLoading,
 }: CreatePortfoiloProps) {
   return (
     <div className="fixed top-0 z-30 flex h-screen w-screen items-center justify-center">
@@ -67,33 +73,58 @@ export default function CreatePortfolio({
         )}
         onClick={onSetting}
       ></div>
-      <div className="z-50 h-5/6  w-1/2 min-w-[900px] rounded-md border bg-white">
+      <div className="z-50 h-[850px] w-1/2 min-w-[900px] rounded-md border bg-white">
         <div className="grid h-fit w-full grid-cols-5 p-8">
-          <div className="col-span-2  h-4/5  rounded-l-md border bg-gray-50 p-8">
+          <div className="col-span-2 h-[700px]  rounded-l-md border bg-gray-50 p-8">
             <div className="">
               <span className="mr-2 text-sm font-semibold">프로젝트 표지</span>
               <span className="text-sm text-gray-300">(필수)</span>
               <div className="relative m-auto mt-4 flex h-56 items-center justify-center border border-dashed border-gray-300 px-16">
-                {!thumbnailSrc ? (
+                {isThumbnailLoading && (
+                  <div role="status">
+                    <svg
+                      aria-hidden="true"
+                      className="mr-2 h-8 w-8 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"
+                      viewBox="0 0 100 101"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                        fill="currentColor"
+                      />
+                      <path
+                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                        fill="currentFill"
+                      />
+                    </svg>
+                    <span className="sr-only">Loading...</span>
+                  </div>
+                )}
+                {/* {isThumbnailLoading && (
+                )} */}
+                {!isThumbnailLoading && !thumbnailSrc ? (
                   <UploadButton
                     onChange={onThumbnailImage}
                     kind="thumbnail"
                   ></UploadButton>
                 ) : (
-                  <>
-                    <Image
-                      src={thumbnailSrc}
-                      alt="thumbnail"
-                      className="rounded-sm object-contain p-2"
-                      layout="fill"
-                    ></Image>
-                    <div className="absolute -bottom-12 left-2 z-10">
-                      <UploadButton
-                        onChange={onThumbnailImage}
-                        kind="changeThumb"
-                      ></UploadButton>
-                    </div>
-                  </>
+                  !isThumbnailLoading && (
+                    <>
+                      <Image
+                        src={makeImageURL(thumbnailSrc!, "bigAvatar")}
+                        alt="thumbnail"
+                        className="rounded-sm object-contain p-2"
+                        layout="fill"
+                      ></Image>
+                      <div className="absolute -bottom-12 left-2 z-10">
+                        <UploadButton
+                          onChange={onThumbnailImage}
+                          kind="changeThumb"
+                        ></UploadButton>
+                      </div>
+                    </>
+                  )
                 )}
               </div>
               {errors.thumbnail && (
@@ -101,7 +132,7 @@ export default function CreatePortfolio({
               )}
             </div>
           </div>
-          <div className="col-span-3 h-4/5  overflow-y-scroll rounded-r-md border-r border-t border-b bg-white px-6">
+          <div className="col-span-3 h-[700px] overflow-y-scroll rounded-r-md border-r border-t border-b bg-white px-6">
             <UploadInput
               label="프로젝트 제목"
               name="title"
@@ -276,14 +307,45 @@ export default function CreatePortfolio({
               onKeyPress={(e) => onKeyPress(e, "owner")}
               deleteContentTags={deleteContentTags}
             />
-            <div className="my-12 flex items-end justify-end space-x-4">
-              <NextButton
-                label="취소"
-                color="whiteDiv"
-                onClick={onSetting}
-              ></NextButton>
-              <NextButton label="초안으로 저장" color="blueBtn"></NextButton>
-              <NextButton label="게시" color="greenBtn"></NextButton>
+          </div>
+          <div className="mt-4 flex w-[900px] justify-end">
+            <div className="flex flex-col">
+              <div className="flex w-[450px] items-end space-x-4">
+                {isDraft || isThumbnailLoading ? (
+                  <>
+                    <NextButton label="취소" color="disabled" size="sm" />
+                    <NextButton
+                      label={isDraft ? "로딩중" : "초안으로 저장"}
+                      color="disabled"
+                      size="sm"
+                    />
+                    <NextButton label="게시" color="disabled" size="sm" />
+                  </>
+                ) : (
+                  <>
+                    <NextButton
+                      label="취소"
+                      size="sm"
+                      color="whiteDiv"
+                      onClick={onSetting}
+                    ></NextButton>
+                    <NextButton
+                      label="초안으로 저장"
+                      size="sm"
+                      onClick={onDraftClick}
+                      color="blueBtn"
+                    ></NextButton>
+                    <NextButton
+                      size="sm"
+                      label="게시"
+                      color="greenBtn"
+                    ></NextButton>
+                  </>
+                )}
+              </div>
+              {errors.content && (
+                <ErrorMessage>{errors.content.message}</ErrorMessage>
+              )}
             </div>
           </div>
         </div>

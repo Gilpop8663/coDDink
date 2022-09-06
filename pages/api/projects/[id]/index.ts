@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import withHandler from "@libs/server/withHandler";
 import client from "@libs/server/client";
 import { withApiSession } from "@libs/server/withSession";
-import { profile } from "console";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const {
@@ -41,7 +40,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           name: true,
         },
       },
-      contents: true,
+      contents: {
+        orderBy: {
+          id: "desc",
+        },
+      },
       comments: {
         orderBy: { createdAt: "desc" },
         include: {
@@ -65,6 +68,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       AND: {
         id: {
           not: project?.id,
+        },
+        NOT: {
+          isDraft: true,
         },
       },
     },

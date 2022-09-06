@@ -12,8 +12,6 @@ declare module "iron-session" {
 }
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  // console.log(req.body);
-
   if (req.session.user === undefined) {
     res.json({
       ok: false,

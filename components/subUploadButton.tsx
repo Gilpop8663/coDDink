@@ -53,6 +53,7 @@ export default function SubUploadButton({
         <label
           htmlFor="attatchment"
           className="cursor-pointer rounded-md p-1 hover:bg-gray-400"
+          title="이미지"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

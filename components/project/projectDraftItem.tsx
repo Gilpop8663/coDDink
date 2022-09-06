@@ -18,9 +18,10 @@ interface ItemProps {
   onFollowClick: (id: number) => void;
   loginId: number | undefined;
   followingData: idea_follow[] | undefined;
+  onProjectDeleteClick: () => void;
 }
 
-export default function ProjectItem({
+export default function ProjectDraftItem({
   title,
   likes,
   views,
@@ -30,6 +31,7 @@ export default function ProjectItem({
   onFollowClick,
   loginId,
   followingData,
+  onProjectDeleteClick,
 }: ItemProps) {
   const [isContentTouch, setIsContentTouch] = useState(false);
   const [isOwnerTouch, setIsOwnerTouch] = useState(false);
@@ -42,24 +44,50 @@ export default function ProjectItem({
   return (
     <div>
       <div
-        onClick={onClick}
         onMouseOver={onContentTouch}
         onMouseOut={onContentTouch}
         className="relative flex cursor-pointer flex-col"
       >
-        <div className="relative  h-64 w-full  rounded-md border hover:visible"></div>
-
-        <Image
-          src={makeImageURL(thumbnail, "public")}
-          priority={true}
-          alt="thumbnail"
-          className="rounded-md object-cover"
-          layout="fill"
-        ></Image>
-
+        <div className="relative flex h-64 w-full items-center justify-center rounded-md border bg-gray-100 hover:visible">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="h-12 w-12 text-gray-200"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+            />
+          </svg>
+        </div>
+        {thumbnail !== "" && (
+          <Image
+            src={makeImageURL(thumbnail, "public")}
+            priority={true}
+            alt="thumbnail"
+            className="rounded-md object-cover"
+            layout="fill"
+          ></Image>
+        )}
         {isContentTouch && (
-          <div className="absolute bottom-0 flex h-16 w-full items-center rounded-md bg-gradient-to-t from-black/60 to-gray-600/0 px-4">
-            <span className="relative top-2 font-semibold text-white hover:underline">
+          <div className="absolute bottom-0 flex h-full w-full flex-col items-center justify-center rounded-md bg-black/40  px-4 ">
+            <div className="flex flex-col space-y-2">
+              <NextButton
+                onClick={onClick}
+                color="blueDiv"
+                label="프로젝트 편집"
+              ></NextButton>
+              <NextButton
+                color="grayBtn"
+                onClick={onProjectDeleteClick}
+                label="프로젝트 삭제"
+              ></NextButton>
+            </div>
+            <span className="absolute bottom-5 font-semibold text-white hover:underline">
               {title}
             </span>
           </div>

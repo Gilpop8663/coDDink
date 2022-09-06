@@ -139,6 +139,7 @@ export default function ClickedProject({
           kind={kind}
           title={title}
           owner={owner}
+          projectId={id}
         ></ClickedHeader>
         <div className="w-[1400px]">
           <div className="flex flex-col  space-y-8 bg-white px-24 py-16">
@@ -183,6 +184,7 @@ export default function ClickedProject({
             })}
           </div>
           <ClickedFooter
+            isLogin={Boolean(loginId)}
             onLikeClick={onLikeClick}
             createdAt={createdAt}
             title={title}

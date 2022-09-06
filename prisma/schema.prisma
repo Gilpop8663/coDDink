@@ -70,6 +70,7 @@ model idea_project{
   moodboard idea_moodboard @relation(fields: [moodboardId],references: [id],onDelete: Cascade)
   moodboardId Int @default(1)
   contents idea_projectContent[]
+  isDraft Boolean @default(false)
 }
 
 model idea_like{
@@ -165,6 +166,7 @@ model idea_projectContent{
   fontSize String?
   alignText String?
   language String?
+  description String @db.MediumText() @default("")
 }
 
 model idea_projectTag{
@@ -214,6 +216,8 @@ model idea_projectView{
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+
 
 enum contentKind{
   text

@@ -9,7 +9,8 @@ interface UploadProps {
     | "grayBtn"
     | "greenDiv"
     | "blueDiv"
-    | "followDelBtn";
+    | "followDelBtn"
+    | "disabled";
   label: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   [key: string]: any;
@@ -81,6 +82,18 @@ export default function NextButton({
             `text-${size}`,
             "flex w-full cursor-pointer justify-center rounded-full bg-green-600 py-1 px-2 font-semibold text-white transition-colors hover:bg-green-700"
           )}
+          onClick={onClick}
+        >
+          {label}
+        </div>
+      )}
+      {color === "disabled" && (
+        <div
+          className={cls(
+            `text-${size}`,
+            "transition-color flex w-full select-none justify-center rounded-full bg-gray-200 py-1 px-2 font-semibold text-white"
+          )}
+          draggable={false}
           onClick={onClick}
         >
           {label}

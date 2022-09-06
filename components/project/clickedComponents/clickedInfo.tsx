@@ -8,7 +8,7 @@ interface ItemProps {
   views: number;
   comments: number;
   createdAt: Date;
-  description: string;
+  description?: string;
 }
 
 export default function ClickedInfo({
@@ -34,9 +34,9 @@ export default function ClickedInfo({
         <div className="mb-4 flex flex-col space-y-4">
           <h4 className="text-base font-semibold text-black">{title}</h4>
           <p className="text-sm text-gray-600">
-            {isDetail ? description : description.slice(0, 100)}
+            {isDetail ? description : description?.slice(0, 100)}
           </p>
-          {description.length > 100 && (
+          {description && description?.length > 100 && (
             <span
               onClick={onDescriptionClick}
               className="cursor-pointer text-xs font-semibold text-gray-500"

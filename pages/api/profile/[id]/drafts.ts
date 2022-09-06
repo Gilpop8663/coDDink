@@ -9,12 +9,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     query: { id },
   } = req;
 
-  console.log(id);
-
   const projects = await client.idea_project.findMany({
     where: {
       userId: Number(id),
-      NOT: {
+      AND: {
         isDraft: true,
       },
     },

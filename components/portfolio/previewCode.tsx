@@ -99,10 +99,6 @@ export default function PreviewCode({
     });
   };
 
-  useEffect(() => {
-    console.log(language);
-  }, [language]);
-
   return (
     <div
       className="relative mt-16"

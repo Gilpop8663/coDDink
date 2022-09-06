@@ -30,7 +30,6 @@ export default function OwnerInfo({
   const onOwnerOver = () => {
     setIsOwnerTouch(true);
   };
-  // console.log(follwingData);
   return (
     <div
       onMouseOver={onOwnerOver}
@@ -147,7 +146,7 @@ export default function OwnerInfo({
                       )}
                     </div>
                   </div>
-                  {loginId !== item.userId && (
+                  {Boolean(loginId) && loginId !== item.userId && (
                     <div className="">
                       {followingData?.find(
                         (ele) => ele.followerId === item.userId

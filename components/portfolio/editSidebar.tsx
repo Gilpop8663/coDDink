@@ -1,23 +1,31 @@
 import SubUploadButton from "@components/subUploadButton";
 import NextButton from "@components/upload/nextButton";
-import { UploadProps } from "pages/portfolio/editor";
+import { ContentProps, UploadProps } from "pages/portfolio/editor";
 import React from "react";
 import { UseFormRegister } from "react-hook-form";
 
 interface EditSidebarProps {
   onSetting: () => void;
+  content: ContentProps[];
   register: UseFormRegister<UploadProps>;
   onPreviewImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onAddTextArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
   onAddCodeArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
+  onDraftClick: () => void;
+  onPreviewClick: () => void;
+  isDraft: boolean;
 }
 
 export default function EditSidebar({
   onSetting,
   register,
+  content,
   onPreviewImage,
   onAddTextArea,
   onAddCodeArea,
+  onDraftClick,
+  onPreviewClick,
+  isDraft,
 }: EditSidebarProps) {
   return (
     <div className="grid-cols-1">
@@ -63,7 +71,7 @@ export default function EditSidebar({
                 />
               </svg>
             </SubUploadButton>
-            <SubUploadButton label="임베드" onClick={onAddCodeArea}>
+            <SubUploadButton label="코드" onClick={onAddCodeArea}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6"
@@ -106,27 +114,65 @@ export default function EditSidebar({
           </SubUploadButton>
         </div>
         <div className="mt-20 space-y-4 border bg-white py-7 px-4 shadow-md">
-          <NextButton color="greenDiv" label="계속" onClick={onSetting} />
-          <NextButton label="초안으로 저장" color="blueDiv" />
-          <div className="mt-4 flex justify-center text-gray-400">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="mr-1 h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          {content.length && !isDraft ? (
+            <>
+              <NextButton color="greenDiv" label="계속" onClick={onSetting} />
+              <NextButton
+                label="초안으로 저장"
+                color="blueBtn"
+                onClick={onDraftClick}
               />
-            </svg>
-            <span className="cursor-pointer text-sm hover:underline">
-              미리보기 확인
-            </span>
-          </div>
+              <div
+                className="mt-4 flex justify-center text-gray-400"
+                onClick={onPreviewClick}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="mr-1 h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+                <span className="cursor-pointer text-sm hover:underline">
+                  미리보기 확인
+                </span>
+              </div>
+            </>
+          ) : (
+            <>
+              <NextButton color="disabled" label="계속" />
+              <NextButton
+                label={isDraft ? "로딩중" : "초안으로 저장"}
+                color="disabled"
+              />
+              <div className="mt-4 flex justify-center text-gray-200">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="mr-1 h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+                <span className="select-none text-sm text-gray-200">
+                  미리보기 확인
+                </span>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
