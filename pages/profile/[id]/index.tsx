@@ -1,5 +1,6 @@
 import Layout from "@components/layout";
 import CategoryButton from "@components/profile/categoryButton";
+import DeleteModal from "@components/profile/deleteModal";
 import ClickedProject from "@components/project/clickedProject";
 import ProjectDraftItem from "@components/project/projectDraftItem";
 import ProjectItem from "@components/project/projectItem";
@@ -92,6 +93,8 @@ const Profile: NextPage = () => {
   const [isBannerLoading, setIsBannerLoading] = useState(false);
   const [isBannerOver, setIsBannerOver] = useState(false);
   const [isBannerClick, setIsBannerClick] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
   const { data, error, mutate: myDataMutate } = useSWR("/api/users/me");
   const router = useRouter();
   const path = router.asPath;
@@ -109,9 +112,10 @@ const Profile: NextPage = () => {
       router.query.id ? `/api/profile/${router.query.id}/projects` : null
     );
 
-  const { data: likeProjects } = useSWR<LikeProjectResponse>(
-    isAppreciated ? `/api/profile/${router.query.id}/appreciated` : null
-  );
+  const { data: likeProjects, mutate: likeProjectMutate } =
+    useSWR<LikeProjectResponse>(
+      isAppreciated ? `/api/profile/${router.query.id}/appreciated` : null
+    );
 
   const { data: draftProjects, mutate: draftMutate } =
     useSWR<UserProjectsResponse>(
@@ -148,6 +152,18 @@ const Profile: NextPage = () => {
   //     `/profile/${router.query.id}/moodboards`
   //   );
   // };
+
+  const onDeleteModalClick = (id: number | null) => {
+    setIsDelete((prev) => !prev);
+    setDeleteTarget(id);
+  };
+
+  const onProjectDeleteClick = (id: number | null) => {
+    if (id === null) return;
+    deleteProject({ projectId: id });
+    setDeleteTarget(null);
+    setIsDelete(false);
+  };
 
   const onDraftsClick = () => {
     setKind("drafts");
@@ -279,11 +295,6 @@ const Profile: NextPage = () => {
     router.push(`/portfolio/editor?project_id=${id}`);
   };
 
-  const onProjectDeleteClick = (id: number) => {
-    console.log("되긴하니");
-    deleteProject({ projectId: id });
-  };
-
   useEffect(() => {
     if (userData && !userData.ok) {
       router.push("/");
@@ -328,8 +339,10 @@ const Profile: NextPage = () => {
   useEffect(() => {
     if (deleteData && deleteData.ok) {
       draftMutate();
+      projectMutate();
+      likeProjectMutate();
     }
-  }, [deleteData, draftMutate]);
+  }, [deleteData, draftMutate, projectMutate, likeProjectMutate]);
 
   return (
     <Layout
@@ -405,6 +418,22 @@ const Profile: NextPage = () => {
               </div>
             )}
         </div>
+      )}
+      {kind === "drafts" && isDelete && (
+        <DeleteModal
+          title="초안 삭제"
+          description="이 초안을 삭제하시겠습니까?"
+          onDeleteModalClick={() => onDeleteModalClick(null)}
+          onProjectDeleteClick={() => onProjectDeleteClick(deleteTarget)}
+        ></DeleteModal>
+      )}
+      {kind !== "drafts" && isDelete && (
+        <DeleteModal
+          title="프로젝트 삭제"
+          description="이 프로젝트를 삭제하시겠습니까?"
+          onDeleteModalClick={() => onDeleteModalClick(null)}
+          onProjectDeleteClick={() => onProjectDeleteClick(deleteTarget)}
+        ></DeleteModal>
       )}
       {!isBannerClick &&
         !userData?.userInfo.bannerSrc &&
@@ -834,6 +863,7 @@ const Profile: NextPage = () => {
               {kind === "projects" &&
                 userProjects?.projects?.map((item) => (
                   <ProjectItem
+                    projectId={item.id}
                     followingData={data?.profile?.followings}
                     loginId={data?.profile?.id}
                     onFollowClick={onFollowClick}
@@ -844,6 +874,7 @@ const Profile: NextPage = () => {
                     views={1}
                     owner={item.owner}
                     onClick={() => onBoxClicked(item.id)}
+                    onDeleteModalClick={() => onDeleteModalClick(item.id)}
                   />
                 ))}
               {kind === "drafts" &&
@@ -859,12 +890,13 @@ const Profile: NextPage = () => {
                     views={1}
                     owner={item.owner}
                     onClick={() => onDraftRouterClick(item.id)}
-                    onProjectDeleteClick={() => onProjectDeleteClick(item.id)}
+                    onDeleteModalClick={() => onDeleteModalClick(item.id)}
                   />
                 ))}
               {kind === "appreciated" &&
                 likeProjects?.projects?.map((item) => (
                   <ProjectItem
+                    projectId={item.id}
                     followingData={data?.profile?.followings}
                     loginId={data?.profile?.id}
                     onFollowClick={onFollowClick}
@@ -875,6 +907,7 @@ const Profile: NextPage = () => {
                     views={1}
                     owner={item.project.owner}
                     onClick={() => onBoxClicked(item.id)}
+                    onDeleteModalClick={() => onDeleteModalClick(item.id)}
                   />
                 ))}
             </div>

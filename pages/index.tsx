@@ -1,4 +1,5 @@
 import Layout from "@components/layout";
+import DeleteModal from "@components/profile/deleteModal";
 import ClickedProject from "@components/project/clickedProject";
 import ProjectItem from "@components/project/projectItem";
 import useMutation from "@libs/client/useMutation";
@@ -13,7 +14,7 @@ import {
 } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 
@@ -108,6 +109,11 @@ const Home: NextPage = () => {
     reset,
     formState: { errors },
   } = useForm<CommentProps>();
+  const [isDelete, setIsDelete] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
+  const [deleteProject, { data: deleteData }] = useMutation<CommentResponse>(
+    "/api/projects/delete"
+  );
 
   const isGallery = path.slice(1, 8) === "gallery";
 
@@ -122,7 +128,8 @@ const Home: NextPage = () => {
 
   const clickedId = path.slice(9);
 
-  const { data: projectsData } = useSWR<ProjectsResponse>("/api/projects");
+  const { data: projectsData, mutate: projectsMutate } =
+    useSWR<ProjectsResponse>("/api/projects");
   const { data: detailData, mutate } = useSWR<DetailProjectResponse | null>(
     isGallery ? `/api/projects/${clickedId}` : null
   );
@@ -171,6 +178,18 @@ const Home: NextPage = () => {
     router.push(`/`, `/gallery/${id}`, { shallow: true });
   };
 
+  const onDeleteModalClick = (id: number | null) => {
+    setIsDelete((prev) => !prev);
+    setDeleteTarget(id);
+  };
+
+  const onProjectDeleteClick = (id: number | null) => {
+    if (id === null) return;
+    deleteProject({ projectId: id });
+    setDeleteTarget(null);
+    setIsDelete(false);
+  };
+
   useEffect(() => {
     if (commentData && commentData.ok) {
       reset();
@@ -184,15 +203,30 @@ const Home: NextPage = () => {
     }
   }, [followData, userMutate]);
 
+  useEffect(() => {
+    if (deleteData && deleteData.ok) {
+      projectsMutate();
+    }
+  }, [deleteData, projectsMutate]);
+
   return (
     <Layout
       isLogin={data && data.ok}
       profile={data?.profile}
       userId={data?.profile?.id}
     >
+      {isDelete && (
+        <DeleteModal
+          title="프로젝트 삭제"
+          description="이 프로젝트를 삭제하시겠습니까?"
+          onDeleteModalClick={() => onDeleteModalClick(null)}
+          onProjectDeleteClick={() => onProjectDeleteClick(deleteTarget)}
+        ></DeleteModal>
+      )}
       <div className="grid grid-cols-5 gap-6 px-6 py-6">
         {projectsData?.projects?.map((item) => (
           <ProjectItem
+            projectId={item.id}
             followingData={data?.profile?.followings}
             loginId={data?.profile?.id}
             thumbnail={item.thumbnail}
@@ -203,6 +237,7 @@ const Home: NextPage = () => {
             owner={item.owner}
             onClick={() => onBoxClicked(item.id)}
             onFollowClick={onFollowClick}
+            onDeleteModalClick={() => onDeleteModalClick(item.id)}
           />
         ))}
         {detailData && (

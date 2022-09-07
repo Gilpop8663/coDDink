@@ -1,3 +1,4 @@
+import DeleteModal from "@components/profile/deleteModal";
 import NextButton from "@components/upload/nextButton";
 import UploadButton from "@components/uploadButton";
 import { makeImageURL } from "@libs/client/utils";
@@ -18,7 +19,7 @@ interface ItemProps {
   onFollowClick: (id: number) => void;
   loginId: number | undefined;
   followingData: idea_follow[] | undefined;
-  onProjectDeleteClick: () => void;
+  onDeleteModalClick: () => void;
 }
 
 export default function ProjectDraftItem({
@@ -31,7 +32,7 @@ export default function ProjectDraftItem({
   onFollowClick,
   loginId,
   followingData,
-  onProjectDeleteClick,
+  onDeleteModalClick,
 }: ItemProps) {
   const [isContentTouch, setIsContentTouch] = useState(false);
   const [isOwnerTouch, setIsOwnerTouch] = useState(false);
@@ -83,7 +84,7 @@ export default function ProjectDraftItem({
               ></NextButton>
               <NextButton
                 color="grayBtn"
-                onClick={onProjectDeleteClick}
+                onClick={onDeleteModalClick}
                 label="프로젝트 삭제"
               ></NextButton>
             </div>

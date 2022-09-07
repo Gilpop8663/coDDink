@@ -1,6 +1,6 @@
 import NextButton from "@components/upload/nextButton";
 import UploadButton from "@components/uploadButton";
-import { makeImageURL } from "@libs/client/utils";
+import { cls, makeImageURL } from "@libs/client/utils";
 import { idea_follow, idea_projectOwner } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,6 +9,7 @@ import { useState } from "react";
 import OwnerInfo from "./ownerInfo";
 
 interface ItemProps {
+  projectId: number;
   title: string;
   likes: number;
   views: number;
@@ -18,9 +19,11 @@ interface ItemProps {
   onFollowClick: (id: number) => void;
   loginId: number | undefined;
   followingData: idea_follow[] | undefined;
+  onDeleteModalClick: () => void;
 }
 
 export default function ProjectItem({
+  projectId,
   title,
   likes,
   views,
@@ -30,21 +33,27 @@ export default function ProjectItem({
   onFollowClick,
   loginId,
   followingData,
+  onDeleteModalClick,
 }: ItemProps) {
   const [isContentTouch, setIsContentTouch] = useState(false);
   const [isOwnerTouch, setIsOwnerTouch] = useState(false);
-  const onContentTouch = () => {
-    setIsContentTouch((prev) => !prev);
+  const [isSetting, setIsSetting] = useState(false);
+  const onContentTouch = (kind: boolean) => {
+    setIsContentTouch(kind);
   };
   const onOwnerTouch = () => {
     setIsOwnerTouch((prev) => !prev);
+  };
+
+  const onSettingTouch = (kind: boolean) => {
+    setIsSetting(kind);
   };
   return (
     <div>
       <div
         onClick={onClick}
-        onMouseOver={onContentTouch}
-        onMouseOut={onContentTouch}
+        onMouseOver={() => onContentTouch(true)}
+        onMouseOut={() => onContentTouch(false)}
         className="relative flex cursor-pointer flex-col"
       >
         <div className="relative  h-64 w-full  rounded-md border hover:visible"></div>
@@ -58,11 +67,78 @@ export default function ProjectItem({
         ></Image>
 
         {isContentTouch && (
-          <div className="absolute bottom-0 flex h-16 w-full items-center rounded-md bg-gradient-to-t from-black/60 to-gray-600/0 px-4">
-            <span className="relative top-2 font-semibold text-white hover:underline">
-              {title}
-            </span>
-          </div>
+          <>
+            {owner[0].userId === loginId && (
+              <div onClick={(e) => e.stopPropagation()}>
+                <div
+                  onMouseOver={() => onSettingTouch(true)}
+                  onMouseOut={() => onSettingTouch(false)}
+                  className={cls(
+                    isSetting ? "bg-black/50" : "bg-black/30",
+                    "absolute left-3 top-3 flex items-center rounded-full p-2 text-white"
+                  )}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="h-5 w-5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                  </svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="ml-2 h-3 w-3"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                    />
+                  </svg>
+                </div>
+                {isSetting && (
+                  <div
+                    onMouseOver={() => onSettingTouch(true)}
+                    onMouseOut={() => onSettingTouch(false)}
+                    className="absolute top-12 left-3 flex flex-col rounded-md border bg-white py-3 shadow-md "
+                  >
+                    <Link href={`/portfolio/editor?project_id=${projectId}`}>
+                      <a className="py-1 pl-4 pr-16 text-sm font-semibold text-black transition-colors hover:bg-blue-600 hover:text-white">
+                        프로젝트 편집
+                      </a>
+                    </Link>
+                    <span
+                      onClick={onDeleteModalClick}
+                      className="py-1 pl-4 pr-16 text-sm font-semibold text-black transition-colors hover:bg-blue-600 hover:text-white"
+                    >
+                      삭제
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
+            <div className="absolute bottom-0 flex h-16 w-full items-center rounded-md bg-gradient-to-t from-black/60 to-gray-600/0 px-4">
+              <span className="relative top-2 font-semibold text-white hover:underline">
+                {title}
+              </span>
+            </div>
+          </>
         )}
       </div>
       <div
