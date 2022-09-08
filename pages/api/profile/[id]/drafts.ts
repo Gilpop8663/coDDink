@@ -12,9 +12,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   const projects = await client.idea_project.findMany({
     where: {
       userId: Number(id),
-      AND: {
-        isDraft: true,
-      },
+      isDraft: true,
     },
     include: {
       _count: {
@@ -23,6 +21,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         },
       },
       owner: {
+        orderBy: {
+          id: "desc",
+        },
         select: {
           name: true,
           userId: true,

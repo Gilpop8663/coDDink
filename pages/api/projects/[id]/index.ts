@@ -8,6 +8,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     query: { id },
     session: { user },
   } = req;
+
   const project = await client.idea_project.findUnique({
     where: {
       id: Number(id),
@@ -21,6 +22,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         },
       },
       owner: {
+        orderBy: {
+          id: "desc",
+        },
         select: {
           name: true,
           userId: true,
@@ -65,12 +69,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   const relatedProjects = await client.idea_project.findMany({
     where: {
       userId: project?.userId,
+      isDraft: false,
+      visible: true,
       AND: {
         id: {
           not: project?.id,
-        },
-        NOT: {
-          isDraft: true,
         },
       },
     },
@@ -82,6 +85,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         },
       },
       owner: {
+        orderBy: {
+          id: "desc",
+        },
         select: {
           name: true,
           userId: true,
@@ -109,7 +115,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     })
   );
 
-  res.json({ ok: true, project, relatedProjects, isLiked });
+  if (
+    (project?.isDraft == true || project?.visible === false) &&
+    id !== user?.id
+  ) {
+    return res.json({ ok: false });
+  }
+
+  return res.json({ ok: true, project, relatedProjects, isLiked });
 }
 
 export default withApiSession(withHandler({ methods: ["GET"], handler }));

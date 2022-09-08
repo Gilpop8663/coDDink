@@ -227,6 +227,7 @@ const Home: NextPage = () => {
         {projectsData?.projects?.map((item) => (
           <ProjectItem
             projectId={item.id}
+            visible={item.visible}
             followingData={data?.profile?.followings}
             loginId={data?.profile?.id}
             thumbnail={item.thumbnail}

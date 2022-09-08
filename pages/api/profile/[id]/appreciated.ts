@@ -18,6 +18,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         include: {
           _count: { select: { like: true } },
           owner: {
+            orderBy: {
+              id: "desc",
+            },
             select: {
               name: true,
               userId: true,

@@ -7,40 +7,73 @@ import { profile } from "console";
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { id },
+    session: { user },
   } = req;
 
-  console.log(id);
-
-  const projects = await client.idea_project.findMany({
-    where: {
-      userId: Number(id),
-      NOT: {
-        isDraft: true,
+  if (Number(id) === user?.id) {
+    const projects = await client.idea_project.findMany({
+      where: {
+        userId: Number(id),
+        isDraft: false,
       },
-    },
-    include: {
-      _count: {
-        select: {
-          like: true,
+      include: {
+        _count: {
+          select: {
+            like: true,
+          },
         },
-      },
-      owner: {
-        select: {
-          name: true,
-          userId: true,
-          user: {
-            select: {
-              avatar: true,
-              city: true,
-              country: true,
+        owner: {
+          orderBy: {
+            id: "desc",
+          },
+          select: {
+            name: true,
+            userId: true,
+            user: {
+              select: {
+                avatar: true,
+                city: true,
+                country: true,
+              },
             },
           },
         },
       },
-    },
-  });
-
-  res.json({ ok: true, projects });
+    });
+    return res.json({ ok: true, projects });
+  } else {
+    const projects = await client.idea_project.findMany({
+      where: {
+        userId: Number(id),
+        isDraft: false,
+        visible: true,
+      },
+      include: {
+        _count: {
+          select: {
+            like: true,
+          },
+        },
+        owner: {
+          orderBy: {
+            id: "desc",
+          },
+          select: {
+            name: true,
+            userId: true,
+            user: {
+              select: {
+                avatar: true,
+                city: true,
+                country: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    return res.json({ ok: true, projects });
+  }
 }
 
 export default withApiSession(withHandler({ methods: ["GET"], handler }));

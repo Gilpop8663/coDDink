@@ -37,7 +37,7 @@ const Gallery: NextPage = () => {
 
   const [sendComment, { data: commentData, loading: commentLoading }] =
     useMutation<CommentResponse>(
-      `/api/projects/${detailData?.project.id}/comment`
+      `/api/projects/${detailData?.project?.id}/comment`
     );
 
   const onCommentValid = (value: CommentProps) => {
@@ -80,6 +80,12 @@ const Gallery: NextPage = () => {
     }
   }, [followData, userMutate]);
 
+  useEffect(() => {
+    if (detailData && !detailData.ok) {
+      router.replace("/");
+    }
+  }, [detailData, router]);
+
   return (
     <Layout
       isLogin={data && data.ok}
@@ -87,13 +93,13 @@ const Gallery: NextPage = () => {
       userId={data?.profile?.id}
     >
       <div className="bg-zinc-50">
-        {detailData && (
+        {detailData?.ok && detailData && (
           <ClickedProject
             followingData={data?.profile?.followings}
             loginId={data?.profile?.id}
             onFollowClick={onFollowClick}
             kind="gallery"
-            contents={detailData.project.contents}
+            contents={detailData?.project.contents}
             onLikeClick={onLikeClick}
             title={detailData?.project.title}
             id={detailData?.project.id}

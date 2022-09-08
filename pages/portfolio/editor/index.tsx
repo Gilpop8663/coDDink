@@ -150,7 +150,7 @@ const Editor: NextPage = () => {
 
     return id;
   };
-
+  console.log(isPublic);
   const onValid = async (value: UploadProps) => {
     console.log(value);
     if (loading) return;

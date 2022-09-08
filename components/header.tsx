@@ -34,7 +34,9 @@ export default function Header({
 
   const onLogoutClick = () => {
     logout({});
-    router.reload();
+    setTimeout(() => {
+      router.reload();
+    }, 500);
   };
 
   const onMouseOver = () => {
@@ -233,7 +235,7 @@ export default function Header({
               onMouseOver={onProfileOver}
               onMouseOut={onProfileLeave}
             >
-              {profile && (
+              {profile?.avatar && (
                 <Image
                   className="rounded-full"
                   src={makeImageURL(profile?.avatar!, "smAvatar")}
@@ -242,7 +244,7 @@ export default function Header({
                   alt="avatar"
                 ></Image>
               )}
-              {isProfileOn && (
+              {isProfileOn && profile?.avatar && (
                 <div className="absolute top-6  flex w-[350px] flex-col items-center rounded-md border bg-white p-5 text-black shadow-md">
                   <Link href={`/profile/${userId}`}>
                     <a className="z-10 flex h-24 w-24 cursor-pointer rounded-full bg-black ring-2 ring-gray-300">

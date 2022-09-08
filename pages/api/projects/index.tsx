@@ -9,9 +9,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     const projects = await client.idea_project.findMany({
       where: {
-        NOT: {
-          isDraft: true,
-        },
+        isDraft: false,
+        visible: true,
       },
       include: {
         user: {
@@ -27,6 +26,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           },
         },
         owner: {
+          orderBy: {
+            id: "desc",
+          },
           select: {
             name: true,
             userId: true,
@@ -74,7 +76,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       session: { user },
     } = req;
 
-    console.log(isDraft, projectId);
+    console.log(visible);
 
     let project: idea_project;
     if (projectId) {

@@ -6,7 +6,7 @@ import ProjectDraftItem from "@components/project/projectDraftItem";
 import ProjectItem from "@components/project/projectItem";
 import NextButton from "@components/upload/nextButton";
 import useMutation from "@libs/client/useMutation";
-import { useUserState } from "@libs/client/useUser";
+import { ProfileResponse, useUserState } from "@libs/client/useUser";
 import {
   cfImageUpload,
   cls,
@@ -43,7 +43,7 @@ interface ProfileWithCount extends idea_user {
   };
 }
 
-interface ProfileResponse {
+interface ProfileUserInfoResponse {
   ok: boolean;
   userInfo: ProfileWithCount;
 }
@@ -95,7 +95,11 @@ const Profile: NextPage = () => {
   const [isBannerClick, setIsBannerClick] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
-  const { data, error, mutate: myDataMutate } = useSWR("/api/users/me");
+  const {
+    data,
+    error,
+    mutate: myDataMutate,
+  } = useSWR<ProfileResponse>("/api/users/me");
   const router = useRouter();
   const path = router.asPath;
   const isGallery = path.slice(1, 8) === "gallery";
@@ -103,9 +107,10 @@ const Profile: NextPage = () => {
   const isAppreciated = path.slice(-11) === "appreciated";
 
   const isDraftPath = path.slice(-6) === "drafts";
-  const { data: userData, mutate: userMutate } = useSWR<ProfileResponse | null>(
-    router.query.id ? `/api/users/${router.query.id}` : null
-  );
+  const { data: userData, mutate: userMutate } =
+    useSWR<ProfileUserInfoResponse | null>(
+      router.query.id ? `/api/users/${router.query.id}` : null
+    );
 
   const { data: userProjects, mutate: projectMutate } =
     useSWR<UserProjectsResponse>(
@@ -321,6 +326,7 @@ const Profile: NextPage = () => {
       setIsTop(true);
     }
   };
+
   useEffect(() => {
     window.addEventListener("scroll", handleFollow);
 
@@ -383,7 +389,9 @@ const Profile: NextPage = () => {
             className={cls(
               `${userData.userInfo.bannerPosition}`,
               "object-cover transition-opacity",
-              isBannerOver ? "opacity-60" : ""
+              isBannerOver && data?.profile?.id === Number(router?.query?.id)
+                ? "opacity-60"
+                : ""
             )}
           ></Image>
           {!(isBannerLoading || loading) &&
@@ -613,7 +621,7 @@ const Profile: NextPage = () => {
           </div>
           <div className="flex w-full items-center justify-between">
             <span>프로젝트 보기</span>
-            <span>{userData?.userInfo._count.portfolio}</span>
+            <span>{userProjects?.projects.length}</span>
           </div>
           <div className="mt-2 flex w-full items-center justify-between">
             <span>평가</span>
@@ -639,9 +647,12 @@ const Profile: NextPage = () => {
             )}
             <div className="mt-3 flex space-x-2">
               {userData?.userInfo.Facebook && (
-                <Link href={`www.facebook.com/${userData?.userInfo.Facebook}`}>
+                <Link
+                  href={`https://www.facebook.com/${userData?.userInfo.Facebook}`}
+                >
                   <a
                     title="facebook"
+                    target="_blank"
                     className="flex h-8 w-8 items-center justify-center rounded-full border"
                   >
                     <svg
@@ -656,9 +667,12 @@ const Profile: NextPage = () => {
                 </Link>
               )}
               {userData?.userInfo.Youtube && (
-                <Link href={`www.youtube.com/${userData?.userInfo.Youtube}`}>
+                <Link
+                  href={`https://www.youtube.com/${userData?.userInfo.Youtube}`}
+                >
                   <a
                     title="youtube"
+                    target="_blank"
                     className="flex h-8 w-8 items-center justify-center rounded-full border"
                   >
                     <svg
@@ -673,8 +687,11 @@ const Profile: NextPage = () => {
                 </Link>
               )}
               {userData?.userInfo.Github && (
-                <Link href={`github.com/${userData?.userInfo.Github}`}>
+                <Link
+                  href={`https://www.github.com/${userData?.userInfo.Github}`}
+                >
                   <a
+                    target="_blank"
                     title="github"
                     className="flex h-8 w-8 items-center justify-center rounded-full border"
                   >
@@ -690,9 +707,12 @@ const Profile: NextPage = () => {
                 </Link>
               )}
               {userData?.userInfo.Twitter && (
-                <Link href={`twitter.com/${userData?.userInfo.Twitter}`}>
+                <Link
+                  href={`https://twitter.com/${userData?.userInfo.Twitter}`}
+                >
                   <a
                     title="twitter"
+                    target="_blank"
                     className="flex h-8 w-8 items-center justify-center rounded-full border"
                   >
                     <svg
@@ -708,10 +728,11 @@ const Profile: NextPage = () => {
               )}
               {userData?.userInfo.Instagram && (
                 <Link
-                  href={`www.instagram.com/${userData?.userInfo.Instagram}`}
+                  href={`https://www.instagram.com/${userData?.userInfo.Instagram}`}
                 >
                   <a
                     title="instagram"
+                    target="_blank"
                     className="flex h-8 w-8 items-center justify-center rounded-full border"
                   >
                     <svg
@@ -726,9 +747,12 @@ const Profile: NextPage = () => {
                 </Link>
               )}
               {userData?.userInfo.LinkedIn && (
-                <Link href={`www.linkedin.com/${userData?.userInfo.LinkedIn}`}>
+                <Link
+                  href={`https://www.linkedin.com/${userData?.userInfo.LinkedIn}`}
+                >
                   <a
                     title="linkedin"
+                    target="_blank"
                     className="flex h-8 w-8 items-center justify-center rounded-full border"
                   >
                     <svg
@@ -743,9 +767,12 @@ const Profile: NextPage = () => {
                 </Link>
               )}
               {userData?.userInfo.Twitch && (
-                <Link href={`www.twitch.tv/${userData?.userInfo.Twitch}`}>
+                <Link
+                  href={`https://www.twitch.tv/${userData?.userInfo.Twitch}`}
+                >
                   <a
                     title="twitch"
+                    target="_blank"
                     className="flex h-8 w-8 items-center justify-center rounded-full border"
                   >
                     <svg
@@ -760,9 +787,12 @@ const Profile: NextPage = () => {
                 </Link>
               )}
               {userData?.userInfo.Dribble && (
-                <Link href={`dribbble.com/${userData?.userInfo.Dribble}`}>
+                <Link
+                  href={`https://dribbble.com/${userData?.userInfo.Dribble}`}
+                >
                   <a
                     title="dribble"
+                    target="_blank"
                     className="flex h-8 w-8 items-center justify-center rounded-full border"
                   >
                     <svg
@@ -840,7 +870,7 @@ const Profile: NextPage = () => {
             </div>
           )}
         </div>
-        <div className="relative top-48 w-full pl-14">
+        <div className="relative top-48 w-full pl-14 pb-48">
           <div className="w-full">
             <div className="flex space-x-3">
               <CategoryButton
@@ -871,6 +901,7 @@ const Profile: NextPage = () => {
                     key={item.id}
                     title={item.title}
                     likes={item._count.like}
+                    visible={item.visible}
                     views={1}
                     owner={item.owner}
                     onClick={() => onBoxClicked(item.id)}
@@ -896,6 +927,7 @@ const Profile: NextPage = () => {
               {kind === "appreciated" &&
                 likeProjects?.projects?.map((item) => (
                   <ProjectItem
+                    visible={item.project.visible}
                     projectId={item.id}
                     followingData={data?.profile?.followings}
                     loginId={data?.profile?.id}
