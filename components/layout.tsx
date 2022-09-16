@@ -8,7 +8,7 @@ interface LayoutProps {
   children: React.ReactNode;
   kind?: "normal" | "profile";
   isTop?: boolean;
-  userId: number;
+  userId?: number;
 }
 
 export default function Layout({
