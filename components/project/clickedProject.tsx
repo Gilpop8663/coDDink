@@ -36,6 +36,7 @@ import ClickedCodeView from "./clickedComponents/clickedCodeView";
 import ClickedSideInfos from "./clickedComponents/clickedSideInfos";
 import ProjectItem from "./projectItem";
 import ClickedRelatedItem from "./clickedComponents/clickedRelatedItem";
+import HeadMeta from "@components/headMeta";
 
 interface ItemProps {
   kind: "home" | "gallery";
@@ -67,6 +68,7 @@ interface ItemProps {
   onFollowClick: (id: number) => void;
   loginId: number | undefined;
   followingData: idea_follow[] | undefined;
+  thumbnail: string;
 }
 
 export default function ClickedProject({
@@ -79,6 +81,7 @@ export default function ClickedProject({
   avatar,
   onClick,
   onLikeClick,
+  thumbnail,
   createdAt,
   isLiked,
   commentCount,
@@ -120,6 +123,12 @@ export default function ClickedProject({
         "flex w-screen justify-center"
       )}
     >
+      <HeadMeta
+        title={title}
+        description={description}
+        url={`http://localhost:3000/gallery/${id}`}
+        image={makeImageURL(thumbnail, "bigAvatar")}
+      ></HeadMeta>
       {kind === "home" && (
         <div
           className="fixed top-0 left-0 z-20 h-screen w-screen bg-black/80"

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import Button from "./button";
+import LOGO from "@public/coding-logo.png";
 
 interface HeaderProps {
   isLogin: boolean;
@@ -64,7 +65,9 @@ export default function Header({
     >
       <div className="item-center flex h-16 space-x-5 py-5">
         <Link href="/">
-          <a className="cursor-pointer text-lg font-bold">로고</a>
+          <a className="relative top-[1px] flex h-[20px] w-[82.58px] cursor-pointer items-center text-lg font-bold">
+            <Image src={LOGO} layout="fill" alt="logo"></Image>
+          </a>
         </Link>
         {isLogin && (
           <Link href="/">
@@ -79,7 +82,7 @@ export default function Header({
           </Link>
         )}
 
-        <Link href="/gallery">
+        {/* <Link href="/gallery">
           <a
             className={cls(
               path === "/galleries" ? "border-b-2 border-gray-800" : "",
@@ -108,7 +111,7 @@ export default function Header({
           >
             직업
           </a>
-        </Link>
+        </Link> */}
       </div>
       <div className="flex space-x-2">
         {isLogin === false ? (
@@ -177,7 +180,7 @@ export default function Header({
                       </div>
                     </a>
                   </Link>
-                  <Link href="/live/upload">
+                  {/* <Link href="/live/upload">
                     <div className="flex w-auto cursor-pointer  items-center justify-between rounded-md border border-blue-200 bg-[#F5F8FF] p-2 text-blue-600 transition-all hover:bg-[#DEE8FF]">
                       <span className="flex h-10 items-center justify-center ">
                         <div className="border-r border-r-blue-200 px-2">
@@ -223,7 +226,7 @@ export default function Header({
                         </svg>
                       </div>
                     </div>
-                  </Link>
+                  </Link> */}
                 </div>
               )}
             </div>
@@ -281,7 +284,6 @@ export default function Header({
             </div>
           </div>
         )}
-        <div>로고</div>
       </div>
     </div>
   );

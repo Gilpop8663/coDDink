@@ -1,3 +1,4 @@
+import HeadMeta from "@components/headMeta";
 import Layout from "@components/layout";
 import CategoryButton from "@components/profile/categoryButton";
 import DeleteModal from "@components/profile/deleteModal";
@@ -358,6 +359,7 @@ const Profile: NextPage = () => {
       kind="profile"
       isTop={isTop}
     >
+      <HeadMeta></HeadMeta>
       {(loading || isBannerLoading) && (
         <div className="absolute top-0 z-20 flex h-[260px]  w-screen items-center justify-center text-3xl text-white">
           <svg
@@ -948,6 +950,7 @@ const Profile: NextPage = () => {
       </div>
       {detailData && (
         <ClickedProject
+          thumbnail={detailData.project.thumbnail}
           followingData={data?.profile?.followings}
           loginId={data?.profile?.id}
           onFollowClick={onFollowClick}

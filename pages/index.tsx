@@ -1,3 +1,4 @@
+import HeadMeta from "@components/headMeta";
 import Layout from "@components/layout";
 import DeleteModal from "@components/profile/deleteModal";
 import ClickedProject from "@components/project/clickedProject";
@@ -215,6 +216,7 @@ const Home: NextPage = () => {
       profile={data?.profile}
       userId={data?.profile?.id}
     >
+      <HeadMeta></HeadMeta>
       {isDelete && (
         <DeleteModal
           title="프로젝트 삭제"
@@ -243,6 +245,7 @@ const Home: NextPage = () => {
         ))}
         {detailData && (
           <ClickedProject
+            thumbnail={detailData.project.thumbnail}
             followingData={data?.profile?.followings}
             loginId={data?.profile?.id}
             onFollowClick={onFollowClick}

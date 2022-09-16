@@ -95,6 +95,7 @@ const Gallery: NextPage = () => {
       <div className="bg-zinc-50">
         {detailData?.ok && detailData && (
           <ClickedProject
+            thumbnail={detailData.project.thumbnail}
             followingData={data?.profile?.followings}
             loginId={data?.profile?.id}
             onFollowClick={onFollowClick}

@@ -2,10 +2,10 @@ import Head from "next/head";
 import React from "react";
 
 interface HeadMetaProps {
-  title: string;
-  description: string;
-  url: string;
-  image: string;
+  title?: string;
+  description?: string;
+  url?: string;
+  image?: string;
 }
 
 export default function HeadMeta({
@@ -16,20 +16,20 @@ export default function HeadMeta({
 }: HeadMetaProps) {
   return (
     <Head>
-      <title>{title || "천만"}</title>
+      <title>{title || "coDinK"}</title>
       <meta
         name="description"
         content={
           description ||
-          "사람들의 창조적인 아이디어을 공유하고 발견하기 위한 사이트입니다"
+          "코딩크(CODINK)는 개발자들이 만든 사이트 등을 전시하고 검색할 수 있는 무료 온라인 웹 포트폴리오 사이트입니다."
         }
       ></meta>
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      <meta property="og:title" content={title || "정리습관"} />
+      <meta property="og:title" content={title || "coDinK"} />
       <meta property="og:type" content="website" />
       <meta property="og:url" content={url || "https://1000-ideas.com/"} />
       <meta property="og:image" content={image} />
-      <meta property="og:article:author" content="천만" />
+      <meta property="og:article:author" content="coDinK" />
     </Head>
   );
 }

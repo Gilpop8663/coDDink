@@ -42,11 +42,11 @@ model idea_user{
   comments idea_comment[]
   followers idea_follow[] @relation(name:"followerUser") 
   followings idea_follow[] @relation(name:"followingUser")
-  record Record[]
   moodboards idea_moodboard[]
   streams idea_stream[]
   messages idea_message[]
   jointOwner idea_projectOwner[]
+
 }
 
 model idea_project{
@@ -66,11 +66,11 @@ model idea_project{
   like idea_like[]
   view idea_projectView[]
   comments idea_comment[]
-  record Record[]
   moodboard idea_moodboard @relation(fields: [moodboardId],references: [id],onDelete: Cascade)
   moodboardId Int @default(1)
   contents idea_projectContent[]
   isDraft Boolean @default(false)
+  @@index([userId])
 }
 
 model idea_like{
@@ -81,6 +81,8 @@ model idea_like{
   projectId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  @@index([userId])
+  @@index([projectId])
 
 }
 
@@ -93,6 +95,8 @@ model idea_comment{
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   comment String @db.MediumText
+  @@index([userId])
+  @@index([projectId])
 }
 
 model idea_follow{
@@ -103,6 +107,8 @@ model idea_follow{
   followerId Int
   following idea_user @relation(name:"followingUser",fields: [followingId],references: [id],onDelete: Cascade)
   followingId Int
+  @@index([followerId])
+  @@index([followingId])
 }
 
 model idea_stream{
@@ -118,7 +124,7 @@ model idea_stream{
   cloudflareId String
   cloudflareUrl String
   cloudflareKey String
-
+  @@index([userId])
 }
 
 model idea_message{
@@ -130,19 +136,12 @@ model idea_message{
   message String @db.MediumText
   stream idea_stream @relation(fields: [streamId],references: [id],onDelete: Cascade)
   streamId Int
+  @@index([userId])
+  @@index([streamId])
+
   
 }
 
-model Record{
-  id Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  project idea_project @relation(fields: [projectId],references: [id],onDelete: Cascade)
-  projectId Int
-  user idea_user @relation(fields: [userId],references: [id],onDelete: Cascade)
-  userId Int
-  kind Kind
-}
 
 
 model idea_moodboard{
@@ -153,6 +152,7 @@ model idea_moodboard{
   user idea_user @relation(fields: [userId],references: [id],onDelete: Cascade)
   userId Int
   projects idea_project[]
+  @@index([userId])
 }
 
 
@@ -167,6 +167,7 @@ model idea_projectContent{
   alignText String?
   language String?
   description String @db.MediumText() @default("")
+  @@index([projectId])
 }
 
 model idea_projectTag{
@@ -176,6 +177,7 @@ model idea_projectTag{
   name String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  @@index([projectId])
 }
 
 model idea_projectTool{
@@ -185,6 +187,7 @@ model idea_projectTool{
   name String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  @@index([projectId])
 }
 
 model idea_projectCategory{
@@ -194,6 +197,7 @@ model idea_projectCategory{
   name String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  @@index([projectId])
 }
 
 model idea_projectOwner{
@@ -205,6 +209,7 @@ model idea_projectOwner{
   userId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  @@index([projectId])
 }
 
 model idea_projectView{
@@ -215,6 +220,8 @@ model idea_projectView{
   userId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  @@index([projectId])
+  @@index([userId])
 }
 
 
@@ -229,4 +236,50 @@ enum Kind{
   Work
   Moodboard
   Like
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  phone     Int?     @unique
+  email     String?  @unique
+  name      String
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+}
+
+model TutorUser {
+  id        Int      @id @default(autoincrement())
+  nickname  String   @unique
+  email     String   @unique
+  password  String
+  phone     String      @unique
+  avatar    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  classes TutorClass[]
+}
+
+model TutorToken {
+  id        Int      @id @default(autoincrement())
+  payload   String    
+  phone String @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TutorClass{
+  id        Int      @id @default(autoincrement())
+  user TutorUser @relation(fields: [userId],references: [id],onDelete: Cascade)
+  userId Int
+  image String
+  name String
+  price Int
+  tag1 String
+  tag2 String
+  tag3 String
+  summary String @db.MediumText
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

@@ -49,7 +49,7 @@ export default function PreviewImage({
           onClearClick={onClearClick}
         />
         <Image
-          src={src}
+          src={src!}
           layout="fill"
           className="object-contain"
           alt="image"
