@@ -1,11 +1,10 @@
-import { userWithFollow } from "@libs/client/useUser";
-import { idea_user } from "@prisma/client";
 import React from "react";
 import Header from "./header";
+import { idea_user } from "@prisma/client";
 
 interface LayoutProps {
   isLogin: boolean | undefined;
-  profile?: userWithFollow;
+  profile?: idea_user | undefined;
   children: React.ReactNode;
   kind?: "normal" | "profile";
   isTop?: boolean;
