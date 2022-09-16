@@ -146,10 +146,6 @@ const ProfileEditor: NextPage = () => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   console.log("ScrollY is ", scrollY); // ScrollY가 변화할때마다 값을 콘솔에 출력
-  // }, [scrollY]);
-
   useEffect(() => {
     if (user?.name) setValue("name", user?.name);
     if (user?.job) setValue("job", user?.job);
@@ -209,7 +205,6 @@ const ProfileEditor: NextPage = () => {
       const file = avatar[0];
       setAvatarPreview(URL.createObjectURL(file));
     }
-    console.log(avatarPreveiw);
   }, [avatar]);
 
   return (

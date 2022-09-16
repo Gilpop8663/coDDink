@@ -55,8 +55,6 @@ export default function Login() {
     if (isCheckingEmail === false) return;
     if (loading) return;
     login(value);
-
-    // console.log(value);
   };
 
   const curEmail = watch("email");
@@ -73,7 +71,6 @@ export default function Login() {
       setIsWrong(true);
     }
     if (mailData?.ok) {
-      console.log(mailData.ok);
       setIsCheckingEmail(true);
     }
   }, [data, router, mailData]);

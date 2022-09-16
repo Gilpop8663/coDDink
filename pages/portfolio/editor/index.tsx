@@ -150,7 +150,6 @@ const Editor: NextPage = () => {
 
     return id;
   };
-  console.log(isPublic);
   const onValid = async (value: UploadProps) => {
     console.log(value);
     if (loading) return;
@@ -399,7 +398,6 @@ const Editor: NextPage = () => {
 
   const onDraftClick = () => {
     if (isDraft) return;
-    console.log("왜안돼");
     setIsDraft(true);
     clearErrors("title");
     clearErrors("thumbnail");
@@ -442,7 +440,6 @@ const Editor: NextPage = () => {
   };
 
   useEffect(() => {
-    console.log(error, data?.ok);
     if (data?.ok && !isDraft && data.project) {
       router.push(`/gallery/${data?.project.id}`);
     } else if (data?.ok && isDraft && data.project) {
@@ -545,10 +542,6 @@ const Editor: NextPage = () => {
       setIsPublic(editProjectData.project.visible);
     }
   }, [editProjectData]);
-
-  useEffect(() => {
-    console.log(isThumbnailLoading);
-  }, [isThumbnailLoading]);
 
   return (
     <Layout isLogin={true} profile={user} userId={user?.id}>

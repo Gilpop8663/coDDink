@@ -12,7 +12,6 @@ const ProfileLike: NextPage = () => {
 
   const userId = router.query.id;
 
-  //   console.log(userId);
   useEffect(() => {
     if (userId) {
       router.push(`/profile/${userId}`);

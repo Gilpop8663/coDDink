@@ -76,8 +76,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       session: { user },
     } = req;
 
-    console.log(visible);
-
     let project: idea_project;
     if (projectId) {
       if (isDraft) {

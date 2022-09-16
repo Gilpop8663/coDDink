@@ -1,9 +1,8 @@
 import UploadTagValue from "@components/portfolio/uploadTagValue";
 import { makeImageURL } from "@libs/client/utils";
-import { idea_user } from "@prisma/client";
 import Image from "next/image";
 import { UserDataProps } from "pages/portfolio/editor";
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 
 interface UploadProps {

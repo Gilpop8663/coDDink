@@ -52,7 +52,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       },
     });
 
-    console.log(stream);
     res.json({ ok: true, stream });
   }
 }
