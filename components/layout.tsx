@@ -4,11 +4,11 @@ import { idea_user } from "@prisma/client";
 
 interface LayoutProps {
   isLogin: boolean | undefined;
-  profile?: idea_user | undefined;
+  profile?: idea_user;
   children: React.ReactNode;
   kind?: "normal" | "profile";
   isTop?: boolean;
-  userId?: number | undefined;
+  userId: number;
 }
 
 export default function Layout({

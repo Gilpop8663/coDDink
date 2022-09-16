@@ -11,7 +11,7 @@ const Live: NextPage = () => {
     <Layout
       isLogin={data && data.ok}
       profile={data?.profile}
-      userId={data?.user?.id}
+      userId={data?.profile?.id}
     >
       <div>안녕</div>
     </Layout>

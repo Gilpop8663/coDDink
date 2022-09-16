@@ -151,7 +151,6 @@ const Editor: NextPage = () => {
     return id;
   };
   const onValid = async (value: UploadProps) => {
-    console.log(value);
     if (loading) return;
     const newValue = {
       ...value,
