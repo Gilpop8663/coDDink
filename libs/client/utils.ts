@@ -19,7 +19,7 @@ export function makeImageURL(
 export function timeConverter(time: Date) {
   const converterTime = new Date(time);
   const year = converterTime.getFullYear();
-  const month = converterTime.getMonth();
+  const month = converterTime.getMonth() + 1;
   const date = converterTime.getDate();
   return `${year}년 ${month}월 ${date}일`;
 }

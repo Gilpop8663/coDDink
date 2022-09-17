@@ -15,6 +15,11 @@ import { watch } from "fs";
 import InputPassword from "@components/inputPassword";
 import Input from "@components/input";
 import { makeImageURL } from "@libs/client/utils";
+import GoogleBtn from "@components/auth/googleBtn";
+import Script from "next/script";
+import HeadMeta from "@components/headMeta";
+import { ProfileResponse } from "@libs/client/useUser";
+import useSWR from "swr";
 
 interface ILoginProps {
   email: string;
@@ -33,6 +38,11 @@ interface MutationResult {
 }
 
 export default function Login() {
+  const {
+    data: userData,
+    error: userError,
+    mutate: userMutate,
+  } = useSWR<ProfileResponse>("/api/users/me");
   const router = useRouter();
   const {
     register,
@@ -81,8 +91,61 @@ export default function Login() {
     }
   }, [curPassword]);
 
+  useEffect(() => {
+    if (userData && userData.ok) {
+      router.push("/");
+    }
+  }, [userData, router]);
+
   return (
     <div className="">
+      <HeadMeta></HeadMeta>
+      <Script
+        id="googleScript"
+        src="https://accounts.google.com/gsi/client"
+        async
+        defer
+      ></Script>
+      <Script id="my-script">{`console.log('Hello world!');
+
+        function parseJwt (token) {
+          var base64Url = token.split('.')[1];
+          var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+          var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+              return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+          }).join(''));
+
+          return JSON.parse(jsonPayload);
+        };
+
+        function handleCredentialResponse(response) {
+          // decodeJwtResponse() is a custom function defined by you
+          // to decode the credential response.
+       
+           const responsePayload = parseJwt(response.credential);
+
+
+          fetch("/api/auth/google", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              loginId: responsePayload.sub,
+              fullName:responsePayload.name,
+              givenName:responsePayload.given_name,
+              familyName:responsePayload.family_name,
+              imageURL:responsePayload.picture,
+              email:responsePayload.email
+            }),
+          }).then((response) => {console.log(response)
+            window.location.replace("/");
+          });
+
+
+
+       }
+      `}</Script>
       <div className="fixed -z-10 h-screen w-screen bg-black bg-cover opacity-50"></div>
       <Image
         className="fixed -z-20"
@@ -134,15 +197,23 @@ export default function Login() {
                 <div className="absolute top-7 bg-white px-2">또는</div>
               </div>
               <div className="mt-8 flex flex-col space-y-6">
-                <div className="flex h-16 w-full cursor-pointer items-center justify-center rounded-full border-2 hover:border-gray-300">
-                  <Image
-                    src={GOOGLE_LOGO}
-                    alt="google"
-                    height={16}
-                    width={16}
-                  ></Image>
-                  <span className="ml-4 font-semibold">Google로 계속</span>
-                </div>
+                <GoogleBtn></GoogleBtn>
+                <div
+                  id="g_id_onload"
+                  data-client_id="691707762640-i8gqdf86ntht6dmd02a1t5c8mdn6c998.apps.googleusercontent.com"
+                  data-login_uri="http://localhost:3000/"
+                  data-callback="handleCredentialResponse"
+                  data-auto_prompt="false"
+                ></div>
+                <div
+                  className="g_id_signin"
+                  data-type="standard"
+                  data-size="large"
+                  data-theme="outline"
+                  data-text="sign_in_with"
+                  data-shape="rectangular"
+                  data-logo_alignment="left"
+                ></div>
                 <div className="flex h-16 w-full cursor-pointer items-center justify-center rounded-full border-2  hover:border-gray-300">
                   <Image
                     src={FACEBOOK_LOGO}
