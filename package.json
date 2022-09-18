@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@greatsumini/react-facebook-login": "^3.2.1",
     "@prisma/client": "^4.1.1",
     "@uiw/react-codemirror": "^4.11.6",
     "@uiw/react-textarea-code-editor": "^1.4.4",

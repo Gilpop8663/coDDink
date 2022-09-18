@@ -10,8 +10,6 @@ import { useForm } from "react-hook-form";
 import ErrorMessage from "@components/error";
 import useMutation from "@libs/client/useMutation";
 import { useRouter } from "next/router";
-import { create } from "domain";
-import { watch } from "fs";
 import InputPassword from "@components/inputPassword";
 import Input from "@components/input";
 import { makeImageURL } from "@libs/client/utils";
@@ -20,6 +18,7 @@ import Script from "next/script";
 import HeadMeta from "@components/headMeta";
 import { ProfileResponse } from "@libs/client/useUser";
 import useSWR from "swr";
+import FacebookBtn from "@components/auth/facebookBtn";
 
 interface ILoginProps {
   email: string;
@@ -54,6 +53,8 @@ export default function Login() {
     useMutation<EmailResult>("/api/users/emailCheck");
   const [login, { loading, data, error }] =
     useMutation<MutationResult>("/api/users/login");
+  const [snsLogin, { data: snsLoginData }] =
+    useMutation<MutationResult>("/api/auth/snsLogin");
 
   const [isCheckingEmail, setIsCheckingEmail] = useState(false);
 
@@ -97,16 +98,24 @@ export default function Login() {
     }
   }, [userData, router]);
 
+  useEffect(() => {
+    if (snsLoginData && snsLoginData.ok) {
+      router.push("/");
+    }
+  }, [snsLoginData, router]);
+
   return (
     <div className="">
       <HeadMeta></HeadMeta>
       <Script
         id="googleScript"
         src="https://accounts.google.com/gsi/client"
-        async
-        defer
+        strategy="lazyOnload"
       ></Script>
-      <Script id="my-script">{`console.log('Hello world!');
+      <Script
+        id="my-script"
+        strategy="lazyOnload"
+      >{`console.log('Hello world!');
 
         function parseJwt (token) {
           var base64Url = token.split('.')[1];
@@ -125,7 +134,7 @@ export default function Login() {
            const responsePayload = parseJwt(response.credential);
 
 
-          fetch("/api/auth/google", {
+          fetch("/api/auth/snsLogin", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -141,11 +150,9 @@ export default function Login() {
           }).then((response) => {console.log(response)
             window.location.replace("/");
           });
-
-
-
        }
       `}</Script>
+
       <div className="fixed -z-10 h-screen w-screen bg-black bg-cover opacity-50"></div>
       <Image
         className="fixed -z-20"
@@ -198,31 +205,7 @@ export default function Login() {
               </div>
               <div className="mt-8 flex flex-col space-y-6">
                 <GoogleBtn></GoogleBtn>
-                <div
-                  id="g_id_onload"
-                  data-client_id="691707762640-i8gqdf86ntht6dmd02a1t5c8mdn6c998.apps.googleusercontent.com"
-                  data-login_uri="http://localhost:3000/"
-                  data-callback="handleCredentialResponse"
-                  data-auto_prompt="false"
-                ></div>
-                <div
-                  className="g_id_signin"
-                  data-type="standard"
-                  data-size="large"
-                  data-theme="outline"
-                  data-text="sign_in_with"
-                  data-shape="rectangular"
-                  data-logo_alignment="left"
-                ></div>
-                <div className="flex h-16 w-full cursor-pointer items-center justify-center rounded-full border-2  hover:border-gray-300">
-                  <Image
-                    src={FACEBOOK_LOGO}
-                    alt="facebook"
-                    height={16}
-                    width={16}
-                  ></Image>
-                  <span className="ml-4 font-semibold">Facebook으로 계속</span>
-                </div>
+                <FacebookBtn facebookLogin={snsLogin}></FacebookBtn>
                 <div className="flex h-16 w-full cursor-pointer items-center justify-center rounded-full bg-black hover:ring-4 hover:ring-gray-300">
                   <Image
                     src={APPLE_LOGO}

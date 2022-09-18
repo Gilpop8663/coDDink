@@ -25,6 +25,9 @@ const nextConfig = removeImports({
     domains: ["user-images.githubusercontent.com", "imagedelivery.net"],
   },
   experimental: { esmExternals: true },
+  env: {
+    BASE_URL: process.env.BASE_URL,
+  },
   // async headers() {
   //   return [
   //     {
