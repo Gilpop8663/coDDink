@@ -17,7 +17,10 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import useSWR from "swr";
+import useSWR, { SWRConfig } from "swr";
+import useSWRInfinite from "swr/infinite";
+import client from "@libs/server/client";
+import LoadingSpinner from "@components/loadingSpinner";
 
 export interface ProjectWithCountWithUser extends idea_project {
   _count: {
@@ -110,11 +113,15 @@ const Home: NextPage = () => {
     reset,
     formState: { errors },
   } = useForm<CommentProps>();
+
+  const [isFinishData, setIsFinishData] = useState(true);
   const [isDelete, setIsDelete] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
   const [deleteProject, { data: deleteData }] = useMutation<CommentResponse>(
     "/api/projects/delete"
   );
+
+  const [cnt, setCnt] = useState(1);
 
   const isGallery = path.slice(1, 8) === "gallery";
 
@@ -129,8 +136,34 @@ const Home: NextPage = () => {
 
   const clickedId = path.slice(9);
 
-  const { data: projectsData, mutate: projectsMutate } =
+  const { data: defaultProjectsData, mutate: defaultProjectsMutate } =
     useSWR<ProjectsResponse>("/api/projects");
+
+  const getKey = (pageIndex: number, previousPageData: ProjectsResponse) => {
+    console.log(pageIndex);
+    if (previousPageData && !previousPageData.projects) {
+      setIsFinishData(false);
+      return null; // 끝에 도달
+    }
+    return `/api/projects?page=${pageIndex}`; // SWR 키
+  };
+
+  const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+  const {
+    data: projectsInfiniteData,
+    size,
+    setSize,
+
+    mutate: projectsMutate,
+  } = useSWRInfinite<ProjectsResponse>(getKey, fetcher);
+
+  const projectsData = projectsInfiniteData
+    ? {
+        ok: true,
+        projects: projectsInfiniteData.map((item) => item.projects).flat(),
+      }
+    : defaultProjectsData;
   const { data: detailData, mutate } = useSWR<DetailProjectResponse | null>(
     isGallery ? `/api/projects/${clickedId}` : null
   );
@@ -191,6 +224,22 @@ const Home: NextPage = () => {
     setIsDelete(false);
   };
 
+  function handleScroll() {
+    if (
+      document.documentElement.scrollTop + window.innerHeight ===
+      document.documentElement.scrollHeight
+    ) {
+      setSize((p) => p + 1);
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   useEffect(() => {
     if (commentData && commentData.ok) {
       reset();
@@ -225,6 +274,7 @@ const Home: NextPage = () => {
           onProjectDeleteClick={() => onProjectDeleteClick(deleteTarget)}
         ></DeleteModal>
       )}
+      {}
       <div className="grid grid-cols-5 gap-6 px-6 py-6">
         {projectsData?.projects?.map((item) => (
           <ProjectItem
@@ -232,12 +282,12 @@ const Home: NextPage = () => {
             visible={item.visible}
             followingData={data?.profile?.followings}
             loginId={data?.profile?.id}
-            thumbnail={item.thumbnail}
+            thumbnail={item?.thumbnail}
             key={item.id}
             title={item.title}
-            likes={item._count.like}
-            views={item._count.view}
-            owner={item.owner}
+            likes={item._count?.like}
+            views={item._count?.view}
+            owner={item?.owner}
             onClick={() => onBoxClicked(item.id)}
             onFollowClick={onFollowClick}
             onDeleteModalClick={() => onDeleteModalClick(item.id)}
@@ -277,8 +327,76 @@ const Home: NextPage = () => {
           />
         )}
       </div>
+      <div className="flex justify-center py-12">
+        {isFinishData && <LoadingSpinner />}
+      </div>
     </Layout>
   );
 };
 
-export default Home;
+const Page: NextPage<{ projects: ProjectWithCountWithUser[] }> = ({
+  projects,
+}) => {
+  return (
+    <SWRConfig
+      value={{
+        fallback: {
+          "/api/projects": {
+            ok: true,
+            projects,
+          },
+        },
+      }}
+    >
+      <Home />
+    </SWRConfig>
+  );
+};
+
+export async function getServerSideProps() {
+  const projects = await client.idea_project.findMany({
+    where: {
+      isDraft: false,
+      visible: true,
+    },
+    include: {
+      user: {
+        select: {
+          avatar: true,
+          name: true,
+        },
+      },
+      _count: {
+        select: {
+          like: true,
+          view: true,
+        },
+      },
+      owner: {
+        orderBy: {
+          id: "desc",
+        },
+        select: {
+          name: true,
+          userId: true,
+          user: {
+            select: {
+              avatar: true,
+              city: true,
+              country: true,
+            },
+          },
+        },
+      },
+    },
+    take: 20,
+  });
+
+  return {
+    props: {
+      projects: JSON.parse(JSON.stringify(projects)),
+    },
+  };
+}
+
+export default Page;

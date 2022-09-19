@@ -70,7 +70,7 @@ export default function ProjectItem({
 
         {isContentTouch && (
           <>
-            {owner[0].userId === loginId && (
+            {owner[0]?.userId === loginId && (
               <div onClick={(e) => e.stopPropagation()}>
                 <div
                   onMouseOver={() => onSettingTouch(true)}

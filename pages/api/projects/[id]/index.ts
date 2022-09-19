@@ -5,7 +5,7 @@ import { withApiSession } from "@libs/server/withSession";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const {
-    query: { id },
+    query: { id, page = 1 },
     session: { user },
   } = req;
 
@@ -60,6 +60,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             },
           },
         },
+        take: 10,
+        skip: +page * 10,
       },
       tools: true,
       tags: true,
