@@ -99,6 +99,11 @@ export interface CommentResponse {
   ok: boolean;
 }
 
+export interface GETCommentResponse {
+  ok: boolean;
+  comments: CommentWithUser[];
+}
+
 const Home: NextPage = () => {
   const router = useRouter();
   const {
@@ -113,7 +118,9 @@ const Home: NextPage = () => {
     reset,
     formState: { errors },
   } = useForm<CommentProps>();
+  const isGallery = path.slice(1, 8) === "gallery";
 
+  const clickedId = path.slice(9);
   const [isFinishData, setIsFinishData] = useState(true);
   const [isDelete, setIsDelete] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
@@ -121,9 +128,23 @@ const Home: NextPage = () => {
     "/api/projects/delete"
   );
 
-  const [cnt, setCnt] = useState(1);
+  const [commentPage, setCommentPage] = useState(1);
 
-  const isGallery = path.slice(1, 8) === "gallery";
+  const { data: detailData, mutate } = useSWR<DetailProjectResponse | null>(
+    isGallery ? `/api/projects/${clickedId}` : null
+  );
+
+  const { data: getCommentsData, mutate: getCommentsMutate } =
+    useSWR<GETCommentResponse | null>(
+      isGallery
+        ? `/api/projects/${clickedId}/comment?commentIdx=${commentPage}&id=${clickedId}`
+        : null
+    );
+
+  const onMoreCommentClick = () => {
+    setCommentPage((prev) => prev + 1);
+    mutate();
+  };
 
   const [sendFollow, { data: followData, loading: followLoading }] =
     useMutation<CommentResponse>("/api/users/follow");
@@ -134,13 +155,10 @@ const Home: NextPage = () => {
     sendFollow({ id: id, myId: data?.profile?.id });
   };
 
-  const clickedId = path.slice(9);
-
   const { data: defaultProjectsData, mutate: defaultProjectsMutate } =
     useSWR<ProjectsResponse>("/api/projects");
 
   const getKey = (pageIndex: number, previousPageData: ProjectsResponse) => {
-    console.log(pageIndex);
     if (previousPageData && !previousPageData.projects) {
       setIsFinishData(false);
       return null; // 끝에 도달
@@ -164,9 +182,7 @@ const Home: NextPage = () => {
         projects: projectsInfiniteData.map((item) => item.projects).flat(),
       }
     : defaultProjectsData;
-  const { data: detailData, mutate } = useSWR<DetailProjectResponse | null>(
-    isGallery ? `/api/projects/${clickedId}` : null
-  );
+
   const [toggleLike, { loading: likeLoading }] = useMutation(
     `/api/projects/${clickedId}/like`
   );
@@ -178,6 +194,8 @@ const Home: NextPage = () => {
 
   const [sendView, { loading: viewLoading, data: viewData }] =
     useMutation("/api/projects/view");
+
+  const [commentArr, setCommentArr] = useState<CommentWithUser[]>([]);
 
   const onCommentValid = (value: CommentProps) => {
     if (commentLoading) return;
@@ -259,6 +277,13 @@ const Home: NextPage = () => {
     }
   }, [deleteData, projectsMutate]);
 
+  useEffect(() => {
+    if (getCommentsData && getCommentsData.ok) {
+      getCommentsMutate();
+      setCommentArr(getCommentsData.comments);
+    }
+  }, [getCommentsData, getCommentsMutate]);
+
   return (
     <Layout
       isLogin={data && data.ok}
@@ -295,6 +320,7 @@ const Home: NextPage = () => {
         ))}
         {detailData && (
           <ClickedProject
+            onMoreCommentClick={onMoreCommentClick}
             thumbnail={detailData.project.thumbnail}
             followingData={data?.profile?.followings}
             loginId={data?.profile?.id}
@@ -312,7 +338,7 @@ const Home: NextPage = () => {
             createdAt={detailData.project.createdAt}
             isLiked={detailData.isLiked}
             commentCount={detailData.project._count.comments}
-            projectComments={detailData.project.comments}
+            projectComments={commentArr || []}
             currentUserId={data?.profile?.id}
             onCommentValid={onCommentValid}
             isLogin={data && data.ok}

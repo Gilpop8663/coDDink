@@ -3,12 +3,20 @@ import ClickedProject from "@components/project/clickedProject";
 import useMutation from "@libs/client/useMutation";
 import { useUserState } from "@libs/client/useUser";
 import { idea_project } from "@prisma/client";
-import type { NextPage } from "next";
+import type { NextApiRequest, NextApiResponse, NextPage } from "next";
 import { useRouter } from "next/router";
-import { CommentProps, CommentResponse, DetailProjectResponse } from "pages";
-import { useEffect } from "react";
+import client from "@libs/server/client";
+import {
+  CommentProps,
+  CommentResponse,
+  CommentWithUser,
+  DetailProjectResponse,
+  GETCommentResponse,
+} from "pages";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
+import useSWRInfinite from "swr/infinite";
 
 const Gallery: NextPage = () => {
   const router = useRouter();
@@ -19,10 +27,24 @@ const Gallery: NextPage = () => {
     formState: { errors },
   } = useForm<CommentProps>();
 
-  const { data, error, mutate: userMutate } = useSWR("/api/users/me");
+  const { data, mutate: userMutate } = useSWR("/api/users/me");
+  const [commentPage, setCommentPage] = useState(1);
   const { data: detailData, mutate } = useSWR<DetailProjectResponse | null>(
     router.query.id ? `/api/projects/${router.query.id}` : null
   );
+
+  const { data: getCommentsData, mutate: getCommentsMutate } =
+    useSWR<GETCommentResponse | null>(
+      router.query.id
+        ? `/api/projects/${router.query.id}/comment?commentIdx=${commentPage}&id=${router.query.id}`
+        : null
+    );
+
+  const [commentArr, setCommentArr] = useState<CommentWithUser[]>([]);
+
+  const onMoreCommentClick = () => {
+    setCommentPage((prev) => prev + 1);
+  };
   const [sendFollow, { data: followData, loading: followLoading }] =
     useMutation<CommentResponse>("/api/users/follow");
 
@@ -81,10 +103,11 @@ const Gallery: NextPage = () => {
   }, [followData, userMutate]);
 
   useEffect(() => {
-    if (detailData && !detailData.ok) {
-      router.replace("/");
+    if (getCommentsData && getCommentsData.ok) {
+      getCommentsMutate();
+      setCommentArr(getCommentsData.comments);
     }
-  }, [detailData, router]);
+  }, [getCommentsData, getCommentsMutate]);
 
   return (
     <Layout
@@ -112,7 +135,7 @@ const Gallery: NextPage = () => {
             createdAt={detailData.project.createdAt}
             isLiked={detailData.isLiked}
             commentCount={detailData.project._count.comments}
-            projectComments={detailData.project.comments}
+            projectComments={commentArr || []}
             currentUserId={data?.profile?.id}
             onCommentValid={onCommentValid}
             isLogin={data && data.ok}
@@ -124,6 +147,7 @@ const Gallery: NextPage = () => {
             tags={detailData.project.tags}
             relatedData={detailData.relatedProjects}
             description={detailData.project.description}
+            onMoreCommentClick={onMoreCommentClick}
           />
         )}
       </div>

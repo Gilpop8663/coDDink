@@ -4,29 +4,61 @@ import client from "@libs/server/client";
 import { withApiSession } from "@libs/server/withSession";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const {
-    body: { comment: value },
-    query: { id },
-    session: { user },
-  } = req;
+  if (req.method === "GET") {
+    const {
+      query: { id, commentIdx = 1 },
+    } = req;
 
-  const comment = await client.idea_comment.create({
-    data: {
-      comment: value,
-      user: {
-        connect: {
-          id: user?.id,
+    const comments = await client.idea_comment.findMany({
+      where: {
+        projectId: Number(id),
+      },
+      take: +commentIdx * 10,
+      orderBy: { createdAt: "desc" },
+      include: {
+        user: {
+          select: {
+            avatar: true,
+            name: true,
+            id: true,
+          },
         },
       },
-      project: {
-        connect: {
-          id: Number(id),
+    });
+
+    return res.json({
+      ok: true,
+      comments,
+    });
+  }
+
+  if (req.method === "POST") {
+    const {
+      body: { comment: value },
+      query: { id },
+      session: { user },
+    } = req;
+
+    const comment = await client.idea_comment.create({
+      data: {
+        comment: value,
+        user: {
+          connect: {
+            id: user?.id,
+          },
+        },
+        project: {
+          connect: {
+            id: Number(id),
+          },
         },
       },
-    },
-  });
+    });
 
-  res.json({ ok: true });
+    res.json({ ok: true });
+  }
 }
 
-export default withApiSession(withHandler({ methods: ["POST"], handler }));
+export default withApiSession(
+  withHandler({ methods: ["GET", "POST"], handler })
+);

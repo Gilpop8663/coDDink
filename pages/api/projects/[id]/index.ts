@@ -5,7 +5,7 @@ import { withApiSession } from "@libs/server/withSession";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const {
-    query: { id, page = 1 },
+    query: { id },
     session: { user },
   } = req;
 
@@ -49,20 +49,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           id: "desc",
         },
       },
-      comments: {
-        orderBy: { createdAt: "desc" },
-        include: {
-          user: {
-            select: {
-              avatar: true,
-              name: true,
-              id: true,
-            },
-          },
-        },
-        take: 10,
-        skip: +page * 10,
-      },
+
       tools: true,
       tags: true,
       category: true,
@@ -124,7 +111,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     return res.json({ ok: false });
   }
 
-  return res.json({ ok: true, project, relatedProjects, isLiked });
+  return res.json({
+    ok: true,
+    project,
+    relatedProjects,
+    isLiked,
+  });
 }
 
 export default withApiSession(withHandler({ methods: ["GET"], handler }));
