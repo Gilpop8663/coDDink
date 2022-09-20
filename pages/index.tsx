@@ -285,7 +285,7 @@ const Home: NextPage = () => {
   }, [getCommentsData, getCommentsMutate]);
 
   useEffect(() => {
-    if (!projectsData?.projects?.length) {
+    if (!projectsData?.projects) {
       setIsFinishData(false);
     }
   }, []);
