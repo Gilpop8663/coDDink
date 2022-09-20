@@ -182,7 +182,7 @@ const Home: NextPage = () => {
         ok: true,
         projects: projectsInfiniteData.map((item) => item.projects).flat(),
       }
-    : defaultProjectsData;
+    : { ok: true, projects: [] };
 
   const [toggleLike, { loading: likeLoading }] = useMutation(
     `/api/projects/${clickedId}/like`
@@ -306,24 +306,23 @@ const Home: NextPage = () => {
         ></DeleteModal>
       )}
       <div className="grid grid-cols-5 gap-6 px-6 py-6">
-        {projectsData?.projects &&
-          projectsData?.projects?.map((item) => (
-            <ProjectItem
-              projectId={item?.id}
-              visible={item?.visible}
-              followingData={data?.profile?.followings}
-              loginId={data?.profile?.id}
-              thumbnail={item?.thumbnail}
-              key={item?.id}
-              title={item?.title}
-              likes={item?._count?.like}
-              views={item?._count?.view}
-              owner={item?.owner}
-              onClick={() => onBoxClicked(item?.id)}
-              onFollowClick={onFollowClick}
-              onDeleteModalClick={() => onDeleteModalClick(item?.id)}
-            />
-          ))}
+        {projectsData?.projects?.map((item) => (
+          <ProjectItem
+            projectId={item?.id}
+            visible={item?.visible}
+            followingData={data?.profile?.followings}
+            loginId={data?.profile?.id}
+            thumbnail={item?.thumbnail}
+            key={item?.id}
+            title={item?.title}
+            likes={item?._count?.like}
+            views={item?._count?.view}
+            owner={item?.owner}
+            onClick={() => onBoxClicked(item?.id)}
+            onFollowClick={onFollowClick}
+            onDeleteModalClick={() => onDeleteModalClick(item?.id)}
+          />
+        ))}
         {detailData && (
           <ClickedProject
             onMoreCommentClick={onMoreCommentClick}
