@@ -1,11 +1,8 @@
 import Layout from "@components/layout";
 import ClickedProject from "@components/project/clickedProject";
 import useMutation from "@libs/client/useMutation";
-import { useUserState } from "@libs/client/useUser";
-import { idea_project } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse, NextPage } from "next";
 import { useRouter } from "next/router";
-import client from "@libs/server/client";
 import {
   CommentProps,
   CommentResponse,
@@ -16,7 +13,6 @@ import {
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
-import useSWRInfinite from "swr/infinite";
 
 const Gallery: NextPage = () => {
   const router = useRouter();

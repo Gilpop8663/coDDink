@@ -8,11 +8,10 @@ import TextArea from "@components/textArea";
 import NextButton from "@components/upload/nextButton";
 import UploadButton from "@components/uploadButton";
 import useMutation from "@libs/client/useMutation";
-import useUser, { useUserState } from "@libs/client/useUser";
+import useUser from "@libs/client/useUser";
 import { makeImageURL } from "@libs/client/utils";
 import type { NextPage } from "next";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import useSWR, { mutate } from "swr";
@@ -53,7 +52,7 @@ interface StatesProps {
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const ProfileEditor: NextPage = () => {
-  const { user, isLoading } = useUser();
+  const { user } = useUser();
   const { mutate } = useSWR("");
   const {
     register,

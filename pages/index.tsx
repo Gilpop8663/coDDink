@@ -4,7 +4,7 @@ import DeleteModal from "@components/profile/deleteModal";
 import ClickedProject from "@components/project/clickedProject";
 import ProjectItem from "@components/project/projectItem";
 import useMutation from "@libs/client/useMutation";
-import { ProfileResponse, useUserState } from "@libs/client/useUser";
+import { ProfileResponse } from "@libs/client/useUser";
 import {
   idea_comment,
   idea_project,
@@ -192,8 +192,7 @@ const Home: NextPage = () => {
       `/api/projects/${detailData?.project.id}/comment`
     );
 
-  const [sendView, { loading: viewLoading, data: viewData }] =
-    useMutation("/api/projects/view");
+  const [sendView] = useMutation("/api/projects/view");
 
   const [commentArr, setCommentArr] = useState<CommentWithUser[]>([]);
 
