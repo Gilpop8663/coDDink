@@ -205,7 +205,7 @@ export default function ClickedProject({
             comments={commentCount}
             isLiked={isLiked}
           />
-          {relatedData.length > 0 && (
+          {relatedData?.length > 0 && (
             <div className="relative grid grid-cols-4 gap-4 bg-[#191919] py-20 px-10">
               {relatedData.map((item, idx) => (
                 <ClickedRelatedItem
@@ -245,7 +245,7 @@ export default function ClickedProject({
                   <ClickedLoginInfo owner={owner} />
                 )}
 
-                {projectComments.length > 0 && (
+                {projectComments?.length > 0 && (
                   <div className="relative bottom-1 flex w-full flex-col space-y-8 border border-b-0 bg-white p-8">
                     {projectComments.map((item) => (
                       <CommentMsg
@@ -260,7 +260,7 @@ export default function ClickedProject({
                     ))}
                   </div>
                 )}
-                {commentCount > projectComments.length && (
+                {commentCount > projectComments?.length && (
                   <div
                     onClick={onMoreCommentClick}
                     className=" relative bottom-1 flex w-full cursor-pointer items-center justify-center border border-t-0 bg-white py-6 text-sm text-blue-600 transition-colors hover:bg-black/5"
@@ -296,13 +296,13 @@ export default function ClickedProject({
                     description={description}
                   ></ClickedInfo>
                 </div>
-                {tools.length > 0 && (
+                {tools?.length > 0 && (
                   <ClickedSideInfos data={tools} label="툴" />
                 )}
-                {category.length > 0 && (
+                {category?.length > 0 && (
                   <ClickedSideInfos data={category} label="크리에이티브 분야" />
                 )}
-                {tags.length > 0 && (
+                {tags?.length > 0 && (
                   <ClickedSideInfos data={tags} label="태그" />
                 )}
               </div>
