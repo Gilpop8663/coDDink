@@ -414,7 +414,7 @@ export async function getServerSideProps() {
         },
       },
     },
-    take: 20,
+    take: 5,
   });
 
   return {
