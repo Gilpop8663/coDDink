@@ -163,6 +163,7 @@ const Home: NextPage = () => {
       setIsFinishData(false);
       return null; // 끝에 도달
     }
+
     return `/api/projects?page=${pageIndex}`; // SWR 키
   };
 
@@ -283,6 +284,12 @@ const Home: NextPage = () => {
     }
   }, [getCommentsData, getCommentsMutate]);
 
+  useEffect(() => {
+    if (!projectsData?.projects.length) {
+      setIsFinishData(false);
+    }
+  }, [projectsData]);
+
   return (
     <Layout
       isLogin={data && data.ok}
@@ -379,7 +386,7 @@ const Page: NextPage<{ projects: ProjectWithCountWithUser[] }> = ({
 };
 
 export async function getServerSideProps() {
-  const projects = await client.idea_project.findMany({
+  const projects = await client?.idea_project?.findMany({
     where: {
       isDraft: false,
       visible: true,
