@@ -11,7 +11,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       query: { page = 1 },
     } = req;
 
-    console.log(page);
     const projects = await client.idea_project.findMany({
       where: {
         isDraft: false,
