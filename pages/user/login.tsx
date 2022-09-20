@@ -10,11 +10,15 @@ import { useForm } from "react-hook-form";
 import ErrorMessage from "@components/error";
 import useMutation from "@libs/client/useMutation";
 import { useRouter } from "next/router";
-import { create } from "domain";
-import { watch } from "fs";
 import InputPassword from "@components/inputPassword";
 import Input from "@components/input";
 import { makeImageURL } from "@libs/client/utils";
+import GoogleBtn from "@components/auth/googleBtn";
+import Script from "next/script";
+import HeadMeta from "@components/headMeta";
+import { ProfileResponse } from "@libs/client/useUser";
+import useSWR from "swr";
+import FacebookBtn from "@components/auth/facebookBtn";
 
 interface ILoginProps {
   email: string;
@@ -33,6 +37,11 @@ interface MutationResult {
 }
 
 export default function Login() {
+  const {
+    data: userData,
+    error: userError,
+    mutate: userMutate,
+  } = useSWR<ProfileResponse>("/api/users/me");
   const router = useRouter();
   const {
     register,
@@ -44,6 +53,8 @@ export default function Login() {
     useMutation<EmailResult>("/api/users/emailCheck");
   const [login, { loading, data, error }] =
     useMutation<MutationResult>("/api/users/login");
+  const [snsLogin, { data: snsLoginData }] =
+    useMutation<MutationResult>("/api/auth/snsLogin");
 
   const [isCheckingEmail, setIsCheckingEmail] = useState(false);
 
@@ -81,18 +92,78 @@ export default function Login() {
     }
   }, [curPassword]);
 
+  useEffect(() => {
+    if (userData && userData.ok) {
+      router.push("/");
+    }
+  }, [userData, router]);
+
+  useEffect(() => {
+    if (snsLoginData && snsLoginData.ok) {
+      router.push("/");
+    }
+  }, [snsLoginData, router]);
+
   return (
     <div className="">
+      <HeadMeta></HeadMeta>
+      <Script
+        id="googleScript"
+        src="https://accounts.google.com/gsi/client"
+        strategy="lazyOnload"
+      ></Script>
+      <Script
+        id="my-script"
+        strategy="lazyOnload"
+      >{`console.log('Hello world!');
+
+        function parseJwt (token) {
+          var base64Url = token.split('.')[1];
+          var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+          var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+              return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+          }).join(''));
+
+          return JSON.parse(jsonPayload);
+        };
+
+        function handleCredentialResponse(response) {
+          // decodeJwtResponse() is a custom function defined by you
+          // to decode the credential response.
+       
+           const responsePayload = parseJwt(response.credential);
+
+
+          fetch("/api/auth/snsLogin", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              loginId: responsePayload.sub,
+              fullName:responsePayload.name,
+              givenName:responsePayload.given_name,
+              familyName:responsePayload.family_name,
+              imageURL:responsePayload.picture,
+              email:responsePayload.email
+            }),
+          }).then((response) => {console.log(response)
+            window.location.replace("/");
+          });
+       }
+      `}</Script>
+
       <div className="fixed -z-10 h-screen w-screen bg-black bg-cover opacity-50"></div>
-      <Image
-        className="fixed -z-20"
-        alt="background"
-        src={NATURE_IMAGE}
-        layout="fill"
-        objectFit="cover"
-      ></Image>
+      <div className="fixed -z-20 h-screen w-screen">
+        <Image
+          alt="background"
+          src={NATURE_IMAGE}
+          layout="fill"
+          objectFit="cover"
+        ></Image>
+      </div>
       <div className="flex h-screen items-center justify-evenly">
-        <div className="text-4xl text-white">1000 Ideas</div>
+        <div className="text-4xl text-white">coDDink</div>
         <form
           onSubmit={handleSubmit(onValid)}
           className="z-10 flex h-fit w-1/4 flex-col bg-white py-12 px-10"
@@ -134,25 +205,9 @@ export default function Login() {
                 <div className="absolute top-7 bg-white px-2">또는</div>
               </div>
               <div className="mt-8 flex flex-col space-y-6">
-                <div className="flex h-16 w-full cursor-pointer items-center justify-center rounded-full border-2 hover:border-gray-300">
-                  <Image
-                    src={GOOGLE_LOGO}
-                    alt="google"
-                    height={16}
-                    width={16}
-                  ></Image>
-                  <span className="ml-4 font-semibold">Google로 계속</span>
-                </div>
-                <div className="flex h-16 w-full cursor-pointer items-center justify-center rounded-full border-2  hover:border-gray-300">
-                  <Image
-                    src={FACEBOOK_LOGO}
-                    alt="facebook"
-                    height={16}
-                    width={16}
-                  ></Image>
-                  <span className="ml-4 font-semibold">Facebook으로 계속</span>
-                </div>
-                <div className="flex h-16 w-full cursor-pointer items-center justify-center rounded-full bg-black hover:ring-4 hover:ring-gray-300">
+                <GoogleBtn kind="text"></GoogleBtn>
+                <FacebookBtn kind="text" facebookLogin={snsLogin}></FacebookBtn>
+                {/* <div className="flex h-16 w-full cursor-pointer items-center justify-center rounded-full bg-black hover:ring-4 hover:ring-gray-300">
                   <Image
                     src={APPLE_LOGO}
                     alt="apple"
@@ -162,7 +217,7 @@ export default function Login() {
                   <span className="ml-4 font-semibold text-white">
                     Apple로 계속
                   </span>
-                </div>
+                </div> */}
               </div>
             </>
           ) : (

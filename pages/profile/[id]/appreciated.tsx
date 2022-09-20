@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import useSWR from "swr";
 
 const ProfileLike: NextPage = () => {
-  const { data, error }: useUserState = useSWR("/api/users/me");
+  const { data }: useUserState = useSWR("/api/users/me");
 
   const router = useRouter();
 

@@ -1,9 +1,9 @@
 import Layout from "@components/layout";
 import { useUserState } from "@libs/client/useUser";
-import type { NextPage } from "next";
+import React from "react";
 import useSWR from "swr";
 
-const Gallery: NextPage = () => {
+export default function Custom404Page() {
   const { data }: useUserState = useSWR("/api/users/me");
 
   return (
@@ -12,9 +12,9 @@ const Gallery: NextPage = () => {
       profile={data?.profile}
       userId={data?.profile?.id}
     >
-      <div>안녕</div>
+      <div className="fixed flex h-screen w-screen items-center justify-center text-3xl font-semibold">
+        존재하지 않는 페이지입니다
+      </div>
     </Layout>
   );
-};
-
-export default Gallery;
+}

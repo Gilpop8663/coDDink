@@ -1,4 +1,5 @@
 import ErrorMessage from "@components/error";
+import HeadMeta from "@components/headMeta";
 import Input from "@components/input";
 import Layout from "@components/layout";
 import CategoryTabMenu from "@components/profile/categoryTabMenu";
@@ -7,11 +8,10 @@ import TextArea from "@components/textArea";
 import NextButton from "@components/upload/nextButton";
 import UploadButton from "@components/uploadButton";
 import useMutation from "@libs/client/useMutation";
-import useUser, { useUserState } from "@libs/client/useUser";
+import useUser from "@libs/client/useUser";
 import { makeImageURL } from "@libs/client/utils";
 import type { NextPage } from "next";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import useSWR, { mutate } from "swr";
@@ -52,7 +52,7 @@ interface StatesProps {
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const ProfileEditor: NextPage = () => {
-  const { user, isLoading } = useUser();
+  const { user } = useUser();
   const { mutate } = useSWR("");
   const {
     register,
@@ -209,6 +209,7 @@ const ProfileEditor: NextPage = () => {
 
   return (
     <Layout isLogin={true} profile={user} userId={user?.id}>
+      <HeadMeta></HeadMeta>
       <form onSubmit={handleSubmit(onValid)}>
         <div className="fixed z-10 flex h-16 w-screen items-center justify-center space-x-4 bg-white shadow-sm">
           <Link href={`/profile/${user?.id}`}>

@@ -20,26 +20,35 @@ export default function ClickedLoginInfo({ owner }: InfoProps) {
       제공해 주세요.`}
       </span>
       <div className="mt-5 flex items-center space-x-2">
-        <Link href="/user/create">
+        <Link href="/user/login">
           <a className="w-32 text-sm">
             <NextButton color="blueBtn" label="이메일로 등록"></NextButton>
           </a>
         </Link>
         <span className="text-sm font-semibold text-gray-400">또는</span>
-        <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-2 hover:border-gray-300">
-          <Image src={GOOGLE_LOGO} alt="google" height={15} width={15}></Image>
-        </div>
-        <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full  hover:ring-2 hover:ring-gray-300">
-          <Image
-            src={FACEBOOK_LOGO}
-            alt="facebook"
-            height={30}
-            width={30}
-          ></Image>
-        </div>
-        <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-black hover:ring-2 hover:ring-gray-300">
+        <Link href="/user/login">
+          <a className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-2 hover:border-gray-300">
+            <Image
+              src={GOOGLE_LOGO}
+              alt="google"
+              height={15}
+              width={15}
+            ></Image>
+          </a>
+        </Link>
+        <Link href="/user/login">
+          <a className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full  hover:ring-2 hover:ring-gray-300">
+            <Image
+              src={FACEBOOK_LOGO}
+              alt="facebook"
+              height={30}
+              width={30}
+            ></Image>
+          </a>
+        </Link>
+        {/* <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-black hover:ring-2 hover:ring-gray-300">
           <Image src={APPLE_LOGO} alt="apple" height={15} width={15}></Image>
-        </div>
+        </div> */}
       </div>
     </div>
   );

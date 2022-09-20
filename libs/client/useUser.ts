@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import useSWR from "swr";
 
-interface userWithFollow extends idea_user {
+export interface userWithFollow extends idea_user {
   followers: idea_follow[];
   followings: idea_follow[];
 }

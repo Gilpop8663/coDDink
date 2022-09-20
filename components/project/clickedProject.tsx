@@ -37,6 +37,7 @@ import ClickedSideInfos from "./clickedComponents/clickedSideInfos";
 import ProjectItem from "./projectItem";
 import ClickedRelatedItem from "./clickedComponents/clickedRelatedItem";
 import HeadMeta from "@components/headMeta";
+import comment from "pages/api/projects/[id]/comment";
 
 interface ItemProps {
   kind: "home" | "gallery";
@@ -69,6 +70,7 @@ interface ItemProps {
   loginId: number | undefined;
   followingData: idea_follow[] | undefined;
   thumbnail: string;
+  onMoreCommentClick: () => void;
 }
 
 export default function ClickedProject({
@@ -101,6 +103,7 @@ export default function ClickedProject({
   onFollowClick,
   loginId,
   followingData,
+  onMoreCommentClick,
 }: ItemProps) {
   const router = useRouter();
 
@@ -217,7 +220,7 @@ export default function ClickedProject({
               ))}
             </div>
           )}
-          <div className="mb-24 border bg-gray-100 p-24">
+          <div className="mb-24 border border-b-0 bg-gray-100 p-24">
             <div className="grid grid-cols-7 gap-7">
               <div className="col-span-5 ">
                 {isLogin ? (
@@ -243,7 +246,7 @@ export default function ClickedProject({
                 )}
 
                 {projectComments.length > 0 && (
-                  <div className="relative bottom-1 flex w-full flex-col space-y-8 border bg-white p-8">
+                  <div className="relative bottom-1 flex w-full flex-col space-y-8 border border-b-0 bg-white p-8">
                     {projectComments.map((item) => (
                       <CommentMsg
                         key={item.id}
@@ -255,6 +258,28 @@ export default function ClickedProject({
                         currentUserId={currentUserId}
                       ></CommentMsg>
                     ))}
+                  </div>
+                )}
+                {commentCount > projectComments.length && (
+                  <div
+                    onClick={onMoreCommentClick}
+                    className=" relative bottom-1 flex w-full cursor-pointer items-center justify-center border border-t-0 bg-white py-6 text-sm text-blue-600 transition-colors hover:bg-black/5"
+                  >
+                    <span className="mr-2">댓글 더보기</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="h-4 w-4"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3"
+                      />
+                    </svg>
                   </div>
                 )}
               </div>

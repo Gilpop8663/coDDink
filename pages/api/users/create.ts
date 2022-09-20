@@ -30,6 +30,12 @@ async function handler(
     },
   });
 
+  req.session.user = {
+    id: user.id,
+  };
+
+  await req.session.save();
+
   res.json({
     ok: true,
     message: "회원가입이 완료되었습니다",

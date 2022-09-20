@@ -9,7 +9,7 @@ declare module "iron-session" {
 }
 
 const sessionOption = {
-  cookieName: "1000_idea",
+  cookieName: "coDDink",
   password: process.env.COOKIE_PASSWORD!,
   cookieOptions: {
     secure: process.env.NODE_ENV === "production",

@@ -7,6 +7,11 @@ import { idea_project } from "@prisma/client";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
+    const {
+      query: { page = 1 },
+    } = req;
+
+    console.log(page);
     const projects = await client.idea_project.findMany({
       where: {
         isDraft: false,
@@ -42,6 +47,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           },
         },
       },
+      take: 20,
+      skip: +page * 20,
     });
 
     if (projects.length === 0) {

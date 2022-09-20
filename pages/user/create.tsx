@@ -14,6 +14,10 @@ import useMutation from "@libs/client/useMutation";
 import { useRouter } from "next/router";
 import Input from "@components/input";
 import InputPassword from "@components/inputPassword";
+import FacebookBtn from "@components/auth/facebookBtn";
+import Script from "next/script";
+import HeadMeta from "@components/headMeta";
+import GoogleBtn from "@components/auth/googleBtn";
 
 interface ICreateProps {
   email: string;
@@ -38,6 +42,9 @@ export default function Create() {
   const [create, { loading, data, error }] =
     useMutation<MutationResult>("/api/users/create");
 
+  const [snsLogin, { data: snsLoginData }] =
+    useMutation<MutationResult>("/api/auth/snsLogin");
+
   const router = useRouter();
 
   const onValid = (value: ICreateProps) => {
@@ -51,18 +58,71 @@ export default function Create() {
     }
   }, [data, router]);
 
+  useEffect(() => {
+    if (snsLoginData && snsLoginData.ok) {
+      router.push("/");
+    }
+  }, [snsLoginData, router]);
+
   return (
     <div className="">
+      <HeadMeta></HeadMeta>
+      <Script
+        id="googleScript"
+        src="https://accounts.google.com/gsi/client"
+        strategy="lazyOnload"
+      ></Script>
+      <Script
+        id="my-script"
+        strategy="lazyOnload"
+      >{`console.log('Hello world!');
+
+        function parseJwt (token) {
+          var base64Url = token.split('.')[1];
+          var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+          var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+              return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+          }).join(''));
+
+          return JSON.parse(jsonPayload);
+        };
+
+        function handleCredentialResponse(response) {
+          // decodeJwtResponse() is a custom function defined by you
+          // to decode the credential response.
+       
+           const responsePayload = parseJwt(response.credential);
+
+
+          fetch("/api/auth/snsLogin", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              loginId: responsePayload.sub,
+              fullName:responsePayload.name,
+              givenName:responsePayload.given_name,
+              familyName:responsePayload.family_name,
+              imageURL:responsePayload.picture,
+              email:responsePayload.email
+            }),
+          }).then((response) => {console.log(response)
+            window.location.replace("/");
+          });
+       }
+      `}</Script>
       <div className="fixed -z-10 h-screen w-screen bg-black bg-cover opacity-50"></div>
-      <Image
-        className="fixed -z-20"
-        alt="background"
-        src={NATURE_IMAGE}
-        layout="fill"
-        objectFit="cover"
-      ></Image>
+      <div className="fixed -z-20 h-screen w-screen">
+        <Image
+          alt="background"
+          src={NATURE_IMAGE}
+          layout="fill"
+          objectFit="cover"
+        ></Image>
+      </div>
       <div className="flex h-screen items-center justify-evenly">
-        <div className="text-4xl text-white">1000 Ideas</div>
+        <div className="text-4xl text-white">coDDink</div>
         <form
           onSubmit={handleSubmit(onValid)}
           className="z-10 flex h-fit w-1/4 flex-col bg-white py-12 px-10"
@@ -77,29 +137,19 @@ export default function Create() {
           <h3 className="pt-6 font-semibold">소셜로 등록</h3>
           <div className="flex space-x-5 pt-6 transition-all">
             <div className="flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border-2 hover:border-gray-300">
-              <Image
-                src={GOOGLE_LOGO}
-                alt="google"
-                height={30}
-                width={30}
-              ></Image>
+              <GoogleBtn kind="icon"></GoogleBtn>
             </div>
-            <div className="flex h-16 w-16 cursor-pointer items-center justify-center rounded-full  hover:ring-2 hover:ring-gray-300">
-              <Image
-                src={FACEBOOK_LOGO}
-                alt="facebook"
-                height={60}
-                width={60}
-              ></Image>
-            </div>
-            <div className="flex h-16 w-16 cursor-pointer items-center justify-center rounded-full bg-black hover:ring-4 hover:ring-gray-300">
+
+            <FacebookBtn kind="icon" facebookLogin={snsLogin}></FacebookBtn>
+
+            {/* <div className="flex h-16 w-16 cursor-pointer items-center justify-center rounded-full bg-black hover:ring-4 hover:ring-gray-300">
               <Image
                 src={APPLE_LOGO}
                 alt="apple"
                 height={25}
                 width={25}
               ></Image>
-            </div>
+            </div> */}
           </div>
           <div className="relative flex items-center justify-center">
             <div className="mt-10 h-[0.1px] w-full bg-gray-300"></div>
@@ -177,10 +227,22 @@ export default function Create() {
           {errors.policy && (
             <ErrorMessage>{errors.policy.message}</ErrorMessage>
           )}
-          <span className="ml-2 mt-4 text-sm">
-            “계정 만들기”를 클릭함으로써 사용 약관 및 개인정보보호 정책을
-            읽었으며 이에 동의한다고 확인합니다.
-          </span>
+
+          <div className="ml-2 mt-4 text-sm">
+            “계정 만들기” 를 클릭함으로써
+            <Link href="/policies/conditions">
+              <a target="_blank" className="ml-2 mt-4 text-sm text-blue-600">
+                사용 약관
+              </a>
+            </Link>{" "}
+            및
+            <Link href="/policies/privacy">
+              <a target="_blank" className="ml-2 mt-4 text-sm text-blue-600">
+                개인 정보 정책
+              </a>
+            </Link>
+            을 읽었으며 이에 동의한다고 확인합니다.
+          </div>
           <Button kind="blue" value="계정 만들기"></Button>
         </form>
       </div>
