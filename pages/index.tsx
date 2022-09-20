@@ -285,10 +285,10 @@ const Home: NextPage = () => {
   }, [getCommentsData, getCommentsMutate]);
 
   useEffect(() => {
-    if (!projectsData?.projects) {
+    if (!projectsData?.projects.length) {
       setIsFinishData(false);
     }
-  }, []);
+  }, [projectsData]);
 
   return (
     <Layout

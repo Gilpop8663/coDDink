@@ -54,7 +54,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       return res.json({ ok: false, projects: [] });
     }
 
-    res.json({
+    return res.json({
       ok: true,
       projects,
     });

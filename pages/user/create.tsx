@@ -1,6 +1,6 @@
 import Layout from "@components/layout";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import NATURE_IMAGE from "@public/user-create.jpg";
 import GOOGLE_LOGO from "@public/google.svg";
 import FACEBOOK_LOGO from "@public/facebook.svg";
@@ -17,7 +17,13 @@ import InputPassword from "@components/inputPassword";
 import FacebookBtn from "@components/auth/facebookBtn";
 import Script from "next/script";
 import HeadMeta from "@components/headMeta";
-import GoogleBtn from "@components/auth/googleBtn";
+import dynamic from "next/dynamic";
+
+const GoogleBtn = dynamic(import("@components/auth/googleBtn"), {
+  ssr: false,
+  suspense: true,
+  loading: () => <span>loading</span>,
+});
 
 interface ICreateProps {
   email: string;
@@ -67,51 +73,49 @@ export default function Create() {
   return (
     <div className="">
       <HeadMeta></HeadMeta>
+      <Script id="my-script" strategy="lazyOnload">{`
+
+function parseJwt (token) {
+  var base64Url = token.split('.')[1];
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+
+  return JSON.parse(jsonPayload);
+};
+
+function handleCredentialResponse(response) {
+  // decodeJwtResponse() is a custom function defined by you
+  // to decode the credential response.
+
+   const responsePayload = parseJwt(response.credential);
+
+
+  fetch("/api/auth/snsLogin", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      loginId: responsePayload.sub,
+      fullName:responsePayload.name,
+      givenName:responsePayload.given_name,
+      familyName:responsePayload.family_name,
+      imageURL:responsePayload.picture,
+      email:responsePayload.email
+    }),
+  }).then((response) => {console.log(response)
+    window.location.replace("/");
+  });
+}
+`}</Script>
       <Script
         id="googleScript"
         src="https://accounts.google.com/gsi/client"
         strategy="lazyOnload"
       ></Script>
-      <Script
-        id="my-script"
-        strategy="lazyOnload"
-      >{`console.log('Hello world!');
 
-        function parseJwt (token) {
-          var base64Url = token.split('.')[1];
-          var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-          var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-              return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-          }).join(''));
-
-          return JSON.parse(jsonPayload);
-        };
-
-        function handleCredentialResponse(response) {
-          // decodeJwtResponse() is a custom function defined by you
-          // to decode the credential response.
-       
-           const responsePayload = parseJwt(response.credential);
-
-
-          fetch("/api/auth/snsLogin", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              loginId: responsePayload.sub,
-              fullName:responsePayload.name,
-              givenName:responsePayload.given_name,
-              familyName:responsePayload.family_name,
-              imageURL:responsePayload.picture,
-              email:responsePayload.email
-            }),
-          }).then((response) => {console.log(response)
-            window.location.replace("/");
-          });
-       }
-      `}</Script>
       <div className="fixed -z-10 h-screen w-screen bg-black bg-cover opacity-50"></div>
       <div className="fixed -z-20 h-screen w-screen">
         <Image
@@ -130,16 +134,16 @@ export default function Create() {
           <h2 className="text-3xl font-semibold ">계정 만들기</h2>
           <div className="flex items-center pt-4">
             <p className="mr-2 text-sm">이미 계정이 있으십니까?</p>
+
             <Link href="/user/login">
               <p className="cursor-pointer text-sm text-blue-600">로그인</p>
             </Link>
           </div>
           <h3 className="pt-6 font-semibold">소셜로 등록</h3>
           <div className="flex space-x-5 pt-6 transition-all">
-            <div className="flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border-2 hover:border-gray-300">
+            <Suspense fallback={<div>안녕</div>}>
               <GoogleBtn kind="icon"></GoogleBtn>
-            </div>
-
+            </Suspense>
             <FacebookBtn kind="icon" facebookLogin={snsLogin}></FacebookBtn>
 
             {/* <div className="flex h-16 w-16 cursor-pointer items-center justify-center rounded-full bg-black hover:ring-4 hover:ring-gray-300">
