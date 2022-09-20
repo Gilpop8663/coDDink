@@ -1,10 +1,11 @@
+import React from "react";
 import FacebookLogin from "@greatsumini/react-facebook-login";
 import Image from "next/image";
 import FACEBOOK_LOGO from "@public/facebook.svg";
-import React from "react";
 
 interface facebookBtnProps {
   facebookLogin: (data: any) => void;
+  kind: "icon" | "text";
 }
 
 interface ResponseProps {
@@ -13,7 +14,7 @@ interface ResponseProps {
   name: string;
 }
 
-export default function FacebookBtn({ facebookLogin }: facebookBtnProps) {
+export default function FacebookBtn({ facebookLogin, kind }: facebookBtnProps) {
   const ID = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID as string;
   return (
     <FacebookLogin
@@ -27,20 +28,38 @@ export default function FacebookBtn({ facebookLogin }: facebookBtnProps) {
       onProfileSuccess={(res: any) => {
         facebookLogin({ email: res.email, fullName: res.name });
       }}
-      render={({ onClick }) => (
-        <div
-          onClick={onClick}
-          className="flex h-16 w-full cursor-pointer items-center justify-center rounded-full border-2  hover:border-gray-300"
-        >
-          <Image
-            src={FACEBOOK_LOGO}
-            alt="facebook"
-            height={16}
-            width={16}
-          ></Image>
-          <span className="ml-4 font-semibold">Facebook으로 계속</span>
-        </div>
-      )}
+      render={({ onClick }) => {
+        if (kind === "text") {
+          return (
+            <div
+              onClick={onClick}
+              className="flex h-16 w-full cursor-pointer items-center justify-center rounded-full border-2  hover:border-gray-300"
+            >
+              <Image
+                src={FACEBOOK_LOGO}
+                alt="facebook"
+                height={16}
+                width={16}
+              ></Image>
+              <span className="ml-4 font-semibold">Facebook으로 계속</span>
+            </div>
+          );
+        } else {
+          return (
+            <div
+              onClick={onClick}
+              className="flex h-16 w-16 cursor-pointer items-center justify-center rounded-full  hover:ring-2 hover:ring-gray-300"
+            >
+              <Image
+                src={FACEBOOK_LOGO}
+                alt="facebook"
+                height={60}
+                width={60}
+              ></Image>
+            </div>
+          );
+        }
+      }}
     ></FacebookLogin>
   );
 }

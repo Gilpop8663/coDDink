@@ -154,15 +154,16 @@ export default function Login() {
       `}</Script>
 
       <div className="fixed -z-10 h-screen w-screen bg-black bg-cover opacity-50"></div>
-      <Image
-        className="fixed -z-20"
-        alt="background"
-        src={NATURE_IMAGE}
-        layout="fill"
-        objectFit="cover"
-      ></Image>
+      <div className="fixed -z-20 h-screen w-screen">
+        <Image
+          alt="background"
+          src={NATURE_IMAGE}
+          layout="fill"
+          objectFit="cover"
+        ></Image>
+      </div>
       <div className="flex h-screen items-center justify-evenly">
-        <div className="text-4xl text-white">1000 Ideas</div>
+        <div className="text-4xl text-white">coDDink</div>
         <form
           onSubmit={handleSubmit(onValid)}
           className="z-10 flex h-fit w-1/4 flex-col bg-white py-12 px-10"
@@ -204,9 +205,9 @@ export default function Login() {
                 <div className="absolute top-7 bg-white px-2">또는</div>
               </div>
               <div className="mt-8 flex flex-col space-y-6">
-                <GoogleBtn></GoogleBtn>
-                <FacebookBtn facebookLogin={snsLogin}></FacebookBtn>
-                <div className="flex h-16 w-full cursor-pointer items-center justify-center rounded-full bg-black hover:ring-4 hover:ring-gray-300">
+                <GoogleBtn kind="text"></GoogleBtn>
+                <FacebookBtn kind="text" facebookLogin={snsLogin}></FacebookBtn>
+                {/* <div className="flex h-16 w-full cursor-pointer items-center justify-center rounded-full bg-black hover:ring-4 hover:ring-gray-300">
                   <Image
                     src={APPLE_LOGO}
                     alt="apple"
@@ -216,7 +217,7 @@ export default function Login() {
                   <span className="ml-4 font-semibold text-white">
                     Apple로 계속
                   </span>
-                </div>
+                </div> */}
               </div>
             </>
           ) : (

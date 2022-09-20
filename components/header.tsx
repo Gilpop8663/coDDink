@@ -65,9 +65,12 @@ export default function Header({
     >
       <div className="item-center flex h-16 space-x-5 py-5">
         <Link href="/">
-          <a className="relative top-[1px] flex h-[20px] w-[82.58px] cursor-pointer items-center text-lg font-bold">
+          {/* <a className="relative top-[1px] flex h-[20px] w-[82.58px] cursor-pointer items-center text-lg font-bold">
             <Image src={LOGO} layout="fill" alt="logo"></Image>
-          </a>
+          </a> */}
+          <span className="relative bottom-[3px] cursor-pointer text-xl font-semibold transition-colors">
+            coDDink
+          </span>
         </Link>
         {isLogin && (
           <Link href="/">
@@ -239,13 +242,15 @@ export default function Header({
               onMouseOut={onProfileLeave}
             >
               {profile?.avatar && (
-                <Image
-                  className="rounded-full"
-                  src={makeImageURL(profile?.avatar!, "smAvatar")}
-                  width={50}
-                  height={50}
-                  alt="avatar"
-                ></Image>
+                <div className="relative h-7 w-7 rounded-full">
+                  <Image
+                    className="rounded-full"
+                    src={makeImageURL(profile.avatar, "smAvatar")}
+                    layout="fill"
+                    alt="avatar"
+                    priority={true}
+                  ></Image>
+                </div>
               )}
               {isProfileOn && profile?.avatar && (
                 <div className="absolute top-6  flex w-[350px] flex-col items-center rounded-md border bg-white p-5 text-black shadow-md">

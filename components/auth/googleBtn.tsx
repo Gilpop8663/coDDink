@@ -1,16 +1,26 @@
 import Image from "next/image";
 import React from "react";
 import GOOGLE_LOGO from "@public/google.svg";
+import { cls } from "@libs/client/utils";
 
-export default function GoogleBtn() {
+interface GoogleBtnProps {
+  kind: "icon" | "text";
+}
+
+export default function GoogleBtn({ kind }: GoogleBtnProps) {
   return (
-    <div>
-      <div className="flex h-16 w-full cursor-pointer items-center justify-center rounded-full border-2 hover:border-gray-300">
+    <div className="">
+      <div
+        className={cls(
+          kind === "text" ? " border-2" : "",
+          "flex h-16 w-full cursor-pointer items-center justify-center rounded-full hover:border-gray-300"
+        )}
+      >
         {/* <Image src={GOOGLE_LOGO} alt="google" height={16} width={16}></Image>
         <span className="ml-4 font-semibold">Google로 계속</span> */}
         <div
           className="g_id_signin"
-          data-type="standard"
+          data-type={kind === "text" ? "standard" : "icon"}
           data-size="large"
           data-theme="outline"
           data-text="sign_in_with"

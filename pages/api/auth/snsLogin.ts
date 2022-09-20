@@ -35,6 +35,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       },
     });
 
+    req.session.user = {
+      id: createUser.id,
+    };
+
+    await req.session.save();
+
     res.json({
       ok: true,
       message: "회원가입이 완료되었습니다",

@@ -27,7 +27,9 @@ import { useRouter } from "next/router";
 import {
   CommentProps,
   CommentResponse,
+  CommentWithUser,
   DetailProjectResponse,
+  GETCommentResponse,
   OwnerProps,
   ProjectWithCountWithUser,
 } from "pages";
@@ -220,6 +222,22 @@ const Profile: NextPage = () => {
     "/api/projects/delete"
   );
 
+  const [commentPage, setCommentPage] = useState(1);
+
+  const { data: getCommentsData, mutate: getCommentsMutate } =
+    useSWR<GETCommentResponse | null>(
+      isGallery
+        ? `/api/projects/${clickedId}/comment?commentIdx=${commentPage}&id=${clickedId}`
+        : null
+    );
+
+  const [commentArr, setCommentArr] = useState<CommentWithUser[]>([]);
+
+  const onMoreCommentClick = () => {
+    setCommentPage((prev) => prev + 1);
+    mutate();
+  };
+
   const onCommentValid = (value: CommentProps) => {
     if (commentLoading) return;
     sendComment(value);
@@ -350,6 +368,13 @@ const Profile: NextPage = () => {
       likeProjectMutate();
     }
   }, [deleteData, draftMutate, projectMutate, likeProjectMutate]);
+
+  useEffect(() => {
+    if (getCommentsData && getCommentsData.ok) {
+      getCommentsMutate();
+      setCommentArr(getCommentsData.comments);
+    }
+  }, [getCommentsData, getCommentsMutate]);
 
   return (
     <Layout
@@ -544,9 +569,14 @@ const Profile: NextPage = () => {
           <div className="relative mb-6 h-24 w-24 self-center">
             <Image
               className="rounded-full"
-              src={makeImageURL(userData?.userInfo?.avatar!, "smAvatar")}
+              src={makeImageURL(
+                userData?.userInfo.avatar ||
+                  "8b9dd122-cda2-4183-e41e-2c8d9259ac00",
+                "smAvatar"
+              )}
               alt="avatar"
               layout="fill"
+              priority={true}
             ></Image>
           </div>
           <div className="self-center text-2xl font-semibold">
@@ -617,7 +647,7 @@ const Profile: NextPage = () => {
                     label={"팔로우"}
                   ></NextButton>
                 )}
-                <NextButton color="grayBtn" label="메세지"></NextButton>
+                {/* <NextButton color="grayBtn" label="메세지"></NextButton> */}
               </>
             )}
           </div>
@@ -860,7 +890,7 @@ const Profile: NextPage = () => {
                 `멤버 가입일: ${timeConverter(userData?.userInfo.createdAt)}`}
             </span>
           </div>
-          {userData?.userInfo.id !== data?.profile?.id && (
+          {/* {userData?.userInfo.id !== data?.profile?.id && (
             <div className="mt-4 flex justify-center space-x-3 text-sm text-gray-400">
               <span className="cursor-pointer transition-colors hover:text-gray-700">
                 신고
@@ -870,7 +900,7 @@ const Profile: NextPage = () => {
                 차단
               </span>
             </div>
-          )}
+          )} */}
         </div>
         <div className="relative top-48 w-full pl-14 pb-48">
           <div className="w-full">
@@ -950,6 +980,7 @@ const Profile: NextPage = () => {
       </div>
       {detailData && (
         <ClickedProject
+          onMoreCommentClick={onMoreCommentClick}
           thumbnail={detailData.project.thumbnail}
           followingData={data?.profile?.followings}
           loginId={data?.profile?.id}
@@ -967,7 +998,7 @@ const Profile: NextPage = () => {
           createdAt={detailData.project.createdAt}
           isLiked={detailData.isLiked}
           commentCount={detailData.project._count.comments}
-          projectComments={detailData.project.comments}
+          projectComments={commentArr || []}
           currentUserId={data?.profile?.id}
           onCommentValid={onCommentValid}
           isLogin={data && data.ok}

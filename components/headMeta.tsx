@@ -16,12 +16,12 @@ export default function HeadMeta({
 }: HeadMetaProps) {
   return (
     <Head>
-      <title>{title || "coDinK"}</title>
+      <title>{title || "coDDinK"}</title>
       <meta
         name="description"
         content={
           description ||
-          "코딩크(CODINK)는 개발자들이 만든 사이트 등을 전시하고 검색할 수 있는 무료 온라인 웹 포트폴리오 사이트입니다."
+          "코띵크(CODDINK)는 개발자들이 만든 사이트 등을 전시하고 검색할 수 있는 무료 온라인 웹 포트폴리오 사이트입니다."
         }
       ></meta>
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />

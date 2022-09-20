@@ -1,4 +1,5 @@
 import ErrorMessage from "@components/error";
+import HeadMeta from "@components/headMeta";
 import Input from "@components/input";
 import Layout from "@components/layout";
 import CategoryTabMenu from "@components/profile/categoryTabMenu";
@@ -209,6 +210,7 @@ const ProfileEditor: NextPage = () => {
 
   return (
     <Layout isLogin={true} profile={user} userId={user?.id}>
+      <HeadMeta></HeadMeta>
       <form onSubmit={handleSubmit(onValid)}>
         <div className="fixed z-10 flex h-16 w-screen items-center justify-center space-x-4 bg-white shadow-sm">
           <Link href={`/profile/${user?.id}`}>
