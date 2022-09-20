@@ -288,7 +288,7 @@ const Home: NextPage = () => {
     if (!projectsData?.projects.length) {
       setIsFinishData(false);
     }
-  }, [projectsData]);
+  }, []);
 
   return (
     <Layout
@@ -366,69 +366,69 @@ const Home: NextPage = () => {
   );
 };
 
-const Page: NextPage<{ projects: ProjectWithCountWithUser[] }> = ({
-  projects,
-}) => {
-  return (
-    <SWRConfig
-      value={{
-        fallback: {
-          "/api/projects": {
-            ok: true,
-            projects,
-          },
-        },
-      }}
-    >
-      <Home />
-    </SWRConfig>
-  );
-};
+// const Page: NextPage<{ projects: ProjectWithCountWithUser[] }> = ({
+//   projects,
+// }) => {
+//   return (
+//     <SWRConfig
+//       value={{
+//         fallback: {
+//           "/api/projects": {
+//             ok: true,
+//             projects,
+//           },
+//         },
+//       }}
+//     >
+//       <Home />
+//     </SWRConfig>
+//   );
+// };
 
-export async function getServerSideProps() {
-  const projects = await client?.idea_project?.findMany({
-    where: {
-      isDraft: false,
-      visible: true,
-    },
-    include: {
-      user: {
-        select: {
-          avatar: true,
-          name: true,
-        },
-      },
-      _count: {
-        select: {
-          like: true,
-          view: true,
-        },
-      },
-      owner: {
-        orderBy: {
-          id: "desc",
-        },
-        select: {
-          name: true,
-          userId: true,
-          user: {
-            select: {
-              avatar: true,
-              city: true,
-              country: true,
-            },
-          },
-        },
-      },
-    },
-    take: 5,
-  });
+// export async function getServerSideProps() {
+//   const projects = await client?.idea_project?.findMany({
+//     where: {
+//       isDraft: false,
+//       visible: true,
+//     },
+//     include: {
+//       user: {
+//         select: {
+//           avatar: true,
+//           name: true,
+//         },
+//       },
+//       _count: {
+//         select: {
+//           like: true,
+//           view: true,
+//         },
+//       },
+//       owner: {
+//         orderBy: {
+//           id: "desc",
+//         },
+//         select: {
+//           name: true,
+//           userId: true,
+//           user: {
+//             select: {
+//               avatar: true,
+//               city: true,
+//               country: true,
+//             },
+//           },
+//         },
+//       },
+//     },
+//     take: 5,
+//   });
 
-  return {
-    props: {
-      projects: JSON.parse(JSON.stringify(projects)),
-    },
-  };
-}
+//   return {
+//     props: {
+//       projects: JSON.parse(JSON.stringify(projects)),
+//     },
+//   };
+// }
 
-export default Page;
+export default Home;
