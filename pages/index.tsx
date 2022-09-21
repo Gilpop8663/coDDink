@@ -155,8 +155,8 @@ const Home: NextPage = () => {
     sendFollow({ id: id, myId: data?.profile?.id });
   };
 
-  const { data: defaultProjectsData, mutate: defaultProjectsMutate } =
-    useSWR<ProjectsResponse>("/api/projects");
+  // const { data: defaultProjectsData, mutate: defaultProjectsMutate } =
+  //   useSWR<ProjectsResponse>("/api/projects");
 
   const getKey = (pageIndex: number, previousPageData: ProjectsResponse) => {
     if (previousPageData && !previousPageData.projects) {
@@ -169,20 +169,20 @@ const Home: NextPage = () => {
 
   const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-  const {
-    data: projectsInfiniteData,
-    size,
-    setSize,
+  // const {
+  //   data: projectsInfiniteData,
+  //   size,
+  //   setSize,
 
-    mutate: projectsMutate,
-  } = useSWRInfinite<ProjectsResponse>(getKey, fetcher);
+  //   mutate: projectsMutate,
+  // } = useSWRInfinite<ProjectsResponse>(getKey, fetcher);
 
-  const projectsData = projectsInfiniteData
-    ? {
-        ok: true,
-        projects: projectsInfiniteData.map((item) => item.projects).flat(),
-      }
-    : { ok: true, projects: [] };
+  // const projectsData = projectsInfiniteData
+  //   ? {
+  //       ok: true,
+  //       projects: projectsInfiniteData.map((item) => item.projects).flat(),
+  //     }
+  //   : { ok: true, projects: [] };
 
   const [toggleLike, { loading: likeLoading }] = useMutation(
     `/api/projects/${clickedId}/like`
@@ -242,21 +242,21 @@ const Home: NextPage = () => {
     setIsDelete(false);
   };
 
-  function handleScroll() {
-    if (
-      document.documentElement.scrollTop + window.innerHeight ===
-      document.documentElement.scrollHeight
-    ) {
-      setSize((p) => p + 1);
-    }
-  }
+  // function handleScroll() {
+  //   if (
+  //     document.documentElement.scrollTop + window.innerHeight ===
+  //     document.documentElement.scrollHeight
+  //   ) {
+  //     setSize((p) => p + 1);
+  //   }
+  // }
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  // useEffect(() => {
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, []);
 
   useEffect(() => {
     if (commentData && commentData.ok) {
@@ -271,11 +271,11 @@ const Home: NextPage = () => {
     }
   }, [followData, userMutate]);
 
-  useEffect(() => {
-    if (deleteData && deleteData.ok) {
-      projectsMutate();
-    }
-  }, [deleteData, projectsMutate]);
+  // useEffect(() => {
+  //   if (deleteData && deleteData.ok) {
+  //     projectsMutate();
+  //   }
+  // }, [deleteData, projectsMutate]);
 
   useEffect(() => {
     if (getCommentsData && getCommentsData.ok) {
@@ -284,11 +284,11 @@ const Home: NextPage = () => {
     }
   }, [getCommentsData, getCommentsMutate]);
 
-  useEffect(() => {
-    if (!projectsData?.projects.length) {
-      setIsFinishData(false);
-    }
-  }, [projectsData]);
+  // useEffect(() => {
+  //   if (!projectsData?.projects.length) {
+  //     setIsFinishData(false);
+  //   }
+  // }, [projectsData]);
 
   return (
     <Layout
