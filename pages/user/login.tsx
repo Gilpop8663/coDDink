@@ -107,7 +107,14 @@ export default function Login() {
   return (
     <div className="">
       <HeadMeta></HeadMeta>
-      <Script id="my-script" strategy="afterInteractive">{`
+      <Script
+        id="googleScript"
+        src="https://accounts.google.com/gsi/client"
+        strategy="lazyOnload"
+        async
+        defer
+      ></Script>
+      <Script id="my-script" strategy="lazyOnload">{`
 
 function parseJwt (token) {
   var base64Url = token.split('.')[1];
@@ -144,13 +151,6 @@ function handleCredentialResponse(response) {
   });
 }
 `}</Script>
-      <Script
-        id="googleScript"
-        src="https://accounts.google.com/gsi/client"
-        strategy="afterInteractive"
-        async
-        defer
-      ></Script>
 
       <div className="fixed -z-10 h-screen w-screen bg-black bg-cover opacity-50"></div>
       <div className="fixed -z-20 h-screen w-screen">

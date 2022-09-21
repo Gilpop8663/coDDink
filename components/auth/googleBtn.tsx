@@ -27,7 +27,7 @@ export default function GoogleBtn({ kind }: GoogleBtnProps) {
       </div>
       <div
         id="g_id_onload"
-        data-client_id="691707762640-i8gqdf86ntht6dmd02a1t5c8mdn6c998.apps.googleusercontent.com"
+        data-client_id={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
         data-callback="handleCredentialResponse"
         data-auto_prompt="false"
       ></div>

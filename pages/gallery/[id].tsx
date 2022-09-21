@@ -88,9 +88,9 @@ const Gallery: NextPage = () => {
   useEffect(() => {
     if (commentData && commentData.ok) {
       reset();
-      mutate();
+      getCommentsMutate();
     }
-  }, [commentData, reset, mutate]);
+  }, [commentData, reset, getCommentsMutate]);
 
   useEffect(() => {
     if (followData && followData.ok) {

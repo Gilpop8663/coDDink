@@ -328,9 +328,9 @@ const Profile: NextPage = () => {
   useEffect(() => {
     if (commentData && commentData.ok) {
       reset();
-      mutate();
+      getCommentsMutate();
     }
-  }, [commentData, reset, mutate, toggleData]);
+  }, [commentData, reset, getCommentsMutate]);
 
   useEffect(() => {
     if (ProfileData && ProfileData.ok) {
