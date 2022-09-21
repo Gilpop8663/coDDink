@@ -40,6 +40,11 @@ package-lock.json
 yarn.lock
 
 .env
+.env.development
+
+/.env.development
+
+.env.development
 
 /.env
 
