@@ -306,7 +306,7 @@ const Home: NextPage = () => {
         ></DeleteModal>
       )}
       <div className="grid grid-cols-5 gap-6 px-6 py-6">
-        {projectsData?.projects.length &&
+        {/* {
           projectsData?.projects?.map((item) => (
             <ProjectItem
               projectId={item?.id}
@@ -323,7 +323,7 @@ const Home: NextPage = () => {
               onFollowClick={onFollowClick}
               onDeleteModalClick={() => onDeleteModalClick(item?.id)}
             />
-          ))}
+          ))} */}
         {detailData && (
           <ClickedProject
             onMoreCommentClick={onMoreCommentClick}
