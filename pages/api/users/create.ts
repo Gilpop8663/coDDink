@@ -10,7 +10,6 @@ async function handler(
   res: NextApiResponse<ResponseType>
 ) {
   const { email, name, password, policy } = req.body;
-  console.log(email, name);
   const salt = await bcrypt.genSalt(saltRounds); // salt 생성
 
   const hashedPW = await bcrypt.hash(password, salt);
@@ -22,6 +21,7 @@ async function handler(
     "8b9dd122-cda2-4183-e41e-2c8d9259ac00",
   ];
 
+  console.log(email, name, hashedPW, number);
   const user = await client.idea_user.create({
     data: {
       email,
@@ -31,6 +31,7 @@ async function handler(
     },
   });
 
+  console.log(user);
   res.json({
     ok: true,
     message: "회원가입이 완료되었습니다",

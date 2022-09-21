@@ -10,7 +10,11 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
   referentialIntegrity = "prisma"
+  
+  
 }
+
+
 
 model idea_user{
   id Int @id @default(autoincrement())
