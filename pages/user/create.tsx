@@ -142,7 +142,9 @@ function handleCredentialResponse(response) {
           <h3 className="pt-6 font-semibold">소셜로 등록</h3>
           <div className="flex space-x-5 pt-6 transition-all">
             <Suspense fallback={<div>안녕</div>}>
-              <GoogleBtn kind="icon"></GoogleBtn>
+              <div className="rounded-ful flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border bg-white hover:ring-2 hover:ring-gray-300">
+                <GoogleBtn kind="icon"></GoogleBtn>
+              </div>
             </Suspense>
             <FacebookBtn kind="icon" facebookLogin={snsLogin}></FacebookBtn>
 
