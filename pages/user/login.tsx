@@ -110,7 +110,7 @@ export default function Login() {
   return (
     <div className="">
       <HeadMeta></HeadMeta>
-      <Script id="my-script" strategy="afterInteractive">{`
+      {/* <Script id="my-script" strategy="afterInteractive">{`
 
 function parseJwt (token) {
   var base64Url = token.split('.')[1];
@@ -153,7 +153,7 @@ function handleCredentialResponse(response) {
         strategy="afterInteractive"
         async
         defer
-      ></Script>
+      ></Script> */}
 
       <div className="fixed -z-10 h-screen w-screen bg-black bg-cover opacity-50"></div>
       <div className="fixed -z-20 h-screen w-screen">
@@ -207,7 +207,7 @@ function handleCredentialResponse(response) {
                 <div className="absolute top-7 bg-white px-2">또는</div>
               </div>
               <div className="mt-8 flex flex-col space-y-6">
-                <GoogleBtn kind="text"></GoogleBtn>
+                {/* <GoogleBtn kind="text"></GoogleBtn> */}
                 <FacebookBtn kind="text" facebookLogin={snsLogin}></FacebookBtn>
                 {/* <div className="flex h-16 w-full cursor-pointer items-center justify-center rounded-full bg-black hover:ring-4 hover:ring-gray-300">
                   <Image
