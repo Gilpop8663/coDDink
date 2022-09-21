@@ -19,7 +19,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(200).end();
   }
 
-  const profile = await client.idea_user.findUnique({
+  const profile = await client.coddinkUser.findUnique({
     where: {
       id: req.session.user?.id,
     },

@@ -17,7 +17,7 @@ import UploadButton from "@components/uploadButton";
 import useMutation from "@libs/client/useMutation";
 import useUser, { useUserState } from "@libs/client/useUser";
 import { cls } from "@libs/client/utils";
-import { idea_project, idea_user } from "@prisma/client";
+import { idea_project, coddinkUser } from "@prisma/client";
 import type { NextPage } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";

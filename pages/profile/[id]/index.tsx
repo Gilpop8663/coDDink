@@ -18,7 +18,7 @@ import {
   idea_follow,
   idea_like,
   idea_project,
-  idea_user,
+  coddinkUser,
 } from "@prisma/client";
 import type { NextPage } from "next";
 import Image from "next/image";
@@ -37,7 +37,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 
-interface ProfileWithCount extends idea_user {
+interface ProfileWithCount extends coddinkUser {
   _count: {
     portfolio: number;
     followers: number;

@@ -10,7 +10,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     body: { email, fullName },
   } = req;
 
-  const user = await client.idea_user.findUnique({
+  const user = await client.coddinkUser.findUnique({
     where: {
       email,
     },
@@ -26,7 +26,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (!user) {
     //가입하지 않은 경우 가입을 해야함
 
-    const createUser = await client.idea_user.create({
+    const createUser = await client.coddinkUser.create({
       data: {
         email: email,
         name: fullName,

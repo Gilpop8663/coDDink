@@ -8,7 +8,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     query: { id },
     session: { user },
   } = req;
-  const userInfo = await client.idea_user.findUnique({
+  const userInfo = await client.coddinkUser.findUnique({
     where: {
       id: Number(id),
     },

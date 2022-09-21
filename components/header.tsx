@@ -1,6 +1,6 @@
 import useMutation from "@libs/client/useMutation";
 import { cls, makeImageURL } from "@libs/client/utils";
-import { idea_user } from "@prisma/client";
+import { coddinkUser } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -10,7 +10,7 @@ import LOGO from "@public/coding-logo.png";
 
 interface HeaderProps {
   isLogin: boolean;
-  profile?: idea_user;
+  profile?: coddinkUser;
   kind?: "normal" | "profile";
   userId: number | undefined;
   isTop?: boolean;

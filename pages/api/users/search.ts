@@ -9,7 +9,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     session: { user: SESSION_USER },
   } = req;
 
-  const user = await client.idea_user.findMany({
+  const user = await client.coddinkUser.findMany({
     where: {
       name: {
         contains: name?.toString(),

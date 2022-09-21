@@ -1,9 +1,9 @@
-import { idea_follow, idea_user } from "@prisma/client";
+import { idea_follow, coddinkUser } from "@prisma/client";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import useSWR from "swr";
 
-export interface userWithFollow extends idea_user {
+export interface userWithFollow extends coddinkUser {
   followers: idea_follow[];
   followings: idea_follow[];
 }

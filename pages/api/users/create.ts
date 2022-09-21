@@ -23,24 +23,16 @@ async function handler(
 
   console.log(email, name, hashedPW, number);
 
-  const user = await client.user.create({
+  const user = await client.coddinkUser.create({
     data: {
-      name: name,
-      email: email,
+      email,
+      name,
+      password: hashedPW,
       avatar: avatarURL[number],
     },
   });
-  console.log(user);
-  // const user = await client.idea_user.create({
-  //   data: {
-  //     email,
-  //     name,
-  //     password: hashedPW,
-  //     avatar: avatarURL[number],
-  //   },
-  // });
 
-  // console.log(user);
+  console.log(user);
   res.json({
     ok: true,
     message: "회원가입이 완료되었습니다",

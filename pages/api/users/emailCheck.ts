@@ -5,7 +5,7 @@ import { withApiSession } from "@libs/server/withSession";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { email } = req.body;
-  const user = await client.idea_user.findUnique({
+  const user = await client.coddinkUser.findUnique({
     where: {
       email,
     },
