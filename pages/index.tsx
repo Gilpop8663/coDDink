@@ -163,6 +163,7 @@ const Home: NextPage = () => {
       setIsFinishData(false);
       return null; // 끝에 도달
     }
+
     return `/api/projects?page=${pageIndex}`; // SWR 키
   };
 
@@ -181,7 +182,7 @@ const Home: NextPage = () => {
         ok: true,
         projects: projectsInfiniteData.map((item) => item.projects).flat(),
       }
-    : defaultProjectsData;
+    : { ok: true, projects: [] };
 
   const [toggleLike, { loading: likeLoading }] = useMutation(
     `/api/projects/${clickedId}/like`
@@ -283,6 +284,12 @@ const Home: NextPage = () => {
     }
   }, [getCommentsData, getCommentsMutate]);
 
+  useEffect(() => {
+    if (!projectsData?.projects.length) {
+      setIsFinishData(false);
+    }
+  }, [projectsData]);
+
   return (
     <Layout
       isLogin={data && data.ok}
@@ -298,25 +305,25 @@ const Home: NextPage = () => {
           onProjectDeleteClick={() => onProjectDeleteClick(deleteTarget)}
         ></DeleteModal>
       )}
-      {}
       <div className="grid grid-cols-5 gap-6 px-6 py-6">
-        {projectsData?.projects?.map((item) => (
-          <ProjectItem
-            projectId={item.id}
-            visible={item.visible}
-            followingData={data?.profile?.followings}
-            loginId={data?.profile?.id}
-            thumbnail={item?.thumbnail}
-            key={item.id}
-            title={item.title}
-            likes={item._count?.like}
-            views={item._count?.view}
-            owner={item?.owner}
-            onClick={() => onBoxClicked(item.id)}
-            onFollowClick={onFollowClick}
-            onDeleteModalClick={() => onDeleteModalClick(item.id)}
-          />
-        ))}
+        {/* {
+          projectsData?.projects?.map((item) => (
+            <ProjectItem
+              projectId={item?.id}
+              visible={item?.visible}
+              followingData={data?.profile?.followings}
+              loginId={data?.profile?.id}
+              thumbnail={item?.thumbnail}
+              key={item?.id}
+              title={item?.title}
+              likes={item?._count?.like}
+              views={item?._count?.view}
+              owner={item?.owner}
+              onClick={() => onBoxClicked(item?.id)}
+              onFollowClick={onFollowClick}
+              onDeleteModalClick={() => onDeleteModalClick(item?.id)}
+            />
+          ))} */}
         {detailData && (
           <ClickedProject
             onMoreCommentClick={onMoreCommentClick}
@@ -359,69 +366,69 @@ const Home: NextPage = () => {
   );
 };
 
-const Page: NextPage<{ projects: ProjectWithCountWithUser[] }> = ({
-  projects,
-}) => {
-  return (
-    <SWRConfig
-      value={{
-        fallback: {
-          "/api/projects": {
-            ok: true,
-            projects,
-          },
-        },
-      }}
-    >
-      <Home />
-    </SWRConfig>
-  );
-};
+// const Page: NextPage<{ projects: ProjectWithCountWithUser[] }> = ({
+//   projects,
+// }) => {
+//   return (
+//     <SWRConfig
+//       value={{
+//         fallback: {
+//           "/api/projects": {
+//             ok: true,
+//             projects,
+//           },
+//         },
+//       }}
+//     >
+//       <Home />
+//     </SWRConfig>
+//   );
+// };
 
-export async function getServerSideProps() {
-  const projects = await client.idea_project.findMany({
-    where: {
-      isDraft: false,
-      visible: true,
-    },
-    include: {
-      user: {
-        select: {
-          avatar: true,
-          name: true,
-        },
-      },
-      _count: {
-        select: {
-          like: true,
-          view: true,
-        },
-      },
-      owner: {
-        orderBy: {
-          id: "desc",
-        },
-        select: {
-          name: true,
-          userId: true,
-          user: {
-            select: {
-              avatar: true,
-              city: true,
-              country: true,
-            },
-          },
-        },
-      },
-    },
-    take: 5,
-  });
+// export async function getServerSideProps() {
+//   const projects = await client.idea_project.findMany({
+//     where: {
+//       isDraft: false,
+//       visible: true,
+//     },
+//     include: {
+//       user: {
+//         select: {
+//           avatar: true,
+//           name: true,
+//         },
+//       },
+//       _count: {
+//         select: {
+//           like: true,
+//           view: true,
+//         },
+//       },
+//       owner: {
+//         orderBy: {
+//           id: "desc",
+//         },
+//         select: {
+//           name: true,
+//           userId: true,
+//           user: {
+//             select: {
+//               avatar: true,
+//               city: true,
+//               country: true,
+//             },
+//           },
+//         },
+//       },
+//     },
+//     take: 5,
+//   });
 
-  return {
-    props: {
-      projects: JSON.parse(JSON.stringify(projects)),
-    },
-  };
-}
+//   return {
+//     props: {
+//       projects: JSON.parse(JSON.stringify(projects)),
+//     },
+//   };
+// }
 
-export default Page;
+export default Home;

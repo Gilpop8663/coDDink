@@ -67,6 +67,9 @@ export default function Login() {
     if (loading) return;
     login(value);
   };
+  const onCreateClick = () => {
+    router.push("/user/create");
+  };
 
   const curEmail = watch("email");
   const curPassword = watch("password");
@@ -107,51 +110,50 @@ export default function Login() {
   return (
     <div className="">
       <HeadMeta></HeadMeta>
+      <Script id="my-script" strategy="afterInteractive">{`
+
+function parseJwt (token) {
+  var base64Url = token.split('.')[1];
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+
+  return JSON.parse(jsonPayload);
+};
+
+function handleCredentialResponse(response) {
+  // decodeJwtResponse() is a custom function defined by you
+  // to decode the credential response.
+
+   const responsePayload = parseJwt(response.credential);
+
+
+  fetch("/api/auth/snsLogin", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      loginId: responsePayload.sub,
+      fullName:responsePayload.name,
+      givenName:responsePayload.given_name,
+      familyName:responsePayload.family_name,
+      imageURL:responsePayload.picture,
+      email:responsePayload.email
+    }),
+  }).then((response) => {console.log(response)
+    window.location.replace("/");
+  });
+}
+`}</Script>
       <Script
         id="googleScript"
         src="https://accounts.google.com/gsi/client"
-        strategy="lazyOnload"
+        strategy="afterInteractive"
+        async
+        defer
       ></Script>
-      <Script
-        id="my-script"
-        strategy="lazyOnload"
-      >{`console.log('Hello world!');
-
-        function parseJwt (token) {
-          var base64Url = token.split('.')[1];
-          var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-          var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-              return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-          }).join(''));
-
-          return JSON.parse(jsonPayload);
-        };
-
-        function handleCredentialResponse(response) {
-          // decodeJwtResponse() is a custom function defined by you
-          // to decode the credential response.
-       
-           const responsePayload = parseJwt(response.credential);
-
-
-          fetch("/api/auth/snsLogin", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              loginId: responsePayload.sub,
-              fullName:responsePayload.name,
-              givenName:responsePayload.given_name,
-              familyName:responsePayload.family_name,
-              imageURL:responsePayload.picture,
-              email:responsePayload.email
-            }),
-          }).then((response) => {console.log(response)
-            window.location.replace("/");
-          });
-       }
-      `}</Script>
 
       <div className="fixed -z-10 h-screen w-screen bg-black bg-cover opacity-50"></div>
       <div className="fixed -z-20 h-screen w-screen">
@@ -173,10 +175,10 @@ export default function Login() {
               <h2 className="text-3xl font-semibold ">로그인</h2>
               <div className="flex items-center pt-6">
                 <p className="mr-2 text-sm">신규 사용자이신가요?</p>
-                <Link href="/user/create">
-                  <p className="cursor-pointer text-sm text-blue-500">
+                <Link href="/user/create" passHref>
+                  <a className="cursor-pointer text-sm text-blue-500">
                     계정 만들기
-                  </p>
+                  </a>
                 </Link>
               </div>
 

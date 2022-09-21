@@ -11,7 +11,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       query: { page = 1 },
     } = req;
 
-    console.log(page);
     const projects = await client.idea_project.findMany({
       where: {
         isDraft: false,
@@ -51,11 +50,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       skip: +page * 20,
     });
 
-    if (projects.length === 0) {
+    if (!projects) {
       return res.json({ ok: false, projects: [] });
     }
 
-    res.json({
+    return res.json({
       ok: true,
       projects,
     });
