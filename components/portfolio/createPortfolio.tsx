@@ -4,7 +4,7 @@ import NextButton from "@components/upload/nextButton";
 import UploadInput from "@components/upload/uploadInput";
 import UploadButton from "@components/uploadButton";
 import { cls, makeImageURL } from "@libs/client/utils";
-import { coddinkUser } from "@prisma/client";
+import { CoddinkUser } from "@prisma/client";
 import Image from "next/image";
 import { UploadProps, UserDataProps } from "pages/portfolio/editor";
 import React from "react";

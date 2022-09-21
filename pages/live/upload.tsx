@@ -3,7 +3,7 @@ import Input from "@components/input";
 import Layout from "@components/layout";
 import useMutation from "@libs/client/useMutation";
 import useUser, { useUserState } from "@libs/client/useUser";
-import { idea_stream } from "@prisma/client";
+import { CoddinkStream } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -18,7 +18,7 @@ interface FormProps {
 
 interface StreamResponse {
   ok: boolean;
-  stream: idea_stream;
+  stream: CoddinkStream;
 }
 
 const LiveUpload: NextPage = () => {

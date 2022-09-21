@@ -9,7 +9,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     session: { user },
   } = req;
 
-  const alreadyExists = await client.idea_like.findFirst({
+  const alreadyExists = await client.coddinkLike.findFirst({
     where: {
       projectId: Number(id),
       userId: user?.id,
@@ -17,13 +17,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   });
 
   if (alreadyExists) {
-    await client.idea_like.delete({
+    await client.coddinkLike.delete({
       where: {
         id: alreadyExists.id,
       },
     });
   } else {
-    await client.idea_like.create({
+    await client.coddinkLike.create({
       data: {
         user: {
           connect: {

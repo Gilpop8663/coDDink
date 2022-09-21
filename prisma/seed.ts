@@ -4,7 +4,7 @@ const client = new PrismaClient();
 
 async function main() {
   [...Array.from(Array(500).keys())].forEach(async (item) => {
-    await client.idea_project.create({
+    await client.coddinkProject.create({
       data: {
         title: String(item),
         thumbnail: String(item),

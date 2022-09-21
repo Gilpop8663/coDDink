@@ -1,13 +1,13 @@
 import {
-  idea_projectCategory,
-  idea_projectTag,
-  idea_projectTool,
+  CoddinkProjectCategory,
+  CoddinkProjectTag,
+  CoddinkProjectTool,
 } from "@prisma/client";
 import React from "react";
 
 interface SideInfoProps {
   label: string;
-  data: idea_projectCategory[] | idea_projectTag[] | idea_projectTool[];
+  data: CoddinkProjectCategory[] | CoddinkProjectTag[] | CoddinkProjectTool[];
 }
 
 export default function ClickedSideInfos({ label, data }: SideInfoProps) {

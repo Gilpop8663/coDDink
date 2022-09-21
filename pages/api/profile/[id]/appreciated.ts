@@ -8,7 +8,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     query: { id },
   } = req;
 
-  const projects = await client.idea_like.findMany({
+  const projects = await client.coddinkLike.findMany({
     where: {
       userId: Number(id),
     },

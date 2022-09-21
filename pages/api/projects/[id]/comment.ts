@@ -9,7 +9,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       query: { id, commentIdx = 1 },
     } = req;
 
-    const comments = await client.idea_comment.findMany({
+    const comments = await client.coddinkComment.findMany({
       where: {
         projectId: Number(id),
       },
@@ -39,7 +39,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       session: { user },
     } = req;
 
-    const comment = await client.idea_comment.create({
+    const comment = await client.coddinkComment.create({
       data: {
         comment: value,
         user: {

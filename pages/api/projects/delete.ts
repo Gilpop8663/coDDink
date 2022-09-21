@@ -11,7 +11,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       session: { user },
     } = req;
 
-    await client.idea_project.delete({
+    await client.coddinkProject.delete({
       where: {
         id: projectId,
       },

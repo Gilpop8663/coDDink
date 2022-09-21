@@ -15,7 +15,7 @@ datasource db {
 
 
 
-model coddinkUser{
+model CoddinkUser{
   id Int @id @default(autoincrement())
   email String? @unique
   name String
@@ -39,48 +39,48 @@ model coddinkUser{
   updatedAt DateTime @updatedAt
   bannerSrc String?
   bannerPosition String?
-  view idea_projectView[]
-  portfolio idea_project[]
-  like idea_like[]
-  comments idea_comment[]
-  followers idea_follow[] @relation(name:"followerUser") 
-  followings idea_follow[] @relation(name:"followingUser")
-  moodboards idea_moodboard[]
-  streams idea_stream[]
-  messages idea_message[]
-  jointOwner idea_projectOwner[]
+  view CoddinkProjectView[]
+  portfolio CoddinkProject[]
+  like CoddinkLike[]
+  comments CoddinkComment[]
+  followers CoddinkFollow[] @relation(name:"followerUser") 
+  followings CoddinkFollow[] @relation(name:"followingUser")
+  moodboards CoddinkMoodboard[]
+  streams CoddinkStream[]
+  messages CoddinkMessage[]
+  jointOwner CoddinkProjectOwner[]
 
 }
 
-model idea_project{
+model CoddinkProject{
   id Int @id @default(autoincrement())
-  user coddinkUser @relation(fields: [userId],references: [id],onDelete: Cascade)
+  user CoddinkUser @relation(fields: [userId],references: [id],onDelete: Cascade)
   userId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   title String
-  tags idea_projectTag[]
-  tools idea_projectTool[]
-  category idea_projectCategory[]
+  tags CoddinkProjectTag[]
+  tools CoddinkProjectTool[]
+  category CoddinkProjectCategory[]
   visible Boolean
   description String @db.MediumText
   thumbnail String
-  owner idea_projectOwner[]
-  like idea_like[]
-  view idea_projectView[]
-  comments idea_comment[]
-  moodboard idea_moodboard @relation(fields: [moodboardId],references: [id],onDelete: Cascade)
+  owner CoddinkProjectOwner[]
+  like CoddinkLike[]
+  view CoddinkProjectView[]
+  comments CoddinkComment[]
+  moodboard CoddinkMoodboard @relation(fields: [moodboardId],references: [id],onDelete: Cascade)
   moodboardId Int @default(1)
-  contents idea_projectContent[]
+  contents CoddinkProjectContent[]
   isDraft Boolean @default(false)
   @@index([userId])
 }
 
-model idea_like{
+model CoddinkLike{
   id Int @id @default(autoincrement())
-  user coddinkUser @relation(fields: [userId],references: [id],onDelete: Cascade)
+  user CoddinkUser @relation(fields: [userId],references: [id],onDelete: Cascade)
   userId Int
-  project idea_project @relation(fields: [projectId],references: [id],onDelete: Cascade)
+  project CoddinkProject @relation(fields: [projectId],references: [id],onDelete: Cascade)
   projectId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -89,11 +89,11 @@ model idea_like{
 
 }
 
-model idea_comment{
+model CoddinkComment{
   id Int @id @default(autoincrement())
-  user coddinkUser @relation(fields: [userId],references: [id],onDelete: Cascade)
+  user CoddinkUser @relation(fields: [userId],references: [id],onDelete: Cascade)
   userId Int
-  project idea_project @relation(fields: [projectId],references: [id],onDelete: Cascade)
+  project CoddinkProject @relation(fields: [projectId],references: [id],onDelete: Cascade)
   projectId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -102,42 +102,42 @@ model idea_comment{
   @@index([projectId])
 }
 
-model idea_follow{
+model CoddinkFollow{
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  follower coddinkUser @relation(name:"followerUser",fields: [followerId],references: [id],onDelete: Cascade)
+  follower CoddinkUser @relation(name:"followerUser",fields: [followerId],references: [id],onDelete: Cascade)
   followerId Int
-  following coddinkUser @relation(name:"followingUser",fields: [followingId],references: [id],onDelete: Cascade)
+  following CoddinkUser @relation(name:"followingUser",fields: [followingId],references: [id],onDelete: Cascade)
   followingId Int
   @@index([followerId])
   @@index([followingId])
 }
 
-model idea_stream{
+model CoddinkStream{
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   title String
   description String
-  user coddinkUser @relation(fields: [userId],references: [id],onDelete: Cascade)
+  user CoddinkUser @relation(fields: [userId],references: [id],onDelete: Cascade)
   userId Int
   tools String?
-  messages idea_message[]
+  messages CoddinkMessage[]
   cloudflareId String
   cloudflareUrl String
   cloudflareKey String
   @@index([userId])
 }
 
-model idea_message{
+model CoddinkMessage{
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user coddinkUser @relation(fields: [userId],references: [id],onDelete: Cascade)
+  user CoddinkUser @relation(fields: [userId],references: [id],onDelete: Cascade)
   userId Int
   message String @db.MediumText
-  stream idea_stream @relation(fields: [streamId],references: [id],onDelete: Cascade)
+  stream CoddinkStream @relation(fields: [streamId],references: [id],onDelete: Cascade)
   streamId Int
   @@index([userId])
   @@index([streamId])
@@ -147,21 +147,21 @@ model idea_message{
 
 
 
-model idea_moodboard{
+model CoddinkMoodboard{
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   title String
-  user coddinkUser @relation(fields: [userId],references: [id],onDelete: Cascade)
+  user CoddinkUser @relation(fields: [userId],references: [id],onDelete: Cascade)
   userId Int
-  projects idea_project[]
+  projects CoddinkProject[]
   @@index([userId])
 }
 
 
-model idea_projectContent{
+model CoddinkProjectContent{
   id Int @id @default(autoincrement())
-  project idea_project @relation(fields: [projectId],references: [id],onDelete: Cascade)
+  project CoddinkProject @relation(fields: [projectId],references: [id],onDelete: Cascade)
   projectId Int
   kind contentKind
   content String? @db.LongText
@@ -173,9 +173,9 @@ model idea_projectContent{
   @@index([projectId])
 }
 
-model idea_projectTag{
+model CoddinkProjectTag{
   id Int @id @default(autoincrement())
-  project idea_project @relation(fields: [projectId],references: [id],onDelete: Cascade)
+  project CoddinkProject @relation(fields: [projectId],references: [id],onDelete: Cascade)
   projectId Int
   name String
   createdAt DateTime @default(now())
@@ -183,9 +183,9 @@ model idea_projectTag{
   @@index([projectId])
 }
 
-model idea_projectTool{
+model CoddinkProjectTool{
   id Int @id @default(autoincrement())
-  project idea_project @relation(fields: [projectId],references: [id],onDelete: Cascade)
+  project CoddinkProject @relation(fields: [projectId],references: [id],onDelete: Cascade)
   projectId Int
   name String
   createdAt DateTime @default(now())
@@ -193,9 +193,9 @@ model idea_projectTool{
   @@index([projectId])
 }
 
-model idea_projectCategory{
+model CoddinkProjectCategory{
   id Int @id @default(autoincrement())
-  project idea_project @relation(fields: [projectId],references: [id],onDelete: Cascade)
+  project CoddinkProject @relation(fields: [projectId],references: [id],onDelete: Cascade)
   projectId Int
   name String
   createdAt DateTime @default(now())
@@ -203,23 +203,23 @@ model idea_projectCategory{
   @@index([projectId])
 }
 
-model idea_projectOwner{
+model CoddinkProjectOwner{
   id Int @id @default(autoincrement())
-  project idea_project @relation(fields: [projectId],references: [id],onDelete: Cascade)
+  project CoddinkProject @relation(fields: [projectId],references: [id],onDelete: Cascade)
   projectId Int
   name String
-  user coddinkUser @relation(fields: [userId],references: [id],onDelete: Cascade)
+  user CoddinkUser @relation(fields: [userId],references: [id],onDelete: Cascade)
   userId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@index([projectId])
 }
 
-model idea_projectView{
+model CoddinkProjectView{
   id Int @id @default(autoincrement())
-  project idea_project @relation(fields: [projectId],references: [id],onDelete: Cascade)
+  project CoddinkProject @relation(fields: [projectId],references: [id],onDelete: Cascade)
   projectId Int
-  user coddinkUser @relation(fields: [userId],references: [id],onDelete: Cascade)
+  user CoddinkUser @relation(fields: [userId],references: [id],onDelete: Cascade)
   userId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -239,17 +239,6 @@ enum Kind{
   Work
   Moodboard
   Like
-}
-
-model User {
-  id        Int      @id @default(autoincrement())
-  phone     Int?     @unique
-  email     String?  @unique
-  name      String
-  avatar    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
 }
 
 model TutorUser {

@@ -9,7 +9,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     session: { user },
   } = req;
 
-  const project = await client.idea_project.findUnique({
+  const project = await client.coddinkProject.findUnique({
     where: {
       id: Number(id),
     },
@@ -55,7 +55,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       category: true,
     },
   });
-  const relatedProjects = await client.idea_project.findMany({
+  const relatedProjects = await client.coddinkProject.findMany({
     where: {
       userId: project?.userId,
       isDraft: false,
@@ -93,7 +93,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   });
 
   const isLiked = Boolean(
-    await client.idea_like.findFirst({
+    await client.coddinkLike.findFirst({
       where: {
         projectId: Number(id),
         userId: user?.id,

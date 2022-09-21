@@ -5,7 +5,7 @@ import { withApiSession } from "@libs/server/withSession";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
-    const streams = await client.idea_stream.findMany({
+    const streams = await client.coddinkStream.findMany({
       take: 10,
       skip: 20,
     });
@@ -36,7 +36,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       )
     ).json();
 
-    const stream = await client.idea_stream.create({
+    const stream = await client.coddinkStream.create({
       data: {
         cloudflareId: uid,
         cloudflareKey: streamKey,

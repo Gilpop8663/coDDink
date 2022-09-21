@@ -1,6 +1,6 @@
 import NextButton from "@components/upload/nextButton";
 import { cls, makeImageURL } from "@libs/client/utils";
-import { idea_follow } from "@prisma/client";
+import { CoddinkFollow } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { OwnerProps } from "pages";
@@ -12,7 +12,7 @@ interface InfoProps {
   path: "home" | "gallery";
   onFollowClick: (id: number) => void;
   loginId: number | undefined;
-  followingData: idea_follow[] | undefined;
+  followingData: CoddinkFollow[] | undefined;
 }
 
 export default function OwnerInfo({
