@@ -6,17 +6,17 @@ import client from "@libs/server/client";
 //(2)
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  //   const projects: any = await client?.coddinkProject.findMany({
-  //     select: {
-  //       id: true,
-  //     },
-  //   });
+  const projects: any = await client?.coddinkProject.findMany({
+    select: {
+      id: true,
+    },
+  });
 
-  //   const users: any = await client?.coddinkUser.findMany({
-  //     select: {
-  //       id: true,
-  //     },
-  //   });
+  const users: any = await client?.coddinkUser.findMany({
+    select: {
+      id: true,
+    },
+  });
 
   const lastmod = new Date().toISOString();
 
@@ -57,23 +57,22 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     },
   ];
 
-  //   const projectFields = projects.map((project: any) => ({
-  //     loc: `${URL}gallery/${project.id}`,
-  //     changefreq: "daily",
-  //     priority: "1.0",
-  //     lastmod,
-  //   }));
+  const projectFields = projects.map((project: any) => ({
+    loc: `${URL}gallery/${project.id}`,
+    changefreq: "daily",
+    priority: "1.0",
+    lastmod,
+  }));
 
-  //   const userFields = users.map((user: any) => ({
-  //     loc: `${URL}profile/${user.id}`,
-  //     changefreq: "daily",
-  //     priority: "0.9",
-  //     lastmod,
-  //   }));
+  const userFields = users.map((user: any) => ({
+    loc: `${URL}profile/${user.id}`,
+    changefreq: "daily",
+    priority: "0.9",
+    lastmod,
+  }));
 
   //(6)
-  const fields: any = [...defaultFields];
-  //   const fields: any = [...defaultFields, ...projectFields, ...userFields];
+  const fields: any = [...defaultFields, ...projectFields, ...userFields];
 
   //(7)
   return getServerSideSitemap(ctx, fields);
