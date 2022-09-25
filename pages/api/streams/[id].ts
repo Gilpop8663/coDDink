@@ -8,7 +8,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     query: { id },
   } = req;
 
-  const stream = await client.idea_stream.findUnique({
+  const stream = await client.coddinkStream.findUnique({
     where: {
       id: Number(id),
     },

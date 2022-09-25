@@ -1,10 +1,10 @@
 import React from "react";
 import Header from "./header";
-import { idea_user } from "@prisma/client";
+import { CoddinkUser } from "@prisma/client";
 
 interface LayoutProps {
   isLogin: boolean | undefined;
-  profile?: idea_user;
+  profile?: CoddinkUser;
   children: React.ReactNode;
   kind?: "normal" | "profile";
   isTop?: boolean;

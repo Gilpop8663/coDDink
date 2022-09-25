@@ -11,7 +11,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (!user) return res.json({ ok: false });
 
-  const alreadyExists = await client.idea_projectView.findFirst({
+  const alreadyExists = await client.coddinkProjectView.findFirst({
     where: {
       userId: user?.id,
       projectId: projectId,
@@ -20,7 +20,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (alreadyExists) return res.json({ ok: true });
 
-  await client.idea_projectView.create({
+  await client.coddinkProjectView.create({
     data: {
       project: {
         connect: {

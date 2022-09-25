@@ -3,9 +3,6 @@ import React, { useEffect, useState } from "react";
 import NATURE_IMAGE from "@public/user-login.jpg";
 import Image from "next/image";
 import Button from "@components/button";
-import GOOGLE_LOGO from "@public/google.svg";
-import FACEBOOK_LOGO from "@public/facebook.svg";
-import APPLE_LOGO from "@public/apple.png";
 import { useForm } from "react-hook-form";
 import ErrorMessage from "@components/error";
 import useMutation from "@libs/client/useMutation";
@@ -110,7 +107,14 @@ export default function Login() {
   return (
     <div className="">
       <HeadMeta></HeadMeta>
-      {/* <Script id="my-script" strategy="afterInteractive">{`
+      <Script
+        id="googleScript"
+        src="https://accounts.google.com/gsi/client"
+        strategy="lazyOnload"
+        async
+        defer
+      ></Script>
+      <Script id="my-script" strategy="lazyOnload">{`
 
 function parseJwt (token) {
   var base64Url = token.split('.')[1];
@@ -147,13 +151,6 @@ function handleCredentialResponse(response) {
   });
 }
 `}</Script>
-      <Script
-        id="googleScript"
-        src="https://accounts.google.com/gsi/client"
-        strategy="afterInteractive"
-        async
-        defer
-      ></Script> */}
 
       <div className="fixed -z-10 h-screen w-screen bg-black bg-cover opacity-50"></div>
       <div className="fixed -z-20 h-screen w-screen">
@@ -207,7 +204,7 @@ function handleCredentialResponse(response) {
                 <div className="absolute top-7 bg-white px-2">또는</div>
               </div>
               <div className="mt-8 flex flex-col space-y-6">
-                {/* <GoogleBtn kind="text"></GoogleBtn> */}
+                <GoogleBtn kind="text"></GoogleBtn>
                 <FacebookBtn kind="text" facebookLogin={snsLogin}></FacebookBtn>
                 {/* <div className="flex h-16 w-full cursor-pointer items-center justify-center rounded-full bg-black hover:ring-4 hover:ring-gray-300">
                   <Image

@@ -13,20 +13,20 @@ async function handler(
 
   if (id === myId) return;
 
-  const alreadyExists = await client.idea_follow.findFirst({
+  const alreadyExists = await client.coddinkFollow.findFirst({
     where: {
       followerId: Number(id),
     },
   });
 
   if (alreadyExists) {
-    await client.idea_follow.delete({
+    await client.coddinkFollow.delete({
       where: {
         id: alreadyExists.id,
       },
     });
   } else {
-    await client.idea_follow.create({
+    await client.coddinkFollow.create({
       data: {
         follower: {
           connect: {

@@ -10,7 +10,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   } = req;
 
   if (Number(id) === user?.id) {
-    const projects = await client.idea_project.findMany({
+    const projects = await client.coddinkProject.findMany({
       where: {
         userId: Number(id),
         isDraft: false,
@@ -41,7 +41,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     });
     return res.json({ ok: true, projects });
   } else {
-    const projects = await client.idea_project.findMany({
+    const projects = await client.coddinkProject.findMany({
       where: {
         userId: Number(id),
         isDraft: false,

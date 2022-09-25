@@ -22,7 +22,8 @@ async function handler(
   ];
 
   console.log(email, name, hashedPW, number);
-  const user = await client.idea_user.create({
+
+  const user = await client.coddinkUser.create({
     data: {
       email,
       name,

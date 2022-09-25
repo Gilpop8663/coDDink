@@ -1,14 +1,3 @@
-import { cls } from "@libs/client/utils";
-import { ContentProps } from "pages/portfolio/editor";
-import {
-  ChangeEvent,
-  ChangeEventHandler,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 
 interface TextAreaProps {

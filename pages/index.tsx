@@ -6,12 +6,12 @@ import ProjectItem from "@components/project/projectItem";
 import useMutation from "@libs/client/useMutation";
 import { ProfileResponse } from "@libs/client/useUser";
 import {
-  idea_comment,
-  idea_project,
-  idea_projectCategory,
-  idea_projectContent,
-  idea_projectTag,
-  idea_projectTool,
+  CoddinkComment,
+  CoddinkProject,
+  CoddinkProjectCategory,
+  CoddinkProjectContent,
+  CoddinkProjectTag,
+  CoddinkProjectTool,
 } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -22,7 +22,7 @@ import useSWRInfinite from "swr/infinite";
 import client from "@libs/server/client";
 import LoadingSpinner from "@components/loadingSpinner";
 
-export interface ProjectWithCountWithUser extends idea_project {
+export interface ProjectWithCountWithUser extends CoddinkProject {
   _count: {
     like: number;
     view: number;
@@ -43,7 +43,7 @@ export interface OwnerProps {
   };
 }
 
-export interface LikeProjectWithCountWithUser extends idea_project {
+export interface LikeProjectWithCountWithUser extends CoddinkProject {
   _count: {
     like: number;
   };
@@ -53,7 +53,7 @@ export interface LikeProjectWithCountWithUser extends idea_project {
   };
 }
 
-export interface CommentWithUser extends idea_comment {
+export interface CommentWithUser extends CoddinkComment {
   user: {
     avatar: string;
     name: string;
@@ -61,7 +61,7 @@ export interface CommentWithUser extends idea_comment {
   };
 }
 
-export interface ProjectWithComment extends idea_project {
+export interface ProjectWithComment extends CoddinkProject {
   _count: {
     like: number;
     comments: number;
@@ -73,10 +73,10 @@ export interface ProjectWithComment extends idea_project {
   };
   owner: OwnerProps[];
   comments: CommentWithUser[];
-  contents: idea_projectContent[];
-  category: idea_projectCategory[];
-  tools: idea_projectTool[];
-  tags: idea_projectTag[];
+  contents: CoddinkProjectContent[];
+  category: CoddinkProjectCategory[];
+  tools: CoddinkProjectTool[];
+  tags: CoddinkProjectTag[];
 }
 
 interface ProjectsResponse {
@@ -155,8 +155,8 @@ const Home: NextPage = () => {
     sendFollow({ id: id, myId: data?.profile?.id });
   };
 
-  // const { data: defaultProjectsData, mutate: defaultProjectsMutate } =
-  //   useSWR<ProjectsResponse>("/api/projects");
+  const { data: defaultProjectsData, mutate: defaultProjectsMutate } =
+    useSWR<ProjectsResponse>("/api/projects");
 
   const getKey = (pageIndex: number, previousPageData: ProjectsResponse) => {
     if (previousPageData && !previousPageData.projects) {
@@ -169,20 +169,20 @@ const Home: NextPage = () => {
 
   const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-  // const {
-  //   data: projectsInfiniteData,
-  //   size,
-  //   setSize,
+  const {
+    data: projectsInfiniteData,
+    size,
+    setSize,
 
-  //   mutate: projectsMutate,
-  // } = useSWRInfinite<ProjectsResponse>(getKey, fetcher);
+    mutate: projectsMutate,
+  } = useSWRInfinite<ProjectsResponse>(getKey, fetcher);
 
-  // const projectsData = projectsInfiniteData
-  //   ? {
-  //       ok: true,
-  //       projects: projectsInfiniteData.map((item) => item.projects).flat(),
-  //     }
-  //   : { ok: true, projects: [] };
+  const projectsData = projectsInfiniteData
+    ? {
+        ok: true,
+        projects: projectsInfiniteData.map((item) => item.projects).flat(),
+      }
+    : defaultProjectsData;
 
   const [toggleLike, { loading: likeLoading }] = useMutation(
     `/api/projects/${clickedId}/like`
@@ -242,28 +242,28 @@ const Home: NextPage = () => {
     setIsDelete(false);
   };
 
-  // function handleScroll() {
-  //   if (
-  //     document.documentElement.scrollTop + window.innerHeight ===
-  //     document.documentElement.scrollHeight
-  //   ) {
-  //     setSize((p) => p + 1);
-  //   }
-  // }
+  function handleScroll() {
+    if (
+      document.documentElement.scrollTop + window.innerHeight ===
+      document.documentElement.scrollHeight
+    ) {
+      setSize((p) => p + 1);
+    }
+  }
 
-  // useEffect(() => {
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, []);
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     if (commentData && commentData.ok) {
       reset();
-      mutate();
+      getCommentsMutate();
     }
-  }, [commentData, reset, mutate]);
+  }, [commentData, reset, getCommentsMutate]);
 
   useEffect(() => {
     if (followData && followData.ok) {
@@ -271,11 +271,11 @@ const Home: NextPage = () => {
     }
   }, [followData, userMutate]);
 
-  // useEffect(() => {
-  //   if (deleteData && deleteData.ok) {
-  //     projectsMutate();
-  //   }
-  // }, [deleteData, projectsMutate]);
+  useEffect(() => {
+    if (deleteData && deleteData.ok) {
+      projectsMutate();
+    }
+  }, [deleteData, projectsMutate]);
 
   useEffect(() => {
     if (getCommentsData && getCommentsData.ok) {
@@ -284,11 +284,11 @@ const Home: NextPage = () => {
     }
   }, [getCommentsData, getCommentsMutate]);
 
-  // useEffect(() => {
-  //   if (!projectsData?.projects.length) {
-  //     setIsFinishData(false);
-  //   }
-  // }, [projectsData]);
+  useEffect(() => {
+    if (!projectsData?.projects.length) {
+      setIsFinishData(false);
+    }
+  }, [projectsData]);
 
   return (
     <Layout
@@ -306,24 +306,23 @@ const Home: NextPage = () => {
         ></DeleteModal>
       )}
       <div className="grid grid-cols-5 gap-6 px-6 py-6">
-        {/* {
-          projectsData?.projects?.map((item) => (
-            <ProjectItem
-              projectId={item?.id}
-              visible={item?.visible}
-              followingData={data?.profile?.followings}
-              loginId={data?.profile?.id}
-              thumbnail={item?.thumbnail}
-              key={item?.id}
-              title={item?.title}
-              likes={item?._count?.like}
-              views={item?._count?.view}
-              owner={item?.owner}
-              onClick={() => onBoxClicked(item?.id)}
-              onFollowClick={onFollowClick}
-              onDeleteModalClick={() => onDeleteModalClick(item?.id)}
-            />
-          ))} */}
+        {projectsData?.projects?.map((item) => (
+          <ProjectItem
+            projectId={item?.id}
+            visible={item?.visible}
+            followingData={data?.profile?.followings}
+            loginId={data?.profile?.id}
+            thumbnail={item?.thumbnail}
+            key={item?.id}
+            title={item?.title}
+            likes={item?._count?.like}
+            views={item?._count?.view}
+            owner={item?.owner}
+            onClick={() => onBoxClicked(item?.id)}
+            onFollowClick={onFollowClick}
+            onDeleteModalClick={() => onDeleteModalClick(item?.id)}
+          />
+        ))}
         {detailData && (
           <ClickedProject
             onMoreCommentClick={onMoreCommentClick}
@@ -366,69 +365,69 @@ const Home: NextPage = () => {
   );
 };
 
-// const Page: NextPage<{ projects: ProjectWithCountWithUser[] }> = ({
-//   projects,
-// }) => {
-//   return (
-//     <SWRConfig
-//       value={{
-//         fallback: {
-//           "/api/projects": {
-//             ok: true,
-//             projects,
-//           },
-//         },
-//       }}
-//     >
-//       <Home />
-//     </SWRConfig>
-//   );
-// };
+const Page: NextPage<{ projects: ProjectWithCountWithUser[] }> = ({
+  projects,
+}) => {
+  return (
+    <SWRConfig
+      value={{
+        fallback: {
+          "/api/projects": {
+            ok: true,
+            projects,
+          },
+        },
+      }}
+    >
+      <Home />
+    </SWRConfig>
+  );
+};
 
-// export async function getServerSideProps() {
-//   const projects = await client.idea_project.findMany({
-//     where: {
-//       isDraft: false,
-//       visible: true,
-//     },
-//     include: {
-//       user: {
-//         select: {
-//           avatar: true,
-//           name: true,
-//         },
-//       },
-//       _count: {
-//         select: {
-//           like: true,
-//           view: true,
-//         },
-//       },
-//       owner: {
-//         orderBy: {
-//           id: "desc",
-//         },
-//         select: {
-//           name: true,
-//           userId: true,
-//           user: {
-//             select: {
-//               avatar: true,
-//               city: true,
-//               country: true,
-//             },
-//           },
-//         },
-//       },
-//     },
-//     take: 5,
-//   });
+export async function getServerSideProps() {
+  const projects = await client.coddinkProject.findMany({
+    where: {
+      isDraft: false,
+      visible: true,
+    },
+    include: {
+      user: {
+        select: {
+          avatar: true,
+          name: true,
+        },
+      },
+      _count: {
+        select: {
+          like: true,
+          view: true,
+        },
+      },
+      owner: {
+        orderBy: {
+          id: "desc",
+        },
+        select: {
+          name: true,
+          userId: true,
+          user: {
+            select: {
+              avatar: true,
+              city: true,
+              country: true,
+            },
+          },
+        },
+      },
+    },
+    take: 5,
+  });
 
-//   return {
-//     props: {
-//       projects: JSON.parse(JSON.stringify(projects)),
-//     },
-//   };
-// }
+  return {
+    props: {
+      projects: JSON.parse(JSON.stringify(projects)),
+    },
+  };
+}
 
-export default Home;
+export default Page;

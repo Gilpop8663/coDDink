@@ -1,13 +1,13 @@
 import useMutation from "@libs/client/useMutation";
 import { cls, makeImageURL } from "@libs/client/utils";
 import {
-  idea_comment,
-  idea_follow,
-  idea_project,
-  idea_projectCategory,
-  idea_projectContent,
-  idea_projectTag,
-  idea_projectTool,
+  CoddinkComment,
+  CoddinkFollow,
+  CoddinkProject,
+  CoddinkProjectCategory,
+  CoddinkProjectContent,
+  CoddinkProjectTag,
+  CoddinkProjectTool,
 } from "@prisma/client";
 import { useRouter } from "next/router";
 import {
@@ -48,7 +48,7 @@ interface ItemProps {
   owner: OwnerProps[];
   avatar: string;
   userId: number;
-  contents: idea_projectContent[];
+  contents: CoddinkProjectContent[];
   createdAt: Date;
   onLikeClick: () => void;
   onClick?: () => void;
@@ -61,14 +61,14 @@ interface ItemProps {
   register: UseFormRegister<CommentProps>;
   handleSubmit: UseFormHandleSubmit<CommentProps>;
   errors: FieldErrorsImpl<DeepRequired<CommentProps>>;
-  tools: idea_projectTool[];
-  category: idea_projectCategory[];
-  tags: idea_projectTag[];
+  tools: CoddinkProjectTool[];
+  category: CoddinkProjectCategory[];
+  tags: CoddinkProjectTag[];
   relatedData: ProjectWithCountWithUser[];
   description: string;
   onFollowClick: (id: number) => void;
   loginId: number | undefined;
-  followingData: idea_follow[] | undefined;
+  followingData: CoddinkFollow[] | undefined;
   thumbnail: string;
   onMoreCommentClick: () => void;
 }

@@ -2,7 +2,7 @@ import ClickedCodeView from "@components/project/clickedComponents/clickedCodeVi
 import ClickedFooter from "@components/project/clickedComponents/clickedFooter";
 import ClickedInfo from "@components/project/clickedComponents/clickedInfo";
 import { cls, makeImageURL } from "@libs/client/utils";
-import { idea_follow } from "@prisma/client";
+import { CoddinkFollow } from "@prisma/client";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { ContentProps, UserDataProps } from "pages/portfolio/editor";

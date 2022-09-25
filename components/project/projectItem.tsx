@@ -1,7 +1,7 @@
 import NextButton from "@components/upload/nextButton";
 import UploadButton from "@components/uploadButton";
 import { cls, makeImageURL } from "@libs/client/utils";
-import { idea_follow, idea_projectOwner } from "@prisma/client";
+import { CoddinkFollow, CoddinkProjectOwner } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { OwnerProps } from "pages";
@@ -18,7 +18,7 @@ interface ItemProps {
   onClick: () => void;
   onFollowClick: (id: number) => void;
   loginId: number | undefined;
-  followingData: idea_follow[] | undefined;
+  followingData: CoddinkFollow[] | undefined;
   onDeleteModalClick: () => void;
   visible: boolean;
 }

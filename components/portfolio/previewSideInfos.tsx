@@ -1,7 +1,7 @@
 import {
-  idea_projectCategory,
-  idea_projectTag,
-  idea_projectTool,
+  CoddinkProjectCategory,
+  CoddinkProjectTag,
+  CoddinkProjectTool,
 } from "@prisma/client";
 import React from "react";
 

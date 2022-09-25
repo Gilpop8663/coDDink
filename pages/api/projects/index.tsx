@@ -3,7 +3,7 @@ import withHandler from "@libs/server/withHandler";
 import client from "@libs/server/client";
 import { withApiSession } from "@libs/server/withSession";
 import { ContentProps, UserDataProps } from "pages/portfolio/editor";
-import { idea_project } from "@prisma/client";
+import { CoddinkProject } from "@prisma/client";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
@@ -11,7 +11,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       query: { page = 1 },
     } = req;
 
-    const projects = await client.idea_project.findMany({
+    const projects = await client.coddinkProject.findMany({
       where: {
         isDraft: false,
         visible: true,
@@ -82,10 +82,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       session: { user },
     } = req;
 
-    let project: idea_project;
+    let project: CoddinkProject;
     if (projectId) {
       if (isDraft) {
-        project = await client.idea_project.update({
+        project = await client.coddinkProject.update({
           where: {
             id: Number(projectId),
           },
@@ -103,7 +103,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           },
         });
       } else {
-        project = await client.idea_project.update({
+        project = await client.coddinkProject.update({
           where: {
             id: Number(projectId),
           },
@@ -122,31 +122,31 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         });
       }
 
-      await client.idea_projectContent.deleteMany({
+      await client.coddinkProjectContent.deleteMany({
         where: {
           projectId: Number(projectId),
         },
       });
 
-      await client.idea_projectCategory.deleteMany({
+      await client.coddinkProjectCategory.deleteMany({
         where: {
           projectId: Number(projectId),
         },
       });
 
-      await client.idea_projectOwner.deleteMany({
+      await client.coddinkProjectOwner.deleteMany({
         where: {
           projectId: Number(projectId),
         },
       });
 
-      await client.idea_projectTag.deleteMany({
+      await client.coddinkProjectTag.deleteMany({
         where: {
           projectId: Number(projectId),
         },
       });
 
-      await client.idea_projectTool.deleteMany({
+      await client.coddinkProjectTool.deleteMany({
         where: {
           projectId: Number(projectId),
         },
@@ -154,7 +154,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
       content.forEach(async (item: ContentProps) => {
         if (item.description === "" || !item.description) return;
-        const projectContent = await client.idea_projectContent.create({
+        const projectContent = await client.coddinkProjectContent.create({
           data: {
             kind: item.kind,
             imageSrc: item.kind === "image" ? item.imageSrc : null,
@@ -174,7 +174,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
       tagArr.forEach(async (item: string) => {
         if (item === "" || item.length > 50) return;
-        const tagContent = await client.idea_projectTag.create({
+        const tagContent = await client.coddinkProjectTag.create({
           data: {
             name: item,
             project: {
@@ -188,7 +188,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
       categoryArr.forEach(async (item: string) => {
         if (item === "" || item.length > 50) return;
-        const categoryContent = await client.idea_projectCategory.create({
+        const categoryContent = await client.coddinkProjectCategory.create({
           data: {
             name: item,
             project: {
@@ -202,7 +202,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
       toolArr.forEach(async (item: string) => {
         if (item === "" || item.length > 50) return;
-        const categoryContent = await client.idea_projectTool.create({
+        const categoryContent = await client.coddinkProjectTool.create({
           data: {
             name: item,
             project: {
@@ -215,7 +215,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       });
 
       ownerArr.forEach(async (item: UserDataProps) => {
-        const categoryContent = await client.idea_projectOwner.create({
+        const categoryContent = await client.coddinkProjectOwner.create({
           data: {
             name: item.name,
             project: {
@@ -233,7 +233,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       });
     } else {
       if (isDraft) {
-        project = await client.idea_project.create({
+        project = await client.coddinkProject.create({
           data: {
             title: title ? title : "",
             description: description ? description : "",
@@ -248,7 +248,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           },
         });
       } else {
-        project = await client.idea_project.create({
+        project = await client.coddinkProject.create({
           data: {
             title: title,
             description: description,
@@ -266,7 +266,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
       content.forEach(async (item: ContentProps) => {
         if (item.description === "" || !item.description) return;
-        const projectContent = await client.idea_projectContent.create({
+        const projectContent = await client.coddinkProjectContent.create({
           data: {
             kind: item.kind,
             imageSrc: item.kind === "image" ? item.imageSrc : null,
@@ -286,7 +286,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
       tagArr.forEach(async (item: string) => {
         if (item === "" || item.length > 50) return;
-        const tagContent = await client.idea_projectTag.create({
+        const tagContent = await client.coddinkProjectTag.create({
           data: {
             name: item,
             project: {
@@ -300,7 +300,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
       categoryArr.forEach(async (item: string) => {
         if (item === "" || item.length > 50) return;
-        const categoryContent = await client.idea_projectCategory.create({
+        const categoryContent = await client.coddinkProjectCategory.create({
           data: {
             name: item,
             project: {
@@ -314,7 +314,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
       toolArr.forEach(async (item: string) => {
         if (item === "" || item.length > 50) return;
-        const categoryContent = await client.idea_projectTool.create({
+        const categoryContent = await client.coddinkProjectTool.create({
           data: {
             name: item,
             project: {
@@ -327,7 +327,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       });
 
       ownerArr.forEach(async (item: UserDataProps) => {
-        const categoryContent = await client.idea_projectOwner.create({
+        const categoryContent = await client.coddinkProjectOwner.create({
           data: {
             name: item.name,
             project: {

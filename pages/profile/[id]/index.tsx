@@ -15,10 +15,10 @@ import {
   timeConverter,
 } from "@libs/client/utils";
 import {
-  idea_follow,
-  idea_like,
-  idea_project,
-  idea_user,
+  CoddinkFollow,
+  CoddinkLike,
+  CoddinkProject,
+  CoddinkUser,
 } from "@prisma/client";
 import type { NextPage } from "next";
 import Image from "next/image";
@@ -37,7 +37,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 
-interface ProfileWithCount extends idea_user {
+interface ProfileWithCount extends CoddinkUser {
   _count: {
     portfolio: number;
     followers: number;
@@ -56,12 +56,12 @@ interface UserProjectsResponse {
   projects: ProjectWithCountWithUser[];
 }
 
-interface ProjectWithCount extends idea_project {
+interface ProjectWithCount extends CoddinkProject {
   _count: { like: number };
   owner: OwnerProps[];
 }
 
-interface LikeProjectWithCountWithUser extends idea_like {
+interface LikeProjectWithCountWithUser extends CoddinkLike {
   project: ProjectWithCount;
 }
 
@@ -328,9 +328,9 @@ const Profile: NextPage = () => {
   useEffect(() => {
     if (commentData && commentData.ok) {
       reset();
-      mutate();
+      getCommentsMutate();
     }
-  }, [commentData, reset, mutate, toggleData]);
+  }, [commentData, reset, getCommentsMutate]);
 
   useEffect(() => {
     if (ProfileData && ProfileData.ok) {
@@ -633,7 +633,8 @@ const Profile: NextPage = () => {
             {userData?.userInfo.id !== data?.profile?.id && (
               <>
                 {data?.profile?.followings?.find(
-                  (ele: idea_follow) => ele.followerId === userData?.userInfo.id
+                  (ele: CoddinkFollow) =>
+                    ele.followerId === userData?.userInfo.id
                 ) ? (
                   <NextButton
                     onClick={() => onFollowClick(userData?.userInfo.id)}

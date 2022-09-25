@@ -18,12 +18,7 @@ import FacebookBtn from "@components/auth/facebookBtn";
 import Script from "next/script";
 import HeadMeta from "@components/headMeta";
 import dynamic from "next/dynamic";
-
-const GoogleBtn = dynamic(import("@components/auth/googleBtn"), {
-  ssr: false,
-  suspense: true,
-  loading: () => <span>loading</span>,
-});
+import GoogleBtn from "@components/auth/googleBtn";
 
 interface ICreateProps {
   email: string;
@@ -73,7 +68,7 @@ export default function Create() {
   return (
     <div className="">
       <HeadMeta></HeadMeta>
-      {/* <Script id="my-script" strategy="lazyOnload">{`
+      <Script id="my-script" strategy="lazyOnload">{`
 
 function parseJwt (token) {
   var base64Url = token.split('.')[1];
@@ -114,7 +109,7 @@ function handleCredentialResponse(response) {
         id="googleScript"
         src="https://accounts.google.com/gsi/client"
         strategy="lazyOnload"
-      ></Script> */}
+      ></Script>
 
       <div className="fixed -z-10 h-screen w-screen bg-black bg-cover opacity-50"></div>
       <div className="fixed -z-20 h-screen w-screen">
@@ -141,11 +136,9 @@ function handleCredentialResponse(response) {
           </div>
           <h3 className="pt-6 font-semibold">소셜로 등록</h3>
           <div className="flex space-x-5 pt-6 transition-all">
-            {/* <Suspense fallback={<div>안녕</div>}>
-              <div className="rounded-ful flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border bg-white hover:ring-2 hover:ring-gray-300">
-                <GoogleBtn kind="icon"></GoogleBtn>
-              </div>
-            </Suspense> */}
+            <div className="rounded-ful flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border bg-white hover:ring-2 hover:ring-gray-300">
+              <GoogleBtn kind="icon"></GoogleBtn>
+            </div>
             <FacebookBtn kind="icon" facebookLogin={snsLogin}></FacebookBtn>
 
             {/* <div className="flex h-16 w-16 cursor-pointer items-center justify-center rounded-full bg-black hover:ring-4 hover:ring-gray-300">

@@ -29,7 +29,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   } = req;
 
   if (banner) {
-    await client.idea_user.update({
+    await client.coddinkUser.update({
       where: { id: user?.id },
       data: {
         bannerSrc: banner.imageSrc,
@@ -40,7 +40,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     return res.json({ ok: true });
   }
 
-  const updateUser = await client.idea_user.update({
+  const updateUser = await client.coddinkUser.update({
     where: {
       id: user?.id,
     },
@@ -64,7 +64,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   });
 
   if (avatarId) {
-    await client.idea_user.update({
+    await client.coddinkUser.update({
       where: {
         id: user?.id,
       },
