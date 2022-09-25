@@ -1,17 +1,18 @@
 // pages/sitemap.xml.tsx
 import { GetServerSidePropsContext } from "next";
 import { getServerSideSitemap } from "next-sitemap"; //(1)
+import client from "@libs/server/client";
 
 //(2)
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const projects: any = await client?.coddinkProject.findMany({
+  const projects: any = await client.coddinkProject.findMany({
     select: {
       id: true,
     },
   });
 
-  const users: any = await client?.coddinkUser.findMany({
+  const users: any = await client.coddinkUser.findMany({
     select: {
       id: true,
     },
