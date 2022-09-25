@@ -79,7 +79,7 @@ export interface ProjectWithComment extends CoddinkProject {
   tags: CoddinkProjectTag[];
 }
 
-interface ProjectsResponse {
+export interface ProjectsResponse {
   ok: boolean;
   projects: ProjectWithCountWithUser[];
 }

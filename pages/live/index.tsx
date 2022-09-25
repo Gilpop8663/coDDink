@@ -2,6 +2,7 @@ import Layout from "@components/layout";
 import { useUserState } from "@libs/client/useUser";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import { ProjectsResponse } from "pages";
 import useSWR from "swr";
 
 const Live: NextPage = () => {
