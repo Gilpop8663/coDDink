@@ -325,6 +325,7 @@ const Home: NextPage = () => {
         ))}
         {detailData && (
           <ClickedProject
+            projectURL={detailData.project.linkURL}
             onMoreCommentClick={onMoreCommentClick}
             thumbnail={detailData.project.thumbnail}
             followingData={data?.profile?.followings}

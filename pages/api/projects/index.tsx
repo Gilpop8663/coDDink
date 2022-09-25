@@ -78,6 +78,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         toolArr,
         projectId,
         ownerArr,
+        linkURL,
       },
       session: { user },
     } = req;
@@ -91,10 +92,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           },
           data: {
             title: title ? title : "",
+            linkURL: linkURL ? linkURL : "",
             description: description ? description : "",
             visible,
             thumbnail: thumbnail ? thumbnail : "",
             isDraft: isDraft,
+
             user: {
               connect: {
                 id: user?.id,
@@ -109,6 +112,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           },
           data: {
             title: title,
+            linkURL: linkURL,
             description: description,
             visible,
             thumbnail: thumbnail,
@@ -237,6 +241,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           data: {
             title: title ? title : "",
             description: description ? description : "",
+            linkURL: linkURL ? linkURL : "",
             visible,
             thumbnail: thumbnail ? thumbnail : "",
             isDraft: isDraft,
@@ -252,6 +257,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           data: {
             title: title,
             description: description,
+            linkURL: linkURL,
             visible,
             thumbnail: thumbnail,
             isDraft: isDraft,

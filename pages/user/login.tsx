@@ -173,7 +173,10 @@ function handleCredentialResponse(response) {
               <div className="flex items-center pt-6">
                 <p className="mr-2 text-sm">신규 사용자이신가요?</p>
                 <Link href="/user/create" passHref>
-                  <a className="cursor-pointer text-sm text-blue-500">
+                  <a
+                    target="_blank"
+                    className="cursor-pointer text-sm text-blue-500"
+                  >
                     계정 만들기
                   </a>
                 </Link>

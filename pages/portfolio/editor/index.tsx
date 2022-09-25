@@ -38,6 +38,7 @@ export interface UploadProps {
   images: FileList;
   posts: string[];
   code: string;
+  linkURL: string;
   thumbnail: FileList;
   content: ContentProps[];
 }
@@ -498,6 +499,7 @@ const Editor: NextPage = () => {
         return newArr;
       });
 
+      setValue("linkURL", editProjectData.project.linkURL);
       setValue("title", editProjectData.project.title);
       setValue("description", editProjectData.project.description);
 
