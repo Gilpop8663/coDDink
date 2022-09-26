@@ -144,6 +144,7 @@ const Gallery: NextPage = () => {
             relatedData={detailData.relatedProjects}
             description={detailData.project.description}
             onMoreCommentClick={onMoreCommentClick}
+            projectURL={detailData.project.linkURL}
           />
         )}
       </div>

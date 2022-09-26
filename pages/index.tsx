@@ -79,7 +79,7 @@ export interface ProjectWithComment extends CoddinkProject {
   tags: CoddinkProjectTag[];
 }
 
-interface ProjectsResponse {
+export interface ProjectsResponse {
   ok: boolean;
   projects: ProjectWithCountWithUser[];
 }
@@ -325,6 +325,7 @@ const Home: NextPage = () => {
         ))}
         {detailData && (
           <ClickedProject
+            projectURL={detailData.project.linkURL}
             onMoreCommentClick={onMoreCommentClick}
             thumbnail={detailData.project.thumbnail}
             followingData={data?.profile?.followings}

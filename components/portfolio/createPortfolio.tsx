@@ -118,6 +118,7 @@ export default function CreatePortfolio({
               label="프로젝트 제목"
               name="title"
               type="text"
+              subLabel="(필수)"
               placeholder="프로젝트 제목 입력"
               register={register("title", {
                 required: "프로젝트 제목이 필요합니다.",
@@ -180,6 +181,27 @@ export default function CreatePortfolio({
             />
             {errors.category && (
               <ErrorMessage>{errors.category.message}</ErrorMessage>
+            )}
+            <UploadInput
+              label="링크 URL"
+              name="linkURL"
+              type="text"
+              placeholder="링크 URL 입력"
+              register={register("linkURL", {
+                minLength: {
+                  value: 3,
+                  message:
+                    "링크 URL의 문자 길이는 3자에서 55자 사이여야 합니다.",
+                },
+                maxLength: {
+                  value: 55,
+                  message:
+                    "링크 URL의 문자 길이는 3자에서 55자 사이여야 합니다.",
+                },
+              })}
+            />
+            {errors.linkURL && (
+              <ErrorMessage>{errors.linkURL.message}</ErrorMessage>
             )}
             <label
               className="relative top-2 z-10 text-xs font-semibold"
@@ -288,7 +310,9 @@ export default function CreatePortfolio({
               onKeyPress={(e) => onKeyPress(e, "owner")}
               deleteContentTags={deleteContentTags}
             />
+            <div className="h-2 w-full pb-12"></div>
           </div>
+
           <div className="mt-4 flex w-[900px] justify-end">
             <div className="flex flex-col">
               <div className="flex w-[450px] items-end space-x-4">

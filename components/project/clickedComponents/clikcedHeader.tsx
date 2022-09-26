@@ -54,20 +54,20 @@ export default function ClickedHeader({
               <a className="cursor-pointer hover:underline">{owner[0].name}</a>
             </Link> */}
             <span>&bull;</span>
-            {loginId === owner[0].userId && (
+            {loginId === owner[0]?.userId && (
               <Link href={`/portfolio/editor?project_id=${projectId}`}>
                 <a className="hover:underline">프로젝트 편집</a>
               </Link>
             )}
             {Boolean(loginId) &&
               owner.length === 1 &&
-              loginId !== owner[0].userId && (
+              loginId !== owner[0]?.userId && (
                 <span
                   className="cursor-pointer hover:underline"
-                  onClick={() => onFollowClick(owner[0].userId)}
+                  onClick={() => onFollowClick(owner[0]?.userId)}
                 >
                   {followingData?.find(
-                    (ele) => ele.followerId === owner[0].userId
+                    (ele) => ele.followerId === owner[0]?.userId
                   )
                     ? "팔로잉"
                     : "팔로우"}

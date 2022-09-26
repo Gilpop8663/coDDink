@@ -131,7 +131,12 @@ function handleCredentialResponse(response) {
             <p className="mr-2 text-sm">이미 계정이 있으십니까?</p>
 
             <Link href="/user/login">
-              <p className="cursor-pointer text-sm text-blue-600">로그인</p>
+              <a
+                target="_blank"
+                className="cursor-pointer text-sm text-blue-600"
+              >
+                로그인
+              </a>
             </Link>
           </div>
           <h3 className="pt-6 font-semibold">소셜로 등록</h3>

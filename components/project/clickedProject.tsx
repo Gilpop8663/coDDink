@@ -71,6 +71,7 @@ interface ItemProps {
   followingData: CoddinkFollow[] | undefined;
   thumbnail: string;
   onMoreCommentClick: () => void;
+  projectURL: string;
 }
 
 export default function ClickedProject({
@@ -104,6 +105,7 @@ export default function ClickedProject({
   loginId,
   followingData,
   onMoreCommentClick,
+  projectURL,
 }: ItemProps) {
   const router = useRouter();
 
@@ -290,6 +292,7 @@ export default function ClickedProject({
                     kind="sidebar"
                     comments={commentCount}
                     title={title}
+                    projectURL={projectURL}
                     createdAt={createdAt}
                     likes={likes}
                     views={views}

@@ -1,4 +1,5 @@
 import { cls } from "@libs/client/utils";
+import Link from "next/link";
 import React, { useState } from "react";
 
 interface ItemProps {
@@ -9,6 +10,7 @@ interface ItemProps {
   comments: number;
   createdAt: Date;
   description?: string;
+  projectURL?: string;
 }
 
 export default function ClickedInfo({
@@ -18,6 +20,7 @@ export default function ClickedInfo({
   likes,
   views,
   comments,
+  projectURL,
   description,
 }: ItemProps) {
   const [isDetail, setIsDetail] = useState(false);
@@ -33,6 +36,19 @@ export default function ClickedInfo({
       {kind === "sidebar" && (
         <div className="mb-4 flex flex-col space-y-4">
           <h4 className="text-base font-semibold text-black">{title}</h4>
+          {projectURL && (
+            <a
+              href={
+                projectURL.includes("https")
+                  ? projectURL
+                  : `https://${projectURL}`
+              }
+              target="noreferrer"
+              className="text-blue-600"
+            >
+              {projectURL}
+            </a>
+          )}
           <p className="text-sm text-gray-600">
             {isDetail ? description : description?.slice(0, 100)}
           </p>
