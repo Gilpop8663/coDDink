@@ -65,7 +65,7 @@ model CoddinkProject{
   visible Boolean
   description String @db.MediumText
   thumbnail String
-  linkURL String
+  linkURL String @default("")
   owner CoddinkProjectOwner[]
   like CoddinkLike[]
   view CoddinkProjectView[]
