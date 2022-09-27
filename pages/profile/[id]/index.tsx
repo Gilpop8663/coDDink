@@ -96,8 +96,13 @@ const Profile: NextPage = () => {
   const [isBannerLoading, setIsBannerLoading] = useState(false);
   const [isBannerOver, setIsBannerOver] = useState(false);
   const [isBannerClick, setIsBannerClick] = useState(false);
-  const [isDelete, setIsDelete] = useState(false);
-  const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
+  const [isDelete, setIsDelete] = useState<null | "comment" | "project">(null);
+  const [deleteProjectTarget, setDeleteProjectTarget] = useState<number | null>(
+    null
+  );
+  const [deleteCommentTarget, setDeleteCommentTarget] = useState<number | null>(
+    null
+  );
   const {
     data,
     error,
@@ -161,16 +166,23 @@ const Profile: NextPage = () => {
   //   );
   // };
 
-  const onDeleteModalClick = (id: number | null) => {
-    setIsDelete((prev) => !prev);
-    setDeleteTarget(id);
+  const onDeleteModalClick = (
+    id: number | null,
+    kind: null | "comment" | "project"
+  ) => {
+    setIsDelete(kind);
+    if (kind === "project") {
+      setDeleteProjectTarget(id);
+    } else if (kind === "comment") {
+      setDeleteCommentTarget(id);
+    }
   };
 
   const onProjectDeleteClick = (id: number | null) => {
     if (id === null) return;
     deleteProject({ projectId: id });
-    setDeleteTarget(null);
-    setIsDelete(false);
+    setDeleteProjectTarget(null);
+    setIsDelete(null);
   };
 
   const onDraftsClick = () => {
@@ -218,6 +230,13 @@ const Profile: NextPage = () => {
       `/api/projects/${detailData?.project?.id}/comment`
     );
 
+  const [
+    deleteComment,
+    { data: deleteCommentData, loading: deleteCommentLoading },
+  ] = useMutation<CommentResponse>(
+    `/api/projects/${detailData?.project.id}/commentDelete`
+  );
+
   const [deleteProject, { data: deleteData }] = useMutation<CommentResponse>(
     "/api/projects/delete"
   );
@@ -240,7 +259,43 @@ const Profile: NextPage = () => {
 
   const onCommentValid = (value: CommentProps) => {
     if (commentLoading) return;
+    if (!detailData) return;
+    if (!data?.profile) return;
+    mutate(
+      {
+        ...detailData,
+        project: {
+          ...detailData.project,
+          _count: {
+            ...detailData.project._count,
+            comments: detailData.project._count.comments + 1,
+          },
+        },
+      },
+      false
+    );
     sendComment(value);
+  };
+
+  const onCommentDeleteClick = (id: number | null) => {
+    if (!detailData) return;
+    if (!data?.profile) return;
+    mutate(
+      {
+        ...detailData,
+        project: {
+          ...detailData.project,
+          _count: {
+            ...detailData.project._count,
+            comments: detailData.project._count.comments - 1,
+          },
+        },
+      },
+      false
+    );
+    deleteComment({ commentId: id });
+    setDeleteCommentTarget(null);
+    setIsDelete(null);
   };
 
   const onLikeClick = () => {
@@ -318,6 +373,12 @@ const Profile: NextPage = () => {
   const onDraftRouterClick = (id: number) => {
     router.push(`/portfolio/editor?project_id=${id}`);
   };
+
+  useEffect(() => {
+    if (deleteCommentData && deleteCommentData.ok) {
+      getCommentsMutate();
+    }
+  }, [deleteCommentData, getCommentsMutate]);
 
   useEffect(() => {
     if (userData && !userData.ok) {
@@ -454,20 +515,28 @@ const Profile: NextPage = () => {
             )}
         </div>
       )}
-      {kind === "drafts" && isDelete && (
+      {kind === "drafts" && isDelete === "project" && (
         <DeleteModal
           title="초안 삭제"
           description="이 초안을 삭제하시겠습니까?"
-          onDeleteModalClick={() => onDeleteModalClick(null)}
-          onProjectDeleteClick={() => onProjectDeleteClick(deleteTarget)}
+          onDeleteModalClick={() => onDeleteModalClick(null, null)}
+          onProjectDeleteClick={() => onProjectDeleteClick(deleteProjectTarget)}
         ></DeleteModal>
       )}
-      {kind !== "drafts" && isDelete && (
+      {kind !== "drafts" && isDelete === "project" && (
         <DeleteModal
           title="프로젝트 삭제"
           description="이 프로젝트를 삭제하시겠습니까?"
-          onDeleteModalClick={() => onDeleteModalClick(null)}
-          onProjectDeleteClick={() => onProjectDeleteClick(deleteTarget)}
+          onDeleteModalClick={() => onDeleteModalClick(null, null)}
+          onProjectDeleteClick={() => onProjectDeleteClick(deleteProjectTarget)}
+        ></DeleteModal>
+      )}
+      {isDelete === "comment" && (
+        <DeleteModal
+          title="댓글 삭제"
+          description="이 댓글을 삭제하시겠습니까?"
+          onDeleteModalClick={() => onDeleteModalClick(null, null)}
+          onProjectDeleteClick={() => onCommentDeleteClick(deleteCommentTarget)}
         ></DeleteModal>
       )}
       {!isBannerClick &&
@@ -938,7 +1007,9 @@ const Profile: NextPage = () => {
                     views={1}
                     owner={item.owner}
                     onClick={() => onBoxClicked(item.id)}
-                    onDeleteModalClick={() => onDeleteModalClick(item.id)}
+                    onDeleteModalClick={() =>
+                      onDeleteModalClick(item?.id, "project")
+                    }
                   />
                 ))}
               {kind === "drafts" &&
@@ -954,7 +1025,9 @@ const Profile: NextPage = () => {
                     views={1}
                     owner={item.owner}
                     onClick={() => onDraftRouterClick(item.id)}
-                    onDeleteModalClick={() => onDeleteModalClick(item.id)}
+                    onDeleteModalClick={() =>
+                      onDeleteModalClick(item?.id, "project")
+                    }
                   />
                 ))}
               {kind === "appreciated" &&
@@ -972,7 +1045,9 @@ const Profile: NextPage = () => {
                     views={1}
                     owner={item.project.owner}
                     onClick={() => onBoxClicked(item.id)}
-                    onDeleteModalClick={() => onDeleteModalClick(item.id)}
+                    onDeleteModalClick={() =>
+                      onDeleteModalClick(item?.id, "project")
+                    }
                   />
                 ))}
             </div>
@@ -981,6 +1056,7 @@ const Profile: NextPage = () => {
       </div>
       {detailData && (
         <ClickedProject
+          onDeleteModalClick={onDeleteModalClick}
           projectURL={detailData.project.linkURL}
           onMoreCommentClick={onMoreCommentClick}
           thumbnail={detailData.project.thumbnail}

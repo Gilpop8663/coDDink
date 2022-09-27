@@ -39,6 +39,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       session: { user },
     } = req;
 
+    if (!user?.id || !id || !value) return;
+
     const comment = await client.coddinkComment.create({
       data: {
         comment: value,
@@ -60,5 +62,5 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 }
 
 export default withApiSession(
-  withHandler({ methods: ["GET", "POST"], handler })
+  withHandler({ methods: ["GET", "POST"], handler, isPrivate: false })
 );

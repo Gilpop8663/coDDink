@@ -72,6 +72,10 @@ interface ItemProps {
   thumbnail: string;
   onMoreCommentClick: () => void;
   projectURL: string;
+  onDeleteModalClick: (
+    id: number | null,
+    kind: null | "project" | "comment"
+  ) => void;
 }
 
 export default function ClickedProject({
@@ -106,6 +110,7 @@ export default function ClickedProject({
   followingData,
   onMoreCommentClick,
   projectURL,
+  onDeleteModalClick,
 }: ItemProps) {
   const router = useRouter();
 
@@ -258,6 +263,9 @@ export default function ClickedProject({
                         createdAt={item.createdAt}
                         comment={item.comment}
                         currentUserId={currentUserId}
+                        onCommentDeleteClick={() =>
+                          onDeleteModalClick(item.id, "comment")
+                        }
                       ></CommentMsg>
                     ))}
                   </div>

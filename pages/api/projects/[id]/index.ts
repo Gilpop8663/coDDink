@@ -119,4 +119,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   });
 }
 
-export default withApiSession(withHandler({ methods: ["GET"], handler }));
+export default withApiSession(
+  withHandler({ methods: ["GET"], handler, isPrivate: false })
+);
