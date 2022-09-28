@@ -1,5 +1,6 @@
 import ErrorMessage from "@components/error";
 import Layout from "@components/layout";
+import LoadingSpinner from "@components/loadingSpinner";
 import CreatePortfolio from "@components/portfolio/createPortfolio";
 import EditFirstScreen from "@components/portfolio/editFirstScreen";
 import EditMenu from "@components/portfolio/editMenu";
@@ -112,6 +113,8 @@ const Editor: NextPage = () => {
   const [isUpload, setIsUpload] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
   const [thumbnail, setThumbnail] = useState<thumbnailProps | null>(null);
+  const [loadingImg, setLoadingImg] = useState("");
+  const [thumbnailLoadingImg, setThumbnailLoadingImg] = useState("");
   const [uploadProjects, { loading, error, data }] =
     useMutation<UploadProjectMutation>("/api/projects");
   const ownerValue = watch("owner");
@@ -265,7 +268,9 @@ const Editor: NextPage = () => {
 
     setIsThumbnailLoading(true);
     const file = files[0];
+    setThumbnailLoadingImg(URL.createObjectURL(file));
     const imageSrc = await cfImageUpload(file);
+
     setThumbnail({
       description: URL.createObjectURL(file),
       imageSrc: imageSrc,
@@ -287,6 +292,7 @@ const Editor: NextPage = () => {
     const n = files.length;
     const arr: ContentProps[] = [];
     for (let i = 0; i < n; i++) {
+      setLoadingImg(URL.createObjectURL(files[i]));
       const imageSrc = await cfImageUpload(files[i]);
 
       arr.push({
@@ -548,9 +554,18 @@ const Editor: NextPage = () => {
     <Layout isLogin={true} profile={user} userId={user?.id}>
       {isUpload && (
         <div className="fixed z-30 flex h-screen w-screen items-center justify-center bg-black/80 text-3xl text-white">
-          이미지 로딩중...
+          <div className="relative flex h-4/5 w-[1400px] items-center justify-center bg-black">
+            <Image
+              src={loadingImg}
+              alt="loadingImage"
+              layout="fill"
+              className="opacity-40"
+            ></Image>
+            <LoadingSpinner></LoadingSpinner>
+          </div>
         </div>
       )}
+
       <form action="" onSubmit={handleSubmit(onValid)}>
         <div className="absolute top-0 grid w-full grid-rows-1 bg-gray-100">
           <div className="row-span-1 mt-16 grid w-full grid-cols-6 grid-rows-1 gap-4 bg-gray-100 p-5">
@@ -633,6 +648,7 @@ const Editor: NextPage = () => {
         {isSetting && (
           <CreatePortfolio
             isThumbnailLoading={isThumbnailLoading}
+            previewThumbnailImg={thumbnailLoadingImg}
             isDraft={isDraft}
             onDraftClick={onDraftClick}
             onThumbnailImage={onThumbnailImage}

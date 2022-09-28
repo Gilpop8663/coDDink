@@ -46,7 +46,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       },
       contents: {
         orderBy: {
-          id: "desc",
+          id: "asc",
         },
       },
 

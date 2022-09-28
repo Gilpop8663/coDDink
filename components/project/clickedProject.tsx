@@ -161,7 +161,7 @@ export default function ClickedProject({
           projectId={id}
         ></ClickedHeader>
         <div className="w-[1400px]">
-          <div className="flex flex-col  space-y-8 bg-white px-24 py-16">
+          <div className="flex  flex-col space-y-8 bg-white px-24 py-16">
             {contents.map((item) => {
               const contentFontSize = item.fontSize;
               return (
@@ -181,11 +181,21 @@ export default function ClickedProject({
                       ></Image>
                     </div>
                   )}
+                  {/* {item.kind === "image" && (
+                    <div className="relative h-5/6 w-full  ">
+                      <Image
+                        className="object-contain"
+                        alt={item.id.toString()}
+                        layout="fill"
+                        src={item.description}
+                      ></Image>
+                    </div>
+                  )} */}
                   {item.kind === "text" && (
                     <div
                       className={cls(
                         `${item?.fontSize} ${item?.alignText}`,
-                        "relative whitespace-pre"
+                        "relative   whitespace-pre-wrap text-blue-600"
                       )}
                     >
                       {item.content}

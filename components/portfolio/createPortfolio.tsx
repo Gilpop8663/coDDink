@@ -42,6 +42,7 @@ interface CreatePortfoiloProps {
   onDraftClick: () => void;
   isDraft: boolean;
   isThumbnailLoading: boolean;
+  previewThumbnailImg: string;
 }
 
 export default function CreatePortfolio({
@@ -65,6 +66,7 @@ export default function CreatePortfolio({
   onDraftClick,
   isDraft,
   isThumbnailLoading,
+  previewThumbnailImg,
 }: CreatePortfoiloProps) {
   return (
     <div className="fixed top-0 z-30 flex h-screen w-screen items-center justify-center">
@@ -81,9 +83,18 @@ export default function CreatePortfolio({
               <span className="mr-2 text-sm font-semibold">프로젝트 표지</span>
               <span className="text-sm text-gray-300">(필수)</span>
               <div className="relative m-auto mt-4 flex h-56 items-center justify-center border border-dashed border-gray-300 px-16">
-                {isThumbnailLoading && <LoadingSpinner />}
-                {/* {isThumbnailLoading && (
-                )} */}
+                {isThumbnailLoading && (
+                  <>
+                    <Image
+                      src={previewThumbnailImg!}
+                      alt="previewThumbnailImage"
+                      layout="fill"
+                      className="rounded-sm  object-contain p-2"
+                    ></Image>
+                    <LoadingSpinner />
+                  </>
+                )}
+
                 {!isThumbnailLoading && !thumbnailSrc ? (
                   <UploadButton
                     onChange={onThumbnailImage}
@@ -191,12 +202,12 @@ export default function CreatePortfolio({
                 minLength: {
                   value: 3,
                   message:
-                    "링크 URL의 문자 길이는 3자에서 55자 사이여야 합니다.",
+                    "링크 URL의 문자 길이는 3자에서 150자 사이여야 합니다.",
                 },
                 maxLength: {
-                  value: 55,
+                  value: 150,
                   message:
-                    "링크 URL의 문자 길이는 3자에서 55자 사이여야 합니다.",
+                    "링크 URL의 문자 길이는 3자에서 150자 사이여야 합니다.",
                 },
               })}
             />

@@ -89,7 +89,7 @@ export default function PreviewProject({
                     <div
                       className={cls(
                         `${item?.fontSize} ${item?.alignText}`,
-                        "relative whitespace-pre"
+                        "relative whitespace-pre-wrap"
                       )}
                     >
                       {item.description}
