@@ -10,6 +10,7 @@ interface CommentProps {
   createdAt: Date;
   comment: string;
   currentUserId: number | undefined;
+  onCommentDeleteClick: () => void;
 }
 
 export default function CommentMsg({
@@ -19,6 +20,7 @@ export default function CommentMsg({
   createdAt,
   comment,
   currentUserId,
+  onCommentDeleteClick,
 }: CommentProps) {
   return (
     <>
@@ -52,6 +54,7 @@ export default function CommentMsg({
         </div>
         {currentUserId === +id && (
           <svg
+            onClick={onCommentDeleteClick}
             xmlns="http://www.w3.org/2000/svg"
             className="h-3 w-3 cursor-pointer text-gray-400"
             fill="none"

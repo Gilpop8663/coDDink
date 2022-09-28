@@ -1,3 +1,4 @@
+import { makeImageURL } from "@libs/client/utils";
 import Head from "next/head";
 import React from "react";
 
@@ -28,7 +29,13 @@ export default function HeadMeta({
       <meta property="og:title" content={title || "coDDinK"} />
       <meta property="og:type" content="website" />
       <meta property="og:url" content={url || "https://www.coddink.com/"} />
-      <meta property="og:image" content={image} />
+      <meta
+        property="og:image"
+        content={
+          image ||
+          makeImageURL("ff2afe6b-70f7-4e45-b8b4-59e51ddeea00", "bigAvatar")
+        }
+      />
       <meta
         property="og:description"
         content={

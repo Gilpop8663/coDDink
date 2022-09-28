@@ -37,4 +37,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   return res.status(200).end();
 }
 
-export default withApiSession(withHandler({ methods: ["GET"], handler }));
+export default withApiSession(
+  withHandler({ methods: ["GET"], handler, isPrivate: false })
+);

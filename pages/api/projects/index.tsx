@@ -83,6 +83,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       session: { user },
     } = req;
 
+    if (!user?.id) return;
+
     let project: CoddinkProject;
     if (projectId) {
       if (isDraft) {
@@ -358,5 +360,5 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 }
 
 export default withApiSession(
-  withHandler({ methods: ["GET", "POST"], handler })
+  withHandler({ methods: ["GET", "POST"], handler, isPrivate: false })
 );

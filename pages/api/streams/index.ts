@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import withHandler from "@libs/server/withHandler";
 import client from "@libs/server/client";
 import { withApiSession } from "@libs/server/withSession";
+import { off } from "process";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
@@ -17,6 +18,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       body: { title, tools, description },
       session: { user },
     } = req;
+
+    if (!user?.id) return;
 
     const {
       result: {
@@ -57,5 +60,5 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 }
 
 export default withApiSession(
-  withHandler({ methods: ["GET", "POST"], handler })
+  withHandler({ methods: ["GET", "POST"], handler, isPrivate: false })
 );

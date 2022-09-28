@@ -122,8 +122,13 @@ const Home: NextPage = () => {
 
   const clickedId = path.slice(9);
   const [isFinishData, setIsFinishData] = useState(true);
-  const [isDelete, setIsDelete] = useState(false);
-  const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
+  const [isDelete, setIsDelete] = useState<null | "comment" | "project">(null);
+  const [deleteProjectTarget, setDeleteProjectTarget] = useState<number | null>(
+    null
+  );
+  const [deleteCommentTarget, setDeleteCommentTarget] = useState<number | null>(
+    null
+  );
   const [deleteProject, { data: deleteData }] = useMutation<CommentResponse>(
     "/api/projects/delete"
   );
@@ -193,12 +198,34 @@ const Home: NextPage = () => {
       `/api/projects/${detailData?.project.id}/comment`
     );
 
+  const [
+    deleteComment,
+    { data: deleteCommentData, loading: deleteCommentLoading },
+  ] = useMutation<CommentResponse>(
+    `/api/projects/${detailData?.project.id}/commentDelete`
+  );
+
   const [sendView] = useMutation("/api/projects/view");
 
   const [commentArr, setCommentArr] = useState<CommentWithUser[]>([]);
 
   const onCommentValid = (value: CommentProps) => {
     if (commentLoading) return;
+    if (!detailData) return;
+    if (!data?.profile) return;
+    mutate(
+      {
+        ...detailData,
+        project: {
+          ...detailData.project,
+          _count: {
+            ...detailData.project._count,
+            comments: detailData.project._count.comments + 1,
+          },
+        },
+      },
+      false
+    );
     sendComment(value);
   };
 
@@ -225,21 +252,49 @@ const Home: NextPage = () => {
     toggleLike({});
   };
 
+  const onCommentDeleteClick = (id: number | null) => {
+    if (!detailData) return;
+    if (!data?.profile) return;
+    mutate(
+      {
+        ...detailData,
+        project: {
+          ...detailData.project,
+          _count: {
+            ...detailData.project._count,
+            comments: detailData.project._count.comments - 1,
+          },
+        },
+      },
+      false
+    );
+    deleteComment({ commentId: id });
+    setDeleteCommentTarget(null);
+    setIsDelete(null);
+  };
+
   const onBoxClicked = (id: number) => {
     sendView({ projectId: id });
     router.push(`/`, `/gallery/${id}`, { shallow: true });
   };
 
-  const onDeleteModalClick = (id: number | null) => {
-    setIsDelete((prev) => !prev);
-    setDeleteTarget(id);
+  const onDeleteModalClick = (
+    id: number | null,
+    kind: null | "comment" | "project"
+  ) => {
+    setIsDelete(kind);
+    if (kind === "project") {
+      setDeleteProjectTarget(id);
+    } else if (kind === "comment") {
+      setDeleteCommentTarget(id);
+    }
   };
 
   const onProjectDeleteClick = (id: number | null) => {
     if (id === null) return;
     deleteProject({ projectId: id });
-    setDeleteTarget(null);
-    setIsDelete(false);
+    setDeleteProjectTarget(null);
+    setIsDelete(null);
   };
 
   function handleScroll() {
@@ -278,6 +333,12 @@ const Home: NextPage = () => {
   }, [deleteData, projectsMutate]);
 
   useEffect(() => {
+    if (deleteCommentData && deleteCommentData.ok) {
+      getCommentsMutate();
+    }
+  }, [deleteCommentData, getCommentsMutate]);
+
+  useEffect(() => {
     if (getCommentsData && getCommentsData.ok) {
       getCommentsMutate();
       setCommentArr(getCommentsData.comments);
@@ -297,12 +358,20 @@ const Home: NextPage = () => {
       userId={data?.profile?.id}
     >
       <HeadMeta></HeadMeta>
-      {isDelete && (
+      {isDelete === "project" && (
         <DeleteModal
           title="프로젝트 삭제"
           description="이 프로젝트를 삭제하시겠습니까?"
-          onDeleteModalClick={() => onDeleteModalClick(null)}
-          onProjectDeleteClick={() => onProjectDeleteClick(deleteTarget)}
+          onDeleteModalClick={() => onDeleteModalClick(null, null)}
+          onProjectDeleteClick={() => onProjectDeleteClick(deleteProjectTarget)}
+        ></DeleteModal>
+      )}
+      {isDelete === "comment" && (
+        <DeleteModal
+          title="댓글 삭제"
+          description="이 댓글을 삭제하시겠습니까?"
+          onDeleteModalClick={() => onDeleteModalClick(null, null)}
+          onProjectDeleteClick={() => onCommentDeleteClick(deleteCommentTarget)}
         ></DeleteModal>
       )}
       <div className="grid grid-cols-5 gap-6 px-6 py-6">
@@ -320,7 +389,7 @@ const Home: NextPage = () => {
             owner={item?.owner}
             onClick={() => onBoxClicked(item?.id)}
             onFollowClick={onFollowClick}
-            onDeleteModalClick={() => onDeleteModalClick(item?.id)}
+            onDeleteModalClick={() => onDeleteModalClick(item?.id, "project")}
           />
         ))}
         {detailData && (
@@ -356,6 +425,7 @@ const Home: NextPage = () => {
             tags={detailData.project.tags}
             relatedData={detailData.relatedProjects}
             description={detailData.project.description}
+            onDeleteModalClick={onDeleteModalClick}
           />
         )}
       </div>

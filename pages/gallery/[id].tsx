@@ -1,4 +1,5 @@
 import Layout from "@components/layout";
+import DeleteModal from "@components/profile/deleteModal";
 import ClickedProject from "@components/project/clickedProject";
 import useMutation from "@libs/client/useMutation";
 import type { NextApiRequest, NextApiResponse, NextPage } from "next";
@@ -29,6 +30,16 @@ const Gallery: NextPage = () => {
     router.query.id ? `/api/projects/${router.query.id}` : null
   );
 
+  const [isDelete, setIsDelete] = useState<null | "comment" | "project">(null);
+  const [deleteCommentTarget, setDeleteCommentTarget] = useState<number | null>(
+    null
+  );
+  const [
+    deleteComment,
+    { data: deleteCommentData, loading: deleteCommentLoading },
+  ] = useMutation<CommentResponse>(
+    `/api/projects/${router.query.id}/commentDelete`
+  );
   const { data: getCommentsData, mutate: getCommentsMutate } =
     useSWR<GETCommentResponse | null>(
       router.query.id
@@ -60,7 +71,54 @@ const Gallery: NextPage = () => {
 
   const onCommentValid = (value: CommentProps) => {
     if (commentLoading) return;
+    if (!detailData) return;
+    if (!data?.profile) return;
+    mutate(
+      {
+        ...detailData,
+        project: {
+          ...detailData.project,
+          _count: {
+            ...detailData.project._count,
+            comments: detailData.project._count.comments + 1,
+          },
+        },
+      },
+      false
+    );
     sendComment(value);
+  };
+
+  const onCommentDeleteClick = (id: number | null) => {
+    if (!detailData) return;
+    if (!data?.profile) return;
+    mutate(
+      {
+        ...detailData,
+        project: {
+          ...detailData.project,
+          _count: {
+            ...detailData.project._count,
+            comments: detailData.project._count.comments - 1,
+          },
+        },
+      },
+      false
+    );
+    deleteComment({ commentId: id });
+    setDeleteCommentTarget(null);
+    setIsDelete(null);
+  };
+
+  const onDeleteModalClick = (
+    id: number | null,
+    kind: null | "comment" | "project"
+  ) => {
+    setIsDelete(kind);
+    if (kind === "project") {
+    } else if (kind === "comment") {
+      setDeleteCommentTarget(id);
+    }
   };
 
   const onLikeClick = () => {
@@ -105,15 +163,30 @@ const Gallery: NextPage = () => {
     }
   }, [getCommentsData, getCommentsMutate]);
 
+  useEffect(() => {
+    if (deleteCommentData && deleteCommentData.ok) {
+      getCommentsMutate();
+    }
+  }, [deleteCommentData, getCommentsMutate]);
+
   return (
     <Layout
       isLogin={data && data.ok}
       profile={data?.profile}
       userId={data?.profile?.id}
     >
+      {isDelete === "comment" && (
+        <DeleteModal
+          title="댓글 삭제"
+          description="이 댓글을 삭제하시겠습니까?"
+          onDeleteModalClick={() => onDeleteModalClick(null, null)}
+          onProjectDeleteClick={() => onCommentDeleteClick(deleteCommentTarget)}
+        ></DeleteModal>
+      )}
       <div className="bg-zinc-50">
         {detailData?.ok && detailData && (
           <ClickedProject
+            onDeleteModalClick={onDeleteModalClick}
             thumbnail={detailData.project.thumbnail}
             followingData={data?.profile?.followings}
             loginId={data?.profile?.id}
