@@ -46,10 +46,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       },
       contents: {
         orderBy: {
-          id: "asc",
+          contentIdx: "asc",
         },
       },
-
       tools: true,
       tags: true,
       category: true,
@@ -106,7 +105,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (
     (project?.isDraft == true || project?.visible === false) &&
-    id !== user?.id
+    project.owner[0].userId !== user?.id
   ) {
     return res.json({ ok: false });
   }

@@ -40,9 +40,9 @@ export default function ClickedRelatedItem({ data, onClick }: RelatedProps) {
               {data.owner.length > 1 ? (
                 <span className="text-sm text-white">여러 소유자</span>
               ) : (
-                <Link href={`/profile/${data.owner[0].userId}`}>
+                <Link href={`/profile/${data.owner[0]?.userId}`}>
                   <a className="text-sm text-white hover:underline">
-                    {data.owner[0].name}
+                    {data.owner[0]?.name}
                   </a>
                 </Link>
               )}

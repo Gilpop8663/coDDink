@@ -6,7 +6,11 @@ import UploadButton from "@components/uploadButton";
 import { cls, makeImageURL } from "@libs/client/utils";
 import { CoddinkUser } from "@prisma/client";
 import Image from "next/image";
-import { UploadProps, UserDataProps } from "pages/portfolio/editor";
+import {
+  thumbnailProps,
+  UploadProps,
+  UserDataProps,
+} from "pages/portfolio/editor";
 import React from "react";
 import {
   DeepRequired,
@@ -37,12 +41,12 @@ interface CreatePortfoiloProps {
   userData: UserDataProps[] | undefined;
   onUserClick: (e: React.MouseEvent, item: UserDataProps) => void;
   ownerArr: UserDataProps[];
-  thumbnailSrc: string | undefined;
   onThumbnailImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onDraftClick: () => void;
   isDraft: boolean;
   isThumbnailLoading: boolean;
-  previewThumbnailImg: string;
+  previewThumbnailImg: thumbnailProps | null;
+  isSubmitLoading: boolean;
 }
 
 export default function CreatePortfolio({
@@ -61,12 +65,12 @@ export default function CreatePortfolio({
   userData,
   onUserClick,
   ownerArr,
-  thumbnailSrc,
   onThumbnailImage,
   onDraftClick,
   isDraft,
   isThumbnailLoading,
   previewThumbnailImg,
+  isSubmitLoading,
 }: CreatePortfoiloProps) {
   return (
     <div className="fixed top-0 z-30 flex h-screen w-screen items-center justify-center">
@@ -85,17 +89,19 @@ export default function CreatePortfolio({
               <div className="relative m-auto mt-4 flex h-56 items-center justify-center border border-dashed border-gray-300 px-16">
                 {isThumbnailLoading && (
                   <>
-                    <Image
-                      src={previewThumbnailImg!}
-                      alt="previewThumbnailImage"
-                      layout="fill"
-                      className="rounded-sm  object-contain p-2"
-                    ></Image>
+                    {previewThumbnailImg?.imageSrc && (
+                      <Image
+                        src={previewThumbnailImg.description}
+                        alt="previewThumbnailImage"
+                        layout="fill"
+                        className="rounded-sm  object-contain p-2"
+                      ></Image>
+                    )}
                     <LoadingSpinner />
                   </>
                 )}
 
-                {!isThumbnailLoading && !thumbnailSrc ? (
+                {!isThumbnailLoading && !previewThumbnailImg ? (
                   <UploadButton
                     onChange={onThumbnailImage}
                     kind="thumbnail"
@@ -103,12 +109,24 @@ export default function CreatePortfolio({
                 ) : (
                   !isThumbnailLoading && (
                     <>
-                      <Image
-                        src={makeImageURL(thumbnailSrc!, "bigAvatar")}
-                        alt="thumbnail"
-                        className="rounded-sm object-contain p-2"
-                        layout="fill"
-                      ></Image>
+                      {previewThumbnailImg?.imageSrc ? (
+                        <Image
+                          src={makeImageURL(
+                            previewThumbnailImg?.imageSrc,
+                            "bigAvatar"
+                          )}
+                          alt="thumbnail"
+                          className="rounded-sm object-contain p-2"
+                          layout="fill"
+                        ></Image>
+                      ) : (
+                        <Image
+                          src={previewThumbnailImg?.description!}
+                          alt="thumbnail"
+                          className="rounded-sm object-contain p-2"
+                          layout="fill"
+                        ></Image>
+                      )}
                       <div className="absolute -bottom-12 left-2 z-10">
                         <UploadButton
                           onChange={onThumbnailImage}
@@ -176,7 +194,7 @@ export default function CreatePortfolio({
 
             <UploadInput
               label="이 프로젝트를 어떤 범주로 분류하시겠습니까?"
-              subLabel="(필수 , 최대 10개)"
+              subLabel="(필수 , 최대 10개, Enter 입력으로 추가하실 수 있습니다)"
               name="category"
               type="text"
               deleteContentTags={deleteContentTags}
@@ -327,7 +345,7 @@ export default function CreatePortfolio({
           <div className="mt-4 flex w-[900px] justify-end">
             <div className="flex flex-col">
               <div className="flex w-[450px] items-end space-x-4">
-                {isDraft || isThumbnailLoading ? (
+                {isDraft || isThumbnailLoading || isSubmitLoading ? (
                   <>
                     <NextButton label="취소" color="disabled" size="sm" />
                     <NextButton
@@ -335,7 +353,11 @@ export default function CreatePortfolio({
                       color="disabled"
                       size="sm"
                     />
-                    <NextButton label="게시" color="disabled" size="sm" />
+                    <NextButton
+                      label={isSubmitLoading ? "로딩중" : "게시"}
+                      color="disabled"
+                      size="sm"
+                    />
                   </>
                 ) : (
                   <>

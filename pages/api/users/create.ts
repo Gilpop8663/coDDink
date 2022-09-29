@@ -21,9 +21,7 @@ async function handler(
     "8b9dd122-cda2-4183-e41e-2c8d9259ac00",
   ];
 
-  console.log(email, name, hashedPW, number);
-
-  const user = await client.coddinkUser.create({
+  const userCreate = await client.coddinkUser.create({
     data: {
       email,
       name,
@@ -32,7 +30,6 @@ async function handler(
     },
   });
 
-  console.log(user);
   res.json({
     ok: true,
     message: "회원가입이 완료되었습니다",

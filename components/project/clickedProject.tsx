@@ -181,21 +181,12 @@ export default function ClickedProject({
                       ></Image>
                     </div>
                   )}
-                  {/* {item.kind === "image" && (
-                    <div className="relative h-5/6 w-full  ">
-                      <Image
-                        className="object-contain"
-                        alt={item.id.toString()}
-                        layout="fill"
-                        src={item.description}
-                      ></Image>
-                    </div>
-                  )} */}
+
                   {item.kind === "text" && (
                     <div
                       className={cls(
                         `${item?.fontSize} ${item?.alignText}`,
-                        "relative   whitespace-pre-wrap text-blue-600"
+                        "relative   whitespace-pre-wrap "
                       )}
                     >
                       {item.content}

@@ -148,6 +148,7 @@ model CoddinkMessage{
 
 
 
+
 // model CoddinkMoodboard{
 //   id Int @id @default(autoincrement())
 //   createdAt DateTime @default(now())
@@ -165,12 +166,13 @@ model CoddinkProjectContent{
   project CoddinkProject @relation(fields: [projectId],references: [id],onDelete: Cascade)
   projectId Int
   kind contentKind
+  contentIdx Int
+  description String @db.MediumText() @default("")
   content String? @db.LongText
   imageSrc String?
   fontSize String?
   alignText String?
   language String?
-  description String @db.MediumText() @default("")
   @@index([projectId])
 }
 

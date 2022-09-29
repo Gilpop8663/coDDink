@@ -1,13 +1,14 @@
 import SubUploadButton from "@components/subUploadButton";
 import UploadButton from "@components/uploadButton";
-import { cls } from "@libs/client/utils";
+import { cls, makeImageURL } from "@libs/client/utils";
 import Image from "next/image";
+import { ContentProps } from "pages/portfolio/editor";
 import React, { useState } from "react";
 import EditMenu from "./editMenu";
 import MiniUploadMenu from "./miniUploadMenu";
 
 interface PreviewImageProps {
-  src: string | null;
+  src: ContentProps;
   idx: number;
   onClearClick: (idx: number) => void;
   onPreviewImage: (
@@ -48,12 +49,21 @@ export default function PreviewImage({
           idx={idx}
           onClearClick={onClearClick}
         />
-        <Image
-          src={src!}
-          layout="fill"
-          className="object-contain"
-          alt="image"
-        ></Image>
+        {src.imageSrc ? (
+          <Image
+            src={makeImageURL(src.imageSrc, "public")}
+            layout="fill"
+            className="object-contain"
+            alt="image"
+          ></Image>
+        ) : (
+          <Image
+            src={src.description}
+            layout="fill"
+            className="object-contain"
+            alt="image"
+          ></Image>
+        )}
       </div>
     </div>
   );
