@@ -31,7 +31,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         },
         owner: {
           orderBy: {
-            id: "desc",
+            ownerIdx: "asc",
           },
           select: {
             name: true,
@@ -85,48 +85,28 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     if (!user?.id) return;
 
+    console.log(projectId);
+
     let project: CoddinkProject;
     if (projectId) {
-      if (isDraft) {
-        project = await client.coddinkProject.update({
-          where: {
-            id: Number(projectId),
-          },
-          data: {
-            title: title ? title : "",
-            linkURL: linkURL ? linkURL : "",
-            description: description ? description : "",
-            visible,
-            thumbnail: thumbnail ? thumbnail : "",
-            isDraft: isDraft,
-
-            user: {
-              connect: {
-                id: user?.id,
-              },
+      project = await client.coddinkProject.update({
+        where: {
+          id: Number(projectId),
+        },
+        data: {
+          title: title ? title : "",
+          linkURL: linkURL ? linkURL : "",
+          description: description ? description : "",
+          visible,
+          thumbnail: thumbnail ? thumbnail : "",
+          isDraft: isDraft,
+          user: {
+            connect: {
+              id: user?.id,
             },
           },
-        });
-      } else {
-        project = await client.coddinkProject.update({
-          where: {
-            id: Number(projectId),
-          },
-          data: {
-            title: title,
-            linkURL: linkURL,
-            description: description,
-            visible,
-            thumbnail: thumbnail,
-            isDraft: isDraft,
-            user: {
-              connect: {
-                id: user?.id,
-              },
-            },
-          },
-        });
-      }
+        },
+      });
 
       await client.coddinkProjectContent.deleteMany({
         where: {
@@ -158,11 +138,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         },
       });
 
-      content.forEach(async (item: ContentProps) => {
+      content.forEach(async (item: ContentProps, idx: number) => {
         if (item.description === "" || !item.description) return;
         const projectContent = await client.coddinkProjectContent.create({
           data: {
             kind: item.kind,
+            contentIdx: idx,
             imageSrc: item.kind === "image" ? item.imageSrc : null,
             content: item.kind !== "image" ? item.description : null,
             fontSize: item.kind !== "image" ? item.fontSize : null,
@@ -171,7 +152,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             description: item.description,
             project: {
               connect: {
-                id: project.id,
+                id: Number(projectId),
               },
             },
           },
@@ -185,7 +166,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             name: item,
             project: {
               connect: {
-                id: project.id,
+                id: Number(projectId),
               },
             },
           },
@@ -199,7 +180,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             name: item,
             project: {
               connect: {
-                id: project.id,
+                id: Number(projectId),
               },
             },
           },
@@ -213,20 +194,21 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             name: item,
             project: {
               connect: {
-                id: project.id,
+                id: Number(projectId),
               },
             },
           },
         });
       });
 
-      ownerArr.forEach(async (item: UserDataProps) => {
+      ownerArr.forEach(async (item: UserDataProps, idx: number) => {
         const categoryContent = await client.coddinkProjectOwner.create({
           data: {
             name: item.name,
+            ownerIdx: idx,
             project: {
               connect: {
-                id: project.id,
+                id: Number(projectId),
               },
             },
             user: {
@@ -238,45 +220,28 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         });
       });
     } else {
-      if (isDraft) {
-        project = await client.coddinkProject.create({
-          data: {
-            title: title ? title : "",
-            description: description ? description : "",
-            linkURL: linkURL ? linkURL : "",
-            visible,
-            thumbnail: thumbnail ? thumbnail : "",
-            isDraft: isDraft,
-            user: {
-              connect: {
-                id: user?.id,
-              },
+      project = await client.coddinkProject.create({
+        data: {
+          title: title ? title : "",
+          linkURL: linkURL ? linkURL : "",
+          description: description ? description : "",
+          visible,
+          thumbnail: thumbnail ? thumbnail : "",
+          isDraft: isDraft,
+          user: {
+            connect: {
+              id: user?.id,
             },
           },
-        });
-      } else {
-        project = await client.coddinkProject.create({
-          data: {
-            title: title,
-            description: description,
-            linkURL: linkURL,
-            visible,
-            thumbnail: thumbnail,
-            isDraft: isDraft,
-            user: {
-              connect: {
-                id: user?.id,
-              },
-            },
-          },
-        });
-      }
+        },
+      });
 
-      content.forEach(async (item: ContentProps) => {
+      content.forEach(async (item: ContentProps, idx: number) => {
         if (item.description === "" || !item.description) return;
         const projectContent = await client.coddinkProjectContent.create({
           data: {
             kind: item.kind,
+            contentIdx: idx,
             imageSrc: item.kind === "image" ? item.imageSrc : null,
             content: item.kind !== "image" ? item.description : null,
             fontSize: item.kind !== "image" ? item.fontSize : null,
@@ -334,10 +299,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         });
       });
 
-      ownerArr.forEach(async (item: UserDataProps) => {
+      ownerArr.forEach(async (item: UserDataProps, idx: number) => {
         const categoryContent = await client.coddinkProjectOwner.create({
           data: {
             name: item.name,
+            ownerIdx: idx,
             project: {
               connect: {
                 id: project.id,
@@ -352,6 +318,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         });
       });
     }
+
     return res.json({
       ok: true,
       project,

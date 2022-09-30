@@ -34,7 +34,7 @@ export default function InputPassword({
           required={required}
           placeholder={placeholder}
           type={isBlind == true ? "password" : "text"}
-          className="w-full border-b-2 py-2 transition-colors focus:border-blue-500 focus:outline-none"
+          className="w-full border-b-2 py-2 transition-colors hover:border-black/50 focus:border-blue-500 focus:outline-none"
         />
         {isBlind == false ? (
           <svg

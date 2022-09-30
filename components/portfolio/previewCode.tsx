@@ -112,6 +112,7 @@ export default function PreviewCode({
             className="cursor-pointer  rounded-sm bg-gray-700 text-white ring-blue-600 hover:ring-2 focus:bg-gray-700"
             onChange={onLanguageChange}
             value={language}
+            color="white"
             name="langOption"
           >
             <option value="abap">Language: abap</option>
@@ -257,12 +258,13 @@ export default function PreviewCode({
           onPreviewImage={onPreviewImage}
         />
       )}
-      <div
-        className={cls(fontSize && `${fontSize}`, "bg-[#f5f5f5] p-4 font-mono")}
-      >
+      <div className={cls(fontSize && `${fontSize}`, "p-4 ")}>
         <CodeEditor
           autoFocus
           style={{
+            fontFamily:
+              "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+            backgroundColor: "#f5f5f5",
             fontSize:
               fontSize === "text-2xl"
                 ? 18
@@ -272,6 +274,7 @@ export default function PreviewCode({
                 ? 14
                 : 12,
           }}
+          padding={15}
           value={textValue}
           onChange={onChange}
           language={language}

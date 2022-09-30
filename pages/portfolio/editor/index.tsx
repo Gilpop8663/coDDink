@@ -1,5 +1,6 @@
 import ErrorMessage from "@components/error";
 import Layout from "@components/layout";
+import LoadingSpinner from "@components/loadingSpinner";
 import CreatePortfolio from "@components/portfolio/createPortfolio";
 import EditFirstScreen from "@components/portfolio/editFirstScreen";
 import EditMenu from "@components/portfolio/editMenu";
@@ -56,6 +57,7 @@ export interface ContentProps {
   fontSize?: string | null;
   alignText?: string | null;
   language?: string | null;
+  fileData?: File;
 }
 
 export interface CFImageResult {
@@ -80,9 +82,10 @@ export interface UserDataProps {
   avatar: string;
 }
 
-interface thumbnailProps {
+export interface thumbnailProps {
   description: string;
   imageSrc: string;
+  fileData?: File;
 }
 
 const Editor: NextPage = () => {
@@ -100,6 +103,7 @@ const Editor: NextPage = () => {
   const { user, isLoading } = useUser();
   const [textId, setTextId] = useState(0);
   const [isDraft, setIsDraft] = useState(false);
+  const [isSubmitLoading, setIsSubmitLoading] = useState(false);
   const [tagArr, setTagArr] = useState<string[]>([]);
   const [ownerArr, setOwnerArr] = useState<UserDataProps[]>([]);
   const [categoryArr, setCategoryArr] = useState<string[]>([]);
@@ -112,10 +116,16 @@ const Editor: NextPage = () => {
   const [isUpload, setIsUpload] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
   const [thumbnail, setThumbnail] = useState<thumbnailProps | null>(null);
+  const [loadingImg, setLoadingImg] = useState("");
+  const [thumbnailLoadingImg, setThumbnailLoadingImg] = useState("");
   const [uploadProjects, { loading, error, data }] =
     useMutation<UploadProjectMutation>("/api/projects");
   const ownerValue = watch("owner");
-  const { project_id } = router.query;
+  // const { project_id } = router.query;
+
+  const portfolioAsPath = router.asPath.split("/portfolio/editor?project_id=");
+
+  const project_id = portfolioAsPath.length > 1 ? portfolioAsPath[1] : "";
 
   const { data: editProjectData } = useSWR<DetailProjectResponse | null>(
     project_id ? `/api/projects/${project_id}` : null
@@ -153,17 +163,54 @@ const Editor: NextPage = () => {
   };
   const onValid = async (value: UploadProps) => {
     if (loading) return;
+    if (content.length === 0) {
+      return;
+    }
+    if (categoryArr.length === 0) {
+      setError("category", {
+        type: "required",
+        message:
+          "프로젝트를 게시하려면 적어도 하나의 카테고리를 추가해 주십시오.",
+      });
+      return;
+    }
+
+    setIsSubmitLoading(true);
+    let thumbnailSrc = "";
+
+    const contentArr = await Promise.all(
+      content.map(async (item) => {
+        if (item.kind === "image") {
+          if (item.fileData && !item.imageSrc) {
+            const imageSrc = await cfImageUpload(item.fileData);
+            return { ...item, imageSrc };
+          } else {
+            return item;
+          }
+        } else {
+          return item;
+        }
+      })
+    );
+
+    if (thumbnail && thumbnail.imageSrc) {
+      thumbnailSrc = thumbnail.imageSrc;
+    } else if (thumbnail && thumbnail.fileData) {
+      const imageSrc = await cfImageUpload(thumbnail.fileData);
+      thumbnailSrc = imageSrc;
+    }
+
     const newValue = {
       ...value,
-      content: content,
+      content: contentArr,
       visible: isPublic,
       avatar: user?.avatar,
       tagArr: tagArr,
       categoryArr: categoryArr,
       toolArr: toolArr,
-      thumbnail: thumbnail?.imageSrc,
+      thumbnail: thumbnailSrc,
       isDraft: isDraft,
-      projectId: project_id,
+      projectId: +project_id,
       ownerArr: [
         { name: user?.name, avatar: user?.avatar, id: user?.id },
         ...ownerArr,
@@ -265,10 +312,13 @@ const Editor: NextPage = () => {
 
     setIsThumbnailLoading(true);
     const file = files[0];
-    const imageSrc = await cfImageUpload(file);
+    setThumbnailLoadingImg(URL.createObjectURL(file));
+    // const imageSrc = await cfImageUpload(file);
+
     setThumbnail({
       description: URL.createObjectURL(file),
-      imageSrc: imageSrc,
+      imageSrc: "",
+      fileData: file,
     });
     setIsThumbnailLoading(false);
   };
@@ -282,17 +332,21 @@ const Editor: NextPage = () => {
     } = e;
     if (!files) return;
 
+    // setInputFiles((prev) => prev.concat(Array.from(files)));
+
     setIsUpload(true);
 
     const n = files.length;
     const arr: ContentProps[] = [];
     for (let i = 0; i < n; i++) {
-      const imageSrc = await cfImageUpload(files[i]);
+      setLoadingImg(URL.createObjectURL(files[i]));
+      // const imageSrc = await cfImageUpload(files[i]);
 
       arr.push({
         kind: "image",
         description: URL.createObjectURL(files[i]),
-        imageSrc: imageSrc,
+        imageSrc: "",
+        fileData: files[i],
         id: uuidv4(),
       });
     }
@@ -396,25 +450,50 @@ const Editor: NextPage = () => {
     }
   };
 
-  const onDraftClick = () => {
+  const onDraftClick = async () => {
     if (isDraft) return;
     setIsDraft(true);
     clearErrors("title");
     clearErrors("thumbnail");
     clearErrors("category");
 
+    setIsDraft(true);
+    let thumbnailSrc = "";
+
+    const contentArr = await Promise.all(
+      content.map(async (item) => {
+        if (item.kind === "image") {
+          if (item.fileData) {
+            const imageSrc = await cfImageUpload(item.fileData);
+            return { ...item, imageSrc };
+          } else {
+            return item;
+          }
+        } else {
+          return item;
+        }
+      })
+    );
+
+    if (thumbnail && thumbnail.imageSrc) {
+      thumbnailSrc = thumbnail.imageSrc;
+    } else if (thumbnail && thumbnail.fileData) {
+      const imageSrc = await cfImageUpload(thumbnail.fileData);
+      thumbnailSrc = imageSrc;
+    }
+
     const newValue = {
       title: titleValue,
       decription: descriptionValue,
-      content: content,
+      content: contentArr,
       visible: isPublic,
       avatar: user?.avatar,
       tagArr: tagArr,
       categoryArr: categoryArr,
       toolArr: toolArr,
-      thumbnail: thumbnail?.imageSrc,
+      thumbnail: thumbnailSrc,
       isDraft: true,
-      projectId: project_id,
+      projectId: +project_id,
       ownerArr: [
         { name: user?.name, avatar: user?.avatar, id: user?.id },
         ...ownerArr,
@@ -440,6 +519,7 @@ const Editor: NextPage = () => {
   };
 
   useEffect(() => {
+    console.log(isDraft);
     if (data?.ok && !isDraft && data.project) {
       router.push(`/gallery/${data?.project.id}`);
     } else if (data?.ok && isDraft && data.project) {
@@ -467,7 +547,7 @@ const Editor: NextPage = () => {
   }, []);
 
   useEffect(() => {
-    if (!thumbnail) {
+    if (!thumbnail?.imageSrc && !thumbnail?.fileData) {
       setError("thumbnail", {
         type: "required",
         message: "표지 이미지가 필요합니다.",
@@ -475,7 +555,7 @@ const Editor: NextPage = () => {
     } else {
       clearErrors("thumbnail");
     }
-  }, [thumbnail]);
+  }, [thumbnail, isDraft]);
 
   useEffect(() => {
     if (!content.length) {
@@ -488,6 +568,19 @@ const Editor: NextPage = () => {
       clearErrors("content");
     }
   }, [content]);
+
+  useEffect(() => {
+    console.log(categoryArr.length === 0);
+    if (categoryArr.length === 0) {
+      setError("category", {
+        type: "required",
+        message:
+          "프로젝트를 게시하려면 적어도 하나의 카테고리를 추가해 주십시오.",
+      });
+    } else {
+      clearErrors("category");
+    }
+  }, [categoryArr, categoryValue]);
 
   useEffect(() => {
     if (editProjectData?.ok) {
@@ -519,10 +612,12 @@ const Editor: NextPage = () => {
         return newArr;
       });
 
-      setThumbnail({
-        description: "",
-        imageSrc: editProjectData.project.thumbnail,
-      });
+      if (editProjectData.project.thumbnail.length > 0) {
+        setThumbnail({
+          description: "",
+          imageSrc: editProjectData.project.thumbnail,
+        });
+      }
 
       setTagArr(editProjectData.project.tags.map((item) => item.name));
       setToolArr(editProjectData.project.tools.map((item) => item.name));
@@ -544,13 +639,26 @@ const Editor: NextPage = () => {
     }
   }, [editProjectData]);
 
+  useEffect(() => {
+    console.log(ownerArr);
+  }, [ownerArr]);
+
   return (
     <Layout isLogin={true} profile={user} userId={user?.id}>
       {isUpload && (
         <div className="fixed z-30 flex h-screen w-screen items-center justify-center bg-black/80 text-3xl text-white">
-          이미지 로딩중...
+          <div className="relative flex h-4/5 w-[1400px] items-center justify-center bg-black">
+            <Image
+              src={loadingImg}
+              alt="loadingImage"
+              layout="fill"
+              className="opacity-40"
+            ></Image>
+            <LoadingSpinner></LoadingSpinner>
+          </div>
         </div>
       )}
+
       <form action="" onSubmit={handleSubmit(onValid)}>
         <div className="absolute top-0 grid w-full grid-rows-1 bg-gray-100">
           <div className="row-span-1 mt-16 grid w-full grid-cols-6 grid-rows-1 gap-4 bg-gray-100 p-5">
@@ -583,7 +691,7 @@ const Editor: NextPage = () => {
                             onAddTextArea={onAddTextArea}
                             onPreviewImage={onPreviewImage}
                             onAddCodeArea={onAddCodeArea}
-                            src={item.description}
+                            src={item}
                             idx={idx}
                             onClearClick={onClearAttatchment}
                           />
@@ -632,11 +740,12 @@ const Editor: NextPage = () => {
         </div>
         {isSetting && (
           <CreatePortfolio
+            isSubmitLoading={isSubmitLoading}
             isThumbnailLoading={isThumbnailLoading}
+            previewThumbnailImg={thumbnail}
             isDraft={isDraft}
             onDraftClick={onDraftClick}
             onThumbnailImage={onThumbnailImage}
-            thumbnailSrc={thumbnail?.imageSrc}
             onUserClick={onUserClick}
             userData={userData?.user}
             categoryArr={categoryArr}

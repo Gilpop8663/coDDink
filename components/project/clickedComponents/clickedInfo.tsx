@@ -38,19 +38,20 @@ export default function ClickedInfo({
           <h4 className="text-base font-semibold text-black">{title}</h4>
           {projectURL && (
             <a
+              title="링크 이동하기"
               href={
                 projectURL.includes("https")
                   ? projectURL
                   : `https://${projectURL}`
               }
               target="noreferrer"
-              className="text-blue-600"
+              className="break-all text-sm font-semibold text-blue-600"
             >
               {projectURL}
             </a>
           )}
-          <p className="text-sm text-gray-600">
-            {isDetail ? description : description?.slice(0, 100)}
+          <p className="break-all text-sm text-gray-600">
+            {isDetail ? description : `${description?.slice(0, 100)}...`}
           </p>
           {description && description?.length > 100 && (
             <span

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import NATURE_IMAGE from "@public/user-login.jpg";
 import Image from "next/image";
 import Button from "@components/button";
@@ -16,6 +16,7 @@ import HeadMeta from "@components/headMeta";
 import { ProfileResponse } from "@libs/client/useUser";
 import useSWR from "swr";
 import FacebookBtn from "@components/auth/facebookBtn";
+import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
 
 interface ILoginProps {
   email: string;
@@ -31,6 +32,12 @@ interface EmailResult {
 interface MutationResult {
   ok: boolean;
   message: string;
+}
+
+export interface SNSMutationResult {
+  ok: boolean;
+  message: string;
+  kind: "create" | "login";
 }
 
 export default function Login() {
@@ -51,7 +58,9 @@ export default function Login() {
   const [login, { loading, data, error }] =
     useMutation<MutationResult>("/api/users/login");
   const [snsLogin, { data: snsLoginData }] =
-    useMutation<MutationResult>("/api/auth/snsLogin");
+    useMutation<SNSMutationResult>("/api/auth/snsLogin");
+  const [googleLogin, { data: googleLoginData }] =
+    useMutation<SNSMutationResult>("/api/auth/googleLogin");
 
   const [isCheckingEmail, setIsCheckingEmail] = useState(false);
 
@@ -67,6 +76,12 @@ export default function Login() {
   const onCreateClick = () => {
     router.push("/user/create");
   };
+
+  const onGoogleLoginClick = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      googleLogin({ tokenResponse });
+    },
+  });
 
   const curEmail = watch("email");
   const curPassword = watch("password");
@@ -99,59 +114,36 @@ export default function Login() {
   }, [userData, router]);
 
   useEffect(() => {
-    if (snsLoginData && snsLoginData.ok) {
+    if (snsLoginData && snsLoginData.ok && snsLoginData.kind === "create") {
+      router.push("/user/login");
+    } else if (
+      snsLoginData &&
+      snsLoginData.ok &&
+      snsLoginData.kind === "login"
+    ) {
       router.push("/");
     }
   }, [snsLoginData, router]);
 
+  useEffect(() => {
+    if (
+      googleLoginData &&
+      googleLoginData.ok &&
+      googleLoginData.kind === "create"
+    ) {
+      router.push("/user/login");
+    } else if (
+      googleLoginData &&
+      googleLoginData.ok &&
+      googleLoginData.kind === "login"
+    ) {
+      router.push("/");
+    }
+  }, [googleLoginData, router]);
+
   return (
     <div className="">
       <HeadMeta></HeadMeta>
-      <Script
-        id="googleScript"
-        src="https://accounts.google.com/gsi/client"
-        strategy="lazyOnload"
-        async
-        defer
-      ></Script>
-      <Script id="my-script" strategy="lazyOnload">{`
-
-function parseJwt (token) {
-  var base64Url = token.split('.')[1];
-  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  }).join(''));
-
-  return JSON.parse(jsonPayload);
-};
-
-function handleCredentialResponse(response) {
-  // decodeJwtResponse() is a custom function defined by you
-  // to decode the credential response.
-
-   const responsePayload = parseJwt(response.credential);
-
-
-  fetch("/api/auth/snsLogin", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      loginId: responsePayload.sub,
-      fullName:responsePayload.name,
-      givenName:responsePayload.given_name,
-      familyName:responsePayload.family_name,
-      imageURL:responsePayload.picture,
-      email:responsePayload.email
-    }),
-  }).then((response) => {console.log(response)
-    window.location.replace("/");
-  });
-}
-`}</Script>
-
       <div className="fixed -z-10 h-screen w-screen bg-black bg-cover opacity-50"></div>
       <div className="fixed -z-20 h-screen w-screen">
         <Image
@@ -173,10 +165,7 @@ function handleCredentialResponse(response) {
               <div className="flex items-center pt-6">
                 <p className="mr-2 text-sm">신규 사용자이신가요?</p>
                 <Link href="/user/create" passHref>
-                  <a
-                    target="_blank"
-                    className="cursor-pointer text-sm text-blue-500"
-                  >
+                  <a className="cursor-pointer text-sm text-blue-500">
                     계정 만들기
                   </a>
                 </Link>
@@ -207,7 +196,10 @@ function handleCredentialResponse(response) {
                 <div className="absolute top-7 bg-white px-2">또는</div>
               </div>
               <div className="mt-8 flex flex-col space-y-6">
-                <GoogleBtn kind="text"></GoogleBtn>
+                <GoogleBtn
+                  kind="text"
+                  onGoogleLoginClick={onGoogleLoginClick}
+                ></GoogleBtn>
                 <FacebookBtn kind="text" facebookLogin={snsLogin}></FacebookBtn>
                 {/* <div className="flex h-16 w-full cursor-pointer items-center justify-center rounded-full bg-black hover:ring-4 hover:ring-gray-300">
                   <Image

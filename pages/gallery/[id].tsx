@@ -187,7 +187,7 @@ const Gallery: NextPage = () => {
         {detailData?.ok && detailData && (
           <ClickedProject
             onDeleteModalClick={onDeleteModalClick}
-            thumbnail={detailData.project.thumbnail}
+            thumbnail={detailData?.project.thumbnail}
             followingData={data?.profile?.followings}
             loginId={data?.profile?.id}
             onFollowClick={onFollowClick}
@@ -197,13 +197,13 @@ const Gallery: NextPage = () => {
             title={detailData?.project.title}
             id={detailData?.project.id}
             likes={detailData?.project._count.like}
-            views={detailData.project._count.view}
-            owner={detailData.project.owner}
-            avatar={detailData.project.user.avatar}
-            userId={detailData.project.userId}
-            createdAt={detailData.project.createdAt}
-            isLiked={detailData.isLiked}
-            commentCount={detailData.project._count.comments}
+            views={detailData?.project._count.view}
+            owner={detailData?.project.owner}
+            avatar={detailData?.project.user.avatar}
+            userId={detailData?.project.userId}
+            createdAt={detailData?.project.createdAt}
+            isLiked={detailData?.isLiked}
+            commentCount={detailData?.project._count.comments}
             projectComments={commentArr || []}
             currentUserId={data?.profile?.id}
             onCommentValid={onCommentValid}
@@ -211,13 +211,13 @@ const Gallery: NextPage = () => {
             register={register}
             handleSubmit={handleSubmit}
             errors={errors}
-            tools={detailData.project.tools}
-            category={detailData.project.category}
-            tags={detailData.project.tags}
-            relatedData={detailData.relatedProjects}
-            description={detailData.project.description}
+            tools={detailData?.project.tools}
+            category={detailData?.project.category}
+            tags={detailData?.project.tags}
+            relatedData={detailData?.relatedProjects}
+            description={detailData?.project.description}
             onMoreCommentClick={onMoreCommentClick}
-            projectURL={detailData.project.linkURL}
+            projectURL={detailData?.project.linkURL}
           />
         )}
       </div>

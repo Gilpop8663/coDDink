@@ -119,7 +119,11 @@ export default function Header({
         {isLogin === false ? (
           <>
             <Link href="/user/login">
-              <a className="cursor-pointer rounded-full border px-4 py-2 text-sm font-semibold transition-colors hover:bg-gray-100">
+              <a
+                className={
+                  "cursor-pointer rounded-full border bg-white px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-gray-100"
+                }
+              >
                 로그인
               </a>
             </Link>

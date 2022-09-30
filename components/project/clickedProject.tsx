@@ -161,7 +161,7 @@ export default function ClickedProject({
           projectId={id}
         ></ClickedHeader>
         <div className="w-[1400px]">
-          <div className="flex flex-col  space-y-8 bg-white px-24 py-16">
+          <div className="flex  flex-col space-y-8 bg-white px-24 py-16">
             {contents.map((item) => {
               const contentFontSize = item.fontSize;
               return (
@@ -181,11 +181,12 @@ export default function ClickedProject({
                       ></Image>
                     </div>
                   )}
+
                   {item.kind === "text" && (
                     <div
                       className={cls(
                         `${item?.fontSize} ${item?.alignText}`,
-                        "relative whitespace-pre"
+                        "relative   whitespace-pre-wrap "
                       )}
                     >
                       {item.content}
@@ -253,7 +254,7 @@ export default function ClickedProject({
                 )}
 
                 {projectComments?.length > 0 && (
-                  <div className="relative bottom-1 flex w-full flex-col space-y-8 border border-b-0 bg-white p-8">
+                  <div className="relative bottom-1 flex flex-col space-y-8 border border-b-0 bg-white p-8">
                     {projectComments.map((item) => (
                       <CommentMsg
                         key={item.id}

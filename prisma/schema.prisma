@@ -45,7 +45,7 @@ model CoddinkUser{
   comments CoddinkComment[]
   followers CoddinkFollow[] @relation(name:"followerUser") 
   followings CoddinkFollow[] @relation(name:"followingUser")
-  moodboards CoddinkMoodboard[]
+  // moodboards CoddinkMoodboard[]
   streams CoddinkStream[]
   messages CoddinkMessage[]
   jointOwner CoddinkProjectOwner[]
@@ -70,8 +70,8 @@ model CoddinkProject{
   like CoddinkLike[]
   view CoddinkProjectView[]
   comments CoddinkComment[]
-  moodboard CoddinkMoodboard @relation(fields: [moodboardId],references: [id],onDelete: Cascade)
-  moodboardId Int @default(1)
+  // moodboard CoddinkMoodboard? @relation(fields: [moodboardId],references: [id],onDelete: Cascade)
+  // moodboardId Int? @default(1)
   contents CoddinkProjectContent[]
   isDraft Boolean @default(false)
   @@index([userId])
@@ -148,16 +148,17 @@ model CoddinkMessage{
 
 
 
-model CoddinkMoodboard{
-  id Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title String
-  user CoddinkUser @relation(fields: [userId],references: [id],onDelete: Cascade)
-  userId Int
-  projects CoddinkProject[]
-  @@index([userId])
-}
+
+// model CoddinkMoodboard{
+//   id Int @id @default(autoincrement())
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   title String
+//   user CoddinkUser @relation(fields: [userId],references: [id],onDelete: Cascade)
+//   userId Int
+//   projects CoddinkProject[]
+//   @@index([userId])
+// }
 
 
 model CoddinkProjectContent{
@@ -165,12 +166,13 @@ model CoddinkProjectContent{
   project CoddinkProject @relation(fields: [projectId],references: [id],onDelete: Cascade)
   projectId Int
   kind contentKind
+  contentIdx Int
+  description String @db.MediumText() @default("")
   content String? @db.LongText
   imageSrc String?
   fontSize String?
   alignText String?
   language String?
-  description String @db.MediumText() @default("")
   @@index([projectId])
 }
 
@@ -213,6 +215,7 @@ model CoddinkProjectOwner{
   userId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  ownerIdx Int
   @@index([projectId])
 }
 

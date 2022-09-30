@@ -32,6 +32,7 @@ export default function FacebookBtn({ facebookLogin, kind }: facebookBtnProps) {
         if (kind === "text") {
           return (
             <div
+              title="페이스북"
               onClick={onClick}
               className="flex h-16 w-full cursor-pointer items-center justify-center rounded-full border-2  hover:border-gray-300"
             >
@@ -47,6 +48,7 @@ export default function FacebookBtn({ facebookLogin, kind }: facebookBtnProps) {
         } else {
           return (
             <div
+              title="페이스북"
               onClick={onClick}
               className="flex h-16 w-16 cursor-pointer items-center justify-center rounded-full  hover:ring-2 hover:ring-gray-300"
             >

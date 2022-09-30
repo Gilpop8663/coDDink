@@ -23,7 +23,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         },
         owner: {
           orderBy: {
-            id: "desc",
+            ownerIdx: "asc",
           },
           select: {
             name: true,
@@ -55,7 +55,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         },
         owner: {
           orderBy: {
-            id: "desc",
+            ownerIdx: "asc",
           },
           select: {
             name: true,

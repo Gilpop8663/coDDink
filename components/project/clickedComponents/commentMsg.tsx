@@ -23,21 +23,20 @@ export default function CommentMsg({
   onCommentDeleteClick,
 }: CommentProps) {
   return (
-    <>
-      <div className="flex justify-between">
-        <div className="item-center flex">
+    <div className="">
+      <div className="flex  justify-between">
+        <div className="item-center flex w-full">
           <Link href={`/profile/${id}`}>
-            <a className="mr-4 flex">
+            <a className="relative mr-4 flex h-8 w-8 rounded-full">
               <Image
                 src={makeImageURL(avatar, "smAvatar")}
                 alt="avatar"
-                width={50}
-                height={50}
+                layout="fill"
                 className="rounded-full"
               ></Image>
             </a>
           </Link>
-          <div className="flex flex-col">
+          <div className="flex w-full flex-col">
             <div className="flex items-center space-x-1">
               <Link href={`/profile/${id}`}>
                 <a className="cursor-pointer text-sm font-semibold text-gray-800 hover:underline">
@@ -49,7 +48,7 @@ export default function CommentMsg({
                 {timeForToday(createdAt)}
               </h6>
             </div>
-            <span className="mt-2 text-sm">{comment}</span>
+            <span className="mt-2 overflow-auto text-sm">{comment}</span>
           </div>
         </div>
         {currentUserId === +id && (
@@ -70,6 +69,6 @@ export default function CommentMsg({
           </svg>
         )}
       </div>
-    </>
+    </div>
   );
 }

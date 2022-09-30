@@ -77,19 +77,28 @@ export default function PreviewProject({
                 >
                   {item.kind === "image" && (
                     <div className="relative h-5/6 w-full  ">
-                      <Image
-                        className="object-contain"
-                        alt={item.id.toString()}
-                        layout="fill"
-                        src={makeImageURL(item.imageSrc!, "public")}
-                      ></Image>
+                      {item.imageSrc ? (
+                        <Image
+                          className="object-contain"
+                          alt={item.id.toString()}
+                          layout="fill"
+                          src={makeImageURL(item.imageSrc!, "public")}
+                        ></Image>
+                      ) : (
+                        <Image
+                          className="object-contain"
+                          alt={item.id.toString()}
+                          layout="fill"
+                          src={item.description!}
+                        ></Image>
+                      )}
                     </div>
                   )}
                   {item.kind === "text" && (
                     <div
                       className={cls(
                         `${item?.fontSize} ${item?.alignText}`,
-                        "relative whitespace-pre"
+                        "relative whitespace-pre-wrap"
                       )}
                     >
                       {item.description}
