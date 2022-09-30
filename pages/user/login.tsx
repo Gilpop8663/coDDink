@@ -114,32 +114,20 @@ export default function Login() {
   }, [userData, router]);
 
   useEffect(() => {
-    if (snsLoginData && snsLoginData.ok && snsLoginData.kind === "create") {
+    if (snsLoginData && snsLoginData.kind === "create") {
       router.push("/user/login");
-    } else if (
-      snsLoginData &&
-      snsLoginData.ok &&
-      snsLoginData.kind === "login"
-    ) {
-      router.push("/");
+    } else if (snsLoginData && snsLoginData.kind === "login") {
+      userMutate();
     }
-  }, [snsLoginData, router]);
+  }, [snsLoginData, router, userMutate]);
 
   useEffect(() => {
-    if (
-      googleLoginData &&
-      googleLoginData.ok &&
-      googleLoginData.kind === "create"
-    ) {
+    if (googleLoginData && googleLoginData.kind === "create") {
       router.push("/user/login");
-    } else if (
-      googleLoginData &&
-      googleLoginData.ok &&
-      googleLoginData.kind === "login"
-    ) {
-      router.push("/");
+    } else if (googleLoginData && googleLoginData.kind === "login") {
+      userMutate();
     }
-  }, [googleLoginData, router]);
+  }, [googleLoginData, router, userMutate]);
 
   return (
     <div className="">
