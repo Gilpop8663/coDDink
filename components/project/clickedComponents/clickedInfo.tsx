@@ -45,15 +45,13 @@ export default function ClickedInfo({
                   : `https://${projectURL}`
               }
               target="noreferrer"
-              className="space-x-reverse text-sm font-semibold text-blue-600"
+              className="break-all text-sm font-semibold text-blue-600"
             >
-              {projectURL.length > 33
-                ? `${projectURL.slice(0, 33)}...`
-                : projectURL}
+              {projectURL}
             </a>
           )}
-          <p className="text-sm text-gray-600">
-            {isDetail ? description : description?.slice(0, 100)}
+          <p className="break-all text-sm text-gray-600">
+            {isDetail ? description : `${description?.slice(0, 100)}...`}
           </p>
           {description && description?.length > 100 && (
             <span

@@ -181,7 +181,7 @@ const Editor: NextPage = () => {
     const contentArr = await Promise.all(
       content.map(async (item) => {
         if (item.kind === "image") {
-          if (item.fileData) {
+          if (item.fileData && !item.imageSrc) {
             const imageSrc = await cfImageUpload(item.fileData);
             return { ...item, imageSrc };
           } else {
@@ -577,6 +577,8 @@ const Editor: NextPage = () => {
         message:
           "프로젝트를 게시하려면 적어도 하나의 카테고리를 추가해 주십시오.",
       });
+    } else {
+      clearErrors("category");
     }
   }, [categoryArr, categoryValue]);
 
@@ -636,6 +638,10 @@ const Editor: NextPage = () => {
       setIsPublic(editProjectData.project.visible);
     }
   }, [editProjectData]);
+
+  useEffect(() => {
+    console.log(ownerArr);
+  }, [ownerArr]);
 
   return (
     <Layout isLogin={true} profile={user} userId={user?.id}>

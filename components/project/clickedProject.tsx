@@ -254,7 +254,7 @@ export default function ClickedProject({
                 )}
 
                 {projectComments?.length > 0 && (
-                  <div className="relative bottom-1 flex w-full flex-col space-y-8 border border-b-0 bg-white p-8">
+                  <div className="relative bottom-1 flex flex-col space-y-8 border border-b-0 bg-white p-8">
                     {projectComments.map((item) => (
                       <CommentMsg
                         key={item.id}

@@ -75,8 +75,10 @@ interface ToggleResponse {
 }
 
 interface BannerProps {
+  previewSrc: string;
   imageSrc: string;
   position: string;
+  fileData?: File;
 }
 
 const Profile: NextPage = () => {
@@ -90,6 +92,7 @@ const Profile: NextPage = () => {
   const [updateProfile, { loading, data: ProfileData }] =
     useMutation<ToggleResponse>("/api/profile");
   const [banner, setBanner] = useState<BannerProps>({
+    previewSrc: "",
     imageSrc: "",
     position: "",
   });
@@ -111,7 +114,7 @@ const Profile: NextPage = () => {
   const router = useRouter();
   const path = router.asPath;
   const isGallery = path.slice(1, 8) === "gallery";
-
+  const [isDetail, setIsDetail] = useState(false);
   const isAppreciated = path.slice(-11) === "appreciated";
 
   const isDraftPath = path.slice(-6) === "drafts";
@@ -156,6 +159,9 @@ const Profile: NextPage = () => {
     } else if (kind === 2) {
       setIsBannerOver(false);
     }
+  };
+  const onDescriptionClick = () => {
+    setIsDetail((prev) => !prev);
   };
 
   // const onMoodboardClick = () => {
@@ -329,10 +335,11 @@ const Profile: NextPage = () => {
     setIsBannerLoading(true);
     const file = files[0];
 
-    const imageSrc = await cfImageUpload(file);
     setBanner({
-      imageSrc,
+      previewSrc: URL.createObjectURL(file),
+      imageSrc: "",
       position: "object-center",
+      fileData: file,
     });
     setIsBannerLoading(false);
   };
@@ -353,20 +360,26 @@ const Profile: NextPage = () => {
     }
   };
 
-  const bannerFinishClick = () => {
+  const bannerFinishClick = async () => {
     if (loading) return;
+    if (!banner.fileData) return;
+
     setIsBannerClick(false);
-    updateProfile({ banner: banner });
+    setIsBannerLoading(true);
+    const imageSrc = await cfImageUpload(banner.fileData);
+
+    updateProfile({ banner: { ...banner, imageSrc } });
+    setIsBannerLoading(false);
   };
 
   const bannerCancleClick = () => {
     setIsBannerClick(false);
-    setBanner({ imageSrc: "", position: "" });
+    setBanner({ previewSrc: "", imageSrc: "", position: "" });
   };
 
   const bannerResetClick = () => {
     setIsBannerClick(false);
-    setBanner({ imageSrc: "", position: "" });
+    setBanner({ previewSrc: "", imageSrc: "", position: "" });
     updateProfile({ banner: { imageSrc: "", position: "" } });
   };
 
@@ -447,7 +460,7 @@ const Profile: NextPage = () => {
     >
       <HeadMeta></HeadMeta>
       {(loading || isBannerLoading) && (
-        <div className="absolute top-0 z-20 flex h-[260px]  w-screen items-center justify-center text-3xl text-white">
+        <div className="absolute top-0 z-10 flex h-[260px]  w-screen items-center justify-center bg-black/50 text-3xl text-white">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -463,6 +476,7 @@ const Profile: NextPage = () => {
           <span className="ml-2 text-2xl">로딩중...</span>
         </div>
       )}
+
       {!isBannerClick && userData?.userInfo.bannerSrc && (
         <div
           onMouseOver={() => onBannerMouseOver(1)}
@@ -539,7 +553,8 @@ const Profile: NextPage = () => {
           onProjectDeleteClick={() => onCommentDeleteClick(deleteCommentTarget)}
         ></DeleteModal>
       )}
-      {!isBannerClick &&
+      {!isBannerLoading &&
+        !isBannerClick &&
         !userData?.userInfo.bannerSrc &&
         userData?.userInfo.id === data?.profile?.id && (
           <label
@@ -581,9 +596,9 @@ const Profile: NextPage = () => {
       {isBannerClick && (
         <div className="absolute top-0  flex h-[260px] w-screen cursor-pointer items-end justify-center bg-stone-500">
           <div className="relative bottom-0 h-full w-screen">
-            {banner.imageSrc && (
+            {banner.previewSrc && (
               <Image
-                src={makeImageURL(banner.imageSrc, "banner")}
+                src={banner.previewSrc}
                 alt="banner"
                 layout="fill"
                 className={cls(`${banner.position}`, "object-cover")}
@@ -928,8 +943,19 @@ const Profile: NextPage = () => {
                   ABOUT ME
                 </span>
                 <div className="mt-4 whitespace-pre-line text-sm text-gray-800">
-                  {userData?.userInfo.introduce}
+                  {isDetail
+                    ? userData?.userInfo.introduce
+                    : `${userData?.userInfo.introduce.slice(0, 100)}...`}
                 </div>
+                {userData?.userInfo.introduce &&
+                  userData?.userInfo.introduce?.length > 100 && (
+                    <span
+                      onClick={onDescriptionClick}
+                      className="cursor-pointer text-xs font-semibold text-gray-500"
+                    >
+                      {isDetail ? "간단히 보기" : "자세히 보기"}
+                    </span>
+                  )}
               </div>
             )}
           </div>
@@ -1057,9 +1083,9 @@ const Profile: NextPage = () => {
       {detailData && (
         <ClickedProject
           onDeleteModalClick={onDeleteModalClick}
-          projectURL={detailData.project.linkURL}
+          projectURL={detailData?.project.linkURL}
           onMoreCommentClick={onMoreCommentClick}
-          thumbnail={detailData.project.thumbnail}
+          thumbnail={detailData?.project.thumbnail}
           followingData={data?.profile?.followings}
           loginId={data?.profile?.id}
           onFollowClick={onFollowClick}
@@ -1069,13 +1095,13 @@ const Profile: NextPage = () => {
           title={detailData?.project.title}
           id={detailData?.project.id}
           likes={detailData?.project._count.like}
-          views={detailData.project._count.view}
-          owner={detailData.project.owner}
-          avatar={detailData.project.user.avatar}
-          userId={detailData.project.userId}
-          createdAt={detailData.project.createdAt}
-          isLiked={detailData.isLiked}
-          commentCount={detailData.project._count.comments}
+          views={detailData?.project._count.view}
+          owner={detailData?.project.owner}
+          avatar={detailData?.project.user.avatar}
+          userId={detailData?.project.userId}
+          createdAt={detailData?.project.createdAt}
+          isLiked={detailData?.isLiked}
+          commentCount={detailData?.project._count.comments}
           projectComments={commentArr || []}
           currentUserId={data?.profile?.id}
           onCommentValid={onCommentValid}
@@ -1083,11 +1109,11 @@ const Profile: NextPage = () => {
           register={register}
           handleSubmit={handleSubmit}
           errors={errors}
-          tools={detailData.project.tools}
-          category={detailData.project.category}
-          tags={detailData.project.tags}
-          relatedData={detailData.relatedProjects}
-          description={detailData.project.description}
+          tools={detailData?.project.tools}
+          category={detailData?.project.category}
+          tags={detailData?.project.tags}
+          relatedData={detailData?.relatedProjects}
+          description={detailData?.project.description}
         />
       )}
     </Layout>

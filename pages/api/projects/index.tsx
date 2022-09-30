@@ -31,7 +31,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         },
         owner: {
           orderBy: {
-            id: "desc",
+            ownerIdx: "asc",
           },
           select: {
             name: true,
@@ -201,10 +201,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         });
       });
 
-      ownerArr.forEach(async (item: UserDataProps) => {
+      ownerArr.forEach(async (item: UserDataProps, idx: number) => {
         const categoryContent = await client.coddinkProjectOwner.create({
           data: {
             name: item.name,
+            ownerIdx: idx,
             project: {
               connect: {
                 id: Number(projectId),
@@ -298,10 +299,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         });
       });
 
-      ownerArr.forEach(async (item: UserDataProps) => {
+      ownerArr.forEach(async (item: UserDataProps, idx: number) => {
         const categoryContent = await client.coddinkProjectOwner.create({
           data: {
             name: item.name,
+            ownerIdx: idx,
             project: {
               connect: {
                 id: project.id,
@@ -316,7 +318,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         });
       });
     }
-    console.log(project);
 
     return res.json({
       ok: true,

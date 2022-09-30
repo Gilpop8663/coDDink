@@ -19,6 +19,8 @@ import Script from "next/script";
 import HeadMeta from "@components/headMeta";
 import dynamic from "next/dynamic";
 import GoogleBtn from "@components/auth/googleBtn";
+import { useGoogleLogin } from "@react-oauth/google";
+import { SNSMutationResult } from "./login";
 
 interface ICreateProps {
   email: string;
@@ -44,7 +46,16 @@ export default function Create() {
     useMutation<MutationResult>("/api/users/create");
 
   const [snsLogin, { data: snsLoginData }] =
-    useMutation<MutationResult>("/api/auth/snsLogin");
+    useMutation<SNSMutationResult>("/api/auth/snsLogin");
+
+  const [googleLogin, { data: googleLoginData }] =
+    useMutation<SNSMutationResult>("/api/auth/googleLogin");
+
+  const onGoogleLoginClick = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      googleLogin({ tokenResponse });
+    },
+  });
 
   const router = useRouter();
 
@@ -55,61 +66,41 @@ export default function Create() {
 
   useEffect(() => {
     if (data?.ok) {
-      router.push("/");
+      router.push("/user/login");
     }
   }, [data, router]);
 
   useEffect(() => {
-    if (snsLoginData && snsLoginData.ok) {
+    if (snsLoginData && snsLoginData.ok && snsLoginData.kind === "create") {
+      router.push("/user/login");
+    } else if (
+      snsLoginData &&
+      snsLoginData.ok &&
+      snsLoginData.kind === "login"
+    ) {
       router.push("/");
     }
   }, [snsLoginData, router]);
 
+  useEffect(() => {
+    if (
+      googleLoginData &&
+      googleLoginData.ok &&
+      googleLoginData.kind === "create"
+    ) {
+      router.push("/user/login");
+    } else if (
+      googleLoginData &&
+      googleLoginData.ok &&
+      googleLoginData.kind === "login"
+    ) {
+      router.push("/");
+    }
+  }, [googleLoginData, router]);
+
   return (
     <div className="">
       <HeadMeta></HeadMeta>
-      <Script id="my-script" strategy="lazyOnload">{`
-
-function parseJwt (token) {
-  var base64Url = token.split('.')[1];
-  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  }).join(''));
-
-  return JSON.parse(jsonPayload);
-};
-
-function handleCredentialResponse(response) {
-  // decodeJwtResponse() is a custom function defined by you
-  // to decode the credential response.
-
-   const responsePayload = parseJwt(response.credential);
-
-
-  fetch("/api/auth/snsLogin", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      loginId: responsePayload.sub,
-      fullName:responsePayload.name,
-      givenName:responsePayload.given_name,
-      familyName:responsePayload.family_name,
-      imageURL:responsePayload.picture,
-      email:responsePayload.email
-    }),
-  }).then((response) => {console.log(response)
-    window.location.replace("/");
-  });
-}
-`}</Script>
-      <Script
-        id="googleScript"
-        src="https://accounts.google.com/gsi/client"
-        strategy="lazyOnload"
-      ></Script>
 
       <div className="fixed -z-10 h-screen w-screen bg-black bg-cover opacity-50"></div>
       <div className="fixed -z-20 h-screen w-screen">
@@ -131,18 +122,16 @@ function handleCredentialResponse(response) {
             <p className="mr-2 text-sm">이미 계정이 있으십니까?</p>
 
             <Link href="/user/login">
-              <a
-                target="_blank"
-                className="cursor-pointer text-sm text-blue-600"
-              >
-                로그인
-              </a>
+              <a className="cursor-pointer text-sm text-blue-600">로그인</a>
             </Link>
           </div>
           <h3 className="pt-6 font-semibold">소셜로 등록</h3>
           <div className="flex space-x-5 pt-6 transition-all">
             <div className="rounded-ful flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border bg-white hover:ring-2 hover:ring-gray-300">
-              <GoogleBtn kind="icon"></GoogleBtn>
+              <GoogleBtn
+                onGoogleLoginClick={onGoogleLoginClick}
+                kind="icon"
+              ></GoogleBtn>
             </div>
             <FacebookBtn kind="icon" facebookLogin={snsLogin}></FacebookBtn>
 
