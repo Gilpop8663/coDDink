@@ -61,7 +61,7 @@ export default function OwnerInfo({
                 "mr-1 hover:underline"
               )}
             >
-              {owner[0].user.name}
+              {owner[0]?.user?.name}
             </span>
           </a>
         </Link>
