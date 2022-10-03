@@ -13,6 +13,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     where: {
       id: Number(id),
     },
+
     include: {
       _count: {
         select: {
@@ -30,6 +31,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           userId: true,
           user: {
             select: {
+              name: true,
               avatar: true,
               city: true,
               country: true,
@@ -64,6 +66,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           not: project?.id,
         },
       },
+    },
+    orderBy: {
+      createdAt: "desc",
     },
     take: 4,
     include: {

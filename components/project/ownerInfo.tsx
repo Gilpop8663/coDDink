@@ -61,7 +61,7 @@ export default function OwnerInfo({
                 "mr-1 hover:underline"
               )}
             >
-              {owner[0].name}
+              {owner[0].user.name}
             </span>
           </a>
         </Link>
@@ -119,7 +119,7 @@ export default function OwnerInfo({
                     <div className="flex flex-col justify-center">
                       <Link href={`/profile/${item.userId}`}>
                         <a className="cursor-pointer hover:underline">
-                          {item.name}
+                          {item.user?.name}
                         </a>
                       </Link>
                       {(item.user.city !== null ||
