@@ -51,7 +51,7 @@ export default function ClickedInfo({
             </a>
           )}
           <p className="break-all text-sm text-gray-600">
-            {isDetail ? description : `${description?.slice(0, 100)}...`}
+            {isDetail ? description : `${description?.slice(0, 100)}`}
           </p>
           {description && description?.length > 100 && (
             <span

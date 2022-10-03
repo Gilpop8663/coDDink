@@ -16,6 +16,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         isDraft: false,
         visible: true,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
       include: {
         user: {
           select: {
@@ -38,6 +41,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             userId: true,
             user: {
               select: {
+                name: true,
                 avatar: true,
                 city: true,
                 country: true,

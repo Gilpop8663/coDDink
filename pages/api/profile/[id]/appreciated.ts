@@ -12,6 +12,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     where: {
       userId: Number(id),
     },
+    orderBy: {
+      createdAt: "desc",
+    },
     include: {
       project: {
         include: {
@@ -25,6 +28,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
               userId: true,
               user: {
                 select: {
+                  name: true,
                   avatar: true,
                   city: true,
                   country: true,

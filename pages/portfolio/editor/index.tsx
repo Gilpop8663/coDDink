@@ -519,7 +519,6 @@ const Editor: NextPage = () => {
   };
 
   useEffect(() => {
-    console.log(isDraft);
     if (data?.ok && !isDraft && data.project) {
       router.push(`/gallery/${data?.project.id}`);
     } else if (data?.ok && isDraft && data.project) {
@@ -627,7 +626,7 @@ const Editor: NextPage = () => {
         editProjectData.project.owner.forEach((item) => {
           if (item.userId === user?.id) return;
           newArr.push({
-            name: item.name,
+            name: item.user.name,
             avatar: item.user.avatar,
             id: item.userId,
           });
