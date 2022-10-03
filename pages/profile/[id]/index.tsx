@@ -712,7 +712,7 @@ const Profile: NextPage = () => {
                 </a>
               </Link>
             )}
-            {userData?.userInfo.id !== data?.profile?.id && (
+            {data?.profile && userData?.userInfo.id !== data?.profile?.id && (
               <>
                 {data?.profile?.followings?.find(
                   (ele: CoddinkFollow) =>
