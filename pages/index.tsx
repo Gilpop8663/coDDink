@@ -37,6 +37,7 @@ export interface OwnerProps {
   name: string;
   userId: number;
   user: {
+    name: string;
     avatar: string;
     city: string;
     country: string;
