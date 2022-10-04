@@ -166,6 +166,7 @@ const Editor: NextPage = () => {
     if (content.length === 0) {
       return;
     }
+    if (!user) return;
     if (categoryArr.length === 0) {
       setError("category", {
         type: "required",
@@ -212,7 +213,7 @@ const Editor: NextPage = () => {
       isDraft: isDraft,
       projectId: +project_id,
       ownerArr: [
-        { name: user?.name, avatar: user?.avatar, id: user?.id },
+        { name: user.name, avatar: user.avatar, id: user.id },
         ...ownerArr,
       ],
     };

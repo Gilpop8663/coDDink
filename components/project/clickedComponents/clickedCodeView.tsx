@@ -21,12 +21,15 @@ export default function ClickedCodeView({
   fontSize,
 }: CodeViewProps) {
   return (
-    <div className={cls(`${fontSize}`, "bg-[#f5f5f5] p-4 font-mono")}>
+    <div className={cls(`${fontSize}`, "p-4")}>
       <CodeEditor
         readOnly
         value={content}
         language={language}
         style={{
+          fontFamily:
+            "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+          backgroundColor: "#f5f5f5",
           fontSize:
             fontSize === "text-2xl"
               ? 18
@@ -36,6 +39,7 @@ export default function ClickedCodeView({
               ? 14
               : 12,
         }}
+        padding={15}
       />
     </div>
   );
