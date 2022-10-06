@@ -655,7 +655,7 @@ const Profile: NextPage = () => {
         </div>
       )}
       <div className="absolute top-48  z-10 flex h-96 w-screen flex-col  items-center  bg-white lg:hidden">
-        <div className="relative bottom-24 mb-6 h-32 w-32  rounded-full border-8 border-white">
+        <div className="relative bottom-16 mb-6 h-32 w-32  rounded-full border-8 border-white">
           <Image
             className="rounded-full"
             src={makeImageURL(
@@ -668,7 +668,7 @@ const Profile: NextPage = () => {
             priority={true}
           ></Image>
         </div>
-        <div className="relative bottom-24 flex w-full flex-col items-center">
+        <div className="relative bottom-16 flex w-full flex-col items-center">
           <div className="relative text-2xl font-semibold">
             {userData?.userInfo?.name}
           </div>

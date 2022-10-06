@@ -19,19 +19,18 @@ export default function CommentInput({
 }: CommentInputProps) {
   return (
     <>
-      <div className="grid grid-cols-10">
+      <div className="flex w-full grid-cols-10 items-start justify-between lg:grid">
         <Link href={`/gallery/${id}`}>
-          <a className="col-span-1 mr-4 mt-4 cursor-pointer">
+          <a className="relative mr-4 h-10 w-12 cursor-pointer md:h-12 lg:col-span-1 lg:mr-4 ">
             <Image
               src={makeImageURL(avatar, "smAvatar")}
               alt="profile"
-              width={50}
-              height={50}
+              layout="fill"
               className="rounded-full"
             ></Image>
           </a>
         </Link>
-        <div className="col-span-9 w-full">
+        <div className="w-full lg:col-span-9 lg:w-full">
           <TextArea
             register={register}
             placeholder="이 프로젝트에 대해 어떻게 생각하십니까?"

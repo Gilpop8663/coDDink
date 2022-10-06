@@ -133,7 +133,7 @@ export default function Login() {
     <div className="">
       <HeadMeta></HeadMeta>
       <div className="fixed -z-10 h-screen w-screen bg-black bg-cover opacity-50"></div>
-      <div className="fixed -z-20 h-screen w-screen">
+      <div className="fixed -z-20 hidden h-screen w-screen sm:flex">
         <Image
           alt="background"
           src={NATURE_IMAGE}
@@ -142,10 +142,10 @@ export default function Login() {
         ></Image>
       </div>
       <div className="flex h-screen items-center justify-evenly">
-        <div className="text-4xl text-white">coDDink</div>
+        <div className="hidden text-4xl text-white xl:flex">coDDink</div>
         <form
           onSubmit={handleSubmit(onValid)}
-          className="z-10 flex h-fit w-1/4 flex-col bg-white py-12 px-10"
+          className="z-10 flex h-screen w-screen  flex-col bg-white py-12 px-10 sm:h-fit sm:w-[520px]"
         >
           {isCheckingEmail === false ? (
             <>

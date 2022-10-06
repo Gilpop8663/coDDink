@@ -25,7 +25,7 @@ export default function TextArea({
         id={name}
         {...register}
         placeholder={placeholder}
-        className="mt-4 w-full resize-none rounded-md border p-2 text-sm font-semibold text-gray-600 placeholder:text-gray-400 hover:border-gray-700 focus:outline-none focus:ring focus:ring-blue-500"
+        className="w-full resize-none rounded-md border p-2 text-sm font-semibold text-gray-600 placeholder:text-gray-400 hover:border-gray-700 focus:outline-none focus:ring focus:ring-blue-500"
         rows={4}
         {...rest}
       />

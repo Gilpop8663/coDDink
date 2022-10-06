@@ -28,7 +28,7 @@ export default function EditSidebar({
   isDraft,
 }: EditSidebarProps) {
   return (
-    <div className="grid-cols-1">
+    <div className="grid-cols-2 2xl:grid-cols-1">
       <div className="max-w-96 fixed right-8 w-72">
         <div className="flex w-full flex-col border shadow-md">
           <div className="flex h-8 items-center bg-gray-100 pl-2 text-xs font-semibold text-gray-500">

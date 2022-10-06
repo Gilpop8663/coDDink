@@ -230,8 +230,8 @@ const ProfileEditor: NextPage = () => {
             </span>
           </div>
         </div>
-        <div className=" flex justify-center bg-slate-100 px-28 pt-28 pb-96 ">
-          <div className="fixed ">
+        <div className=" flex justify-center bg-slate-100 px-6 pt-28 pb-96 lg:px-28 ">
+          <div className="fixed hidden lg:flex">
             <div className="relative right-80 flex flex-col border">
               <CategoryTabMenu
                 onClick={() => onHeightClick(0)}
@@ -250,9 +250,9 @@ const ProfileEditor: NextPage = () => {
               />
             </div>
           </div>
-          <div className="relative left-40 ml-6 flex flex-col space-y-6">
+          <div className="relative flex flex-col space-y-6 lg:left-40 lg:ml-6">
             <div>
-              <div className="border bg-white p-8">
+              <div className="border bg-white p-4 lg:p-8">
                 <h6 className="text-sm font-semibold">기본 정보</h6>
                 <div className="mt-2 flex">
                   <UploadButton
@@ -260,7 +260,7 @@ const ProfileEditor: NextPage = () => {
                     register={register("avatar")}
                     kind="profile"
                   ></UploadButton>
-                  <div className="flex flex-col px-8">
+                  <div className="flex flex-col px-2 lg:px-8">
                     <Input
                       register={register("name", {
                         required: "이 필드는 반드시 입력해야 합니다.",

@@ -86,7 +86,7 @@ export default function Header({
   return (
     <div
       className={cls(
-        "fixed z-20 flex h-16 w-full items-center justify-between border-b px-6 transition-all",
+        "fixed z-50 flex h-16 w-full items-center justify-between border-b px-6 transition-all lg:z-20 ",
         isTop && kind === "profile"
           ? "bg-black/0 text-white"
           : "bg-white text-black"
