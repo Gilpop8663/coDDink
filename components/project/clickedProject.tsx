@@ -148,7 +148,7 @@ export default function ClickedProject({
       <div
         className={cls(
           kind === "home" ? "z-20" : "z-0",
-          "relative top-16 flex w-full flex-col lg:top-5 lg:px-24"
+          "relative top-16 flex w-full flex-col lg:top-5 lg:mx-24"
         )}
       >
         <ClickedHeader
@@ -214,7 +214,7 @@ export default function ClickedProject({
             isLiked={isLiked}
           />
           {relatedData?.length > 0 && (
-            <div className="md:grid-col relative grid grid-cols-1 gap-4 bg-[#191919] py-20 px-10 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+            <div className="relative grid grid-cols-1 gap-4 bg-[#191919] py-20 px-10 md:grid-cols-2  lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
               {relatedData.map((item, idx) => (
                 <ClickedRelatedItem
                   onClick={
