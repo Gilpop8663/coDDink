@@ -1,4 +1,5 @@
 import HeadMeta from "@components/headMeta";
+import { NextApiRequest, NextApiResponse } from "next";
 import Layout from "@components/layout";
 import DeleteModal from "@components/profile/deleteModal";
 import ClickedProject from "@components/project/clickedProject";
@@ -17,7 +18,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import useSWR, { SWRConfig } from "swr";
+import useSWR, { SWRConfig, unstable_serialize } from "swr";
 import useSWRInfinite from "swr/infinite";
 import client from "@libs/server/client";
 import LoadingSpinner from "@components/loadingSpinner";
@@ -160,9 +161,16 @@ const Home: NextPage = () => {
     if (!data?.profile) return;
     sendFollow({ id: id, myId: data?.profile?.id });
   };
+  const searchQuery = router.query;
 
-  const { data: defaultProjectsData, mutate: defaultProjectsMutate } =
-    useSWR<ProjectsResponse>("/api/projects");
+  const { data: searchProjectData } = useSWR<ProjectsResponse>(
+    searchQuery.search
+      ? [
+          `/api/projects/search?search=$00{searchQuery.search}`,
+          searchQuery.search,
+        ]
+      : null
+  );
 
   const getKey = (pageIndex: number, previousPageData: ProjectsResponse) => {
     if (previousPageData && !previousPageData.projects) {
@@ -170,7 +178,7 @@ const Home: NextPage = () => {
       return null; // 끝에 도달
     }
 
-    return `/api/projects?page=${pageIndex}`; // SWR 키
+    return `/api/projects/search?search=${searchQuery.search}&page=${pageIndex}`; // SWR 키
   };
 
   const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -188,7 +196,7 @@ const Home: NextPage = () => {
         ok: true,
         projects: projectsInfiniteData.map((item) => item.projects).flat(),
       }
-    : defaultProjectsData;
+    : searchProjectData;
 
   const [toggleLike, { loading: likeLoading }] = useMutation(
     `/api/projects/${clickedId}/like`
@@ -349,7 +357,7 @@ const Home: NextPage = () => {
   useEffect(() => {
     if (!projectsData?.projects.length) {
       setIsFinishData(false);
-    } else if (projectsData && projectsData.projects.length < 20) {
+    } else if (projectsData && projectsData.projects.length < 5) {
       setIsFinishData(false);
     }
   }, [projectsData]);
@@ -377,7 +385,7 @@ const Home: NextPage = () => {
           onProjectDeleteClick={() => onCommentDeleteClick(deleteCommentTarget)}
         ></DeleteModal>
       )}
-      <div className="grid w-full grid-cols-1 place-items-center gap-6 px-6 py-6 sm:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+      <div className="grid grid-cols-5 gap-6 px-6 py-6">
         {projectsData?.projects?.map((item) => (
           <ProjectItem
             projectId={item?.id}
@@ -439,17 +447,22 @@ const Home: NextPage = () => {
   );
 };
 
-const Page: NextPage<{ projects: ProjectWithCountWithUser[] }> = ({
-  projects,
-}) => {
+interface NextPageProps {
+  projects: ProjectWithCountWithUser[];
+  query: string;
+}
+
+const Page: NextPage<NextPageProps> = ({ projects, query }) => {
   return (
     <SWRConfig
       value={{
         fallback: {
-          "/api/projects": {
-            ok: true,
-            projects,
-          },
+          [unstable_serialize([`/api/projects/search?search=${query}`, query])]:
+            {
+              ok: true,
+              projects,
+            },
+          query: {},
         },
       }}
     >
@@ -458,11 +471,64 @@ const Page: NextPage<{ projects: ProjectWithCountWithUser[] }> = ({
   );
 };
 
-export async function getServerSideProps() {
+export async function getServerSideProps(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const {
+    query: { search },
+  } = req;
+
   const projects = await client.coddinkProject.findMany({
     where: {
       isDraft: false,
       visible: true,
+
+      OR: [
+        {
+          title: {
+            contains: search?.toString(),
+          },
+        },
+        {
+          owner: {
+            some: {
+              user: {
+                name: {
+                  contains: search?.toString(),
+                },
+              },
+            },
+          },
+        },
+        {
+          category: {
+            some: {
+              name: {
+                contains: search?.toString(),
+              },
+            },
+          },
+        },
+        {
+          tags: {
+            some: {
+              name: {
+                contains: search?.toString(),
+              },
+            },
+          },
+        },
+        {
+          tools: {
+            some: {
+              name: {
+                contains: search?.toString(),
+              },
+            },
+          },
+        },
+      ],
     },
     orderBy: {
       createdAt: "desc",
@@ -504,6 +570,7 @@ export async function getServerSideProps() {
   return {
     props: {
       projects: JSON.parse(JSON.stringify(projects)),
+      query: search?.toString(),
     },
   };
 }

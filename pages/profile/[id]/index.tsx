@@ -460,7 +460,7 @@ const Profile: NextPage = () => {
     >
       <HeadMeta></HeadMeta>
       {(loading || isBannerLoading) && (
-        <div className="absolute top-0 z-10 flex h-[260px]  w-screen items-center justify-center bg-black/50 text-3xl text-white">
+        <div className="absolute top-0 left-0 z-10 hidden h-[260px] w-screen  items-center justify-center bg-black/50 text-3xl text-white lg:flex">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -499,7 +499,7 @@ const Profile: NextPage = () => {
           {!(isBannerLoading || loading) &&
             isBannerOver &&
             userData.userInfo.id === data?.profile?.id && (
-              <div className="z-10 flex flex-col items-center text-white">
+              <div className="z-10 hidden flex-col items-center text-white lg:flex">
                 <span className="text-lg font-semibold">배너 이미지 대체</span>
                 <span className="text-sm font-semibold">
                   최적 치수 3200 x 410px
@@ -557,9 +557,15 @@ const Profile: NextPage = () => {
         !isBannerClick &&
         !userData?.userInfo.bannerSrc &&
         userData?.userInfo.id === data?.profile?.id && (
+          <div className="absolute top-0 left-0 flex h-[260px] w-screen cursor-pointer items-end justify-center bg-stone-500 pb-14 lg:flex"></div>
+        )}
+      {!isBannerLoading &&
+        !isBannerClick &&
+        !userData?.userInfo.bannerSrc &&
+        userData?.userInfo.id === data?.profile?.id && (
           <label
             htmlFor="banner"
-            className="absolute top-0  flex h-[260px] w-screen cursor-pointer items-end justify-center bg-stone-500 pb-14"
+            className="absolute top-0 left-0 hidden h-[260px] w-screen cursor-pointer items-end justify-center bg-stone-500 pb-14 lg:flex"
           >
             <div className="flex flex-col items-center text-white">
               <svg
@@ -574,6 +580,7 @@ const Profile: NextPage = () => {
                   clipRule="evenodd"
                 />
               </svg>
+
               <span className="text-lg font-semibold">배너 이미지 추가</span>
               <span className="text-sm font-semibold">
                 최적 치수 3200 x 410px
@@ -591,10 +598,10 @@ const Profile: NextPage = () => {
         )}
       {!userData?.userInfo.bannerSrc &&
         userData?.userInfo.id !== data?.profile?.id && (
-          <div className="absolute top-0  flex h-[260px] w-screen cursor-pointer items-end justify-center bg-stone-500 pb-14"></div>
+          <div className="absolute top-0  hidden h-[260px] w-screen cursor-pointer items-end justify-center bg-stone-500 pb-14 lg:flex"></div>
         )}
       {isBannerClick && (
-        <div className="absolute top-0  flex h-[260px] w-screen cursor-pointer items-end justify-center bg-stone-500">
+        <div className="absolute top-0  hidden h-[260px] w-screen cursor-pointer items-end justify-center bg-stone-500 lg:flex">
           <div className="relative bottom-0 h-full w-screen">
             {banner.previewSrc && (
               <Image
@@ -606,7 +613,7 @@ const Profile: NextPage = () => {
             )}
           </div>
           <div className="absolute -bottom-20 z-10 flex text-3xl text-black">
-            <div className="flex h-20 w-screen items-center justify-center space-x-2 bg-gray-200">
+            <div className="left-0 flex h-20 w-screen items-center justify-center space-x-2 bg-gray-200">
               <div
                 onClick={() => imagePotisionClick(1)}
                 title="위"
@@ -647,10 +654,177 @@ const Profile: NextPage = () => {
           </div>
         </div>
       )}
+      <div className="absolute top-48  z-10 flex h-96 w-screen flex-col  items-center  bg-white lg:hidden">
+        <div className="relative bottom-24 mb-6 h-32 w-32  rounded-full border-8 border-white">
+          <Image
+            className="rounded-full"
+            src={makeImageURL(
+              userData?.userInfo.avatar ||
+                "8b9dd122-cda2-4183-e41e-2c8d9259ac00",
+              "smAvatar"
+            )}
+            alt="avatar"
+            layout="fill"
+            priority={true}
+          ></Image>
+        </div>
+        <div className="relative bottom-24 flex w-full flex-col items-center">
+          <div className="relative text-2xl font-semibold">
+            {userData?.userInfo?.name}
+          </div>
+          <span>{userData?.userInfo.job}</span>
+          {userData?.userInfo.URL && (
+            <Link href={userData?.userInfo.URL}>
+              <a className="cursor-pointer underline">
+                {userData?.userInfo.URL}
+              </a>
+            </Link>
+          )}
+          <div className="mt-4 flex cursor-pointer items-center">
+            {(userData?.userInfo.city !== null ||
+              userData?.userInfo.country !== null) && (
+              <div className="font-base flex cursor-pointer items-center text-xs text-gray-400 transition-colors hover:text-gray-800 ">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="mr-1 h-4 w-4 "
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z"
+                    clipRule="evenodd"
+                  />
+                </svg>
 
-      <div className="flex px-14 py-14 ">
-        <div className="z-10 flex w-1/5 flex-col rounded-sm bg-white p-8 shadow-md">
-          <div className="relative mb-6 h-24 w-24 self-center">
+                <span>
+                  {userData?.userInfo.city && `${userData?.userInfo.city}, `}
+                  {userData?.userInfo.country}
+                </span>
+              </div>
+            )}
+          </div>
+          <div className="my-8 w-full space-y-2 px-10">
+            {userData?.userInfo.id === data?.profile?.id && (
+              <Link href={`/profile/${userData?.userInfo?.id}/editor`}>
+                <a>
+                  <NextButton
+                    color="blueDiv"
+                    label="내 프로필 편집"
+                  ></NextButton>
+                </a>
+              </Link>
+            )}
+            {data?.profile && userData?.userInfo.id !== data?.profile?.id && (
+              <>
+                {data?.profile?.followings?.find(
+                  (ele: CoddinkFollow) =>
+                    ele.followerId === userData?.userInfo.id
+                ) ? (
+                  <NextButton
+                    onClick={() => onFollowClick(userData?.userInfo.id)}
+                    color="followDelBtn"
+                    label={"팔로잉"}
+                  ></NextButton>
+                ) : (
+                  <NextButton
+                    onClick={() => onFollowClick(userData?.userInfo.id)}
+                    color="blueBtn"
+                    label={"팔로우"}
+                  ></NextButton>
+                )}
+                {/* <NextButton color="grayBtn" label="메세지"></NextButton> */}
+              </>
+            )}
+          </div>
+          <div className="absolute top-48 left-0 w-full  px-10 lg:hidden">
+            <div className="w-full">
+              <div className="flex space-x-3">
+                <CategoryButton
+                  onClick={onProjectClick}
+                  label="작업"
+                  isSame={kind === "projects"}
+                />
+                <CategoryButton
+                  onClick={onDraftsClick}
+                  label="초안"
+                  isSame={kind === "drafts"}
+                />
+                <CategoryButton
+                  onClick={onAppreciatedClick}
+                  label="평가"
+                  isSame={kind === "appreciated"}
+                />
+              </div>
+
+              <div className="mt-6 grid w-full grid-cols-1 place-items-center gap-6 sm:grid-cols-2  md:grid-cols-3 ">
+                {kind === "projects" &&
+                  userProjects?.projects?.map((item) => (
+                    <ProjectItem
+                      projectId={item.id}
+                      followingData={data?.profile?.followings}
+                      loginId={data?.profile?.id}
+                      onFollowClick={onFollowClick}
+                      thumbnail={item.thumbnail}
+                      key={item.id}
+                      title={item.title}
+                      likes={item._count.like}
+                      visible={item.visible}
+                      views={1}
+                      owner={item.owner}
+                      onClick={() => onBoxClicked(item.id)}
+                      onDeleteModalClick={() =>
+                        onDeleteModalClick(item?.id, "project")
+                      }
+                    />
+                  ))}
+                {kind === "drafts" &&
+                  draftProjects?.projects?.map((item) => (
+                    <ProjectDraftItem
+                      followingData={data?.profile?.followings}
+                      loginId={data?.profile?.id}
+                      onFollowClick={onFollowClick}
+                      thumbnail={item.thumbnail}
+                      key={item.id}
+                      title={item.title}
+                      likes={item._count.like}
+                      views={1}
+                      owner={item.owner}
+                      onClick={() => onDraftRouterClick(item.id)}
+                      onDeleteModalClick={() =>
+                        onDeleteModalClick(item?.id, "project")
+                      }
+                    />
+                  ))}
+                {kind === "appreciated" &&
+                  likeProjects?.projects?.map((item) => (
+                    <ProjectItem
+                      visible={item.project.visible}
+                      projectId={item.id}
+                      followingData={data?.profile?.followings}
+                      loginId={data?.profile?.id}
+                      onFollowClick={onFollowClick}
+                      thumbnail={item.project.thumbnail}
+                      key={item.id}
+                      title={item.project.title}
+                      likes={item.project._count.like}
+                      views={1}
+                      owner={item.project.owner}
+                      onClick={() => onBoxClicked(item.id)}
+                      onDeleteModalClick={() =>
+                        onDeleteModalClick(item?.id, "project")
+                      }
+                    />
+                  ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex w-full px-14 py-14 ">
+        <div className="z-10 hidden min-w-[360px] flex-col rounded-sm bg-white p-8  shadow-md lg:flex">
+          <div className="relative mb-6 h-24 w-24 self-center ">
             <Image
               className="rounded-full"
               src={makeImageURL(
@@ -996,7 +1170,7 @@ const Profile: NextPage = () => {
             </div>
           )} */}
         </div>
-        <div className="relative top-48 w-full pl-14 pb-48">
+        <div className="relative hidden w-full pl-14 pb-48 lg:top-48 lg:flex">
           <div className="w-full">
             <div className="flex space-x-3">
               <CategoryButton
@@ -1015,7 +1189,8 @@ const Profile: NextPage = () => {
                 isSame={kind === "appreciated"}
               />
             </div>
-            <div className="mt-6 grid w-full grid-cols-4 gap-6">
+            {/* grid w-full grid-cols-1 place-items-center gap-6 px-6 py-6 sm:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 */}
+            <div className="mt-6 grid w-full place-items-center gap-6 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
               {kind === "projects" &&
                 userProjects?.projects?.map((item) => (
                   <ProjectItem

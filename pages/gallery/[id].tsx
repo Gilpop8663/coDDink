@@ -2,7 +2,13 @@ import Layout from "@components/layout";
 import DeleteModal from "@components/profile/deleteModal";
 import ClickedProject from "@components/project/clickedProject";
 import useMutation from "@libs/client/useMutation";
-import type { NextApiRequest, NextApiResponse, NextPage } from "next";
+import type {
+  NextApiHandler,
+  NextApiRequest,
+  NextApiResponse,
+  NextPage,
+  NextPageContext,
+} from "next";
 import { useRouter } from "next/router";
 import {
   CommentProps,
@@ -10,10 +16,15 @@ import {
   CommentWithUser,
   DetailProjectResponse,
   GETCommentResponse,
+  ProjectWithComment,
+  ProjectWithCountWithUser,
 } from "pages";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import useSWR from "swr";
+import client from "@libs/server/client";
+import useSWR, { SWRConfig, unstable_serialize } from "swr";
+import { withApiSession } from "@libs/server/withSession";
+import { withSsrSession } from "@libs/server/withSsrSession";
 
 const Gallery: NextPage = () => {
   const router = useRouter();
@@ -27,7 +38,9 @@ const Gallery: NextPage = () => {
   const { data, mutate: userMutate } = useSWR("/api/users/me");
   const [commentPage, setCommentPage] = useState(1);
   const { data: detailData, mutate } = useSWR<DetailProjectResponse | null>(
-    router.query.id ? `/api/projects/${router.query.id}` : null
+    router.query.id
+      ? [`/api/projects/${router.query.id}`, router.query.id]
+      : null
   );
 
   const [isDelete, setIsDelete] = useState<null | "comment" | "project">(null);
@@ -184,26 +197,26 @@ const Gallery: NextPage = () => {
         ></DeleteModal>
       )}
       <div className="bg-zinc-50">
-        {detailData?.ok && detailData && (
+        {detailData?.ok && detailData.project && (
           <ClickedProject
             onDeleteModalClick={onDeleteModalClick}
-            thumbnail={detailData?.project.thumbnail}
+            thumbnail={detailData?.project?.thumbnail}
             followingData={data?.profile?.followings}
             loginId={data?.profile?.id}
             onFollowClick={onFollowClick}
             kind="gallery"
-            contents={detailData?.project.contents}
+            contents={detailData?.project?.contents}
             onLikeClick={onLikeClick}
-            title={detailData?.project.title}
-            id={detailData?.project.id}
-            likes={detailData?.project._count.like}
-            views={detailData?.project._count.view}
-            owner={detailData?.project.owner}
-            avatar={detailData?.project.user.avatar}
-            userId={detailData?.project.userId}
-            createdAt={detailData?.project.createdAt}
+            title={detailData?.project?.title}
+            id={detailData?.project?.id}
+            likes={detailData?.project?._count.like}
+            views={detailData?.project?._count.view}
+            owner={detailData?.project?.owner}
+            avatar={detailData?.project?.user.avatar}
+            userId={detailData?.project?.userId}
+            createdAt={detailData?.project?.createdAt}
             isLiked={detailData?.isLiked}
-            commentCount={detailData?.project._count.comments}
+            commentCount={detailData?.project?._count.comments}
             projectComments={commentArr || []}
             currentUserId={data?.profile?.id}
             onCommentValid={onCommentValid}
@@ -211,13 +224,13 @@ const Gallery: NextPage = () => {
             register={register}
             handleSubmit={handleSubmit}
             errors={errors}
-            tools={detailData?.project.tools}
-            category={detailData?.project.category}
-            tags={detailData?.project.tags}
+            tools={detailData?.project?.tools}
+            category={detailData?.project?.category}
+            tags={detailData?.project?.tags}
             relatedData={detailData?.relatedProjects}
-            description={detailData?.project.description}
+            description={detailData?.project?.description}
             onMoreCommentClick={onMoreCommentClick}
-            projectURL={detailData?.project.linkURL}
+            projectURL={detailData?.project?.linkURL}
           />
         )}
       </div>
@@ -225,4 +238,171 @@ const Gallery: NextPage = () => {
   );
 };
 
-export default Gallery;
+interface NextPageProps {
+  ok: boolean;
+  project: ProjectWithComment[];
+  relatedProjects: ProjectWithCountWithUser[];
+  isLiked: boolean;
+  query: string;
+}
+
+const Page: NextPage<NextPageProps> = ({
+  project,
+  query,
+  relatedProjects,
+  isLiked,
+  ok,
+}) => {
+  return (
+    <SWRConfig
+      value={{
+        fallback: {
+          [unstable_serialize([`/api/projects/${query}`, +query])]: {
+            ok,
+            project,
+            relatedProjects,
+            isLiked,
+          },
+        },
+      }}
+    >
+      <Gallery />
+    </SWRConfig>
+  );
+};
+
+interface SsrProps {
+  req: NextApiRequest;
+}
+
+export const getServerSideProps = withSsrSession(async function ({
+  req,
+}: SsrProps) {
+  const id = req.url?.includes("/gallery/")
+    ? req.url.split("/gallery/")[1]
+    : "";
+  const user = req?.session.user;
+
+  const project = await client.coddinkProject.findUnique({
+    where: {
+      id: Number(id),
+    },
+
+    include: {
+      _count: {
+        select: {
+          like: true,
+          comments: true,
+          view: true,
+        },
+      },
+      owner: {
+        orderBy: {
+          ownerIdx: "asc",
+        },
+        select: {
+          name: true,
+          userId: true,
+          user: {
+            select: {
+              name: true,
+              avatar: true,
+              city: true,
+              country: true,
+            },
+          },
+        },
+      },
+      user: {
+        select: {
+          id: true,
+          avatar: true,
+          name: true,
+        },
+      },
+      contents: {
+        orderBy: {
+          contentIdx: "asc",
+        },
+      },
+      tools: true,
+      tags: true,
+      category: true,
+    },
+  });
+  const relatedProjects = await client.coddinkProject.findMany({
+    where: {
+      userId: project?.userId,
+      isDraft: false,
+      visible: true,
+      AND: {
+        id: {
+          not: project?.id,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: 4,
+    include: {
+      _count: {
+        select: {
+          like: true,
+        },
+      },
+      owner: {
+        orderBy: {
+          ownerIdx: "asc",
+        },
+        select: {
+          name: true,
+          userId: true,
+          user: {
+            select: {
+              name: true,
+              avatar: true,
+              city: true,
+              country: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const isLiked = Boolean(
+    await client.coddinkLike.findFirst({
+      where: {
+        projectId: Number(id),
+        userId: user?.id,
+      },
+      select: {
+        id: true,
+      },
+    })
+  );
+
+  if (
+    (project?.isDraft == true || project?.visible === false) &&
+    project.owner[0].userId !== user?.id
+  ) {
+    return {
+      props: {
+        ok: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      ok: true,
+      project: JSON.parse(JSON.stringify(project)),
+      relatedProjects: JSON.parse(JSON.stringify(relatedProjects)),
+      isLiked: isLiked,
+      query: id?.toString(),
+    },
+  };
+});
+
+export default Page;

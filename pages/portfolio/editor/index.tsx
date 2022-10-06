@@ -520,9 +520,9 @@ const Editor: NextPage = () => {
   };
 
   useEffect(() => {
-    if (data?.ok && !isDraft && data.project) {
+    if (data && data.ok && !isDraft && data.project) {
       router.push(`/gallery/${data?.project.id}`);
-    } else if (data?.ok && isDraft && data.project) {
+    } else if (data && data.ok && isDraft && data.project) {
       setIsDraft(false);
       router.replace(
         "/portfolio/editor",
