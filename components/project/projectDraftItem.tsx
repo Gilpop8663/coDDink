@@ -43,13 +43,13 @@ export default function ProjectDraftItem({
     setIsOwnerTouch((prev) => !prev);
   };
   return (
-    <div>
+    <div className="w-80 sm:w-full">
       <div
         onMouseOver={onContentTouch}
         onMouseOut={onContentTouch}
         className="relative flex cursor-pointer flex-col"
       >
-        <div className="relative flex h-64 w-full items-center justify-center rounded-md border bg-gray-100 hover:visible">
+        <div className="relative flex h-64 max-h-80  w-auto items-center justify-center rounded-md border bg-gray-100 hover:visible">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

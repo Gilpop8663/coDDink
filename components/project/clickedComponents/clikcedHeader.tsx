@@ -26,7 +26,12 @@ export default function ClickedHeader({
   projectId,
 }: ItemProps) {
   return (
-    <div className={cls(kind === "home" ? "text-white" : "text-black", "flex")}>
+    <div
+      className={cls(
+        kind === "home" ? "lg:p-0 lg:text-white" : "lg:p-0 lg:text-black",
+        "flex bg-white px-5 py-3 text-black lg:bg-white/0"
+      )}
+    >
       <div className="mb-5 flex items-center">
         <Link href={`/profile/${owner[0]?.userId}`}>
           <a>

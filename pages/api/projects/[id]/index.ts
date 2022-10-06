@@ -79,13 +79,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       },
       owner: {
         orderBy: {
-          id: "desc",
+          ownerIdx: "asc",
         },
         select: {
           name: true,
           userId: true,
           user: {
             select: {
+              name: true,
               avatar: true,
               city: true,
               country: true,

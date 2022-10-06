@@ -129,8 +129,8 @@ export default function ClickedProject({
   return (
     <div
       className={cls(
-        kind === "home" ? "absolute left-0 top-0" : "",
-        "flex w-screen justify-center"
+        kind === "home" ? "absolute top-0 lg:left-0" : "",
+        " flex w-screen justify-center"
       )}
     >
       <HeadMeta
@@ -141,14 +141,14 @@ export default function ClickedProject({
       ></HeadMeta>
       {kind === "home" && (
         <div
-          className="fixed top-0 left-0 z-20 h-screen w-screen bg-black/80"
+          className="fixed top-0 left-0 z-20 hidden h-screen w-screen bg-black/80 lg:flex"
           onClick={onBackClick}
         ></div>
       )}
       <div
         className={cls(
           kind === "home" ? "z-20" : "z-0",
-          "relative top-5 z-20 flex flex-col"
+          "relative top-16 flex w-full flex-col lg:top-5 lg:mx-24"
         )}
       >
         <ClickedHeader
@@ -160,19 +160,19 @@ export default function ClickedProject({
           owner={owner}
           projectId={id}
         ></ClickedHeader>
-        <div className="w-[1400px]">
-          <div className="flex  flex-col space-y-8 bg-white px-24 py-16">
+        <div className="">
+          <div className="flex  flex-col space-y-8 bg-white px-6 py-16 lg:space-y-8 lg:px-24">
             {contents.map((item) => {
               const contentFontSize = item.fontSize;
               return (
                 <div
                   key={item.id}
                   className={cls(
-                    item.kind === "image" ? "h-screen w-full" : ""
+                    item.kind === "image" ? "h-48 w-full lg:h-screen" : ""
                   )}
                 >
                   {item.kind === "image" && (
-                    <div className="relative h-5/6 w-full  ">
+                    <div className="relative h-full w-full lg:h-5/6  ">
                       <Image
                         className="object-contain"
                         alt={item.id.toString()}
@@ -214,7 +214,7 @@ export default function ClickedProject({
             isLiked={isLiked}
           />
           {relatedData?.length > 0 && (
-            <div className="relative grid grid-cols-4 gap-4 bg-[#191919] py-20 px-10">
+            <div className="relative grid grid-cols-1 gap-4 bg-[#191919] py-20 px-10 md:grid-cols-2  lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
               {relatedData.map((item, idx) => (
                 <ClickedRelatedItem
                   onClick={
@@ -228,9 +228,9 @@ export default function ClickedProject({
               ))}
             </div>
           )}
-          <div className="mb-24 border border-b-0 bg-gray-100 p-24">
+          <div className="mb-24 border border-b-0 bg-gray-100 p-6 lg:p-24">
             <div className="grid grid-cols-7 gap-7">
-              <div className="col-span-5 ">
+              <div className="col-span-7 xl:col-span-5 ">
                 {isLogin ? (
                   <form
                     onSubmit={handleSubmit(onCommentValid)}
@@ -293,8 +293,35 @@ export default function ClickedProject({
                     </svg>
                   </div>
                 )}
+                <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 xl:hidden">
+                  <OwnerTab owner={owner}></OwnerTab>
+                  <div className=" border bg-white p-8">
+                    <ClickedInfo
+                      kind="sidebar"
+                      comments={commentCount}
+                      title={title}
+                      projectURL={projectURL}
+                      createdAt={createdAt}
+                      likes={likes}
+                      views={views}
+                      description={description}
+                    ></ClickedInfo>
+                  </div>
+                  {tools?.length > 0 && (
+                    <ClickedSideInfos data={tools} label="툴" />
+                  )}
+                  {category?.length > 0 && (
+                    <ClickedSideInfos
+                      data={category}
+                      label="크리에이티브 분야"
+                    />
+                  )}
+                  {tags?.length > 0 && (
+                    <ClickedSideInfos data={tags} label="태그" />
+                  )}
+                </div>
               </div>
-              <div className="col-span-2 flex flex-col space-y-4">
+              <div className="col-span-2 hidden flex-col space-y-4 xl:flex">
                 <OwnerTab owner={owner}></OwnerTab>
                 <div className="mt-4 border bg-white p-8">
                   <ClickedInfo

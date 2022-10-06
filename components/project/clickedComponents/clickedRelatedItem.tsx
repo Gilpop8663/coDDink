@@ -17,7 +17,7 @@ export default function ClickedRelatedItem({ data, onClick }: RelatedProps) {
 
   return (
     <div
-      className="relative col-span-1 w-full cursor-pointer"
+      className="relative col-span-1 w-full cursor-pointer "
       onClick={onClick}
       onMouseOver={onContentTouch}
       onMouseOut={onContentTouch}

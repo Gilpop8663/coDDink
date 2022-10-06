@@ -14,7 +14,9 @@ interface InfoProps {
 export default function ClickedLoginInfo({ owner }: InfoProps) {
   return (
     <div className="flex max-h-52 flex-col border bg-white p-8">
-      <h3 className="text-3xl font-semibold">대화에 참여하려면 등록</h3>
+      <h3 className="text-xl font-semibold lg:text-3xl">
+        대화에 참여하려면 등록
+      </h3>
       <span className="mt-2">
         {`로그인하거나 등록하여 ${owner[0].name} 님의 프로젝트에 대해 피드백을
       제공해 주세요.`}

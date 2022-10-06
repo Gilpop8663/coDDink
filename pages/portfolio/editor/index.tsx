@@ -520,9 +520,9 @@ const Editor: NextPage = () => {
   };
 
   useEffect(() => {
-    if (data?.ok && !isDraft && data.project) {
+    if (data && data.ok && !isDraft && data.project) {
       router.push(`/gallery/${data?.project.id}`);
-    } else if (data?.ok && isDraft && data.project) {
+    } else if (data && data.ok && isDraft && data.project) {
       setIsDraft(false);
       router.replace(
         "/portfolio/editor",
@@ -658,14 +658,23 @@ const Editor: NextPage = () => {
           </div>
         </div>
       )}
-
+      <div className="fixed z-40 flex h-screen w-screen items-center justify-center bg-white xl:hidden">
+        <div role="alert">
+          <div className="rounded-t bg-red-500 px-4 py-2 font-bold text-white">
+            화면이 너무 작습니다
+          </div>
+          <div className="rounded-b border border-t-0 border-red-400 bg-red-100 px-4 py-3 text-red-700">
+            <p>데스크탑을 이용해주세요</p>
+          </div>
+        </div>
+      </div>
       <form action="" onSubmit={handleSubmit(onValid)}>
         <div className="absolute top-0 grid w-full grid-rows-1 bg-gray-100">
-          <div className="row-span-1 mt-16 grid w-full grid-cols-6 grid-rows-1 gap-4 bg-gray-100 p-5">
+          <div className="row-span-1 mt-16 grid w-full grid-rows-1 gap-4 bg-gray-100 p-5 lg:grid-cols-8  2xl:grid-cols-9">
             <div
               className={cls(
                 content.length > 0 ? "" : "h-screen justify-center",
-                "relative col-span-5 flex min-h-screen w-full flex-col items-center  border bg-white shadow-lg"
+                "relative flex min-h-screen w-full flex-col items-center border bg-white shadow-lg  lg:col-span-6 2xl:col-span-7  "
               )}
             >
               {content.length === 0 ? (

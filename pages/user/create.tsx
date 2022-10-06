@@ -102,8 +102,8 @@ export default function Create() {
     <div className="">
       <HeadMeta></HeadMeta>
 
-      <div className="fixed -z-10 h-screen w-screen bg-black bg-cover opacity-50"></div>
-      <div className="fixed -z-20 h-screen w-screen">
+      <div className="fixed -z-10 hidden h-screen w-screen bg-black bg-cover opacity-50 sm:flex"></div>
+      <div className="fixed -z-20 hidden h-screen w-screen sm:flex">
         <Image
           alt="background"
           src={NATURE_IMAGE}
@@ -112,11 +112,12 @@ export default function Create() {
         ></Image>
       </div>
       <div className="flex h-screen items-center justify-evenly">
-        <div className="text-4xl text-white">coDDink</div>
+        <div className="hidden text-4xl text-white xl:flex">coDDink</div>
         <form
           onSubmit={handleSubmit(onValid)}
-          className="z-10 flex h-fit w-1/4 flex-col bg-white py-12 px-10"
+          className="z-10 flex h-full w-screen flex-col  bg-white py-12 px-10 sm:h-fit sm:w-[520px]"
         >
+          <span className="mb-4 font-bold">coDDink</span>
           <h2 className="text-3xl font-semibold ">계정 만들기</h2>
           <div className="flex items-center pt-4">
             <p className="mr-2 text-sm">이미 계정이 있으십니까?</p>
@@ -236,7 +237,9 @@ export default function Create() {
             </Link>
             을 읽었으며 이에 동의한다고 확인합니다.
           </div>
-          <Button kind="blue" value="계정 만들기"></Button>
+          <div className="flex self-end pb-8">
+            <Button kind="blue" value="계정 만들기"></Button>
+          </div>
         </form>
       </div>
     </div>

@@ -51,14 +51,14 @@ export default function ProjectItem({
     setIsSetting(kind);
   };
   return (
-    <div>
+    <div className="w-80 sm:w-full">
       <div
         onClick={onClick}
         onMouseOver={() => onContentTouch(true)}
         onMouseOut={() => onContentTouch(false)}
         className="relative flex cursor-pointer flex-col"
       >
-        <div className="relative  h-64 w-full  rounded-md border hover:visible"></div>
+        <div className="relative  h-64 max-h-80 w-auto  rounded-md  border hover:visible"></div>
 
         <Image
           src={makeImageURL(thumbnail, "public")}

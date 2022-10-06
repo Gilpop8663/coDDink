@@ -56,9 +56,9 @@ export default function OwnerInfo({
             <span
               className={cls(
                 path === "gallery" || kind === "home"
-                  ? "text-xs text-gray-700"
-                  : "text-sm text-white",
-                "mr-1 hover:underline"
+                  ? "text-xs lg:text-gray-700"
+                  : "text-sm lg:text-white",
+                "mr-1 text-black hover:underline"
               )}
             >
               {owner[0].user.name}
