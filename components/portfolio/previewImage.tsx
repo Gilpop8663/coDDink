@@ -33,7 +33,7 @@ export default function PreviewImage({
     setIsEditOver((prev) => !prev);
   };
   return (
-    <div className="h-screen">
+    <div className="h-full">
       <MiniUploadMenu
         onAddTextArea={onAddTextArea}
         idx={idx}
@@ -41,7 +41,7 @@ export default function PreviewImage({
         onAddCodeArea={onAddCodeArea}
       />
 
-      <div className="relative h-5/6 w-full border-blue-600 hover:border">
+      <div className="relative aspect-video w-full border-blue-600 hover:border">
         <EditMenu
           kind="Image"
           isEditOver={isEditOver}
