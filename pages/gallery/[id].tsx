@@ -278,9 +278,10 @@ interface SsrProps {
 export const getServerSideProps = withSsrSession(async function ({
   req,
 }: SsrProps) {
+  if (req.url?.slice(0, 5) !== "/gall") return { props: {} };
   const id = req.url?.includes("/gallery/")
     ? req.url.split("/gallery/")[1]
-    : "";
+    : "1";
   const user = req?.session.user;
 
   const project = await client.coddinkProject.findUnique({

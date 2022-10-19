@@ -89,8 +89,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     if (!user?.id) return;
 
-    console.log(projectId);
-
     let project: CoddinkProject;
     if (projectId) {
       project = await client.coddinkProject.update({

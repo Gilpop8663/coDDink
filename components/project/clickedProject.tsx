@@ -148,7 +148,7 @@ export default function ClickedProject({
       <div
         className={cls(
           kind === "home" ? "z-20" : "z-0",
-          "relative top-16 flex w-full flex-col lg:top-5 lg:mx-24"
+          "relative top-16 flex w-full flex-col md:mx-0 lg:top-5 lg:mx-40 xl:mx-48 2xl:mx-56"
         )}
       >
         <ClickedHeader
@@ -167,14 +167,12 @@ export default function ClickedProject({
               return (
                 <div
                   key={item.id}
-                  className={cls(
-                    item.kind === "image" ? "h-48 w-full lg:h-screen" : ""
-                  )}
+                  className={cls(item.kind === "image" ? " w-full " : "")}
                 >
                   {item.kind === "image" && (
-                    <div className="relative h-full w-full lg:h-5/6  ">
+                    <div className="relative aspect-video h-full w-full">
                       <Image
-                        className="object-contain"
+                        className="object-cover"
                         alt={item.id.toString()}
                         layout="fill"
                         src={makeImageURL(item.imageSrc!, "public")}
