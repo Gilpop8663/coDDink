@@ -9,6 +9,7 @@ import PreviewCode from "@components/portfolio/previewCode";
 import PreviewImage from "@components/portfolio/previewImage";
 import PreviewProject from "@components/portfolio/previewProject";
 import PreviewText from "@components/portfolio/previewText";
+import DeleteModal from "@components/profile/deleteModal";
 import ClickedProject from "@components/project/clickedProject";
 import SubUploadButton from "@components/subUploadButton";
 import TextArea from "@components/textArea";
@@ -521,7 +522,7 @@ const Editor: NextPage = () => {
 
   useEffect(() => {
     if (data && data.ok && !isDraft && data.project) {
-      router.push(`/gallery/${data?.project.id}`);
+      router.push(`/gallery/${data.project.id}`);
     } else if (data && data.ok && isDraft && data.project) {
       setIsDraft(false);
       router.replace(
@@ -530,7 +531,7 @@ const Editor: NextPage = () => {
         { shallow: true }
       );
     }
-  }, [data]);
+  }, [data, router]);
 
   useEffect(() => {
     document.addEventListener(
@@ -645,6 +646,12 @@ const Editor: NextPage = () => {
 
   return (
     <Layout isLogin={true} profile={user} userId={user?.id}>
+      {isSubmitLoading && (
+        <div className="fixed top-0 left-0 z-50 flex h-screen w-screen items-center justify-center bg-black/50 text-3xl font-bold text-white">
+          <span className="mr-5">게시물 업로드 중입니다</span>
+          <LoadingSpinner></LoadingSpinner>
+        </div>
+      )}
       {isUpload && (
         <div className="fixed z-30 flex h-screen w-screen items-center justify-center bg-black/80 text-3xl text-white">
           <div className="relative flex h-4/5 w-[1400px] items-center justify-center bg-black">
@@ -669,7 +676,12 @@ const Editor: NextPage = () => {
         </div>
       </div>
       <form action="" onSubmit={handleSubmit(onValid)}>
-        <div className="absolute top-0 grid w-full grid-rows-1 bg-gray-100">
+        <div
+          className={cls(
+            isSubmitLoading ? "fixed" : "absolute",
+            " top-0 grid w-full grid-rows-1 bg-gray-100"
+          )}
+        >
           <div className="row-span-1 mt-16 grid w-full grid-rows-1 gap-4 bg-gray-100 p-5 lg:grid-cols-8  2xl:grid-cols-9">
             <div
               className={cls(
