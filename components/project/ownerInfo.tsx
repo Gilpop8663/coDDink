@@ -73,7 +73,7 @@ export default function OwnerInfo({
                 path === "gallery" || kind === "home"
                   ? "text-xs text-gray-700"
                   : "text-sm text-white",
-                "mr-1 "
+                "mr-1 text-black hover:underline"
               )}
             >
               여러 소유자
@@ -88,7 +88,7 @@ export default function OwnerInfo({
                 path === "gallery" || kind === "home"
                   ? "text-xs text-gray-700"
                   : "text-white",
-                "h-4 w-4"
+                "h-4 w-4 text-black hover:underline"
               )}
             >
               <path

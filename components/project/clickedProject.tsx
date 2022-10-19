@@ -129,8 +129,8 @@ export default function ClickedProject({
   return (
     <div
       className={cls(
-        kind === "home" ? "absolute top-0 lg:left-0" : "",
-        " flex w-screen justify-center"
+        kind === "home" ? "absolute top-0 right-0 mx-auto lg:left-0" : "",
+        "flex w-full justify-center lg:w-auto"
       )}
     >
       <HeadMeta
@@ -148,7 +148,7 @@ export default function ClickedProject({
       <div
         className={cls(
           kind === "home" ? "z-20" : "z-0",
-          "relative top-16 flex w-full flex-col md:mx-0 lg:top-5 lg:mx-40 xl:mx-48 2xl:mx-56"
+          "relative top-16 flex w-full flex-col md:mx-0 lg:top-5  lg:mx-20 xl:mx-48 2xl:mx-56"
         )}
       >
         <ClickedHeader
@@ -167,12 +167,12 @@ export default function ClickedProject({
               return (
                 <div
                   key={item.id}
-                  className={cls(item.kind === "image" ? " w-full " : "")}
+                  className={cls(item.kind === "image" ? "h-full" : "")}
                 >
                   {item.kind === "image" && (
-                    <div className="relative aspect-video h-full w-full">
+                    <div className="relative aspect-video w-full">
                       <Image
-                        className="object-cover"
+                        className="object-contain"
                         alt={item.id.toString()}
                         layout="fill"
                         src={makeImageURL(item.imageSrc!, "public")}
