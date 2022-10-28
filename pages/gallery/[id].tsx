@@ -245,7 +245,7 @@ interface NextPageProps {
   relatedProjects: ProjectWithCountWithUser[];
   isLiked: boolean;
   query: string;
-  profile: CoddinkUser;
+  profile: CoddinkUser | undefined;
 }
 
 const Page: NextPage<NextPageProps> = ({
@@ -291,15 +291,18 @@ export const getServerSideProps = withSsrSession(async function ({
     : "1";
   const user = req?.session.user;
 
-  const profile = await client.coddinkUser.findUnique({
-    where: {
-      id: req.session.user?.id,
-    },
-    include: {
-      followers: true,
-      followings: true,
-    },
-  });
+  let profile;
+  if (user) {
+    profile = await client.coddinkUser.findUnique({
+      where: {
+        id: req?.session.user?.id,
+      },
+      include: {
+        followers: true,
+        followings: true,
+      },
+    });
+  }
 
   const project = await client.coddinkProject.findUnique({
     where: {
@@ -419,7 +422,7 @@ export const getServerSideProps = withSsrSession(async function ({
       relatedProjects: JSON.parse(JSON.stringify(relatedProjects)),
       isLiked: isLiked,
       query: id?.toString(),
-      profile: JSON.parse(JSON.stringify(profile)),
+      profile: user ? JSON.parse(JSON.stringify(profile)) : {},
     },
   };
 });
