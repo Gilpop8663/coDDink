@@ -119,6 +119,13 @@ const Editor: NextPage = () => {
   const [thumbnail, setThumbnail] = useState<thumbnailProps | null>(null);
   const [loadingImg, setLoadingImg] = useState("");
   const [thumbnailLoadingImg, setThumbnailLoadingImg] = useState("");
+  const [finishProjectId, setFinishProjectId] = useState<null | number>(null);
+  const { data: detailData } = useSWR<DetailProjectResponse | null>(
+    finishProjectId
+      ? [`/api/projects/${finishProjectId}`, finishProjectId]
+      : null,
+    { refreshInterval: 1000 }
+  );
   const [uploadProjects, { loading, error, data }] =
     useMutation<UploadProjectMutation>("/api/projects");
   const ownerValue = watch("owner");
@@ -521,10 +528,14 @@ const Editor: NextPage = () => {
   };
 
   useEffect(() => {
+    if (detailData && detailData.project.owner.length > 0) {
+      router.push(`/gallery/${detailData.project.id}`);
+    }
+  }, [detailData]);
+
+  useEffect(() => {
     if (data && data.ok && !isDraft && data.project) {
-      setTimeout(() => {
-        router.push(`/gallery/${data.project.id}`);
-      }, 1000);
+      setFinishProjectId(data.project.id);
     } else if (data && data.ok && isDraft && data.project) {
       setIsDraft(false);
       router.replace(
@@ -533,7 +544,7 @@ const Editor: NextPage = () => {
         { shallow: true }
       );
     }
-  }, [data, router]);
+  }, [data]);
 
   useEffect(() => {
     document.addEventListener(
@@ -573,7 +584,6 @@ const Editor: NextPage = () => {
   }, [content]);
 
   useEffect(() => {
-    console.log(categoryArr.length === 0);
     if (categoryArr.length === 0) {
       setError("category", {
         type: "required",
