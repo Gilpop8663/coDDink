@@ -640,10 +640,6 @@ const Editor: NextPage = () => {
     }
   }, [editProjectData]);
 
-  useEffect(() => {
-    console.log(ownerArr);
-  }, [ownerArr]);
-
   return (
     <Layout isLogin={true} profile={user} userId={user?.id}>
       {isSubmitLoading && (

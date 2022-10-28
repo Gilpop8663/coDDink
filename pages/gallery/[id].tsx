@@ -25,6 +25,7 @@ import client from "@libs/server/client";
 import useSWR, { SWRConfig, unstable_serialize } from "swr";
 import { withApiSession } from "@libs/server/withSession";
 import { withSsrSession } from "@libs/server/withSsrSession";
+import { CoddinkUser } from "@prisma/client";
 
 const Gallery: NextPage = () => {
   const router = useRouter();
@@ -244,6 +245,7 @@ interface NextPageProps {
   relatedProjects: ProjectWithCountWithUser[];
   isLiked: boolean;
   query: string;
+  profile: CoddinkUser;
 }
 
 const Page: NextPage<NextPageProps> = ({
@@ -252,6 +254,7 @@ const Page: NextPage<NextPageProps> = ({
   relatedProjects,
   isLiked,
   ok,
+  profile,
 }) => {
   return (
     <SWRConfig
@@ -262,6 +265,10 @@ const Page: NextPage<NextPageProps> = ({
             project,
             relatedProjects,
             isLiked,
+          },
+          "/api/users/me": {
+            ok: true,
+            profile,
           },
         },
       }}
@@ -283,6 +290,16 @@ export const getServerSideProps = withSsrSession(async function ({
     ? req.url.split("/gallery/")[1]
     : "1";
   const user = req?.session.user;
+
+  const profile = await client.coddinkUser.findUnique({
+    where: {
+      id: req.session.user?.id,
+    },
+    include: {
+      followers: true,
+      followings: true,
+    },
+  });
 
   const project = await client.coddinkProject.findUnique({
     where: {
@@ -402,6 +419,7 @@ export const getServerSideProps = withSsrSession(async function ({
       relatedProjects: JSON.parse(JSON.stringify(relatedProjects)),
       isLiked: isLiked,
       query: id?.toString(),
+      profile,
     },
   };
 });
