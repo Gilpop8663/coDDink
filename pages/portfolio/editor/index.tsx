@@ -522,7 +522,9 @@ const Editor: NextPage = () => {
 
   useEffect(() => {
     if (data && data.ok && !isDraft && data.project) {
-      router.push(`/gallery/${data.project.id}`);
+      setTimeout(() => {
+        router.push(`/gallery/${data.project.id}`);
+      }, 500);
     } else if (data && data.ok && isDraft && data.project) {
       setIsDraft(false);
       router.replace(
