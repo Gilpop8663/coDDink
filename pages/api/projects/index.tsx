@@ -321,10 +321,18 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       });
     }
 
-    return res.json({
-      ok: true,
-      project,
-    });
+    let isComplete = 1;
+
+    if (isComplete === 1) {
+      return res.json({
+        ok: true,
+        project,
+      });
+    } else {
+      return res.json({
+        ok: false,
+      });
+    }
   }
 }
 
