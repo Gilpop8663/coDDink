@@ -58,7 +58,7 @@ export default function OwnerInfo({
                 path === "gallery" || kind === "home"
                   ? "text-xs lg:text-gray-700"
                   : "text-sm lg:text-white",
-                "mr-1 text-black hover:underline"
+                "ml-1 text-black hover:underline"
               )}
             >
               {owner[0].user.name}
