@@ -16,7 +16,7 @@ import {
   OwnerProps,
   ProjectWithCountWithUser,
 } from "pages";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   DeepRequired,
   FieldErrorsImpl,
@@ -136,7 +136,7 @@ export default function ClickedProject({
       <HeadMeta
         title={title}
         description={description}
-        url={`http://localhost:3000/gallery/${id}`}
+        url={`https://www.coddink.com/gallery/${id}`}
         image={makeImageURL(thumbnail, "bigAvatar")}
       ></HeadMeta>
       {kind === "home" && (

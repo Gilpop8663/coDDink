@@ -524,7 +524,7 @@ const Editor: NextPage = () => {
     if (data && data.ok && !isDraft && data.project) {
       setTimeout(() => {
         router.push(`/gallery/${data.project.id}`);
-      }, 500);
+      }, 1000);
     } else if (data && data.ok && isDraft && data.project) {
       setIsDraft(false);
       router.replace(
