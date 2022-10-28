@@ -419,7 +419,7 @@ export const getServerSideProps = withSsrSession(async function ({
       relatedProjects: JSON.parse(JSON.stringify(relatedProjects)),
       isLiked: isLiked,
       query: id?.toString(),
-      profile,
+      profile: JSON.parse(JSON.stringify(profile)),
     },
   };
 });
