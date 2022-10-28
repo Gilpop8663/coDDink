@@ -139,88 +139,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           projectId: Number(projectId),
         },
       });
-
-      content.forEach(async (item: ContentProps, idx: number) => {
-        if (item.description === "" || !item.description) return;
-        const projectContent = await client.coddinkProjectContent.create({
-          data: {
-            kind: item.kind,
-            contentIdx: idx,
-            imageSrc: item.kind === "image" ? item.imageSrc : null,
-            content: item.kind !== "image" ? item.description : null,
-            fontSize: item.kind !== "image" ? item.fontSize : null,
-            alignText: item.kind === "text" ? item.alignText : null,
-            language: item.kind === "code" ? item.language : null,
-            description: item.description,
-            project: {
-              connect: {
-                id: Number(projectId),
-              },
-            },
-          },
-        });
-      });
-
-      tagArr.forEach(async (item: string) => {
-        if (item === "" || item.length > 50) return;
-        const tagContent = await client.coddinkProjectTag.create({
-          data: {
-            name: item,
-            project: {
-              connect: {
-                id: Number(projectId),
-              },
-            },
-          },
-        });
-      });
-
-      categoryArr.forEach(async (item: string) => {
-        if (item === "" || item.length > 50) return;
-        const categoryContent = await client.coddinkProjectCategory.create({
-          data: {
-            name: item,
-            project: {
-              connect: {
-                id: Number(projectId),
-              },
-            },
-          },
-        });
-      });
-
-      toolArr.forEach(async (item: string) => {
-        if (item === "" || item.length > 50) return;
-        const categoryContent = await client.coddinkProjectTool.create({
-          data: {
-            name: item,
-            project: {
-              connect: {
-                id: Number(projectId),
-              },
-            },
-          },
-        });
-      });
-
-      ownerArr.forEach(async (item: UserDataProps, idx: number) => {
-        const categoryContent = await client.coddinkProjectOwner.create({
-          data: {
-            name: item.name,
-            ownerIdx: idx,
-            project: {
-              connect: {
-                id: Number(projectId),
-              },
-            },
-            user: {
-              connect: {
-                id: item.id,
-              },
-            },
-          },
-        });
-      });
     } else {
       project = await client.coddinkProject.create({
         data: {
@@ -237,102 +155,94 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           },
         },
       });
-
-      content.forEach(async (item: ContentProps, idx: number) => {
-        if (item.description === "" || !item.description) return;
-        const projectContent = await client.coddinkProjectContent.create({
-          data: {
-            kind: item.kind,
-            contentIdx: idx,
-            imageSrc: item.kind === "image" ? item.imageSrc : null,
-            content: item.kind !== "image" ? item.description : null,
-            fontSize: item.kind !== "image" ? item.fontSize : null,
-            alignText: item.kind === "text" ? item.alignText : null,
-            language: item.kind === "code" ? item.language : null,
-            description: item.description,
-            project: {
-              connect: {
-                id: project.id,
-              },
-            },
-          },
-        });
-      });
-
-      tagArr.forEach(async (item: string) => {
-        if (item === "" || item.length > 50) return;
-        const tagContent = await client.coddinkProjectTag.create({
-          data: {
-            name: item,
-            project: {
-              connect: {
-                id: project.id,
-              },
-            },
-          },
-        });
-      });
-
-      categoryArr.forEach(async (item: string) => {
-        if (item === "" || item.length > 50) return;
-        const categoryContent = await client.coddinkProjectCategory.create({
-          data: {
-            name: item,
-            project: {
-              connect: {
-                id: project.id,
-              },
-            },
-          },
-        });
-      });
-
-      toolArr.forEach(async (item: string) => {
-        if (item === "" || item.length > 50) return;
-        const categoryContent = await client.coddinkProjectTool.create({
-          data: {
-            name: item,
-            project: {
-              connect: {
-                id: project.id,
-              },
-            },
-          },
-        });
-      });
-
-      ownerArr.forEach(async (item: UserDataProps, idx: number) => {
-        const categoryContent = await client.coddinkProjectOwner.create({
-          data: {
-            name: item.name,
-            ownerIdx: idx,
-            project: {
-              connect: {
-                id: project.id,
-              },
-            },
-            user: {
-              connect: {
-                id: item.id,
-              },
-            },
-          },
-        });
-      });
     }
 
-    let isComplete = 1;
+    ownerArr.forEach(async (item: UserDataProps, idx: number) => {
+      const categoryContent = await client.coddinkProjectOwner.create({
+        data: {
+          name: item.name,
+          ownerIdx: idx,
+          project: {
+            connect: {
+              id: project.id,
+            },
+          },
+          user: {
+            connect: {
+              id: item.id,
+            },
+          },
+        },
+      });
+    });
 
-    if (isComplete === 1) {
-      return res.json({
-        ok: true,
-        project,
+    content.forEach(async (item: ContentProps, idx: number) => {
+      if (item.description === "" || !item.description) return;
+      const projectContent = await client.coddinkProjectContent.create({
+        data: {
+          kind: item.kind,
+          contentIdx: idx,
+          imageSrc: item.kind === "image" ? item.imageSrc : null,
+          content: item.kind !== "image" ? item.description : null,
+          fontSize: item.kind !== "image" ? item.fontSize : null,
+          alignText: item.kind === "text" ? item.alignText : null,
+          language: item.kind === "code" ? item.language : null,
+          description: item.description,
+          project: {
+            connect: {
+              id: project.id,
+            },
+          },
+        },
       });
-    } else {
-      return res.json({
-        ok: false,
+    });
+
+    tagArr.forEach(async (item: string) => {
+      if (item === "" || item.length > 50) return;
+      const tagContent = await client.coddinkProjectTag.create({
+        data: {
+          name: item,
+          project: {
+            connect: {
+              id: project.id,
+            },
+          },
+        },
       });
-    }
+    });
+
+    categoryArr.forEach(async (item: string) => {
+      if (item === "" || item.length > 50) return;
+      const categoryContent = await client.coddinkProjectCategory.create({
+        data: {
+          name: item,
+          project: {
+            connect: {
+              id: project.id,
+            },
+          },
+        },
+      });
+    });
+
+    toolArr.forEach(async (item: string) => {
+      if (item === "" || item.length > 50) return;
+      const categoryContent = await client.coddinkProjectTool.create({
+        data: {
+          name: item,
+          project: {
+            connect: {
+              id: project.id,
+            },
+          },
+        },
+      });
+    });
+
+    return res.json({
+      ok: true,
+      project,
+    });
   }
 }
 
