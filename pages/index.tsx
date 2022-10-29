@@ -165,7 +165,7 @@ const Home: NextPage = () => {
     useSWR<ProjectsResponse>("/api/projects");
 
   const getKey = (pageIndex: number, previousPageData: ProjectsResponse) => {
-    if (previousPageData && !previousPageData.projects) {
+    if (previousPageData && previousPageData.projects.length < 20) {
       setIsFinishData(false);
       return null; // 끝에 도달
     }
