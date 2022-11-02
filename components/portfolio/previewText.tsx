@@ -25,6 +25,8 @@ interface PreivewTextProps {
   onAddCodeArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
   onChange: ChangeEventHandler<HTMLTextAreaElement>;
   onClearClick: (idx: number) => void;
+  draftFontSize?: string | null;
+  draftAlign?: string | null;
   [key: string]: any;
 }
 
@@ -37,6 +39,8 @@ export default function PreivewText({
   onPreviewImage,
   textValue,
   onChange,
+  draftFontSize,
+  draftAlign,
   onAddCodeArea,
   onClearClick,
   ...rest
@@ -44,8 +48,12 @@ export default function PreivewText({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   // const [currentValue, setCurrentValue] = useState(textValue);
   const [isWrite, setIsWrite] = useState(true);
-  const [fontSize, setFontSize] = useState("text-base");
-  const [alignText, setAlignText] = useState("text-left");
+  const [fontSize, setFontSize] = useState(
+    draftFontSize ? draftFontSize : "text-base"
+  );
+  const [alignText, setAlignText] = useState(
+    draftAlign ? draftAlign : "text-left"
+  );
   const [isOver, setIsOver] = useState(false);
 
   const onOverArea = () => {
@@ -246,6 +254,20 @@ export default function PreivewText({
       )}
       <div className={cls("flex h-fit justify-center ")}>
         <label htmlFor={name}>{label}</label>
+        {/* <textarea
+          ref={textareaRef}
+          id={name}
+          value={textValue}
+          onChange={onChange}
+          autoFocus
+          placeholder={"여기에 텍스트 입력..."}
+          className={cls(
+            fontSize && `${fontSize} placeholder:${fontSize}`,
+            alignText && `${alignText}`,
+            "h-fit w-4/5 resize-none justify-center whitespace-pre-wrap  border-blue-600 scrollbar-hide placeholder:text-xl hover:border focus:border focus:outline-none"
+          )}
+          {...rest}
+        ></textarea> */}
         <textarea
           ref={textareaRef}
           id={name}

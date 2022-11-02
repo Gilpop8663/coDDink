@@ -147,6 +147,7 @@ const Editor: NextPage = () => {
   const toolValue = watch("tools");
   const titleValue = watch("title");
   const descriptionValue = watch("description");
+  const linkURLValue = watch("linkURL");
 
   // const { data: tagData, error: tagError } = useSWR(
   //   `/api/projects/tags?value=${tagValue}`
@@ -493,7 +494,7 @@ const Editor: NextPage = () => {
 
     const newValue = {
       title: titleValue,
-      decription: descriptionValue,
+      description: descriptionValue,
       content: contentArr,
       visible: isPublic,
       avatar: user?.avatar,
@@ -503,6 +504,7 @@ const Editor: NextPage = () => {
       thumbnail: thumbnailSrc,
       isDraft: true,
       projectId: +project_id,
+      linkURL: linkURLValue,
       ownerArr: [
         { name: user?.name, avatar: user?.avatar, id: user?.id },
         ...ownerArr,
@@ -596,7 +598,7 @@ const Editor: NextPage = () => {
   }, [categoryArr, categoryValue]);
 
   useEffect(() => {
-    if (editProjectData?.ok) {
+    if (editProjectData && editProjectData.ok) {
       setCategoryArr(() => {
         const newArr = editProjectData.project.category.map(
           (item) => item.name
@@ -607,6 +609,7 @@ const Editor: NextPage = () => {
 
       setValue("linkURL", editProjectData.project.linkURL);
       setValue("title", editProjectData.project.title);
+
       setValue("description", editProjectData.project.description);
 
       setContent(() => {
@@ -625,7 +628,7 @@ const Editor: NextPage = () => {
         return newArr;
       });
 
-      if (editProjectData.project.thumbnail.length > 0) {
+      if (editProjectData && editProjectData.project.thumbnail.length > 0) {
         setThumbnail({
           description: "",
           imageSrc: editProjectData.project.thumbnail,
@@ -734,6 +737,8 @@ const Editor: NextPage = () => {
                             setContent={setContent}
                             idx={idx}
                             textValue={item.description}
+                            draftAlign={item?.alignText}
+                            draftFontSize={item?.fontSize}
                             onChange={(e) => onChange(e, idx)}
                           />
                         )}
@@ -746,6 +751,8 @@ const Editor: NextPage = () => {
                             onAddCodeArea={onAddCodeArea}
                             setContent={setContent}
                             idx={idx}
+                            draftLang={item.language}
+                            draftFontSize={item.fontSize}
                             onChange={(e) => onChange(e, idx)}
                           ></PreviewCode>
                         )}

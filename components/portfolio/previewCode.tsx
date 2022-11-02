@@ -30,6 +30,8 @@ interface PreivewCodeProps {
   onAddCodeArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
   onChange: ChangeEventHandler<HTMLTextAreaElement>;
   onClearClick: (idx: number) => void;
+  draftFontSize?: string | null;
+  draftLang?: string | null;
   [key: string]: any;
 }
 
@@ -41,11 +43,15 @@ export default function PreviewCode({
   onAddTextArea,
   onChange,
   onClearClick,
+  draftFontSize,
+  draftLang,
   textValue,
 }: PreivewCodeProps) {
   const [isOver, setIsOver] = useState(false);
-  const [language, setLanguage] = useState("jsx");
-  const [fontSize, setFontSize] = useState("text-base");
+  const [language, setLanguage] = useState(draftLang ? draftLang : "jsx");
+  const [fontSize, setFontSize] = useState(
+    draftFontSize ? draftFontSize : "text-base"
+  );
 
   const onOverArea = () => {
     setIsOver(true);
