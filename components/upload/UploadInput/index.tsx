@@ -81,14 +81,16 @@ export default function UploadInput({
             <UploadTagValue
               key={idx}
               value={item}
-              onClick={e => deleteContentTags!(e, name, idx)}></UploadTagValue>
+              onClick={(e) => deleteContentTags!(e, name, idx)}
+            ></UploadTagValue>
           ))}
         {userArr &&
           userArr.map((item, idx) => (
             <UploadTagValue
               key={idx}
               value={item.name}
-              onClick={e => deleteContentTags!(e, name, idx)}></UploadTagValue>
+              onClick={(e) => deleteContentTags!(e, name, idx)}
+            ></UploadTagValue>
           ))}
         <input
           autoComplete="off"
@@ -103,17 +105,19 @@ export default function UploadInput({
       </div>
       {userData && isOver && (
         <div className="absolute w-full border bg-white p-2 shadow-md ">
-          {userData.map(item => (
+          {userData.map((item) => (
             <div
-              onClick={e => onUserClick!(e, item)}
+              onClick={(e) => onUserClick!(e, item)}
               className="flex cursor-pointer items-center py-1 px-2 transition-colors hover:bg-blue-600 hover:text-white"
-              key={item.id}>
+              key={item.id}
+            >
               <div className="relative h-10 w-10">
                 <Image
                   src={makeImageURL(item.avatar!, 'smAvatar')}
                   layout="fill"
                   className="rounded-full"
-                  alt="avater"></Image>
+                  alt="avater"
+                ></Image>
               </div>
               <span className="text-gray-80 ml-2 font-semibold">
                 {item.name}

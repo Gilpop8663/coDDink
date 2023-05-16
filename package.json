@@ -7,7 +7,9 @@
     "build": "rimraf public/robots.txt public/sitemap*.xml & next build",
     "start": "next start",
     "lint": "next lint",
-    "postbuild": "next-sitemap --config sitemap.config.js"
+    "postbuild": "next-sitemap --config sitemap.config.js",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@greatsumini/react-facebook-login": "^3.2.1",
@@ -32,6 +34,13 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@storybook/addon-essentials": "^7.0.12",
+    "@storybook/addon-interactions": "^7.0.12",
+    "@storybook/addon-links": "^7.0.12",
+    "@storybook/blocks": "^7.0.12",
+    "@storybook/nextjs": "^7.0.12",
+    "@storybook/react": "^7.0.12",
+    "@storybook/testing-library": "^0.0.14-next.2",
     "@types/bcrypt": "^5.0.0",
     "@types/node": "18.7.18",
     "@types/react": "18.0.20",
@@ -40,10 +49,12 @@
     "autoprefixer": "^10.4.12",
     "eslint": "8.23.1",
     "eslint-config-next": "12.3.1",
+    "eslint-plugin-storybook": "^0.6.12",
     "postcss": "^8.4.16",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.1.13",
     "prisma": "^4.3.1",
+    "storybook": "^7.0.12",
     "tailwindcss": "^3.1.8",
     "typescript": "4.8.3"
   }
