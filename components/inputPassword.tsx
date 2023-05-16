@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react";
-import { UseFormRegisterReturn } from "react-hook-form";
+import React, { useRef, useState } from 'react';
+import { UseFormRegisterReturn } from 'react-hook-form';
 
 interface InputProps {
   label: string;
@@ -20,7 +20,7 @@ export default function InputPassword({
 }: InputProps) {
   const [isBlind, setIsBlind] = useState(true);
   const onIconClick = () => {
-    setIsBlind((prev) => !prev);
+    setIsBlind(prev => !prev);
   };
   return (
     <div className="mt-4">
@@ -33,7 +33,7 @@ export default function InputPassword({
           {...register}
           required={required}
           placeholder={placeholder}
-          type={isBlind == true ? "password" : "text"}
+          type={isBlind == true ? 'password' : 'text'}
           className="w-full border-b-2 py-2 transition-colors hover:border-black/50 focus:border-blue-500 focus:outline-none"
         />
         {isBlind == false ? (
@@ -44,8 +44,7 @@ export default function InputPassword({
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            strokeWidth={2}
-          >
+            strokeWidth={2}>
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -65,8 +64,7 @@ export default function InputPassword({
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            strokeWidth={2}
-          >
+            strokeWidth={2}>
             <path
               strokeLinecap="round"
               strokeLinejoin="round"

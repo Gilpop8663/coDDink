@@ -1,8 +1,8 @@
-import React, { ChangeEvent } from "react";
-import { UseFormRegisterReturn } from "react-hook-form";
+import React, { ChangeEvent } from 'react';
+import { UseFormRegisterReturn } from 'react-hook-form';
 
 interface UploadProps {
-  kind?: "default" | "image" | "miniImage";
+  kind?: 'default' | 'image' | 'miniImage';
   label?: string;
   children?: React.ReactNode;
   onChange?: (event: ChangeEvent<HTMLInputElement>, idx?: number) => void;
@@ -12,7 +12,7 @@ interface UploadProps {
 }
 
 export default function SubUploadButton({
-  kind = "default",
+  kind = 'default',
   label,
   children,
   onChange,
@@ -22,20 +22,18 @@ export default function SubUploadButton({
 }: UploadProps) {
   return (
     <>
-      {kind === "default" && (
+      {kind === 'default' && (
         <div
           className="col-span-1 flex cursor-pointer flex-col items-center justify-center bg-white py-4 transition-colors hover:bg-gray-100"
-          onClick={onClick}
-        >
+          onClick={onClick}>
           {children}
           <span className="mt-2 text-xs">{label}</span>
         </div>
       )}
-      {kind === "image" && (
+      {kind === 'image' && (
         <label
           htmlFor="attatchment"
-          className="col-span-1 flex cursor-pointer flex-col items-center justify-center bg-white py-4 transition-colors hover:bg-gray-100"
-        >
+          className="col-span-1 flex cursor-pointer flex-col items-center justify-center bg-white py-4 transition-colors hover:bg-gray-100">
           {children}
           <span className="mt-2 text-xs">{label}</span>
           <input
@@ -49,20 +47,18 @@ export default function SubUploadButton({
           />
         </label>
       )}
-      {kind === "miniImage" && (
+      {kind === 'miniImage' && (
         <label
           htmlFor="attatchment"
           className="cursor-pointer rounded-md p-1 hover:bg-gray-400"
-          title="이미지"
-        >
+          title="이미지">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            strokeWidth={2}
-          >
+            strokeWidth={2}>
             <path
               strokeLinecap="round"
               strokeLinejoin="round"

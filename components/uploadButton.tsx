@@ -1,9 +1,9 @@
-import Image from "next/image";
-import React, { ChangeEvent } from "react";
-import { UseFormRegisterReturn } from "react-hook-form";
+import React, { ChangeEvent } from 'react';
+import { UseFormRegisterReturn } from 'react-hook-form';
+import Image from 'next/image';
 
 interface UploadProps {
-  kind: "text" | "image" | "code" | "profile" | "thumbnail" | "changeThumb";
+  kind: 'text' | 'image' | 'code' | 'profile' | 'thumbnail' | 'changeThumb';
   label?: string;
   children?: React.ReactNode;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -23,11 +23,10 @@ export default function UploadButton({
 }: UploadProps) {
   return (
     <div className="flex flex-col items-center">
-      {kind === "image" && (
+      {kind === 'image' && (
         <label
           htmlFor="attatchment"
-          className="flex h-24 w-24 cursor-pointer items-center justify-center rounded-full bg-blue-100 text-blue-600 transition-colors duration-200 hover:bg-blue-600 hover:text-white"
-        >
+          className="flex h-24 w-24 cursor-pointer items-center justify-center rounded-full bg-blue-100 text-blue-600 transition-colors duration-200 hover:bg-blue-600 hover:text-white">
           {children}
           <input
             multiple
@@ -41,7 +40,7 @@ export default function UploadButton({
         </label>
       )}
 
-      {kind === "profile" && (
+      {kind === 'profile' && (
         <label htmlFor="picture" className="mt-4 flex flex-col border-r pr-8">
           {previewImage ? (
             <div className="relative h-24 w-24">
@@ -62,8 +61,7 @@ export default function UploadButton({
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              strokeWidth={2}
-            >
+              strokeWidth={2}>
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -82,11 +80,10 @@ export default function UploadButton({
           />
         </label>
       )}
-      {kind === "thumbnail" && (
+      {kind === 'thumbnail' && (
         <label
           htmlFor="picture"
-          className="flex w-full cursor-pointer justify-center rounded-full bg-blue-600 py-1 px-2 font-semibold text-white transition-colors hover:bg-blue-700"
-        >
+          className="flex w-full cursor-pointer justify-center rounded-full bg-blue-600 py-1 px-2 font-semibold text-white transition-colors hover:bg-blue-700">
           <div className="text-sm">이미지 업로드</div>
           {children}
           <input
@@ -99,7 +96,7 @@ export default function UploadButton({
           />
         </label>
       )}
-      {kind === "changeThumb" && (
+      {kind === 'changeThumb' && (
         <label htmlFor="picture" className="">
           <div className="mt-2 flex cursor-pointer items-center text-blue-600">
             <svg
@@ -108,8 +105,7 @@ export default function UploadButton({
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              strokeWidth={2}
-            >
+              strokeWidth={2}>
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -129,19 +125,17 @@ export default function UploadButton({
           />
         </label>
       )}
-      {kind === "text" && (
+      {kind === 'text' && (
         <div
           onClick={onClick}
-          className="flex h-24 w-24 cursor-pointer items-center justify-center rounded-full bg-blue-100 text-blue-600 transition-colors duration-200 hover:bg-blue-600 hover:text-white"
-        >
+          className="flex h-24 w-24 cursor-pointer items-center justify-center rounded-full bg-blue-100 text-blue-600 transition-colors duration-200 hover:bg-blue-600 hover:text-white">
           {children}
         </div>
       )}
-      {kind === "code" && (
+      {kind === 'code' && (
         <div
           onClick={onClick}
-          className="flex h-24 w-24 cursor-pointer items-center justify-center rounded-full bg-blue-100 text-blue-600 transition-colors duration-200 hover:bg-blue-600 hover:text-white"
-        >
+          className="flex h-24 w-24 cursor-pointer items-center justify-center rounded-full bg-blue-100 text-blue-600 transition-colors duration-200 hover:bg-blue-600 hover:text-white">
           {children}
         </div>
       )}

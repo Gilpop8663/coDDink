@@ -1,11 +1,11 @@
-import SubUploadButton from "@components/subUploadButton";
-import UploadButton from "@components/uploadButton";
-import { cls, makeImageURL } from "@libs/client/utils";
-import Image from "next/image";
-import { ContentProps } from "pages/portfolio/editor";
-import React, { useState } from "react";
-import EditMenu from "./editMenu";
-import MiniUploadMenu from "./miniUploadMenu";
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { ContentProps } from 'pages/portfolio/editor';
+import { cls, makeImageURL } from '@libs/client/utils';
+import SubUploadButton from '@components/subUploadButton';
+import UploadButton from '@components/uploadButton';
+import EditMenu from './editMenu';
+import MiniUploadMenu from './miniUploadMenu';
 
 interface PreviewImageProps {
   src: ContentProps;
@@ -30,7 +30,7 @@ export default function PreviewImage({
   const [isEditOver, setIsEditOver] = useState(false);
 
   const onEditHover = () => {
-    setIsEditOver((prev) => !prev);
+    setIsEditOver(prev => !prev);
   };
   return (
     <div className="h-full">
@@ -51,18 +51,16 @@ export default function PreviewImage({
         />
         {src.imageSrc ? (
           <Image
-            src={makeImageURL(src.imageSrc, "public")}
+            src={makeImageURL(src.imageSrc, 'public')}
             layout="fill"
             className="object-contain"
-            alt="image"
-          ></Image>
+            alt="image"></Image>
         ) : (
           <Image
             src={src.description}
             layout="fill"
             className="object-contain"
-            alt="image"
-          ></Image>
+            alt="image"></Image>
         )}
       </div>
     </div>

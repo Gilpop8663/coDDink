@@ -1,5 +1,3 @@
-import { cls } from "@libs/client/utils";
-import { ContentProps } from "pages/portfolio/editor";
 import {
   ChangeEvent,
   ChangeEventHandler,
@@ -8,8 +6,10 @@ import {
   useEffect,
   useRef,
   useState,
-} from "react";
-import MiniUploadMenu from "./miniUploadMenu";
+} from 'react';
+import { ContentProps } from 'pages/portfolio/editor';
+import { cls } from '@libs/client/utils';
+import MiniUploadMenu from './miniUploadMenu';
 
 interface PreivewTextProps {
   label?: string;
@@ -49,10 +49,10 @@ export default function PreivewText({
   // const [currentValue, setCurrentValue] = useState(textValue);
   const [isWrite, setIsWrite] = useState(true);
   const [fontSize, setFontSize] = useState(
-    draftFontSize ? draftFontSize : "text-base"
+    draftFontSize ? draftFontSize : 'text-base'
   );
   const [alignText, setAlignText] = useState(
-    draftAlign ? draftAlign : "text-left"
+    draftAlign ? draftAlign : 'text-left'
   );
   const [isOver, setIsOver] = useState(false);
 
@@ -71,7 +71,7 @@ export default function PreivewText({
   const onOptionChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setFontSize(e.target.value);
 
-    setContent((prev) => {
+    setContent(prev => {
       const curContent = { ...prev[idx], fontSize: e.target.value };
 
       let newContent;
@@ -92,10 +92,10 @@ export default function PreivewText({
 
   const onAlignText = (kind: number) => {
     const result =
-      kind === 1 ? "text-left" : kind === 2 ? "text-center" : "text-right";
+      kind === 1 ? 'text-left' : kind === 2 ? 'text-center' : 'text-right';
     setAlignText(result);
 
-    setContent((prev) => {
+    setContent(prev => {
       const curContent = { ...prev[idx], alignText: result };
 
       let newContent;
@@ -116,17 +116,17 @@ export default function PreivewText({
 
   useEffect(() => {
     if (textareaRef.current === null) return;
-    textareaRef.current.style.height = "0px";
+    textareaRef.current.style.height = '0px';
     const scrollHeight = textareaRef.current.scrollHeight;
-    textareaRef.current.style.height = scrollHeight + "px";
+    textareaRef.current.style.height = scrollHeight + 'px';
   }, [textValue, fontSize]);
 
   useEffect(() => {
     if (textareaRef.current === null) return;
-    textareaRef.current.addEventListener("focusout", () => {
+    textareaRef.current.addEventListener('focusout', () => {
       setIsWrite(false);
     });
-    textareaRef.current.addEventListener("focusin", () => {
+    textareaRef.current.addEventListener('focusin', () => {
       setIsWrite(true);
     });
   }, []);
@@ -136,10 +136,9 @@ export default function PreivewText({
       onMouseOut={onOutArea}
       onMouseOver={onOverArea}
       className={cls(
-        !isWrite && textValue.length === 0 ? "hidden h-0" : "visible",
-        "relative"
-      )}
-    >
+        !isWrite && textValue.length === 0 ? 'hidden h-0' : 'visible',
+        'relative'
+      )}>
       {(isWrite || textValue.length > 0) && (
         <MiniUploadMenu
           onAddCodeArea={onAddCodeArea}
@@ -151,16 +150,14 @@ export default function PreivewText({
       {isOver && (
         <div
           onMouseOver={onWrite}
-          className="absolute -top-4 flex items-center space-x-4 rounded-md bg-gray-700  px-4 py-2 text-white"
-        >
+          className="absolute -top-4 flex items-center space-x-4 rounded-md bg-gray-700  px-4 py-2 text-white">
           <select
             title="서식 지정 스타일"
             className="cursor-pointer  rounded-sm bg-gray-700 text-white ring-blue-600 hover:ring-2 focus:bg-gray-700"
             name="fontOption"
             id=""
             value={fontSize}
-            onChange={onOptionChange}
-          >
+            onChange={onOptionChange}>
             <option className="bg-gray-700 " value="text-2xl">
               헤더
             </option>
@@ -173,16 +170,14 @@ export default function PreivewText({
           <div
             title="왼쪽 정렬"
             onClick={() => onAlignText(1)}
-            className=" cursor-pointer rounded-md p-1 hover:bg-gray-400"
-          >
+            className=" cursor-pointer rounded-md p-1 hover:bg-gray-400">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-4 w-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              strokeWidth={2}
-            >
+              strokeWidth={2}>
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -193,16 +188,14 @@ export default function PreivewText({
           <div
             title="중앙"
             onClick={() => onAlignText(2)}
-            className="cursor-pointer rounded-md p-1 hover:bg-gray-400"
-          >
+            className="cursor-pointer rounded-md p-1 hover:bg-gray-400">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-4 w-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              strokeWidth={2}
-            >
+              strokeWidth={2}>
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -213,16 +206,14 @@ export default function PreivewText({
           <div
             title="오른쪽 정렬"
             onClick={() => onAlignText(3)}
-            className="cursor-pointer rounded-md p-1 hover:bg-gray-400"
-          >
+            className="cursor-pointer rounded-md p-1 hover:bg-gray-400">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-4 w-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              strokeWidth={2}
-            >
+              strokeWidth={2}>
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -233,16 +224,14 @@ export default function PreivewText({
           <div
             className="cursor-pointer"
             title="삭제하기"
-            onClick={() => onClearClick(idx)}
-          >
+            onClick={() => onClearClick(idx)}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="h-6 w-6"
-            >
+              className="h-6 w-6">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -252,7 +241,7 @@ export default function PreivewText({
           </div>
         </div>
       )}
-      <div className={cls("flex h-fit justify-center ")}>
+      <div className={cls('flex h-fit justify-center ')}>
         <label htmlFor={name}>{label}</label>
         {/* <textarea
           ref={textareaRef}
@@ -274,14 +263,13 @@ export default function PreivewText({
           value={textValue}
           onChange={onChange}
           autoFocus
-          placeholder={"여기에 텍스트 입력..."}
+          placeholder={'여기에 텍스트 입력...'}
           className={cls(
             fontSize && `${fontSize} placeholder:${fontSize}`,
             alignText && `${alignText}`,
-            "h-fit w-4/5 resize-none justify-center whitespace-pre-wrap  border-blue-600 scrollbar-hide placeholder:text-xl hover:border focus:border focus:outline-none"
+            'h-fit w-4/5 resize-none justify-center whitespace-pre-wrap  border-blue-600 scrollbar-hide placeholder:text-xl hover:border focus:border focus:outline-none'
           )}
-          {...rest}
-        ></textarea>
+          {...rest}></textarea>
       </div>
     </div>
   );

@@ -1,9 +1,9 @@
+import React from 'react';
 import {
   CoddinkProjectCategory,
   CoddinkProjectTag,
   CoddinkProjectTool,
-} from "@prisma/client";
-import React from "react";
+} from '@prisma/client';
 
 interface SideInfoProps {
   label: string;
@@ -18,8 +18,7 @@ export default function PreviewSideInfos({ label, data }: SideInfoProps) {
         {data.map((item, idx) => (
           <div
             className="flex items-center justify-center rounded-md bg-black/80 p-2 font-semibold text-white"
-            key={idx}
-          >
+            key={idx}>
             {item}
           </div>
         ))}

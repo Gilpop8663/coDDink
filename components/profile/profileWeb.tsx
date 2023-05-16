@@ -1,9 +1,9 @@
-import NextButton from "@components/upload/nextButton";
-import { cls } from "@libs/client/utils";
-import { FormProps } from "pages/profile/[id]/editor";
-import React, { useEffect, useState } from "react";
-import { UseFormRegisterReturn, UseFormSetValue } from "react-hook-form";
-import { KeyedMutator, mutate, SWRConfig } from "swr";
+import React, { useEffect, useState } from 'react';
+import { UseFormRegisterReturn, UseFormSetValue } from 'react-hook-form';
+import { KeyedMutator, mutate, SWRConfig } from 'swr';
+import { FormProps } from 'pages/profile/[id]/editor';
+import { cls } from '@libs/client/utils';
+import NextButton from '@components/upload/nextButton';
 
 interface ProfileWebProps {
   name: string;
@@ -25,26 +25,26 @@ export default function ProfileWeb({
   const [isOpen, setIsOpen] = useState(false);
   const [snsId, setSnsId] = useState<string | undefined | null>(null);
   const onClick = () => {
-    setIsOpen((prev) => !prev);
+    setIsOpen(prev => !prev);
   };
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    if (typeof label === typeof "string" && label !== "") {
+    if (typeof label === typeof 'string' && label !== '') {
       setIsVisible(true);
       setSnsId(label);
     }
   }, [label]);
 
   const onSubmitClick = () => {
-    setIsOpen((prev) => !prev);
+    setIsOpen(prev => !prev);
     setIsVisible(true);
     setSnsId(watchData);
   };
 
   const onResetClick = () => {
     setIsVisible(false);
-    setValue("Facebook", "");
+    setValue('Facebook', '');
   };
   return (
     <div className="flex items-center justify-between border-b">
@@ -55,8 +55,7 @@ export default function ProfileWeb({
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
-          strokeWidth={2}
-        >
+          strokeWidth={2}>
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -67,8 +66,7 @@ export default function ProfileWeb({
           xmlns="http://www.w3.org/2000/svg"
           width="24"
           height="24"
-          viewBox="0 0 24 24"
-        >
+          viewBox="0 0 24 24">
           <path d={logo} />
         </svg>
         <span className="ml-2 text-sm font-semibold text-gray-800">{name}</span>
@@ -83,8 +81,7 @@ export default function ProfileWeb({
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            strokeWidth={2}
-          >
+            strokeWidth={2}>
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -100,13 +97,11 @@ export default function ProfileWeb({
             {...register}
             className="rounded-sm border border-gray-400 px-2 py-1 text-sm placeholder:text-sm hover:border-gray-800 focus:border-blue-600 focus:outline-none"
             type="text"
-            placeholder="사용자 이름 입력"
-          ></input>
+            placeholder="사용자 이름 입력"></input>
           <button
             type="submit"
             onClick={onSubmitClick}
-            className="cursor-pointer text-xs text-blue-600"
-          >
+            className="cursor-pointer text-xs text-blue-600">
             제출
           </button>
           <svg
@@ -116,8 +111,7 @@ export default function ProfileWeb({
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            strokeWidth={2}
-          >
+            strokeWidth={2}>
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -126,13 +120,12 @@ export default function ProfileWeb({
           </svg>
         </div>
       ) : (
-        <div className={cls("w-14", isVisible ? "hidden" : "")}>
+        <div className={cls('w-14', isVisible ? 'hidden' : '')}>
           <NextButton
             onClick={onClick}
             size="xs"
             color="blueBtn"
-            label="링크"
-          ></NextButton>
+            label="링크"></NextButton>
         </div>
       )}
     </div>

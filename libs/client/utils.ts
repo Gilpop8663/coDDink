@@ -1,17 +1,17 @@
-import { CFImageResult } from "pages/portfolio/editor";
+import { CFImageResult } from 'pages/portfolio/editor';
 
 export function cls(...classnames: string[]) {
-  return classnames.join(" ");
+  return classnames.join(' ');
 }
 
 interface makeImageURLProps {
   id: string | null;
-  variants?: "public" | "bigAvatar" | "smAvatar";
+  variants?: 'public' | 'bigAvatar' | 'smAvatar';
 }
 
 export function makeImageURL(
   id: string,
-  variants?: "public" | "bigAvatar" | "smAvatar" | "banner"
+  variants?: 'public' | 'bigAvatar' | 'smAvatar' | 'banner'
 ) {
   return `https://imagedelivery.net/mPhC7i6OFJEhfh-kdGX8yQ/${id}/${variants}`;
 }
@@ -33,7 +33,7 @@ export function timeForToday(time: Date) {
   );
 
   if (betweenTime < 1) {
-    return "방금";
+    return '방금';
   } else if (betweenTime < 60) {
     return `${betweenTime}분 전`;
   }
@@ -41,7 +41,7 @@ export function timeForToday(time: Date) {
   const betweenTimeHour = Math.floor(betweenTime / 60);
 
   if (betweenTimeHour === 1) {
-    return "한 시간 전";
+    return '한 시간 전';
   }
   if (betweenTimeHour < 24) {
     return `${betweenTimeHour}시간 전`;
@@ -50,7 +50,7 @@ export function timeForToday(time: Date) {
   const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
 
   if (betweenTimeDay === 1) {
-    return "하루 전";
+    return '하루 전';
   }
 
   if (betweenTimeDay < 30) {
@@ -60,7 +60,7 @@ export function timeForToday(time: Date) {
   const betweenTimeMonth = Math.floor(betweenTime / 60 / 24 / 30);
 
   if (betweenTimeMonth === 1) {
-    return "한달 전";
+    return '한달 전';
   }
 
   if (betweenTimeMonth < 12) {
@@ -70,23 +70,23 @@ export function timeForToday(time: Date) {
   const betweenTimeYear = Math.floor(betweenTime / 60 / 24 / 30 / 12);
 
   if (betweenTimeYear === 1) {
-    return "일 년 전";
+    return '일 년 전';
   }
 
   return `${betweenTimeYear}년 전`;
 }
 
 export const cfImageUpload = async (file: File) => {
-  const { uploadURL } = await (await fetch("/api/files")).json();
+  const { uploadURL } = await (await fetch('/api/files')).json();
 
   const form = new FormData();
-  form.append("file", file);
+  form.append('file', file);
 
   const {
     result: { id },
   }: CFImageResult = await (
     await fetch(uploadURL, {
-      method: "POST",
+      method: 'POST',
       body: form,
     })
   ).json();
@@ -95,15 +95,15 @@ export const cfImageUpload = async (file: File) => {
 };
 
 export function parseJwt(token: string) {
-  var base64Url = token.split(".")[1];
-  var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  var base64Url = token.split('.')[1];
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
   var jsonPayload = decodeURIComponent(
     atob(base64)
-      .split("")
+      .split('')
       .map(function (c) {
-        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
       })
-      .join("")
+      .join('')
   );
 
   return JSON.parse(jsonPayload);

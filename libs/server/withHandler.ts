@@ -1,11 +1,11 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from 'next';
 
 export interface ResponseType {
   ok: boolean;
   [key: string]: any;
 }
 
-type method = "GET" | "POST" | "DELETE";
+type method = 'GET' | 'POST' | 'DELETE';
 
 interface ConfigType {
   methods: method[];
@@ -29,7 +29,7 @@ export default function withHandler({
     if (isPrivate && req.session && !req.session.user) {
       return res.status(401).json({
         ok: false,
-        error: "로그인을 해야 합니다",
+        error: '로그인을 해야 합니다',
       });
     }
     try {

@@ -1,8 +1,8 @@
-import { cls, makeImageURL } from "@libs/client/utils";
-import Image from "next/image";
-import Link from "next/link";
-import { ProjectWithCountWithUser } from "pages";
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { ProjectWithCountWithUser } from 'pages';
+import { cls, makeImageURL } from '@libs/client/utils';
 
 interface RelatedProps {
   data: ProjectWithCountWithUser;
@@ -12,7 +12,7 @@ interface RelatedProps {
 export default function ClickedRelatedItem({ data, onClick }: RelatedProps) {
   const [isContentTouch, setIsContentTouch] = useState(false);
   const onContentTouch = () => {
-    setIsContentTouch((prev) => !prev);
+    setIsContentTouch(prev => !prev);
   };
 
   return (
@@ -20,15 +20,13 @@ export default function ClickedRelatedItem({ data, onClick }: RelatedProps) {
       className="relative col-span-1 w-full cursor-pointer "
       onClick={onClick}
       onMouseOver={onContentTouch}
-      onMouseOut={onContentTouch}
-    >
+      onMouseOut={onContentTouch}>
       <div className="relative h-64">
         <Image
           alt="thumbnail"
-          src={makeImageURL(data.thumbnail, "public")}
+          src={makeImageURL(data.thumbnail, 'public')}
           layout="fill"
-          className="rounded-md object-cover"
-        ></Image>
+          className="rounded-md object-cover"></Image>
       </div>
       {isContentTouch && (
         <div className="absolute bottom-0 flex h-28 w-full items-end rounded-md bg-gradient-to-t from-black/80 to-gray-600/0 px-4">
@@ -53,8 +51,7 @@ export default function ClickedRelatedItem({ data, onClick }: RelatedProps) {
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-4 w-4 text-white"
                     viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
+                    fill="currentColor">
                     <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
                   </svg>
                   <span className="ml-1 text-xs font-semibold text-white">
@@ -66,8 +63,7 @@ export default function ClickedRelatedItem({ data, onClick }: RelatedProps) {
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-4 w-4 text-white"
                     viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
+                    fill="currentColor">
                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
                     <path
                       fillRule="evenodd"

@@ -1,7 +1,7 @@
 // pages/sitemap.xml.tsx
-import { GetServerSidePropsContext } from "next";
-import { getServerSideSitemap } from "next-sitemap"; //(1)
-import client from "@libs/server/client";
+import { GetServerSidePropsContext } from 'next';
+import { getServerSideSitemap } from 'next-sitemap'; //(1)
+import client from '@libs/server/client';
 
 //(2)
 
@@ -27,47 +27,47 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const defaultFields = [
     {
       loc: `${URL}`,
-      changefreq: "daily",
-      priority: "0.8",
+      changefreq: 'daily',
+      priority: '0.8',
       lastmod,
     },
     {
       loc: `${URL}policies/conditions`,
-      changefreq: "daily",
-      priority: "0.2",
+      changefreq: 'daily',
+      priority: '0.2',
       lastmod,
     },
     {
       loc: `${URL}policies/privacy`,
-      changefreq: "daily",
-      priority: "0.2",
+      changefreq: 'daily',
+      priority: '0.2',
       lastmod,
     },
     {
       loc: `${URL}user/login`,
-      changefreq: "daily",
-      priority: "0.8",
+      changefreq: 'daily',
+      priority: '0.8',
       lastmod,
     },
     {
       loc: `${URL}user/create`,
-      changefreq: "daily",
-      priority: "0.8",
+      changefreq: 'daily',
+      priority: '0.8',
       lastmod,
     },
   ];
 
   const projectFields = projects.map((project: any) => ({
     loc: `${URL}gallery/${project.id}`,
-    changefreq: "daily",
-    priority: "1.0",
+    changefreq: 'daily',
+    priority: '1.0',
     lastmod,
   }));
 
   const userFields = users.map((user: any) => ({
     loc: `${URL}profile/${user.id}`,
-    changefreq: "daily",
-    priority: "0.9",
+    changefreq: 'daily',
+    priority: '0.9',
     lastmod,
   }));
 

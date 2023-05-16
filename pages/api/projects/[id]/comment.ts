@@ -1,10 +1,10 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import withHandler from "@libs/server/withHandler";
-import client from "@libs/server/client";
-import { withApiSession } from "@libs/server/withSession";
+import { NextApiRequest, NextApiResponse } from 'next';
+import client from '@libs/server/client';
+import withHandler from '@libs/server/withHandler';
+import { withApiSession } from '@libs/server/withSession';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === "GET") {
+  if (req.method === 'GET') {
     const {
       query: { id, commentIdx = 1 },
     } = req;
@@ -14,7 +14,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         projectId: Number(id),
       },
       take: +commentIdx * 10,
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
       include: {
         user: {
           select: {
@@ -32,7 +32,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     });
   }
 
-  if (req.method === "POST") {
+  if (req.method === 'POST') {
     const {
       body: { comment: value },
       query: { id },
@@ -62,5 +62,5 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 }
 
 export default withApiSession(
-  withHandler({ methods: ["GET", "POST"], handler, isPrivate: false })
+  withHandler({ methods: ['GET', 'POST'], handler, isPrivate: false })
 );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 interface UseMutationState<T> {
   loading: boolean;
@@ -18,18 +18,18 @@ export default function useMutation<T = any>(
   });
 
   function mutation(data: any) {
-    setState((prev) => ({ ...prev, loading: true }));
+    setState(prev => ({ ...prev, loading: true }));
     fetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     })
-      .then((response) => response.json().catch(() => {}))
-      .then((data) => setState((prev) => ({ ...prev, data })))
-      .catch((error) => setState((prev) => ({ ...prev, error })))
-      .finally(() => setState((prev) => ({ ...prev, loading: false })));
+      .then(response => response.json().catch(() => {}))
+      .then(data => setState(prev => ({ ...prev, data })))
+      .catch(error => setState(prev => ({ ...prev, error })))
+      .finally(() => setState(prev => ({ ...prev, loading: false })));
   }
   return [mutation, { ...state }];
 }

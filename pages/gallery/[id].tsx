@@ -1,15 +1,15 @@
-import Layout from "@components/layout";
-import DeleteModal from "@components/profile/deleteModal";
-import ClickedProject from "@components/project/clickedProject";
-import useMutation from "@libs/client/useMutation";
 import type {
   NextApiHandler,
   NextApiRequest,
   NextApiResponse,
   NextPage,
   NextPageContext,
-} from "next";
-import { useRouter } from "next/router";
+} from 'next';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/router';
+import { CoddinkUser } from '@prisma/client';
+import useSWR, { SWRConfig, unstable_serialize } from 'swr';
 import {
   CommentProps,
   CommentResponse,
@@ -18,14 +18,14 @@ import {
   GETCommentResponse,
   ProjectWithComment,
   ProjectWithCountWithUser,
-} from "pages";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import client from "@libs/server/client";
-import useSWR, { SWRConfig, unstable_serialize } from "swr";
-import { withApiSession } from "@libs/server/withSession";
-import { withSsrSession } from "@libs/server/withSsrSession";
-import { CoddinkUser } from "@prisma/client";
+} from 'pages';
+import useMutation from '@libs/client/useMutation';
+import client from '@libs/server/client';
+import { withApiSession } from '@libs/server/withSession';
+import { withSsrSession } from '@libs/server/withSsrSession';
+import Layout from '@components/layout';
+import DeleteModal from '@components/profile/deleteModal';
+import ClickedProject from '@components/project/clickedProject';
 
 const Gallery: NextPage = () => {
   const router = useRouter();
@@ -36,7 +36,7 @@ const Gallery: NextPage = () => {
     formState: { errors },
   } = useForm<CommentProps>();
 
-  const { data, mutate: userMutate } = useSWR("/api/users/me");
+  const { data, mutate: userMutate } = useSWR('/api/users/me');
   const [commentPage, setCommentPage] = useState(1);
   const { data: detailData, mutate } = useSWR<DetailProjectResponse | null>(
     router.query.id
@@ -44,7 +44,7 @@ const Gallery: NextPage = () => {
       : null
   );
 
-  const [isDelete, setIsDelete] = useState<null | "comment" | "project">(null);
+  const [isDelete, setIsDelete] = useState<null | 'comment' | 'project'>(null);
   const [deleteCommentTarget, setDeleteCommentTarget] = useState<number | null>(
     null
   );
@@ -64,10 +64,10 @@ const Gallery: NextPage = () => {
   const [commentArr, setCommentArr] = useState<CommentWithUser[]>([]);
 
   const onMoreCommentClick = () => {
-    setCommentPage((prev) => prev + 1);
+    setCommentPage(prev => prev + 1);
   };
   const [sendFollow, { data: followData, loading: followLoading }] =
-    useMutation<CommentResponse>("/api/users/follow");
+    useMutation<CommentResponse>('/api/users/follow');
 
   const onFollowClick = (id: number) => {
     if (followLoading) return;
@@ -126,11 +126,11 @@ const Gallery: NextPage = () => {
 
   const onDeleteModalClick = (
     id: number | null,
-    kind: null | "comment" | "project"
+    kind: null | 'comment' | 'project'
   ) => {
     setIsDelete(kind);
-    if (kind === "project") {
-    } else if (kind === "comment") {
+    if (kind === 'project') {
+    } else if (kind === 'comment') {
       setDeleteCommentTarget(id);
     }
   };
@@ -187,15 +187,15 @@ const Gallery: NextPage = () => {
     <Layout
       isLogin={data && data.ok}
       profile={data?.profile}
-      userId={data?.profile?.id}
-    >
-      {isDelete === "comment" && (
+      userId={data?.profile?.id}>
+      {isDelete === 'comment' && (
         <DeleteModal
           title="댓글 삭제"
           description="이 댓글을 삭제하시겠습니까?"
           onDeleteModalClick={() => onDeleteModalClick(null, null)}
-          onProjectDeleteClick={() => onCommentDeleteClick(deleteCommentTarget)}
-        ></DeleteModal>
+          onProjectDeleteClick={() =>
+            onCommentDeleteClick(deleteCommentTarget)
+          }></DeleteModal>
       )}
       <div className="bg-zinc-50">
         {detailData?.ok && detailData.project && (
@@ -266,13 +266,12 @@ const Page: NextPage<NextPageProps> = ({
             relatedProjects,
             isLiked,
           },
-          "/api/users/me": {
+          '/api/users/me': {
             ok: true,
             profile,
           },
         },
-      }}
-    >
+      }}>
       <Gallery />
     </SWRConfig>
   );
@@ -285,10 +284,10 @@ interface SsrProps {
 export const getServerSideProps = withSsrSession(async function ({
   req,
 }: SsrProps) {
-  if (req.url?.slice(0, 5) !== "/gall") return { props: {} };
-  const id = req.url?.includes("/gallery/")
-    ? req.url.split("/gallery/")[1]
-    : "1";
+  if (req.url?.slice(0, 5) !== '/gall') return { props: {} };
+  const id = req.url?.includes('/gallery/')
+    ? req.url.split('/gallery/')[1]
+    : '1';
   const user = req?.session.user;
 
   let profile;
@@ -319,7 +318,7 @@ export const getServerSideProps = withSsrSession(async function ({
       },
       owner: {
         orderBy: {
-          ownerIdx: "asc",
+          ownerIdx: 'asc',
         },
         select: {
           name: true,
@@ -343,7 +342,7 @@ export const getServerSideProps = withSsrSession(async function ({
       },
       contents: {
         orderBy: {
-          contentIdx: "asc",
+          contentIdx: 'asc',
         },
       },
       tools: true,
@@ -363,7 +362,7 @@ export const getServerSideProps = withSsrSession(async function ({
       },
     },
     orderBy: {
-      createdAt: "desc",
+      createdAt: 'desc',
     },
     take: 4,
     include: {
@@ -374,7 +373,7 @@ export const getServerSideProps = withSsrSession(async function ({
       },
       owner: {
         orderBy: {
-          ownerIdx: "asc",
+          ownerIdx: 'asc',
         },
         select: {
           name: true,

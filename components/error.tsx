@@ -1,6 +1,5 @@
-import React from "react";
-import { cls } from "@libs/client/utils";
-import { FieldError } from "react-hook-form";
+import React from 'react';
+import { cls } from '@libs/client/utils';
 
 interface ErrorMessageType {
   visible?: boolean;
@@ -12,18 +11,16 @@ function ErrorMessage({ visible = true, children }: ErrorMessageType) {
     <p
       className={cls(
         visible
-          ? "mt-4 flex items-center text-sm font-medium text-[#AE1644]"
-          : "hidden"
-      )}
-    >
+          ? 'mt-4 flex items-center text-sm font-medium text-[#AE1644]'
+          : 'hidden'
+      )}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-5 w-5"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
-        strokeWidth={2}
-      >
+        strokeWidth={2}>
         <path
           strokeLinecap="round"
           strokeLinejoin="round"

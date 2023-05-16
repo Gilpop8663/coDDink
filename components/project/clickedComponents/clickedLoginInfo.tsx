@@ -1,11 +1,11 @@
-import NextButton from "@components/upload/nextButton";
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
-import GOOGLE_LOGO from "@public/google.svg";
-import FACEBOOK_LOGO from "@public/facebook.svg";
-import APPLE_LOGO from "@public/apple.png";
-import { OwnerProps } from "pages";
+import React from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { OwnerProps } from 'pages';
+import NextButton from '@components/upload/nextButton';
+import APPLE_LOGO from '@public/apple.png';
+import FACEBOOK_LOGO from '@public/facebook.svg';
+import GOOGLE_LOGO from '@public/google.svg';
 
 interface InfoProps {
   owner: OwnerProps[];
@@ -34,8 +34,7 @@ export default function ClickedLoginInfo({ owner }: InfoProps) {
               src={GOOGLE_LOGO}
               alt="google"
               height={15}
-              width={15}
-            ></Image>
+              width={15}></Image>
           </a>
         </Link>
         <Link href="/user/login">
@@ -44,8 +43,7 @@ export default function ClickedLoginInfo({ owner }: InfoProps) {
               src={FACEBOOK_LOGO}
               alt="facebook"
               height={30}
-              width={30}
-            ></Image>
+              width={30}></Image>
           </a>
         </Link>
         {/* <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-black hover:ring-2 hover:ring-gray-300">

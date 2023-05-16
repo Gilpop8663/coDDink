@@ -1,5 +1,13 @@
-import useMutation from "@libs/client/useMutation";
-import { cls, makeImageURL } from "@libs/client/utils";
+import { useEffect, useState } from 'react';
+import {
+  DeepRequired,
+  FieldErrorsImpl,
+  useForm,
+  UseFormHandleSubmit,
+  UseFormRegister,
+} from 'react-hook-form';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 import {
   CoddinkComment,
   CoddinkFollow,
@@ -8,39 +16,31 @@ import {
   CoddinkProjectContent,
   CoddinkProjectTag,
   CoddinkProjectTool,
-} from "@prisma/client";
-import { useRouter } from "next/router";
+} from '@prisma/client';
 import {
   CommentProps,
   CommentWithUser,
   OwnerProps,
   ProjectWithCountWithUser,
-} from "pages";
-import { useEffect, useState } from "react";
-import {
-  DeepRequired,
-  FieldErrorsImpl,
-  useForm,
-  UseFormHandleSubmit,
-  UseFormRegister,
-} from "react-hook-form";
-import ClickedFooter from "./clickedComponents/clickedFooter";
-import ClickedInfo from "./clickedComponents/clickedInfo";
-import ClickedHeader from "./clickedComponents/clikcedHeader";
-import CommentInput from "./clickedComponents/commentInput";
-import OwnerTab from "./clickedComponents/ownerTab";
-import CommentMsg from "./clickedComponents/commentMsg";
-import ClickedLoginInfo from "./clickedComponents/clickedLoginInfo";
-import Image from "next/image";
-import ClickedCodeView from "./clickedComponents/clickedCodeView";
-import ClickedSideInfos from "./clickedComponents/clickedSideInfos";
-import ProjectItem from "./projectItem";
-import ClickedRelatedItem from "./clickedComponents/clickedRelatedItem";
-import HeadMeta from "@components/headMeta";
-import comment from "pages/api/projects/[id]/comment";
+} from 'pages';
+import comment from 'pages/api/projects/[id]/comment';
+import useMutation from '@libs/client/useMutation';
+import { cls, makeImageURL } from '@libs/client/utils';
+import HeadMeta from '@components/headMeta';
+import ClickedCodeView from './clickedComponents/clickedCodeView';
+import ClickedFooter from './clickedComponents/clickedFooter';
+import ClickedInfo from './clickedComponents/clickedInfo';
+import ClickedLoginInfo from './clickedComponents/clickedLoginInfo';
+import ClickedRelatedItem from './clickedComponents/clickedRelatedItem';
+import ClickedSideInfos from './clickedComponents/clickedSideInfos';
+import ClickedHeader from './clickedComponents/clikcedHeader';
+import CommentInput from './clickedComponents/commentInput';
+import CommentMsg from './clickedComponents/commentMsg';
+import OwnerTab from './clickedComponents/ownerTab';
+import ProjectItem from './projectItem';
 
 interface ItemProps {
-  kind: "home" | "gallery";
+  kind: 'home' | 'gallery';
   title: string;
   id: number;
   likes: number;
@@ -74,7 +74,7 @@ interface ItemProps {
   projectURL: string;
   onDeleteModalClick: (
     id: number | null,
-    kind: null | "project" | "comment"
+    kind: null | 'project' | 'comment'
   ) => void;
 }
 
@@ -129,28 +129,24 @@ export default function ClickedProject({
   return (
     <div
       className={cls(
-        kind === "home" ? "absolute top-0 right-0 mx-auto lg:left-0" : "",
-        "flex w-full justify-center lg:w-auto"
-      )}
-    >
+        kind === 'home' ? 'absolute top-0 right-0 mx-auto lg:left-0' : '',
+        'flex w-full justify-center lg:w-auto'
+      )}>
       <HeadMeta
         title={title}
         description={description}
         url={`https://www.coddink.com/gallery/${id}`}
-        image={makeImageURL(thumbnail, "bigAvatar")}
-      ></HeadMeta>
-      {kind === "home" && (
+        image={makeImageURL(thumbnail, 'bigAvatar')}></HeadMeta>
+      {kind === 'home' && (
         <div
           className="fixed top-0 left-0 z-20 hidden h-screen w-screen bg-black/80 lg:flex"
-          onClick={onBackClick}
-        ></div>
+          onClick={onBackClick}></div>
       )}
       <div
         className={cls(
-          kind === "home" ? "z-20" : "z-0",
-          "relative top-16 flex w-full flex-col md:mx-0 lg:top-5  lg:mx-20 xl:mx-48 2xl:mx-56"
-        )}
-      >
+          kind === 'home' ? 'z-20' : 'z-0',
+          'relative top-16 flex w-full flex-col md:mx-0 lg:top-5  lg:mx-20 xl:mx-48 2xl:mx-56'
+        )}>
         <ClickedHeader
           followingData={followingData}
           loginId={loginId}
@@ -158,44 +154,39 @@ export default function ClickedProject({
           kind={kind}
           title={title}
           owner={owner}
-          projectId={id}
-        ></ClickedHeader>
+          projectId={id}></ClickedHeader>
         <div className="">
           <div className="flex  flex-col space-y-8 bg-white px-6 py-16 lg:space-y-8 lg:px-24">
-            {contents.map((item) => {
+            {contents.map(item => {
               const contentFontSize = item.fontSize;
               return (
                 <div
                   key={item.id}
-                  className={cls(item.kind === "image" ? "h-full" : "")}
-                >
-                  {item.kind === "image" && (
+                  className={cls(item.kind === 'image' ? 'h-full' : '')}>
+                  {item.kind === 'image' && (
                     <div className="relative aspect-video w-full">
                       <Image
                         className="object-contain"
                         alt={item.id.toString()}
                         layout="fill"
-                        src={makeImageURL(item.imageSrc!, "public")}
-                      ></Image>
+                        src={makeImageURL(item.imageSrc!, 'public')}></Image>
                     </div>
                   )}
 
-                  {item.kind === "text" && (
+                  {item.kind === 'text' && (
                     <div
                       className={cls(
                         `${item?.fontSize} ${item?.alignText}`,
-                        "relative   whitespace-pre-wrap "
-                      )}
-                    >
+                        'relative   whitespace-pre-wrap '
+                      )}>
                       {item.content}
                     </div>
                   )}
-                  {item.kind === "code" && (
+                  {item.kind === 'code' && (
                     <ClickedCodeView
                       content={item.content}
                       language={item.language}
-                      fontSize={item.fontSize}
-                    ></ClickedCodeView>
+                      fontSize={item.fontSize}></ClickedCodeView>
                   )}
                 </div>
               );
@@ -216,7 +207,7 @@ export default function ClickedProject({
               {relatedData.map((item, idx) => (
                 <ClickedRelatedItem
                   onClick={
-                    kind === "home"
+                    kind === 'home'
                       ? () => onHomeRelatedClicked(item.id)
                       : () => onGalleryRelatedClicked(item.id)
                   }
@@ -232,20 +223,18 @@ export default function ClickedProject({
                 {isLogin ? (
                   <form
                     onSubmit={handleSubmit(onCommentValid)}
-                    className="flex max-h-52 flex-col border bg-white p-8"
-                  >
+                    className="flex max-h-52 flex-col border bg-white p-8">
                     <CommentInput
                       id={id}
                       avatar={avatar}
-                      register={register("comment", {
-                        required: "이 필드는 반드시 입력해야 합니다.",
+                      register={register('comment', {
+                        required: '이 필드는 반드시 입력해야 합니다.',
                         maxLength: {
                           value: 800,
                           message:
-                            "이 필드는 1자리부터 800자리까지 적을 수 있습니다.",
+                            '이 필드는 1자리부터 800자리까지 적을 수 있습니다.',
                         },
-                      })}
-                    ></CommentInput>
+                      })}></CommentInput>
                   </form>
                 ) : (
                   <ClickedLoginInfo owner={owner} />
@@ -253,7 +242,7 @@ export default function ClickedProject({
 
                 {projectComments?.length > 0 && (
                   <div className="relative bottom-1 flex flex-col space-y-8 border border-b-0 bg-white p-8">
-                    {projectComments.map((item) => (
+                    {projectComments.map(item => (
                       <CommentMsg
                         key={item.id}
                         id={item.user.id}
@@ -263,17 +252,15 @@ export default function ClickedProject({
                         comment={item.comment}
                         currentUserId={currentUserId}
                         onCommentDeleteClick={() =>
-                          onDeleteModalClick(item.id, "comment")
-                        }
-                      ></CommentMsg>
+                          onDeleteModalClick(item.id, 'comment')
+                        }></CommentMsg>
                     ))}
                   </div>
                 )}
                 {commentCount > projectComments?.length && (
                   <div
                     onClick={onMoreCommentClick}
-                    className=" relative bottom-1 flex w-full cursor-pointer items-center justify-center border border-t-0 bg-white py-6 text-sm text-blue-600 transition-colors hover:bg-black/5"
-                  >
+                    className=" relative bottom-1 flex w-full cursor-pointer items-center justify-center border border-t-0 bg-white py-6 text-sm text-blue-600 transition-colors hover:bg-black/5">
                     <span className="mr-2">댓글 더보기</span>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -281,8 +268,7 @@ export default function ClickedProject({
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
                       stroke="currentColor"
-                      className="h-4 w-4"
-                    >
+                      className="h-4 w-4">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -302,8 +288,7 @@ export default function ClickedProject({
                       createdAt={createdAt}
                       likes={likes}
                       views={views}
-                      description={description}
-                    ></ClickedInfo>
+                      description={description}></ClickedInfo>
                   </div>
                   {tools?.length > 0 && (
                     <ClickedSideInfos data={tools} label="툴" />
@@ -330,8 +315,7 @@ export default function ClickedProject({
                     createdAt={createdAt}
                     likes={likes}
                     views={views}
-                    description={description}
-                  ></ClickedInfo>
+                    description={description}></ClickedInfo>
                 </div>
                 {tools?.length > 0 && (
                   <ClickedSideInfos data={tools} label="툴" />

@@ -1,8 +1,8 @@
-import bcrypt from "bcrypt";
-import { NextApiRequest, NextApiResponse } from "next";
-import withHandler from "@libs/server/withHandler";
-import client from "@libs/server/client";
-import { withApiSession } from "@libs/server/withSession";
+import { NextApiRequest, NextApiResponse } from 'next';
+import bcrypt from 'bcrypt';
+import client from '@libs/server/client';
+import withHandler from '@libs/server/withHandler';
+import { withApiSession } from '@libs/server/withSession';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { email, password } = req.body;
@@ -16,7 +16,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     // 이메일이 틀린 경우
     res.json({
       ok: false,
-      message: "존재하지 않는 이메일 주소 입니다",
+      message: '존재하지 않는 이메일 주소 입니다',
     });
     return res.status(200).end();
   }
@@ -33,13 +33,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     res.json({
       ok: true,
-      message: "회원 로그인 완료",
+      message: '회원 로그인 완료',
     });
   } else {
     //입력한 비밀번호가 같지 않은 경우
     res.json({
       ok: false,
-      message: "비밀번호가 올바르지 않습니다",
+      message: '비밀번호가 올바르지 않습니다',
     });
   }
 
@@ -48,7 +48,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
 export default withApiSession(
   withHandler({
-    methods: ["POST"],
+    methods: ['POST'],
     handler,
     isPrivate: false,
   })

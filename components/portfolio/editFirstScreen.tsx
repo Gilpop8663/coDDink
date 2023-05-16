@@ -1,7 +1,7 @@
-import UploadButton from "@components/uploadButton";
-import { UploadProps } from "pages/portfolio/editor";
-import React from "react";
-import { UseFormRegister } from "react-hook-form";
+import React from 'react';
+import { UseFormRegister } from 'react-hook-form';
+import { UploadProps } from 'pages/portfolio/editor';
+import UploadButton from '@components/uploadButton';
 
 interface EditFirstScreenProps {
   register: UseFormRegister<UploadProps>;
@@ -23,19 +23,17 @@ export default function EditFirstScreen({
       </h3>
       <div className="absolute flex space-x-5">
         <UploadButton
-          register={register("images")}
+          register={register('images')}
           onChange={onPreviewImage}
           kind="image"
-          label="이미지"
-        >
+          label="이미지">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            strokeWidth={2}
-          >
+            strokeWidth={2}>
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -46,17 +44,15 @@ export default function EditFirstScreen({
         <UploadButton
           kind="text"
           label="텍스트"
-          register={register("posts")}
-          onClick={onAddTextArea}
-        >
+          register={register('posts')}
+          onClick={onAddTextArea}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            strokeWidth={2}
-          >
+            strokeWidth={2}>
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -67,17 +63,15 @@ export default function EditFirstScreen({
         <UploadButton
           kind="code"
           label="코드"
-          register={register("code")}
-          onClick={onAddCodeArea}
-        >
+          register={register('code')}
+          onClick={onAddCodeArea}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            strokeWidth={2}
-          >
+            strokeWidth={2}>
             <path
               strokeLinecap="round"
               strokeLinejoin="round"

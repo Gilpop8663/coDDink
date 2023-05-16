@@ -7,7 +7,7 @@ declare global {
 const CODE = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS as string;
 
 export const pageview = (url: string) => {
-  window.gtag("config", CODE, {
+  window.gtag('config', CODE, {
     page_path: url,
   });
 };

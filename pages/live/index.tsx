@@ -1,19 +1,18 @@
-import Layout from "@components/layout";
-import { useUserState } from "@libs/client/useUser";
-import type { NextPage } from "next";
-import { useRouter } from "next/router";
-import { ProjectsResponse } from "pages";
-import useSWR from "swr";
+import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import useSWR from 'swr';
+import { ProjectsResponse } from 'pages';
+import { useUserState } from '@libs/client/useUser';
+import Layout from '@components/layout';
 
 const Live: NextPage = () => {
-  const { data, error }: useUserState = useSWR("/api/users/me");
+  const { data, error }: useUserState = useSWR('/api/users/me');
 
   return (
     <Layout
       isLogin={data && data.ok}
       profile={data?.profile}
-      userId={data?.profile?.id}
-    >
+      userId={data?.profile?.id}>
       <div className="grid grid-cols-5 gap-6 px-6 py-6">
         <div className="cursor-pointer">
           <div className="rounded-md bg-gradient-to-t from-black/100 to-black/50">

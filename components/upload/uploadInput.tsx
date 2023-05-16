@@ -1,9 +1,9 @@
-import UploadTagValue from "@components/portfolio/uploadTagValue";
-import { makeImageURL } from "@libs/client/utils";
-import Image from "next/image";
-import { UserDataProps } from "pages/portfolio/editor";
-import React, { useEffect, useRef, useState } from "react";
-import { UseFormRegisterReturn } from "react-hook-form";
+import React, { useEffect, useRef, useState } from 'react';
+import { UseFormRegisterReturn } from 'react-hook-form';
+import Image from 'next/image';
+import { UserDataProps } from 'pages/portfolio/editor';
+import { makeImageURL } from '@libs/client/utils';
+import UploadTagValue from '@components/portfolio/uploadTagValue';
 
 interface UploadProps {
   label: string;
@@ -20,7 +20,7 @@ interface UploadProps {
   userData?: UserDataProps[];
   deleteContentTags?: (
     e: React.MouseEvent<SVGSVGElement, MouseEvent>,
-    kind: "tags" | "category" | "tools" | "owner" | string,
+    kind: 'tags' | 'category' | 'tools' | 'owner' | string,
     idx: number
   ) => void;
   onUserClick?: (
@@ -50,12 +50,12 @@ export default function UploadInput({
 
   useEffect(() => {
     if (curRef.current === null) return;
-    curRef.current.addEventListener("focusout", () => {
+    curRef.current.addEventListener('focusout', () => {
       setTimeout(() => {
         setIsOver(false);
       }, 300);
     });
-    curRef.current.addEventListener("focusin", () => {
+    curRef.current.addEventListener('focusin', () => {
       setIsOver(true);
     });
   }, []);
@@ -81,22 +81,20 @@ export default function UploadInput({
             <UploadTagValue
               key={idx}
               value={item}
-              onClick={(e) => deleteContentTags!(e, name, idx)}
-            ></UploadTagValue>
+              onClick={e => deleteContentTags!(e, name, idx)}></UploadTagValue>
           ))}
         {userArr &&
           userArr.map((item, idx) => (
             <UploadTagValue
               key={idx}
               value={item.name}
-              onClick={(e) => deleteContentTags!(e, name, idx)}
-            ></UploadTagValue>
+              onClick={e => deleteContentTags!(e, name, idx)}></UploadTagValue>
           ))}
         <input
           autoComplete="off"
           onKeyDown={onKeyPress}
           required={required}
-          placeholder={contentArr && contentArr.length > 0 ? "" : placeholder}
+          placeholder={contentArr && contentArr.length > 0 ? '' : placeholder}
           {...register}
           id={name}
           type={type}
@@ -105,19 +103,17 @@ export default function UploadInput({
       </div>
       {userData && isOver && (
         <div className="absolute w-full border bg-white p-2 shadow-md ">
-          {userData.map((item) => (
+          {userData.map(item => (
             <div
-              onClick={(e) => onUserClick!(e, item)}
+              onClick={e => onUserClick!(e, item)}
               className="flex cursor-pointer items-center py-1 px-2 transition-colors hover:bg-blue-600 hover:text-white"
-              key={item.id}
-            >
+              key={item.id}>
               <div className="relative h-10 w-10">
                 <Image
-                  src={makeImageURL(item.avatar!, "smAvatar")}
+                  src={makeImageURL(item.avatar!, 'smAvatar')}
                   layout="fill"
                   className="rounded-full"
-                  alt="avater"
-                ></Image>
+                  alt="avater"></Image>
               </div>
               <span className="text-gray-80 ml-2 font-semibold">
                 {item.name}

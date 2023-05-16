@@ -1,19 +1,18 @@
-import Layout from "@components/layout";
-import InteractionButton from "@components/stream/interactionButton";
-import { useUserState } from "@libs/client/useUser";
-import type { NextPage } from "next";
-import { useRouter } from "next/router";
-import useSWR from "swr";
+import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import useSWR from 'swr';
+import { useUserState } from '@libs/client/useUser';
+import Layout from '@components/layout';
+import InteractionButton from '@components/stream/interactionButton';
 
 const Live: NextPage = () => {
-  const { data, error }: useUserState = useSWR("/api/users/me");
+  const { data, error }: useUserState = useSWR('/api/users/me');
 
   return (
     <Layout
       isLogin={data && data.ok}
       profile={data?.profile}
-      userId={data?.profile?.id}
-    >
+      userId={data?.profile?.id}>
       <div className="relative flex">
         <div className="w-full overflow-scroll">
           <div className="aspect-video bg-slate-200"></div>
@@ -29,8 +28,7 @@ const Live: NextPage = () => {
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-4 w-4"
                     viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
+                    fill="currentColor">
                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
                     <path
                       fillRule="evenodd"

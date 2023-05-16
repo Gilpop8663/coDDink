@@ -1,26 +1,26 @@
-import Layout from "@components/layout";
-import Image from "next/image";
-import React, { Suspense, useEffect, useState } from "react";
-import NATURE_IMAGE from "@public/user-create.jpg";
-import GOOGLE_LOGO from "@public/google.svg";
-import FACEBOOK_LOGO from "@public/facebook.svg";
-import APPLE_LOGO from "@public/apple.png";
-import Link from "next/link";
-import Button from "@components/button";
-import { useForm } from "react-hook-form";
-import { cls } from "@libs/client/utils";
-import ErrorMessage from "@components/error";
-import useMutation from "@libs/client/useMutation";
-import { useRouter } from "next/router";
-import Input from "@components/input";
-import InputPassword from "@components/inputPassword";
-import FacebookBtn from "@components/auth/facebookBtn";
-import Script from "next/script";
-import HeadMeta from "@components/headMeta";
-import dynamic from "next/dynamic";
-import GoogleBtn from "@components/auth/googleBtn";
-import { useGoogleLogin } from "@react-oauth/google";
-import { SNSMutationResult } from "./login";
+import React, { Suspense, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import Script from 'next/script';
+import { useGoogleLogin } from '@react-oauth/google';
+import useMutation from '@libs/client/useMutation';
+import { cls } from '@libs/client/utils';
+import FacebookBtn from '@components/auth/facebookBtn';
+import GoogleBtn from '@components/auth/googleBtn';
+import Button from '@components/button';
+import ErrorMessage from '@components/error';
+import HeadMeta from '@components/headMeta';
+import Input from '@components/input';
+import InputPassword from '@components/inputPassword';
+import Layout from '@components/layout';
+import APPLE_LOGO from '@public/apple.png';
+import FACEBOOK_LOGO from '@public/facebook.svg';
+import GOOGLE_LOGO from '@public/google.svg';
+import NATURE_IMAGE from '@public/user-create.jpg';
+import { SNSMutationResult } from './login';
 
 interface ICreateProps {
   email: string;
@@ -43,16 +43,16 @@ export default function Create() {
   } = useForm<ICreateProps>();
 
   const [create, { loading, data, error }] =
-    useMutation<MutationResult>("/api/users/create");
+    useMutation<MutationResult>('/api/users/create');
 
   const [snsLogin, { data: snsLoginData }] =
-    useMutation<SNSMutationResult>("/api/auth/snsLogin");
+    useMutation<SNSMutationResult>('/api/auth/snsLogin');
 
   const [googleLogin, { data: googleLoginData }] =
-    useMutation<SNSMutationResult>("/api/auth/googleLogin");
+    useMutation<SNSMutationResult>('/api/auth/googleLogin');
 
   const onGoogleLoginClick = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
+    onSuccess: async tokenResponse => {
       googleLogin({ tokenResponse });
     },
   });
@@ -66,19 +66,19 @@ export default function Create() {
 
   useEffect(() => {
     if (data?.ok) {
-      router.push("/user/login");
+      router.push('/user/login');
     }
   }, [data, router]);
 
   useEffect(() => {
-    if (snsLoginData && snsLoginData.ok && snsLoginData.kind === "create") {
-      router.push("/user/login");
+    if (snsLoginData && snsLoginData.ok && snsLoginData.kind === 'create') {
+      router.push('/user/login');
     } else if (
       snsLoginData &&
       snsLoginData.ok &&
-      snsLoginData.kind === "login"
+      snsLoginData.kind === 'login'
     ) {
-      router.push("/");
+      router.push('/');
     }
   }, [snsLoginData, router]);
 
@@ -86,15 +86,15 @@ export default function Create() {
     if (
       googleLoginData &&
       googleLoginData.ok &&
-      googleLoginData.kind === "create"
+      googleLoginData.kind === 'create'
     ) {
-      router.push("/user/login");
+      router.push('/user/login');
     } else if (
       googleLoginData &&
       googleLoginData.ok &&
-      googleLoginData.kind === "login"
+      googleLoginData.kind === 'login'
     ) {
-      router.push("/");
+      router.push('/');
     }
   }, [googleLoginData, router]);
 
@@ -108,15 +108,13 @@ export default function Create() {
           alt="background"
           src={NATURE_IMAGE}
           layout="fill"
-          objectFit="cover"
-        ></Image>
+          objectFit="cover"></Image>
       </div>
       <div className="flex h-screen items-center justify-evenly">
         <div className="hidden text-4xl text-white xl:flex">coDDink</div>
         <form
           onSubmit={handleSubmit(onValid)}
-          className="z-10 flex h-full w-screen flex-col  bg-white py-12 px-10 sm:h-fit sm:w-[520px]"
-        >
+          className="z-10 flex h-full w-screen flex-col  bg-white py-12 px-10 sm:h-fit sm:w-[520px]">
           <span className="mb-4 font-bold">coDDink</span>
           <h2 className="text-3xl font-semibold ">계정 만들기</h2>
           <div className="flex items-center pt-4">
@@ -131,8 +129,7 @@ export default function Create() {
             <div className="rounded-ful flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border bg-white hover:ring-2 hover:ring-gray-300">
               <GoogleBtn
                 onGoogleLoginClick={onGoogleLoginClick}
-                kind="icon"
-              ></GoogleBtn>
+                kind="icon"></GoogleBtn>
             </div>
             <FacebookBtn kind="icon" facebookLogin={snsLogin}></FacebookBtn>
 
@@ -157,14 +154,13 @@ export default function Create() {
               required
               name="email"
               placeholder="example@abcdefg.com"
-              register={register("email", {
-                required: "이메일 주소를 입력해 주십시오.",
+              register={register('email', {
+                required: '이메일 주소를 입력해 주십시오.',
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: "옳지 않은 방식의 이메일입니다",
+                  message: '옳지 않은 방식의 이메일입니다',
                 },
-              })}
-            ></Input>
+              })}></Input>
 
             {errors.email && (
               <ErrorMessage>{errors.email.message}</ErrorMessage>
@@ -176,32 +172,30 @@ export default function Create() {
               required
               name="name"
               placeholder=""
-              register={register("name", {
-                required: "이름을 입력해 주십시오",
+              register={register('name', {
+                required: '이름을 입력해 주십시오',
                 minLength: {
                   value: 2,
-                  message: "너무 짧습니다.",
+                  message: '너무 짧습니다.',
                 },
                 maxLength: {
                   value: 20,
-                  message: "너무 깁니다.",
+                  message: '너무 깁니다.',
                 },
-              })}
-            ></Input>
+              })}></Input>
 
             {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
             <InputPassword
               label="암호"
               name="password"
               required
-              register={register("password", {
-                required: "암호를 입력해 주십시오.",
+              register={register('password', {
+                required: '암호를 입력해 주십시오.',
                 minLength: {
                   value: 8,
-                  message: "최소 8개 이상의 문자 포함해야 합니다.",
+                  message: '최소 8개 이상의 문자 포함해야 합니다.',
                 },
-              })}
-            ></InputPassword>
+              })}></InputPassword>
             {errors.password && (
               <ErrorMessage>{errors.password.message}</ErrorMessage>
             )}
@@ -211,7 +205,7 @@ export default function Create() {
           <div className="flex items-start pt-4">
             <input
               className="h-4 w-4"
-              {...register("policy", { required: "정책을 동의해야 합니다." })}
+              {...register('policy', { required: '정책을 동의해야 합니다.' })}
               type="checkbox"
             />
             <span className="ml-2 text-sm">
@@ -228,7 +222,7 @@ export default function Create() {
               <a target="_blank" className="ml-2 mt-4 text-sm text-blue-600">
                 사용 약관
               </a>
-            </Link>{" "}
+            </Link>{' '}
             및
             <Link href="/policies/privacy">
               <a target="_blank" className="ml-2 mt-4 text-sm text-blue-600">

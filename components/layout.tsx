@@ -1,12 +1,12 @@
-import React from "react";
-import Header from "./header";
-import { CoddinkUser } from "@prisma/client";
+import React from 'react';
+import { CoddinkUser } from '@prisma/client';
+import Header from './header';
 
 interface LayoutProps {
   isLogin: boolean | undefined;
   profile?: CoddinkUser;
   children: React.ReactNode;
-  kind?: "normal" | "profile";
+  kind?: 'normal' | 'profile';
   isTop?: boolean;
   userId?: number;
 }
@@ -15,7 +15,7 @@ export default function Layout({
   isLogin = false,
   profile,
   children,
-  kind = "normal",
+  kind = 'normal',
   userId,
   isTop,
 }: LayoutProps) {

@@ -1,7 +1,7 @@
-import bcrypt from "bcrypt";
-import { NextApiRequest, NextApiResponse } from "next";
-import withHandler, { ResponseType } from "@libs/server/withHandler";
-import client from "@libs/server/client";
+import { NextApiRequest, NextApiResponse } from 'next';
+import bcrypt from 'bcrypt';
+import client from '@libs/server/client';
+import withHandler, { ResponseType } from '@libs/server/withHandler';
 
 const saltRounds = 10;
 
@@ -17,8 +17,8 @@ async function handler(
   const number = Math.floor(Math.random() * 2);
 
   const avatarURL = [
-    "f0787368-2456-4b9e-6ae4-a8841f70b300",
-    "8b9dd122-cda2-4183-e41e-2c8d9259ac00",
+    'f0787368-2456-4b9e-6ae4-a8841f70b300',
+    '8b9dd122-cda2-4183-e41e-2c8d9259ac00',
   ];
 
   const userCreate = await client.coddinkUser.create({
@@ -32,13 +32,13 @@ async function handler(
 
   res.json({
     ok: true,
-    message: "회원가입이 완료되었습니다",
+    message: '회원가입이 완료되었습니다',
   });
   return res.status(200).end();
 }
 
 export default withHandler({
-  methods: ["POST"],
+  methods: ['POST'],
   handler,
   isPrivate: false,
 });

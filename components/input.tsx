@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react";
-import { UseFormRegisterReturn } from "react-hook-form";
+import React, { useRef, useState } from 'react';
+import { UseFormRegisterReturn } from 'react-hook-form';
 
 interface InputProps {
   label: string;

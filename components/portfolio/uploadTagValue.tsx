@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface UploadTagValue {
   value: string;
@@ -16,8 +16,7 @@ export default function UploadTagValue({ value, onClick }: UploadTagValue) {
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
-        strokeWidth={2}
-      >
+        strokeWidth={2}>
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
