@@ -14,7 +14,7 @@ import {
 import { cls, makeImageURL } from '@libs/client/utils';
 import ErrorMessage from '@components/error';
 import LoadingSpinner from '@components/loadingSpinner';
-import NextButton from '@components/upload/nextButton';
+import NextButton from '@components/upload/NextButton';
 import UploadInput from '@components/upload/UploadInput';
 import UploadButton from '@components/uploadButton';
 
@@ -78,7 +78,8 @@ export default function CreatePortfolio({
         className={cls(
           'absolute top-0 z-30 h-screen w-screen bg-black opacity-90 transition-all'
         )}
-        onClick={onSetting}></div>
+        onClick={onSetting}
+      ></div>
       <div className="z-50 h-[850px] w-1/2 min-w-[900px] rounded-md border bg-white">
         <div className="grid h-fit w-full grid-cols-5 p-8">
           <div className="col-span-2 h-[700px]  rounded-l-md border bg-gray-50 p-8">
@@ -93,7 +94,8 @@ export default function CreatePortfolio({
                         src={previewThumbnailImg.description}
                         alt="previewThumbnailImage"
                         layout="fill"
-                        className="rounded-sm  object-contain p-2"></Image>
+                        className="rounded-sm  object-contain p-2"
+                      ></Image>
                     )}
                     <LoadingSpinner />
                   </>
@@ -102,7 +104,8 @@ export default function CreatePortfolio({
                 {!isThumbnailLoading && !previewThumbnailImg ? (
                   <UploadButton
                     onChange={onThumbnailImage}
-                    kind="thumbnail"></UploadButton>
+                    kind="thumbnail"
+                  ></UploadButton>
                 ) : (
                   !isThumbnailLoading && (
                     <>
@@ -114,18 +117,21 @@ export default function CreatePortfolio({
                           )}
                           alt="thumbnail"
                           className="rounded-sm object-contain p-2"
-                          layout="fill"></Image>
+                          layout="fill"
+                        ></Image>
                       ) : (
                         <Image
                           src={previewThumbnailImg?.description!}
                           alt="thumbnail"
                           className="rounded-sm object-contain p-2"
-                          layout="fill"></Image>
+                          layout="fill"
+                        ></Image>
                       )}
                       <div className="absolute -bottom-12 left-2 z-10">
                         <UploadButton
                           onChange={onThumbnailImage}
-                          kind="changeThumb"></UploadButton>
+                          kind="changeThumb"
+                        ></UploadButton>
                       </div>
                     </>
                   )
@@ -164,7 +170,7 @@ export default function CreatePortfolio({
               label="프로젝트 태그"
               name="tags"
               contentArr={tagArr}
-              onKeyPress={e => onKeyPress(e, 'tags')}
+              onKeyPress={(e) => onKeyPress(e, 'tags')}
               deleteContentTags={deleteContentTags}
               type="text"
               required={false}
@@ -180,7 +186,7 @@ export default function CreatePortfolio({
               contentArr={toolArr}
               deleteContentTags={deleteContentTags}
               subLabel="(최대 10개)"
-              onKeyPress={e => onKeyPress(e, 'tools')}
+              onKeyPress={(e) => onKeyPress(e, 'tools')}
               required={false}
               placeholder="사용하신 프레임워크 또는 라이브러리 또는 언어는 무엇입니까?"
               register={register('tools')}
@@ -193,7 +199,7 @@ export default function CreatePortfolio({
               type="text"
               deleteContentTags={deleteContentTags}
               contentArr={categoryArr}
-              onKeyPress={e => onKeyPress(e, 'category')}
+              onKeyPress={(e) => onKeyPress(e, 'category')}
               placeholder="EX) 플랫폼, 판매 , 일상, 홍보, 클론코딩, 게임 , 커뮤니티 등"
               register={register('category', {
                 required:
@@ -228,7 +234,8 @@ export default function CreatePortfolio({
             )}
             <label
               className="relative top-2 z-10 text-xs font-semibold"
-              htmlFor="visible">
+              htmlFor="visible"
+            >
               가시성
               <div
                 id="visible"
@@ -236,7 +243,8 @@ export default function CreatePortfolio({
                 className={cls(
                   isVisible ? 'border-blue-600' : '',
                   'mt-2 flex w-48 cursor-pointer items-center justify-between rounded-sm border px-2 py-1 text-sm'
-                )}>
+                )}
+              >
                 <span>{isPublic ? '모든 사용자' : '비공개'}</span>
                 <span>
                   {!isVisible ? (
@@ -246,7 +254,8 @@ export default function CreatePortfolio({
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
-                      strokeWidth={2}>
+                      strokeWidth={2}
+                    >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -260,7 +269,8 @@ export default function CreatePortfolio({
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
-                      strokeWidth={2}>
+                      strokeWidth={2}
+                    >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -277,7 +287,8 @@ export default function CreatePortfolio({
                     className={cls(
                       isPublic ? 'bg-blue-400' : '',
                       'flex w-full cursor-pointer items-center justify-between rounded-sm  bg-white py-1 px-2 text-sm'
-                    )}>
+                    )}
+                  >
                     모든 사용자
                   </div>
                   <div
@@ -285,7 +296,8 @@ export default function CreatePortfolio({
                     className={cls(
                       !isPublic ? 'bg-blue-400' : '',
                       'flex w-full cursor-pointer items-center justify-between rounded-sm  bg-white py-1 px-2 text-sm'
-                    )}>
+                    )}
+                  >
                     비공개
                   </div>
                 </div>
@@ -324,7 +336,7 @@ export default function CreatePortfolio({
               userData={userData}
               onUserClick={onUserClick}
               userArr={ownerArr}
-              onKeyPress={e => onKeyPress(e, 'owner')}
+              onKeyPress={(e) => onKeyPress(e, 'owner')}
               deleteContentTags={deleteContentTags}
             />
             <div className="h-2 w-full pb-12"></div>
@@ -353,16 +365,19 @@ export default function CreatePortfolio({
                       label="취소"
                       size="sm"
                       color="whiteDiv"
-                      onClick={onSetting}></NextButton>
+                      onClick={onSetting}
+                    ></NextButton>
                     <NextButton
                       label="초안으로 저장"
                       size="sm"
                       onClick={onDraftClick}
-                      color="blueBtn"></NextButton>
+                      color="blueBtn"
+                    ></NextButton>
                     <NextButton
                       size="sm"
                       label="게시"
-                      color="greenBtn"></NextButton>
+                      color="greenBtn"
+                    ></NextButton>
                   </>
                 )}
               </div>

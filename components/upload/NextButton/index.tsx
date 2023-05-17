@@ -23,11 +23,10 @@ export default function NextButton({
   onChange,
   onClick,
   size = 'base',
-  onFollowClick,
 }: UploadProps) {
   const [isOver, setIsOver] = useState(false);
   const onMouseOver = () => {
-    setIsOver(prev => !prev);
+    setIsOver((prev) => !prev);
   };
   return (
     <>
@@ -37,7 +36,8 @@ export default function NextButton({
             `text-${size}`,
             ' flex w-full cursor-pointer justify-center rounded-full  py-1 px-2 font-semibold text-gray-400 transition-colors hover:underline'
           )}
-          onClick={onClick}>
+          onClick={onClick}
+        >
           {label}
         </div>
       )}
@@ -47,7 +47,8 @@ export default function NextButton({
             `text-${size}`,
             'flex w-full cursor-pointer justify-center rounded-full bg-blue-600 py-1 px-2 font-semibold text-white transition-colors hover:bg-blue-700'
           )}
-          onClick={onClick}>
+          onClick={onClick}
+        >
           {label}
         </button>
       )}
@@ -57,7 +58,8 @@ export default function NextButton({
             `text-${size}`,
             'flex w-full cursor-pointer justify-center rounded-full bg-blue-600 py-1 px-2 font-semibold text-white transition-colors hover:bg-blue-700'
           )}
-          onClick={onClick}>
+          onClick={onClick}
+        >
           {label}
         </div>
       )}
@@ -67,7 +69,8 @@ export default function NextButton({
             `text-${size}`,
             'flex w-full cursor-pointer justify-center rounded-full bg-green-600 py-1 px-2 font-semibold text-white transition-colors hover:bg-green-700'
           )}
-          onClick={onClick}>
+          onClick={onClick}
+        >
           {label}
         </button>
       )}
@@ -78,7 +81,8 @@ export default function NextButton({
             `text-${size}`,
             'flex w-full cursor-pointer justify-center rounded-full bg-green-600 py-1 px-2 font-semibold text-white transition-colors hover:bg-green-700'
           )}
-          onClick={onClick}>
+          onClick={onClick}
+        >
           {label}
         </div>
       )}
@@ -89,7 +93,8 @@ export default function NextButton({
             'transition-color flex w-full select-none justify-center rounded-full bg-gray-200 py-1 px-2 font-semibold text-white'
           )}
           draggable={false}
-          onClick={onClick}>
+          onClick={onClick}
+        >
           {label}
         </div>
       )}
@@ -100,7 +105,8 @@ export default function NextButton({
             `text-${size}`,
             'flex w-full cursor-pointer justify-center rounded-full border  bg-white py-1 px-2 font-semibold text-black transition-colors hover:bg-gray-100'
           )}
-          onClick={onClick}>
+          onClick={onClick}
+        >
           {label}
         </button>
       )}
@@ -113,7 +119,8 @@ export default function NextButton({
 
             'flex w-full cursor-pointer justify-center rounded-full border bg-white  py-1 px-2 font-semibold text-black transition-colors hover:bg-red-600 hover:text-white'
           )}
-          onClick={onClick}>
+          onClick={onClick}
+        >
           {isOver ? '팔로우 취소' : '팔로잉'}
         </button>
       )}

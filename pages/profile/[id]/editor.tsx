@@ -13,7 +13,7 @@ import Layout from '@components/layout';
 import CategoryTabMenu from '@components/profile/categoryTabMenu';
 import ProfileWeb from '@components/profile/profileWeb';
 import TextArea from '@components/textArea';
-import NextButton from '@components/upload/nextButton';
+import NextButton from '@components/upload/NextButton';
 import UploadButton from '@components/uploadButton';
 
 interface LocationResponse {
@@ -49,7 +49,7 @@ interface StatesProps {
   code: string;
 }
 
-const fetcher = (url: string) => fetch(url).then(res => res.json());
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const ProfileEditor: NextPage = () => {
   const { user } = useUser();
@@ -109,11 +109,11 @@ const ProfileEditor: NextPage = () => {
   );
 
   const onCountryClick = () => {
-    setIsChange(prev => !prev);
+    setIsChange((prev) => !prev);
   };
 
   const cityName = watch('city');
-  const isCol = cityData && cityData?.find(item => item.name === cityName);
+  const isCol = cityData && cityData?.find((item) => item.name === cityName);
 
   const handleFollow = () => {
     setScrollY(window.pageYOffset); // window 스크롤 값을 ScrollY에 저장
@@ -217,7 +217,8 @@ const ProfileEditor: NextPage = () => {
               <NextButton
                 size="sm"
                 color="greenDiv"
-                label="프로필로 돌아가기"></NextButton>
+                label="프로필로 돌아가기"
+              ></NextButton>
             </a>
           </Link>
           <div className="w-40">
@@ -257,7 +258,8 @@ const ProfileEditor: NextPage = () => {
                   <UploadButton
                     previewImage={avatarPreveiw}
                     register={register('avatar')}
-                    kind="profile"></UploadButton>
+                    kind="profile"
+                  ></UploadButton>
                   <div className="flex flex-col px-2 lg:px-8">
                     <Input
                       register={register('name', {
@@ -275,7 +277,8 @@ const ProfileEditor: NextPage = () => {
                       maxLength={20}
                       name="name"
                       label="이름"
-                      type="text"></Input>
+                      type="text"
+                    ></Input>
                     {errors.name && (
                       <ErrorMessage>{errors.name.message}</ErrorMessage>
                     )}
@@ -289,7 +292,8 @@ const ProfileEditor: NextPage = () => {
                       maxLength={30}
                       name="job"
                       label="직업"
-                      type="text"></Input>
+                      type="text"
+                    ></Input>
                     {errors.job && (
                       <ErrorMessage>{errors.job.message}</ErrorMessage>
                     )}
@@ -303,7 +307,8 @@ const ProfileEditor: NextPage = () => {
                       maxLength={30}
                       name="company"
                       label="회사"
-                      type="text"></Input>
+                      type="text"
+                    ></Input>
                     {errors.company && (
                       <ErrorMessage>{errors.company.message}</ErrorMessage>
                     )}
@@ -311,7 +316,8 @@ const ProfileEditor: NextPage = () => {
                     <div className="flex flex-col">
                       <label
                         htmlFor="country"
-                        className="mt-4 text-xs text-gray-700">
+                        className="mt-4 text-xs text-gray-700"
+                      >
                         위치
                       </label>
                       <div className="mt-4">
@@ -322,7 +328,8 @@ const ProfileEditor: NextPage = () => {
                           name="country"
                           aria-disabled="false"
                           className="mr-2 w-48 p-1 text-sm"
-                          defaultValue={'Korea, Republic of'}>
+                          defaultValue={'Korea, Republic of'}
+                        >
                           <option value="">모든 국가/지역</option>
                           <option data-code="US" value="United States">
                             United States
@@ -410,7 +417,8 @@ const ProfileEditor: NextPage = () => {
                           </option>
                           <option
                             data-code="BQ"
-                            value="Bonaire, Saint Eustatius and Saba">
+                            value="Bonaire, Saint Eustatius and Saba"
+                          >
                             Bonaire, Saint Eustatius and Saba
                           </option>
                           <option data-code="BA" value="Bosnia and Herzegovina">
@@ -424,7 +432,8 @@ const ProfileEditor: NextPage = () => {
                           </option>
                           <option
                             data-code="IO"
-                            value="British Indian Ocean Territory">
+                            value="British Indian Ocean Territory"
+                          >
                             British Indian Ocean Territory
                           </option>
                           <option data-code="BN" value="Brunei Darussalam">
@@ -456,7 +465,8 @@ const ProfileEditor: NextPage = () => {
                           </option>
                           <option
                             data-code="CF"
-                            value="Central African Republic">
+                            value="Central African Republic"
+                          >
                             Central African Republic
                           </option>
                           <option data-code="TD" value="Chad">
@@ -473,7 +483,8 @@ const ProfileEditor: NextPage = () => {
                           </option>
                           <option
                             data-code="CC"
-                            value="Cocos (Keeling) Islands">
+                            value="Cocos (Keeling) Islands"
+                          >
                             Cocos (Keeling) Islands
                           </option>
                           <option data-code="CO" value="Colombia">
@@ -487,7 +498,8 @@ const ProfileEditor: NextPage = () => {
                           </option>
                           <option
                             data-code="CD"
-                            value="Congo, The Democratic Republic of the">
+                            value="Congo, The Democratic Republic of the"
+                          >
                             Congo, The Democratic Republic of the
                           </option>
                           <option data-code="CK" value="Cook Islands">
@@ -549,7 +561,8 @@ const ProfileEditor: NextPage = () => {
                           </option>
                           <option
                             data-code="FK"
-                            value="Falkland Islands (Malvinas)">
+                            value="Falkland Islands (Malvinas)"
+                          >
                             Falkland Islands (Malvinas)
                           </option>
                           <option data-code="FO" value="Faroe Islands">
@@ -572,7 +585,8 @@ const ProfileEditor: NextPage = () => {
                           </option>
                           <option
                             data-code="TF"
-                            value="French Southern Territories">
+                            value="French Southern Territories"
+                          >
                             French Southern Territories
                           </option>
                           <option data-code="GA" value="Gabon">
@@ -628,7 +642,8 @@ const ProfileEditor: NextPage = () => {
                           </option>
                           <option
                             data-code="VA"
-                            value="Holy See (Vatican City State)">
+                            value="Holy See (Vatican City State)"
+                          >
                             Holy See (Vatican City State)
                           </option>
                           <option data-code="HN" value="Honduras">
@@ -651,7 +666,8 @@ const ProfileEditor: NextPage = () => {
                           </option>
                           <option
                             data-code="IR"
-                            value="Iran, Islamic Republic of">
+                            value="Iran, Islamic Republic of"
+                          >
                             Iran, Islamic Republic of
                           </option>
                           <option data-code="IQ" value="Iraq">
@@ -692,7 +708,8 @@ const ProfileEditor: NextPage = () => {
                           </option>
                           <option
                             data-code="KP"
-                            value="Korea, Democratic People's Republic of">
+                            value="Korea, Democratic People's Republic of"
+                          >
                             {`Korea, Democratic People's Republic of`}
                           </option>
                           <option data-code="KR" value="Korea, Republic of">
@@ -709,7 +726,8 @@ const ProfileEditor: NextPage = () => {
                           </option>
                           <option
                             data-code="LA"
-                            value="Lao People's Democratic Republic">
+                            value="Lao People's Democratic Republic"
+                          >
                             {`Lao People's Democratic Republic`}
                           </option>
                           <option data-code="LV" value="Latvia">
@@ -777,7 +795,8 @@ const ProfileEditor: NextPage = () => {
                           </option>
                           <option
                             data-code="FM"
-                            value="Micronesia, Federated States of">
+                            value="Micronesia, Federated States of"
+                          >
                             Micronesia, Federated States of
                           </option>
                           <option data-code="MD" value="Moldova, Republic of">
@@ -842,7 +861,8 @@ const ProfileEditor: NextPage = () => {
                           </option>
                           <option
                             data-code="MP"
-                            value="Northern Mariana Islands">
+                            value="Northern Mariana Islands"
+                          >
                             Northern Mariana Islands
                           </option>
                           <option data-code="NO" value="Norway">
@@ -919,12 +939,14 @@ const ProfileEditor: NextPage = () => {
                           </option>
                           <option
                             data-code="PM"
-                            value="Saint Pierre and Miquelon">
+                            value="Saint Pierre and Miquelon"
+                          >
                             Saint Pierre and Miquelon
                           </option>
                           <option
                             data-code="VC"
-                            value="Saint Vincent and the Grenadines">
+                            value="Saint Vincent and the Grenadines"
+                          >
                             Saint Vincent and the Grenadines
                           </option>
                           <option data-code="WS" value="Samoa">
@@ -974,7 +996,8 @@ const ProfileEditor: NextPage = () => {
                           </option>
                           <option
                             data-code="GS"
-                            value="South Georgia and the South Sandwich Islands">
+                            value="South Georgia and the South Sandwich Islands"
+                          >
                             South Georgia and the South Sandwich Islands
                           </option>
                           <option data-code="SS" value="South Sudan">
@@ -1015,7 +1038,8 @@ const ProfileEditor: NextPage = () => {
                           </option>
                           <option
                             data-code="TZ"
-                            value="Tanzania, United Republic of">
+                            value="Tanzania, United Republic of"
+                          >
                             Tanzania, United Republic of
                           </option>
                           <option data-code="TH" value="Thailand">
@@ -1047,7 +1071,8 @@ const ProfileEditor: NextPage = () => {
                           </option>
                           <option
                             data-code="TC"
-                            value="Turks and Caicos Islands">
+                            value="Turks and Caicos Islands"
+                          >
                             Turks and Caicos Islands
                           </option>
                           <option data-code="TV" value="Tuvalu">
@@ -1067,7 +1092,8 @@ const ProfileEditor: NextPage = () => {
                           </option>
                           <option
                             data-code="UM"
-                            value="United States Minor Outlying Islands">
+                            value="United States Minor Outlying Islands"
+                          >
                             United States Minor Outlying Islands
                           </option>
                           <option data-code="UY" value="Uruguay">
@@ -1087,7 +1113,8 @@ const ProfileEditor: NextPage = () => {
                           </option>
                           <option
                             data-code="VG"
-                            value="Virgin Islands, British">
+                            value="Virgin Islands, British"
+                          >
                             Virgin Islands, British
                           </option>
                           <option data-code="VI" value="Virgin Islands, U.S.">
@@ -1129,7 +1156,8 @@ const ProfileEditor: NextPage = () => {
                             cityData.map((item: StatesProps) => (
                               <option
                                 key={item.code}
-                                value={item.name}></option>
+                                value={item.name}
+                              ></option>
                             ))}
                         </datalist>
                       </div>
@@ -1144,7 +1172,8 @@ const ProfileEditor: NextPage = () => {
                       name="URL"
                       label="웹 사이트 URL"
                       type="text"
-                      maxLength={100}></Input>
+                      maxLength={100}
+                    ></Input>
                     {errors.URL && (
                       <ErrorMessage>{errors.URL.message}</ErrorMessage>
                     )}
@@ -1166,7 +1195,8 @@ const ProfileEditor: NextPage = () => {
                   label="설명"
                   name="info"
                   type="text"
-                  maxLength={800}></TextArea>
+                  maxLength={800}
+                ></TextArea>
                 {errors.introduce && (
                   <ErrorMessage>{errors.introduce.message}</ErrorMessage>
                 )}

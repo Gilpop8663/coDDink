@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { makeImageURL } from '@libs/client/utils';
 import TextArea from '@components/textArea';
-import NextButton from '@components/upload/nextButton';
+import NextButton from '@components/upload/NextButton';
 
 interface CommentInputProps {
   avatar: string;
@@ -20,7 +20,8 @@ export default function PreviewCommentInput({ avatar }: CommentInputProps) {
             alt="profile"
             width={50}
             height={50}
-            className="rounded-full"></Image>
+            className="rounded-full"
+          ></Image>
         </div>
         <div className="col-span-9 w-full select-none">
           <TextArea placeholder="이 프로젝트에 대해 어떻게 생각하십니까?"></TextArea>

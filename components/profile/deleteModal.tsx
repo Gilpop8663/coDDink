@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import NextButton from '@components/upload/nextButton';
+import NextButton from '@components/upload/NextButton';
 
 interface DeleteModalProps {
   title: string;
@@ -30,10 +30,12 @@ export default function DeleteModal({
   return (
     <div
       onClick={onDeleteModalClick}
-      className="fixed  top-0 z-50 flex h-screen w-screen items-center justify-center bg-black/80">
+      className="fixed  top-0 z-50 flex h-screen w-screen items-center justify-center bg-black/80"
+    >
       <div
-        onClick={e => e.stopPropagation()}
-        className="flex h-48 w-[600px] justify-between rounded-md bg-white">
+        onClick={(e) => e.stopPropagation()}
+        className="flex h-48 w-[600px] justify-between rounded-md bg-white"
+      >
         <div className="flex h-full flex-col  justify-between p-7">
           <div className="flex flex-col">
             <span className="text-xl font-bold">{title}</span>
@@ -44,12 +46,14 @@ export default function DeleteModal({
               onClick={onProjectDeleteClick}
               size="sm"
               color="blueDiv"
-              label="삭제"></NextButton>
+              label="삭제"
+            ></NextButton>
             <NextButton
               onClick={onDeleteModalClick}
               size="sm"
               color="whiteDiv"
-              label="취소"></NextButton>
+              label="취소"
+            ></NextButton>
           </div>
         </div>
         <div className="cursor-pointer p-3" onClick={onDeleteModalClick}>
@@ -59,7 +63,8 @@ export default function DeleteModal({
             viewBox="0 0 24 24"
             strokeWidth={3}
             stroke="currentColor"
-            className="h-4 w-4 text-gray-400">
+            className="h-4 w-4 text-gray-400"
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"

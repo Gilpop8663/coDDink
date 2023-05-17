@@ -5,7 +5,7 @@ import { CoddinkFollow, CoddinkProjectOwner } from '@prisma/client';
 import { OwnerProps } from 'pages';
 import { makeImageURL } from '@libs/client/utils';
 import DeleteModal from '@components/profile/deleteModal';
-import NextButton from '@components/upload/nextButton';
+import NextButton from '@components/upload/NextButton';
 import UploadButton from '@components/uploadButton';
 import OwnerInfo from './ownerInfo';
 
@@ -37,17 +37,18 @@ export default function ProjectDraftItem({
   const [isContentTouch, setIsContentTouch] = useState(false);
   const [isOwnerTouch, setIsOwnerTouch] = useState(false);
   const onContentTouch = () => {
-    setIsContentTouch(prev => !prev);
+    setIsContentTouch((prev) => !prev);
   };
   const onOwnerTouch = () => {
-    setIsOwnerTouch(prev => !prev);
+    setIsOwnerTouch((prev) => !prev);
   };
   return (
     <div className="w-80 sm:w-full">
       <div
         onMouseOver={onContentTouch}
         onMouseOut={onContentTouch}
-        className="relative flex cursor-pointer flex-col">
+        className="relative flex cursor-pointer flex-col"
+      >
         <div className="relative flex h-64 max-h-80  w-auto items-center justify-center rounded-md border bg-gray-100 hover:visible">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -55,7 +56,8 @@ export default function ProjectDraftItem({
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="h-12 w-12 text-gray-200">
+            className="h-12 w-12 text-gray-200"
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -69,7 +71,8 @@ export default function ProjectDraftItem({
             priority={true}
             alt="thumbnail"
             className="rounded-md object-cover"
-            layout="fill"></Image>
+            layout="fill"
+          ></Image>
         )}
         {isContentTouch && (
           <div className="absolute bottom-0 flex h-full w-full flex-col items-center justify-center rounded-md bg-black/40  px-4 ">
@@ -77,11 +80,13 @@ export default function ProjectDraftItem({
               <NextButton
                 onClick={onClick}
                 color="blueDiv"
-                label="프로젝트 편집"></NextButton>
+                label="프로젝트 편집"
+              ></NextButton>
               <NextButton
                 color="grayBtn"
                 onClick={onDeleteModalClick}
-                label="프로젝트 삭제"></NextButton>
+                label="프로젝트 삭제"
+              ></NextButton>
             </div>
             <span className="absolute bottom-5 font-semibold text-white hover:underline">
               {title}
@@ -92,14 +97,16 @@ export default function ProjectDraftItem({
       <div
         // onMouseOver={onOwnerTouch}
         // onMouseOut={onOwnerTouch}
-        className="mt-2 flex items-center justify-between pb-2">
+        className="mt-2 flex items-center justify-between pb-2"
+      >
         <OwnerInfo
           followingData={followingData}
           onFollowClick={onFollowClick}
           path="home"
           kind="home"
           owner={owner}
-          loginId={loginId}></OwnerInfo>
+          loginId={loginId}
+        ></OwnerInfo>
 
         <div className="flex items-center space-x-2">
           <div className="flex items-center">
@@ -107,7 +114,8 @@ export default function ProjectDraftItem({
               xmlns="http://www.w3.org/2000/svg"
               className="h-4 w-4 text-gray-500"
               viewBox="0 0 20 20"
-              fill="currentColor">
+              fill="currentColor"
+            >
               <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
             </svg>
             <span className="ml-1 text-xs font-semibold text-gray-500">
@@ -119,7 +127,8 @@ export default function ProjectDraftItem({
               xmlns="http://www.w3.org/2000/svg"
               className="h-4 w-4 text-gray-500"
               viewBox="0 0 20 20"
-              fill="currentColor">
+              fill="currentColor"
+            >
               <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
               <path
                 fillRule="evenodd"

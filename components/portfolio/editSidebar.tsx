@@ -2,7 +2,7 @@ import React from 'react';
 import { UseFormRegister } from 'react-hook-form';
 import { ContentProps, UploadProps } from 'pages/portfolio/editor';
 import SubUploadButton from '@components/subUploadButton';
-import NextButton from '@components/upload/nextButton';
+import NextButton from '@components/upload/NextButton';
 
 interface EditSidebarProps {
   onSetting: () => void;
@@ -38,14 +38,16 @@ export default function EditSidebar({
             <SubUploadButton
               label="이미지"
               kind="image"
-              onChange={onPreviewImage}>
+              onChange={onPreviewImage}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
-                strokeWidth={2}>
+                strokeWidth={2}
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -60,7 +62,8 @@ export default function EditSidebar({
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
-                strokeWidth={2}>
+                strokeWidth={2}
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -75,7 +78,8 @@ export default function EditSidebar({
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
-                strokeWidth={2}>
+                strokeWidth={2}
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -94,7 +98,8 @@ export default function EditSidebar({
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              strokeWidth={2}>
+              strokeWidth={2}
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -119,14 +124,16 @@ export default function EditSidebar({
               />
               <div
                 className="mt-4 flex justify-center text-gray-400"
-                onClick={onPreviewClick}>
+                onClick={onPreviewClick}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="mr-1 h-5 w-5"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
-                  strokeWidth={2}>
+                  strokeWidth={2}
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -152,7 +159,8 @@ export default function EditSidebar({
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
-                  strokeWidth={2}>
+                  strokeWidth={2}
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"

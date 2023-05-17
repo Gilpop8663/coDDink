@@ -25,7 +25,6 @@ import DeleteModal from '@components/profile/deleteModal';
 import ClickedProject from '@components/project/clickedProject';
 import SubUploadButton from '@components/subUploadButton';
 import TextArea from '@components/textArea';
-import NextButton from '@components/upload/nextButton';
 import UploadInput from '@components/upload/UploadInput';
 import UploadButton from '@components/uploadButton';
 
