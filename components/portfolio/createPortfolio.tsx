@@ -347,14 +347,21 @@ export default function CreatePortfolio({
               <div className="flex w-[450px] items-end space-x-4">
                 {isDraft || isThumbnailLoading || isSubmitLoading ? (
                   <>
-                    <NextButton label="취소" color="disabled" size="sm" />
                     <NextButton
-                      label={isDraft ? '로딩중' : '초안으로 저장'}
+                      text="취소"
+                      type="button"
                       color="disabled"
                       size="sm"
                     />
                     <NextButton
-                      label={isSubmitLoading ? '로딩중' : '게시'}
+                      text={isDraft ? '로딩중' : '초안으로 저장'}
+                      type="button"
+                      color="disabled"
+                      size="sm"
+                    />
+                    <NextButton
+                      text={isSubmitLoading ? '로딩중' : '게시'}
+                      type="button"
                       color="disabled"
                       size="sm"
                     />
@@ -362,22 +369,20 @@ export default function CreatePortfolio({
                 ) : (
                   <>
                     <NextButton
-                      label="취소"
+                      text="취소"
                       size="sm"
-                      color="whiteDiv"
+                      type="button"
+                      color="white"
                       onClick={onSetting}
-                    ></NextButton>
+                    />
                     <NextButton
-                      label="초안으로 저장"
+                      text="초안으로 저장"
                       size="sm"
+                      type="button"
                       onClick={onDraftClick}
-                      color="blueBtn"
-                    ></NextButton>
-                    <NextButton
-                      size="sm"
-                      label="게시"
-                      color="greenBtn"
-                    ></NextButton>
+                      color="blue"
+                    />
+                    <NextButton size="sm" text="게시" color="green" />
                   </>
                 )}
               </div>

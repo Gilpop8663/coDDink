@@ -45,15 +45,17 @@ export default function DeleteModal({
             <NextButton
               onClick={onProjectDeleteClick}
               size="sm"
-              color="blueDiv"
-              label="삭제"
-            ></NextButton>
+              type="button"
+              color="blue"
+              text="삭제"
+            />
             <NextButton
               onClick={onDeleteModalClick}
               size="sm"
-              color="whiteDiv"
-              label="취소"
-            ></NextButton>
+              type="button"
+              color="white"
+              text="취소"
+            />
           </div>
         </div>
         <div className="cursor-pointer p-3" onClick={onDeleteModalClick}>

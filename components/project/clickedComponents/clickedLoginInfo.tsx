@@ -24,7 +24,7 @@ export default function ClickedLoginInfo({ owner }: InfoProps) {
       <div className="mt-5 flex items-center space-x-2">
         <Link href="/user/login">
           <a className="w-32 text-sm">
-            <NextButton color="blueBtn" label="이메일로 등록"></NextButton>
+            <NextButton color="blue" text="이메일로 등록" />
           </a>
         </Link>
         <span className="text-sm font-semibold text-gray-400">또는</span>

@@ -1,10 +1,7 @@
 import React from 'react';
-import { UseFormRegisterReturn } from 'react-hook-form';
 import Image from 'next/image';
-import Link from 'next/link';
 import { makeImageURL } from '@libs/client/utils';
 import TextArea from '@components/textArea';
-import NextButton from '@components/upload/NextButton';
 
 interface CommentInputProps {
   avatar: string;

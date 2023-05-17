@@ -38,7 +38,7 @@ export default function CommentInput({
         </div>
       </div>
       <div className="mt-2 w-24 self-end text-sm">
-        <NextButton color="grayBtn" label="댓글 게시"></NextButton>
+        <NextButton color="gray" text="댓글 게시" />
       </div>
     </>
   );

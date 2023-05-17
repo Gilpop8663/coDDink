@@ -154,16 +154,17 @@ export default function OwnerInfo({
                         <NextButton
                           onClick={() => onFollowClick(item.userId)}
                           size="xs"
-                          color="followDelBtn"
-                          label={'팔로잉'}
-                        ></NextButton>
+                          color="red"
+                          text="팔로잉"
+                          hoverText="팔로우 취소"
+                        />
                       ) : (
                         <NextButton
                           onClick={() => onFollowClick(item.userId)}
                           size="xs"
-                          color="blueBtn"
-                          label={'팔로우'}
-                        ></NextButton>
+                          color="blue"
+                          text="팔로우"
+                        />
                       )}
                     </div>
                   )}

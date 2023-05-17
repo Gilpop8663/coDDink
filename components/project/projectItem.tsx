@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { CoddinkFollow, CoddinkProjectOwner } from '@prisma/client';
+import { CoddinkFollow } from '@prisma/client';
 import { OwnerProps } from 'pages';
 import { cls, makeImageURL } from '@libs/client/utils';
-import NextButton from '@components/upload/NextButton';
-import UploadButton from '@components/uploadButton';
 import OwnerInfo from './ownerInfo';
 
 interface ItemProps {

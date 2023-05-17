@@ -116,10 +116,16 @@ export default function EditSidebar({
         <div className="mt-20 space-y-4 border bg-white py-7 px-4 shadow-md">
           {content.length && !isDraft ? (
             <>
-              <NextButton color="greenDiv" label="계속" onClick={onSetting} />
               <NextButton
-                label="초안으로 저장"
-                color="blueBtn"
+                color="green"
+                text="계속"
+                type="button"
+                onClick={onSetting}
+              />
+              <NextButton
+                text="초안으로 저장"
+                color="blue"
+                type="button"
                 onClick={onDraftClick}
               />
               <div
@@ -147,9 +153,10 @@ export default function EditSidebar({
             </>
           ) : (
             <>
-              <NextButton color="disabled" label="계속" />
+              <NextButton type="button" color="disabled" text="계속" />
               <NextButton
-                label={isDraft ? '로딩중' : '초안으로 저장'}
+                type="button"
+                text={isDraft ? '로딩중' : '초안으로 저장'}
                 color="disabled"
               />
               <div className="mt-4 flex justify-center text-gray-200">

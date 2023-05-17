@@ -1,12 +1,9 @@
 import { useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
-import { CoddinkFollow, CoddinkProjectOwner } from '@prisma/client';
+import { CoddinkFollow } from '@prisma/client';
 import { OwnerProps } from 'pages';
 import { makeImageURL } from '@libs/client/utils';
-import DeleteModal from '@components/profile/deleteModal';
 import NextButton from '@components/upload/NextButton';
-import UploadButton from '@components/uploadButton';
 import OwnerInfo from './ownerInfo';
 
 interface ItemProps {
@@ -77,16 +74,12 @@ export default function ProjectDraftItem({
         {isContentTouch && (
           <div className="absolute bottom-0 flex h-full w-full flex-col items-center justify-center rounded-md bg-black/40  px-4 ">
             <div className="flex flex-col space-y-2">
+              <NextButton onClick={onClick} color="blue" text="프로젝트 편집" />
               <NextButton
-                onClick={onClick}
-                color="blueDiv"
-                label="프로젝트 편집"
-              ></NextButton>
-              <NextButton
-                color="grayBtn"
+                color="gray"
                 onClick={onDeleteModalClick}
-                label="프로젝트 삭제"
-              ></NextButton>
+                text="프로젝트 삭제"
+              />
             </div>
             <span className="absolute bottom-5 font-semibold text-white hover:underline">
               {title}

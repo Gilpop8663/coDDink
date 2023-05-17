@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { UseFormRegisterReturn, UseFormSetValue } from 'react-hook-form';
-import { KeyedMutator, mutate, SWRConfig } from 'swr';
-import { FormProps } from 'pages/profile/[id]/editor';
+import { UseFormRegisterReturn } from 'react-hook-form';
 import { cls } from '@libs/client/utils';
 import NextButton from '@components/upload/NextButton';
 
@@ -130,9 +128,10 @@ export default function ProfileWeb({
           <NextButton
             onClick={onClick}
             size="xs"
-            color="blueBtn"
-            label="링크"
-          ></NextButton>
+            color="blue"
+            type="button"
+            text="링크"
+          />
         </div>
       )}
     </div>

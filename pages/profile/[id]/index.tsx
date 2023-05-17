@@ -372,7 +372,7 @@ const Profile: NextPage = () => {
     setIsBannerLoading(false);
   };
 
-  const bannerCancleClick = () => {
+  const bannerCancelClick = () => {
     setIsBannerClick(false);
     setBanner({ previewSrc: '', imageSrc: '', position: '' });
   };
@@ -521,8 +521,8 @@ const Profile: NextPage = () => {
                   </label>
                   <NextButton
                     onClick={bannerResetClick}
-                    color="grayBtn"
-                    label="제거"
+                    color="gray"
+                    text="제거"
                   />
                 </div>
               </div>
@@ -639,16 +639,17 @@ const Profile: NextPage = () => {
               <div className="w-16">
                 <NextButton
                   onClick={bannerFinishClick}
-                  color="blueDiv"
-                  label="완료"
-                ></NextButton>
+                  color="blue"
+                  type="button"
+                  text="완료"
+                />
               </div>
               <div className="w-16">
                 <NextButton
-                  onClick={bannerCancleClick}
-                  color="grayBtn"
-                  label="취소"
-                ></NextButton>
+                  onClick={bannerCancelClick}
+                  color="gray"
+                  text="취소"
+                />
               </div>
             </div>
           </div>
@@ -709,9 +710,10 @@ const Profile: NextPage = () => {
               <Link href={`/profile/${userData?.userInfo?.id}/editor`}>
                 <a>
                   <NextButton
-                    color="blueDiv"
-                    label="내 프로필 편집"
-                  ></NextButton>
+                    color="blue"
+                    type="button"
+                    text="내 프로필 편집"
+                  />
                 </a>
               </Link>
             )}
@@ -723,17 +725,18 @@ const Profile: NextPage = () => {
                 ) ? (
                   <NextButton
                     onClick={() => onFollowClick(userData?.userInfo.id)}
-                    color="followDelBtn"
-                    label={'팔로잉'}
-                  ></NextButton>
+                    color="red"
+                    text="팔로잉"
+                    hoverText="팔로우 취소"
+                  />
                 ) : (
                   <NextButton
                     onClick={() => onFollowClick(userData?.userInfo.id)}
-                    color="blueBtn"
-                    label={'팔로우'}
-                  ></NextButton>
+                    color="blue"
+                    text="팔로우"
+                  />
                 )}
-                {/* <NextButton color="grayBtn" label="메세지"></NextButton> */}
+                {/* <NextButton color="grayBtn" label="메세지"/> */}
               </>
             )}
           </div>
@@ -880,9 +883,10 @@ const Profile: NextPage = () => {
               <Link href={`/profile/${userData?.userInfo?.id}/editor`}>
                 <a>
                   <NextButton
-                    color="blueDiv"
-                    label="내 프로필 편집"
-                  ></NextButton>
+                    color="blue"
+                    type="button"
+                    text="내 프로필 편집"
+                  />
                 </a>
               </Link>
             )}
@@ -894,17 +898,18 @@ const Profile: NextPage = () => {
                 ) ? (
                   <NextButton
                     onClick={() => onFollowClick(userData?.userInfo.id)}
-                    color="followDelBtn"
-                    label={'팔로잉'}
-                  ></NextButton>
+                    color="red"
+                    text="팔로잉"
+                    hoverText="팔로우 취소"
+                  />
                 ) : (
                   <NextButton
                     onClick={() => onFollowClick(userData?.userInfo.id)}
-                    color="blueBtn"
-                    label={'팔로우'}
-                  ></NextButton>
+                    color="blue"
+                    text="팔로우"
+                  />
                 )}
-                {/* <NextButton color="grayBtn" label="메세지"></NextButton> */}
+                {/* <NextButton color="grayBtn" label="메세지"/> */}
               </>
             )}
           </div>
