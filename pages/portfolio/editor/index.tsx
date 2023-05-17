@@ -26,7 +26,7 @@ import ClickedProject from '@components/project/clickedProject';
 import SubUploadButton from '@components/subUploadButton';
 import TextArea from '@components/textArea';
 import NextButton from '@components/upload/nextButton';
-import UploadInput from '@components/upload/uploadInput';
+import UploadInput from '@components/upload/UploadInput';
 import UploadButton from '@components/uploadButton';
 
 export interface UploadProps {
@@ -189,7 +189,7 @@ const Editor: NextPage = () => {
     let thumbnailSrc = '';
 
     const contentArr = await Promise.all(
-      content.map(async item => {
+      content.map(async (item) => {
         if (item.kind === 'image') {
           if (item.fileData && !item.imageSrc) {
             const imageSrc = await cfImageUpload(item.fileData);
@@ -231,7 +231,7 @@ const Editor: NextPage = () => {
   };
 
   const onClearAttatchment = (idx: number) => {
-    setContent(prev => {
+    setContent((prev) => {
       const newArr = [...prev.slice(0, idx), ...prev.slice(idx + 1)];
       return newArr;
     });
@@ -246,12 +246,12 @@ const Editor: NextPage = () => {
       alignText: 'text-left',
     };
     if (!idx && idx !== 0) {
-      setContent(prev => [...prev, newContent]);
+      setContent((prev) => [...prev, newContent]);
     } else {
       if (idx === 0) {
-        setContent(prev => [newContent, ...prev]);
+        setContent((prev) => [newContent, ...prev]);
       } else {
-        setContent(prev => [
+        setContent((prev) => [
           ...prev.slice(0, idx),
           newContent,
           ...prev.slice(idx),
@@ -270,12 +270,12 @@ const Editor: NextPage = () => {
     };
 
     if (!idx && idx !== 0) {
-      setContent(prev => [...prev, newContent]);
+      setContent((prev) => [...prev, newContent]);
     } else {
       if (idx === 0) {
-        setContent(prev => [newContent, ...prev]);
+        setContent((prev) => [newContent, ...prev]);
       } else {
-        setContent(prev => [
+        setContent((prev) => [
           ...prev.slice(0, idx),
           newContent,
           ...prev.slice(idx),
@@ -288,7 +288,7 @@ const Editor: NextPage = () => {
     if (!e.target) return;
     // setCurrentValue(e.target.value);
 
-    setContent(prev => {
+    setContent((prev) => {
       const curValue = { ...prev[idx], description: e.target.value };
 
       const newContent = [
@@ -302,11 +302,11 @@ const Editor: NextPage = () => {
   };
 
   const onSetting = () => {
-    setIsSetting(prev => !prev);
+    setIsSetting((prev) => !prev);
   };
 
   const onVisibleClick = () => {
-    setIsVisible(prev => !prev);
+    setIsVisible((prev) => !prev);
   };
 
   const onPublicClick = (value: boolean) => {
@@ -362,12 +362,12 @@ const Editor: NextPage = () => {
     }
 
     if (!idx && idx !== 0) {
-      setContent(prev => [...prev, ...arr]);
+      setContent((prev) => [...prev, ...arr]);
     } else {
       if (idx === 0) {
-        setContent(prev => [...arr, ...prev]);
+        setContent((prev) => [...arr, ...prev]);
       } else {
-        setContent(prev => {
+        setContent((prev) => {
           const newArr = [...prev.slice(0, idx), ...arr, ...prev.slice(idx)];
 
           return newArr;
@@ -384,30 +384,30 @@ const Editor: NextPage = () => {
     if (e.key === 'Enter') {
       if (kind === 'tags') {
         if (tagValue === '' || tagArr.length >= 10) return;
-        setTagArr(prev => [...prev, tagValue]);
+        setTagArr((prev) => [...prev, tagValue]);
         setValue('tags', '');
       } else if (kind === 'category') {
         if (categoryValue === '' || categoryArr.length >= 10) return;
-        setCategoryArr(prev => [...prev, categoryValue]);
+        setCategoryArr((prev) => [...prev, categoryValue]);
         setValue('category', '');
       } else if (kind === 'tools') {
         if (toolValue === '' || toolArr.length >= 10) return;
-        setToolArr(prev => [...prev, toolValue]);
+        setToolArr((prev) => [...prev, toolValue]);
         setValue('tools', '');
       }
     } else if (e.keyCode === 8) {
       if (kind === 'tags') {
         if (tagValue !== '') return;
-        setTagArr(prev => [...prev.slice(0, -1)]);
+        setTagArr((prev) => [...prev.slice(0, -1)]);
       } else if (kind === 'category') {
         if (categoryValue !== '') return;
-        setCategoryArr(prev => [...prev.slice(0, -1)]);
+        setCategoryArr((prev) => [...prev.slice(0, -1)]);
       } else if (kind === 'tools') {
         if (toolValue !== '') return;
-        setToolArr(prev => [...prev.slice(0, -1)]);
+        setToolArr((prev) => [...prev.slice(0, -1)]);
       } else if (kind === 'owner') {
         if (ownerValue !== '') return;
-        setOwnerArr(prev => [...prev.slice(0, -1)]);
+        setOwnerArr((prev) => [...prev.slice(0, -1)]);
       }
     }
   };
@@ -418,7 +418,7 @@ const Editor: NextPage = () => {
     idx: number
   ) => {
     if (kind === 'tags') {
-      setTagArr(prev => {
+      setTagArr((prev) => {
         let newContent;
         if (idx === 0) {
           newContent = [...prev.slice(idx + 1)];
@@ -428,7 +428,7 @@ const Editor: NextPage = () => {
         return newContent;
       });
     } else if (kind === 'category') {
-      setCategoryArr(prev => {
+      setCategoryArr((prev) => {
         let newContent;
         if (idx === 0) {
           newContent = [...prev.slice(idx + 1)];
@@ -438,7 +438,7 @@ const Editor: NextPage = () => {
         return newContent;
       });
     } else if (kind === 'tools') {
-      setToolArr(prev => {
+      setToolArr((prev) => {
         let newContent;
         if (idx === 0) {
           newContent = [...prev.slice(idx + 1)];
@@ -448,7 +448,7 @@ const Editor: NextPage = () => {
         return newContent;
       });
     } else if (kind === 'owner') {
-      setOwnerArr(prev => {
+      setOwnerArr((prev) => {
         let newContent;
         if (idx === 0) {
           newContent = [...prev.slice(idx + 1)];
@@ -471,7 +471,7 @@ const Editor: NextPage = () => {
     let thumbnailSrc = '';
 
     const contentArr = await Promise.all(
-      content.map(async item => {
+      content.map(async (item) => {
         if (item.kind === 'image') {
           if (item.fileData) {
             const imageSrc = await cfImageUpload(item.fileData);
@@ -516,9 +516,9 @@ const Editor: NextPage = () => {
 
   const onUserClick = (e: React.MouseEvent, item: UserDataProps) => {
     if (ownerValue === '' || ownerArr.length >= 10) return;
-    const isOverlap = ownerArr.find(ele => ele.id === item.id);
+    const isOverlap = ownerArr.find((ele) => ele.id === item.id);
     if (isOverlap) return;
-    setOwnerArr(prev => {
+    setOwnerArr((prev) => {
       const newOnwer = [...prev, item];
       return newOnwer;
     });
@@ -526,7 +526,7 @@ const Editor: NextPage = () => {
   };
 
   const onPreviewClick = () => {
-    setIsPreview(prev => !prev);
+    setIsPreview((prev) => !prev);
   };
 
   useEffect(() => {
@@ -600,7 +600,9 @@ const Editor: NextPage = () => {
   useEffect(() => {
     if (editProjectData && editProjectData.ok) {
       setCategoryArr(() => {
-        const newArr = editProjectData.project.category.map(item => item.name);
+        const newArr = editProjectData.project.category.map(
+          (item) => item.name
+        );
 
         return newArr;
       });
@@ -611,7 +613,7 @@ const Editor: NextPage = () => {
       setValue('description', editProjectData.project.description);
 
       setContent(() => {
-        const newArr = editProjectData.project.contents.map(item => {
+        const newArr = editProjectData.project.contents.map((item) => {
           return {
             alignText: item.alignText,
             language: item.language,
@@ -633,12 +635,12 @@ const Editor: NextPage = () => {
         });
       }
 
-      setTagArr(editProjectData.project.tags.map(item => item.name));
-      setToolArr(editProjectData.project.tools.map(item => item.name));
+      setTagArr(editProjectData.project.tags.map((item) => item.name));
+      setToolArr(editProjectData.project.tools.map((item) => item.name));
 
-      setOwnerArr(prev => {
+      setOwnerArr((prev) => {
         const newArr: UserDataProps[] = [];
-        editProjectData.project.owner.forEach(item => {
+        editProjectData.project.owner.forEach((item) => {
           if (item.userId === user?.id) return;
           newArr.push({
             name: item.user.name,
@@ -668,7 +670,8 @@ const Editor: NextPage = () => {
               src={loadingImg}
               alt="loadingImage"
               layout="fill"
-              className="opacity-40"></Image>
+              className="opacity-40"
+            ></Image>
             <LoadingSpinner></LoadingSpinner>
           </div>
         </div>
@@ -688,13 +691,15 @@ const Editor: NextPage = () => {
           className={cls(
             isSubmitLoading ? 'fixed' : 'absolute',
             ' top-0 grid w-full grid-rows-1 bg-gray-100'
-          )}>
+          )}
+        >
           <div className="row-span-1 mt-16 grid w-full grid-rows-1 gap-4 bg-gray-100 p-5 lg:grid-cols-8  2xl:grid-cols-9">
             <div
               className={cls(
                 content.length > 0 ? '' : 'h-screen justify-center',
                 'relative flex min-h-screen w-full flex-col items-center border bg-white shadow-lg  lg:col-span-6 2xl:col-span-7  '
-              )}>
+              )}
+            >
               {content.length === 0 ? (
                 <EditFirstScreen
                   register={register}
@@ -711,7 +716,8 @@ const Editor: NextPage = () => {
                         className={cls(
                           content.length === 1 ? '' : '',
                           'w-full'
-                        )}>
+                        )}
+                      >
                         {item.kind === 'image' && (
                           <PreviewImage
                             onAddTextArea={onAddTextArea}
@@ -733,7 +739,7 @@ const Editor: NextPage = () => {
                             textValue={item.description}
                             draftAlign={item?.alignText}
                             draftFontSize={item?.fontSize}
-                            onChange={e => onChange(e, idx)}
+                            onChange={(e) => onChange(e, idx)}
                           />
                         )}
                         {item.kind === 'code' && (
@@ -747,7 +753,8 @@ const Editor: NextPage = () => {
                             idx={idx}
                             draftLang={item.language}
                             draftFontSize={item.fontSize}
-                            onChange={e => onChange(e, idx)}></PreviewCode>
+                            onChange={(e) => onChange(e, idx)}
+                          ></PreviewCode>
                         )}
                       </div>
                     ))}

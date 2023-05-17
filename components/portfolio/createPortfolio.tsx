@@ -15,7 +15,7 @@ import { cls, makeImageURL } from '@libs/client/utils';
 import ErrorMessage from '@components/error';
 import LoadingSpinner from '@components/loadingSpinner';
 import NextButton from '@components/upload/nextButton';
-import UploadInput from '@components/upload/uploadInput';
+import UploadInput from '@components/upload/UploadInput';
 import UploadButton from '@components/uploadButton';
 
 interface CreatePortfoiloProps {
