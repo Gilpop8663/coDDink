@@ -1,6 +1,6 @@
 import React from 'react';
 import { CoddinkUser } from '@prisma/client';
-import Header from './header';
+import Header from '@components/header';
 
 interface LayoutProps {
   isLogin: boolean | undefined;

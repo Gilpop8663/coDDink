@@ -29,8 +29,8 @@ import {
   timeConverter,
 } from '@libs/client/utils';
 import Button from '@components/common/Button';
+import Layout from '@components/common/Layout';
 import HeadMeta from '@components/headMeta';
-import Layout from '@components/layout';
 import CategoryButton from '@components/profile/categoryButton';
 import DeleteModal from '@components/profile/deleteModal';
 import ClickedProject from '@components/project/clickedProject';

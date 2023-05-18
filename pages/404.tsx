@@ -1,7 +1,7 @@
 import React from 'react';
 import useSWR from 'swr';
 import { useUserState } from '@libs/client/useUser';
-import Layout from '@components/layout';
+import Layout from '@components/common/Layout';
 
 export default function Custom404Page() {
   const { data }: useUserState = useSWR('/api/users/me');
@@ -10,7 +10,8 @@ export default function Custom404Page() {
     <Layout
       isLogin={data && data.ok}
       profile={data?.profile}
-      userId={data?.profile?.id}>
+      userId={data?.profile?.id}
+    >
       <div className="fixed flex h-screen w-screen items-center justify-center text-3xl font-semibold">
         존재하지 않는 페이지입니다
       </div>

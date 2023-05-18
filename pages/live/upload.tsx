@@ -8,7 +8,7 @@ import useMutation from '@libs/client/useMutation';
 import useUser, { useUserState } from '@libs/client/useUser';
 import Button from '@components/common/Button';
 import Input from '@components/common/Input';
-import Layout from '@components/layout';
+import Layout from '@components/common/Layout';
 
 interface FormProps {
   title: string;

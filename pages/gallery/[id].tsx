@@ -23,7 +23,7 @@ import useMutation from '@libs/client/useMutation';
 import client from '@libs/server/client';
 import { withApiSession } from '@libs/server/withSession';
 import { withSsrSession } from '@libs/server/withSsrSession';
-import Layout from '@components/layout';
+import Layout from '@components/common/Layout';
 import DeleteModal from '@components/profile/deleteModal';
 import ClickedProject from '@components/project/clickedProject';
 
@@ -64,7 +64,7 @@ const Gallery: NextPage = () => {
   const [commentArr, setCommentArr] = useState<CommentWithUser[]>([]);
 
   const onMoreCommentClick = () => {
-    setCommentPage(prev => prev + 1);
+    setCommentPage((prev) => prev + 1);
   };
   const [sendFollow, { data: followData, loading: followLoading }] =
     useMutation<CommentResponse>('/api/users/follow');
@@ -187,15 +187,15 @@ const Gallery: NextPage = () => {
     <Layout
       isLogin={data && data.ok}
       profile={data?.profile}
-      userId={data?.profile?.id}>
+      userId={data?.profile?.id}
+    >
       {isDelete === 'comment' && (
         <DeleteModal
           title="댓글 삭제"
           description="이 댓글을 삭제하시겠습니까?"
           onDeleteModalClick={() => onDeleteModalClick(null, null)}
-          onProjectDeleteClick={() =>
-            onCommentDeleteClick(deleteCommentTarget)
-          }></DeleteModal>
+          onProjectDeleteClick={() => onCommentDeleteClick(deleteCommentTarget)}
+        ></DeleteModal>
       )}
       <div className="bg-zinc-50">
         {detailData?.ok && detailData.project && (
@@ -271,7 +271,8 @@ const Page: NextPage<NextPageProps> = ({
             profile,
           },
         },
-      }}>
+      }}
+    >
       <Gallery />
     </SWRConfig>
   );

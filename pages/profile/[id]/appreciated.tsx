@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import { useUserState } from '@libs/client/useUser';
-import Layout from '@components/layout';
+import Layout from '@components/common/Layout';
 
 const ProfileLike: NextPage = () => {
   const { data }: useUserState = useSWR('/api/users/me');
@@ -21,7 +21,8 @@ const ProfileLike: NextPage = () => {
     <Layout
       isLogin={data && data.ok}
       profile={data?.profile}
-      userId={data?.profile?.id}>
+      userId={data?.profile?.id}
+    >
       <></>
     </Layout>
   );

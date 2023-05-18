@@ -16,8 +16,8 @@ import useSWRInfinite from 'swr/infinite';
 import useMutation from '@libs/client/useMutation';
 import { ProfileResponse } from '@libs/client/useUser';
 import client from '@libs/server/client';
+import Layout from '@components/common/Layout';
 import HeadMeta from '@components/headMeta';
-import Layout from '@components/layout';
 import LoadingSpinner from '@components/loadingSpinner';
 import DeleteModal from '@components/profile/deleteModal';
 import ClickedProject from '@components/project/clickedProject';
@@ -149,7 +149,7 @@ const Home: NextPage = () => {
     );
 
   const onMoreCommentClick = () => {
-    setCommentPage(prev => prev + 1);
+    setCommentPage((prev) => prev + 1);
     mutate();
   };
 
@@ -181,7 +181,7 @@ const Home: NextPage = () => {
     return `/api/projects/search?search=${searchQuery.search}&page=${pageIndex}`; // SWR 키
   };
 
-  const fetcher = (url: string) => fetch(url).then(res => res.json());
+  const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
   const {
     data: projectsInfiniteData,
@@ -194,7 +194,7 @@ const Home: NextPage = () => {
   const projectsData = projectsInfiniteData
     ? {
         ok: true,
-        projects: projectsInfiniteData.map(item => item.projects).flat(),
+        projects: projectsInfiniteData.map((item) => item.projects).flat(),
       }
     : searchProjectData;
 
@@ -311,7 +311,7 @@ const Home: NextPage = () => {
       document.documentElement.scrollTop + window.innerHeight ===
       document.documentElement.scrollHeight
     ) {
-      setSize(p => p + 1);
+      setSize((p) => p + 1);
     }
   }
 
@@ -366,28 +366,27 @@ const Home: NextPage = () => {
     <Layout
       isLogin={data && data.ok}
       profile={data?.profile}
-      userId={data?.profile?.id}>
+      userId={data?.profile?.id}
+    >
       <HeadMeta></HeadMeta>
       {isDelete === 'project' && (
         <DeleteModal
           title="프로젝트 삭제"
           description="이 프로젝트를 삭제하시겠습니까?"
           onDeleteModalClick={() => onDeleteModalClick(null, null)}
-          onProjectDeleteClick={() =>
-            onProjectDeleteClick(deleteProjectTarget)
-          }></DeleteModal>
+          onProjectDeleteClick={() => onProjectDeleteClick(deleteProjectTarget)}
+        ></DeleteModal>
       )}
       {isDelete === 'comment' && (
         <DeleteModal
           title="댓글 삭제"
           description="이 댓글을 삭제하시겠습니까?"
           onDeleteModalClick={() => onDeleteModalClick(null, null)}
-          onProjectDeleteClick={() =>
-            onCommentDeleteClick(deleteCommentTarget)
-          }></DeleteModal>
+          onProjectDeleteClick={() => onCommentDeleteClick(deleteCommentTarget)}
+        ></DeleteModal>
       )}
       <div className="grid w-full grid-cols-1 place-items-center gap-6 px-6 py-6 sm:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-        {projectsData?.projects?.map(item => (
+        {projectsData?.projects?.map((item) => (
           <ProjectItem
             projectId={item?.id}
             visible={item?.visible}
@@ -465,7 +464,8 @@ const Page: NextPage<NextPageProps> = ({ projects, query }) => {
             },
           query: {},
         },
-      }}>
+      }}
+    >
       <Home />
     </SWRConfig>
   );
