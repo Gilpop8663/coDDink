@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -8,7 +7,7 @@ import useSWR from 'swr';
 import useMutation from '@libs/client/useMutation';
 import { cls, makeImageURL } from '@libs/client/utils';
 import Button from '@components/common/Button';
-import SearchBar from './searchBar';
+import SearchBar from '@components/common/SearchBar';
 
 interface HeaderProps {
   isLogin: boolean;
@@ -22,10 +21,6 @@ interface LogoutResult {
   ok: boolean;
 }
 
-export interface SearchProps {
-  search: string;
-}
-
 export default function Header({
   isLogin,
   profile,
@@ -34,7 +29,6 @@ export default function Header({
   isTop,
 }: HeaderProps) {
   const router = useRouter();
-  const { register, handleSubmit } = useForm<SearchProps>();
   const path = router.pathname;
   const [isWorkOn, setIsWorkOn] = useState(false);
   const [isProfileOn, setIsProfileOn] = useState(false);
@@ -71,10 +65,6 @@ export default function Header({
   };
   const onProfileLeave = () => {
     setIsProfileOn(false);
-  };
-
-  const onValid = (value: SearchProps) => {
-    router.push(`/search/projects?search=${value.search}`);
   };
 
   useEffect(() => {
@@ -327,12 +317,7 @@ export default function Header({
         </>
       )}
 
-      <SearchBar
-        register={register('search')}
-        isTop={isTop}
-        handleSubmit={handleSubmit}
-        onValid={onValid}
-      ></SearchBar>
+      <SearchBar isTop={isTop} />
 
       <div className="hidden space-x-2 lg:flex">
         {isLogin === false ? (
