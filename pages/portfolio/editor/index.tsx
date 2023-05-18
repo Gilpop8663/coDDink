@@ -11,7 +11,7 @@ import useMutation from '@libs/client/useMutation';
 import useUser, { useUserState } from '@libs/client/useUser';
 import { cls } from '@libs/client/utils';
 import Layout from '@components/common/Layout';
-import LoadingSpinner from '@components/loadingSpinner';
+import LoadingSpinner from '@components/common/LoadingSpinner';
 import CreatePortfolio from '@components/portfolio/createPortfolio';
 import EditFirstScreen from '@components/portfolio/editFirstScreen';
 import EditMenu from '@components/portfolio/editMenu';
@@ -658,7 +658,7 @@ const Editor: NextPage = () => {
       {isSubmitLoading && (
         <div className="fixed top-0 left-0 z-50 flex h-screen w-screen items-center justify-center bg-black/50 text-3xl font-bold text-white">
           <span className="mr-5">게시물 업로드 중입니다</span>
-          <LoadingSpinner></LoadingSpinner>
+          <LoadingSpinner />
         </div>
       )}
       {isUpload && (
@@ -670,7 +670,7 @@ const Editor: NextPage = () => {
               layout="fill"
               className="opacity-40"
             ></Image>
-            <LoadingSpinner></LoadingSpinner>
+            <LoadingSpinner />
           </div>
         </div>
       )}

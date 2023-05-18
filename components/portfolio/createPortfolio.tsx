@@ -13,7 +13,7 @@ import {
 import { cls, makeImageURL } from '@libs/client/utils';
 import Button from '@components/common/Button';
 import ErrorMessage from '@components/common/ErrorMessage';
-import LoadingSpinner from '@components/loadingSpinner';
+import LoadingSpinner from '@components/common/LoadingSpinner';
 import UploadInput from '@components/upload/UploadInput';
 import UploadButton from '@components/uploadButton';
 
