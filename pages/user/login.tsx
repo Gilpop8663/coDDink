@@ -12,8 +12,8 @@ import FacebookBtn from '@components/auth/facebookBtn';
 import GoogleBtn from '@components/auth/googleBtn';
 import Button from '@components/common/Button';
 import ErrorMessage from '@components/common/ErrorMessage';
+import Input from '@components/common/Input';
 import HeadMeta from '@components/headMeta';
-import Input from '@components/input';
 import InputPassword from '@components/inputPassword';
 import NATURE_IMAGE from '@public/user-login.jpg';
 
@@ -157,7 +157,6 @@ export default function Login() {
                   </a>
                 </Link>
               </div>
-
               <Input
                 label="이메일 주소"
                 type="email"

@@ -6,8 +6,8 @@ import { CoddinkStream } from '@prisma/client';
 import useSWR from 'swr';
 import useMutation from '@libs/client/useMutation';
 import useUser, { useUserState } from '@libs/client/useUser';
-import Button from '@components/button';
-import Input from '@components/input';
+import Button from '@components/common/Button';
+import Input from '@components/common/Input';
 import Layout from '@components/layout';
 
 interface FormProps {
