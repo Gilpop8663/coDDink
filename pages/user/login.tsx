@@ -11,7 +11,7 @@ import { makeImageURL } from '@libs/client/utils';
 import FacebookBtn from '@components/auth/facebookBtn';
 import GoogleBtn from '@components/auth/googleBtn';
 import Button from '@components/common/Button';
-import ErrorMessage from '@components/error';
+import ErrorMessage from '@components/common/ErrorMessage';
 import HeadMeta from '@components/headMeta';
 import Input from '@components/input';
 import InputPassword from '@components/inputPassword';
@@ -172,11 +172,9 @@ export default function Login() {
                 })}
               ></Input>
               {mailData?.ok == false && (
-                <ErrorMessage>{mailData?.message}</ErrorMessage>
+                <ErrorMessage text={mailData?.message} />
               )}
-              {errors.email && (
-                <ErrorMessage>{errors.email.message}</ErrorMessage>
-              )}
+              {errors.email && <ErrorMessage text={errors.email.message} />}
               <div className="mt-4 w-20 self-end">
                 <Button color="blue" text="계속" size="sm" py="2" />
               </div>
@@ -236,10 +234,10 @@ export default function Login() {
                 })}
               ></InputPassword>
               {isWrong === true && data?.ok === false && (
-                <ErrorMessage>{data?.message}</ErrorMessage>
+                <ErrorMessage text={data?.message} />
               )}
               {errors.password && (
-                <ErrorMessage>{errors.password.message}</ErrorMessage>
+                <ErrorMessage text={errors.password.message} />
               )}
               <div className="mt-4  w-20 self-end">
                 <Button color="blue" text="계속" size="sm" py="2" />

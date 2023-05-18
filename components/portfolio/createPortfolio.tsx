@@ -12,7 +12,7 @@ import {
 } from 'pages/portfolio/editor';
 import { cls, makeImageURL } from '@libs/client/utils';
 import Button from '@components/common/Button';
-import ErrorMessage from '@components/error';
+import ErrorMessage from '@components/common/ErrorMessage';
 import LoadingSpinner from '@components/loadingSpinner';
 import UploadInput from '@components/upload/UploadInput';
 import UploadButton from '@components/uploadButton';
@@ -137,7 +137,7 @@ export default function CreatePortfolio({
                 )}
               </div>
               {errors.thumbnail && (
-                <ErrorMessage>{errors.thumbnail.message}</ErrorMessage>
+                <ErrorMessage text={errors.thumbnail.message} />
               )}
             </div>
           </div>
@@ -162,9 +162,7 @@ export default function CreatePortfolio({
                 },
               })}
             />
-            {errors.title && (
-              <ErrorMessage>{errors.title.message}</ErrorMessage>
-            )}
+            {errors.title && <ErrorMessage text={errors.title.message} />}
             <UploadInput
               label="프로젝트 태그"
               name="tags"
@@ -207,9 +205,7 @@ export default function CreatePortfolio({
                     : false,
               })}
             />
-            {errors.category && (
-              <ErrorMessage>{errors.category.message}</ErrorMessage>
-            )}
+            {errors.category && <ErrorMessage text={errors.category.message} />}
             <UploadInput
               label="링크 URL"
               name="linkURL"
@@ -228,9 +224,7 @@ export default function CreatePortfolio({
                 },
               })}
             />
-            {errors.linkURL && (
-              <ErrorMessage>{errors.linkURL.message}</ErrorMessage>
-            )}
+            {errors.linkURL && <ErrorMessage text={errors.linkURL.message} />}
             <label
               className="relative top-2 z-10 text-xs font-semibold"
               htmlFor="visible"
@@ -322,7 +316,7 @@ export default function CreatePortfolio({
               })}
             />
             {errors.description && (
-              <ErrorMessage>{errors.description.message}</ErrorMessage>
+              <ErrorMessage text={errors.description.message} />
             )}
             <UploadInput
               label="공동 소유자"
@@ -385,9 +379,7 @@ export default function CreatePortfolio({
                   </>
                 )}
               </div>
-              {errors.content && (
-                <ErrorMessage>{errors.content.message}</ErrorMessage>
-              )}
+              {errors.content && <ErrorMessage text={errors.content.message} />}
             </div>
           </div>
         </div>

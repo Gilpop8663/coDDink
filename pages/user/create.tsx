@@ -11,7 +11,7 @@ import { cls } from '@libs/client/utils';
 import FacebookBtn from '@components/auth/facebookBtn';
 import GoogleBtn from '@components/auth/googleBtn';
 import Button from '@components/common/Button';
-import ErrorMessage from '@components/error';
+import ErrorMessage from '@components/common/ErrorMessage';
 import HeadMeta from '@components/headMeta';
 import Input from '@components/input';
 import InputPassword from '@components/inputPassword';
@@ -166,9 +166,7 @@ export default function Create() {
               })}
             ></Input>
 
-            {errors.email && (
-              <ErrorMessage>{errors.email.message}</ErrorMessage>
-            )}
+            {errors.email && <ErrorMessage text={errors.email.message} />}
 
             <Input
               label="이름"
@@ -189,7 +187,7 @@ export default function Create() {
               })}
             ></Input>
 
-            {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
+            {errors.name && <ErrorMessage text={errors.name.message} />}
             <InputPassword
               label="암호"
               name="password"
@@ -202,9 +200,7 @@ export default function Create() {
                 },
               })}
             ></InputPassword>
-            {errors.password && (
-              <ErrorMessage>{errors.password.message}</ErrorMessage>
-            )}
+            {errors.password && <ErrorMessage text={errors.password.message} />}
           </div>
 
           <span className="pt-4 text-sm font-semibold">필수 항목</span>
@@ -218,9 +214,7 @@ export default function Create() {
               개인정보 보호정책에 따라 내 개인 정보를 수집 및 사용에 동의합니다.
             </span>
           </div>
-          {errors.policy && (
-            <ErrorMessage>{errors.policy.message}</ErrorMessage>
-          )}
+          {errors.policy && <ErrorMessage text={errors.policy.message} />}
 
           <div className="ml-2 mt-4 text-sm">
             “계정 만들기” 를 클릭함으로써

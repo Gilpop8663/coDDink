@@ -10,7 +10,6 @@ import { DetailProjectResponse } from 'pages';
 import useMutation from '@libs/client/useMutation';
 import useUser, { useUserState } from '@libs/client/useUser';
 import { cls } from '@libs/client/utils';
-import ErrorMessage from '@components/error';
 import Layout from '@components/layout';
 import LoadingSpinner from '@components/loadingSpinner';
 import CreatePortfolio from '@components/portfolio/createPortfolio';

@@ -7,7 +7,7 @@ import useMutation from '@libs/client/useMutation';
 import useUser from '@libs/client/useUser';
 import { makeImageURL } from '@libs/client/utils';
 import Button from '@components/common/Button';
-import ErrorMessage from '@components/error';
+import ErrorMessage from '@components/common/ErrorMessage';
 import HeadMeta from '@components/headMeta';
 import Input from '@components/input';
 import Layout from '@components/layout';
@@ -280,9 +280,7 @@ const ProfileEditor: NextPage = () => {
                       label="이름"
                       type="text"
                     ></Input>
-                    {errors.name && (
-                      <ErrorMessage>{errors.name.message}</ErrorMessage>
-                    )}
+                    {errors.name && <ErrorMessage text={errors.name.message} />}
                     <Input
                       register={register('job', {
                         maxLength: {
@@ -295,9 +293,7 @@ const ProfileEditor: NextPage = () => {
                       label="직업"
                       type="text"
                     ></Input>
-                    {errors.job && (
-                      <ErrorMessage>{errors.job.message}</ErrorMessage>
-                    )}
+                    {errors.job && <ErrorMessage text={errors.job.message} />}
                     <Input
                       register={register('company', {
                         maxLength: {
@@ -311,7 +307,7 @@ const ProfileEditor: NextPage = () => {
                       type="text"
                     ></Input>
                     {errors.company && (
-                      <ErrorMessage>{errors.company.message}</ErrorMessage>
+                      <ErrorMessage text={errors.company.message} />
                     )}
 
                     <div className="flex flex-col">
@@ -1147,10 +1143,10 @@ const ProfileEditor: NextPage = () => {
                           list="city"
                         />
                         {errors.country && (
-                          <ErrorMessage>{errors.country.message}</ErrorMessage>
+                          <ErrorMessage text={errors.country.message} />
                         )}
                         {errors.city && (
-                          <ErrorMessage>{errors.city.message}</ErrorMessage>
+                          <ErrorMessage text={errors.city.message} />
                         )}
                         <datalist id="city">
                           {cityData &&
@@ -1175,9 +1171,7 @@ const ProfileEditor: NextPage = () => {
                       type="text"
                       maxLength={100}
                     ></Input>
-                    {errors.URL && (
-                      <ErrorMessage>{errors.URL.message}</ErrorMessage>
-                    )}
+                    {errors.URL && <ErrorMessage text={errors.URL.message} />}
                   </div>
                 </div>
               </div>
@@ -1199,7 +1193,7 @@ const ProfileEditor: NextPage = () => {
                   maxLength={800}
                 ></TextArea>
                 {errors.introduce && (
-                  <ErrorMessage>{errors.introduce.message}</ErrorMessage>
+                  <ErrorMessage text={errors.introduce.message} />
                 )}
               </div>
             </div>
