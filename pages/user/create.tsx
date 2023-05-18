@@ -13,8 +13,8 @@ import GoogleBtn from '@components/auth/googleBtn';
 import Button from '@components/common/Button';
 import ErrorMessage from '@components/common/ErrorMessage';
 import Input from '@components/common/Input';
+import InputPassword from '@components/common/InputPassword';
 import HeadMeta from '@components/headMeta';
-import InputPassword from '@components/inputPassword';
 import Layout from '@components/layout';
 import APPLE_LOGO from '@public/apple.png';
 import FACEBOOK_LOGO from '@public/facebook.svg';
@@ -199,7 +199,7 @@ export default function Create() {
                   message: '최소 8개 이상의 문자 포함해야 합니다.',
                 },
               })}
-            ></InputPassword>
+            />
             {errors.password && <ErrorMessage text={errors.password.message} />}
           </div>
 
