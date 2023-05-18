@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React from 'react';
 import { cls } from '@libs/client/utils';
 
 interface UploadProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -31,10 +31,12 @@ export default function NextButton({
         `text-${size} ${NEXT_BUTTON_STYLES[color]} ${
           color === 'disabled' ? 'cursor-not-allowed' : 'cursor-pointer'
         }`,
-        'cursor group flex w-full items-center justify-center rounded-full py-1 px-2 font-semibold transition-colors'
+        'cursor group relative flex w-full  items-center justify-center rounded-full py-1 px-2 font-semibold transition-colors'
       )}
     >
-      <span className="text-center group-hover:invisible">{text}</span>
+      <span className="text-center group-hover:invisible group-hover:absolute">
+        {text}
+      </span>
       <span className="invisible absolute text-center group-hover:visible group-hover:relative">
         {hoverText}
       </span>
