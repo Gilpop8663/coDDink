@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { CoddinkFollow } from '@prisma/client';
 import { OwnerProps } from 'pages';
 import { cls, makeImageURL } from '@libs/client/utils';
-import NextButton from '@components/upload/NextButton';
+import Button from '@components/common/Button';
 
 interface InfoProps {
   kind: 'home' | 'detail';
@@ -151,7 +151,7 @@ export default function OwnerInfo({
                       {followingData?.find(
                         (ele) => ele.followerId === item.userId
                       ) ? (
-                        <NextButton
+                        <Button
                           onClick={() => onFollowClick(item.userId)}
                           size="xs"
                           color="red"
@@ -159,7 +159,7 @@ export default function OwnerInfo({
                           hoverText="팔로우 취소"
                         />
                       ) : (
-                        <NextButton
+                        <Button
                           onClick={() => onFollowClick(item.userId)}
                           size="xs"
                           color="blue"

@@ -1,22 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import Script from 'next/script';
-import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
 import useSWR from 'swr';
 import useMutation from '@libs/client/useMutation';
 import { ProfileResponse } from '@libs/client/useUser';
 import { makeImageURL } from '@libs/client/utils';
 import FacebookBtn from '@components/auth/facebookBtn';
 import GoogleBtn from '@components/auth/googleBtn';
-import Button from '@components/button';
+import Button from '@components/common/Button';
 import ErrorMessage from '@components/error';
 import HeadMeta from '@components/headMeta';
 import Input from '@components/input';
 import InputPassword from '@components/inputPassword';
-import NextButton from '@components/upload/NextButton';
 import NATURE_IMAGE from '@public/user-login.jpg';
 
 interface ILoginProps {
@@ -180,7 +178,7 @@ export default function Login() {
                 <ErrorMessage>{errors.email.message}</ErrorMessage>
               )}
               <div className="mt-4 w-20 self-end">
-                <NextButton color="blue" text="계속" size="sm" py="2" />
+                <Button color="blue" text="계속" size="sm" py="2" />
               </div>
               <div className="relative flex items-center justify-center">
                 <div className="mt-10 h-[0.1px] w-full bg-gray-300"></div>
@@ -244,7 +242,7 @@ export default function Login() {
                 <ErrorMessage>{errors.password.message}</ErrorMessage>
               )}
               <div className="mt-4  w-20 self-end">
-                <NextButton color="blue" text="계속" size="sm" py="2" />
+                <Button color="blue" text="계속" size="sm" py="2" />
               </div>
               <hr className="mt-12" />
               <span

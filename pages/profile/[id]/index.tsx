@@ -28,6 +28,7 @@ import {
   makeImageURL,
   timeConverter,
 } from '@libs/client/utils';
+import Button from '@components/common/Button';
 import HeadMeta from '@components/headMeta';
 import Layout from '@components/layout';
 import CategoryButton from '@components/profile/categoryButton';
@@ -35,7 +36,6 @@ import DeleteModal from '@components/profile/deleteModal';
 import ClickedProject from '@components/project/clickedProject';
 import ProjectDraftItem from '@components/project/projectDraftItem';
 import ProjectItem from '@components/project/projectItem';
-import NextButton from '@components/upload/NextButton';
 
 interface ProfileWithCount extends CoddinkUser {
   _count: {
@@ -519,11 +519,7 @@ const Profile: NextPage = () => {
                       // {...register}
                     />
                   </label>
-                  <NextButton
-                    onClick={bannerResetClick}
-                    color="gray"
-                    text="제거"
-                  />
+                  <Button onClick={bannerResetClick} color="gray" text="제거" />
                 </div>
               </div>
             )}
@@ -637,7 +633,7 @@ const Profile: NextPage = () => {
               </div>
 
               <div className="w-16">
-                <NextButton
+                <Button
                   onClick={bannerFinishClick}
                   color="blue"
                   type="button"
@@ -645,11 +641,7 @@ const Profile: NextPage = () => {
                 />
               </div>
               <div className="w-16">
-                <NextButton
-                  onClick={bannerCancelClick}
-                  color="gray"
-                  text="취소"
-                />
+                <Button onClick={bannerCancelClick} color="gray" text="취소" />
               </div>
             </div>
           </div>
@@ -709,11 +701,7 @@ const Profile: NextPage = () => {
             {userData?.userInfo.id === data?.profile?.id && (
               <Link href={`/profile/${userData?.userInfo?.id}/editor`}>
                 <a>
-                  <NextButton
-                    color="blue"
-                    type="button"
-                    text="내 프로필 편집"
-                  />
+                  <Button color="blue" type="button" text="내 프로필 편집" />
                 </a>
               </Link>
             )}
@@ -723,20 +711,20 @@ const Profile: NextPage = () => {
                   (ele: CoddinkFollow) =>
                     ele.followerId === userData?.userInfo.id
                 ) ? (
-                  <NextButton
+                  <Button
                     onClick={() => onFollowClick(userData?.userInfo.id)}
                     color="red"
                     text="팔로잉"
                     hoverText="팔로우 취소"
                   />
                 ) : (
-                  <NextButton
+                  <Button
                     onClick={() => onFollowClick(userData?.userInfo.id)}
                     color="blue"
                     text="팔로우"
                   />
                 )}
-                {/* <NextButton color="grayBtn" label="메세지"/> */}
+                {/* <Button color="grayBtn" label="메세지"/> */}
               </>
             )}
           </div>
@@ -882,11 +870,7 @@ const Profile: NextPage = () => {
             {userData?.userInfo.id === data?.profile?.id && (
               <Link href={`/profile/${userData?.userInfo?.id}/editor`}>
                 <a>
-                  <NextButton
-                    color="blue"
-                    type="button"
-                    text="내 프로필 편집"
-                  />
+                  <Button color="blue" type="button" text="내 프로필 편집" />
                 </a>
               </Link>
             )}
@@ -896,20 +880,20 @@ const Profile: NextPage = () => {
                   (ele: CoddinkFollow) =>
                     ele.followerId === userData?.userInfo.id
                 ) ? (
-                  <NextButton
+                  <Button
                     onClick={() => onFollowClick(userData?.userInfo.id)}
                     color="red"
                     text="팔로잉"
                     hoverText="팔로우 취소"
                   />
                 ) : (
-                  <NextButton
+                  <Button
                     onClick={() => onFollowClick(userData?.userInfo.id)}
                     color="blue"
                     text="팔로우"
                   />
                 )}
-                {/* <NextButton color="grayBtn" label="메세지"/> */}
+                {/* <Button color="grayBtn" label="메세지"/> */}
               </>
             )}
           </div>

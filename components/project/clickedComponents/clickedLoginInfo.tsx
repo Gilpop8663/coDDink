@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { OwnerProps } from 'pages';
-import NextButton from '@components/upload/NextButton';
+import Button from '@components/common/Button';
 import APPLE_LOGO from '@public/apple.png';
 import FACEBOOK_LOGO from '@public/facebook.svg';
 import GOOGLE_LOGO from '@public/google.svg';
@@ -24,7 +24,7 @@ export default function ClickedLoginInfo({ owner }: InfoProps) {
       <div className="mt-5 flex items-center space-x-2">
         <Link href="/user/login">
           <a className="w-32 text-sm">
-            <NextButton color="blue" text="이메일로 등록" />
+            <Button color="blue" text="이메일로 등록" />
           </a>
         </Link>
         <span className="text-sm font-semibold text-gray-400">또는</span>

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import NextButton from '@components/upload/NextButton';
+import Button from '@components/common/Button';
 
 interface DeleteModalProps {
   title: string;
@@ -42,14 +42,14 @@ export default function DeleteModal({
             <span className="mt-2 text-sm font-thin">{description}</span>
           </div>
           <div className="flex w-32">
-            <NextButton
+            <Button
               onClick={onProjectDeleteClick}
               size="sm"
               type="button"
               color="blue"
               text="삭제"
             />
-            <NextButton
+            <Button
               onClick={onDeleteModalClick}
               size="sm"
               type="button"

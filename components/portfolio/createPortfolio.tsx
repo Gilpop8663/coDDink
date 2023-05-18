@@ -5,16 +5,15 @@ import {
   UseFormRegister,
 } from 'react-hook-form';
 import Image from 'next/image';
-import { CoddinkUser } from '@prisma/client';
 import {
   thumbnailProps,
   UploadProps,
   UserDataProps,
 } from 'pages/portfolio/editor';
 import { cls, makeImageURL } from '@libs/client/utils';
+import Button from '@components/common/Button';
 import ErrorMessage from '@components/error';
 import LoadingSpinner from '@components/loadingSpinner';
-import NextButton from '@components/upload/NextButton';
 import UploadInput from '@components/upload/UploadInput';
 import UploadButton from '@components/uploadButton';
 
@@ -347,19 +346,19 @@ export default function CreatePortfolio({
               <div className="flex w-[450px] items-end space-x-4">
                 {isDraft || isThumbnailLoading || isSubmitLoading ? (
                   <>
-                    <NextButton
+                    <Button
                       text="취소"
                       type="button"
                       color="disabled"
                       size="sm"
                     />
-                    <NextButton
+                    <Button
                       text={isDraft ? '로딩중' : '초안으로 저장'}
                       type="button"
                       color="disabled"
                       size="sm"
                     />
-                    <NextButton
+                    <Button
                       text={isSubmitLoading ? '로딩중' : '게시'}
                       type="button"
                       color="disabled"
@@ -368,21 +367,21 @@ export default function CreatePortfolio({
                   </>
                 ) : (
                   <>
-                    <NextButton
+                    <Button
                       text="취소"
                       size="sm"
                       type="button"
                       color="white"
                       onClick={onSetting}
                     />
-                    <NextButton
+                    <Button
                       text="초안으로 저장"
                       size="sm"
                       type="button"
                       onClick={onDraftClick}
                       color="blue"
                     />
-                    <NextButton size="sm" text="게시" color="green" />
+                    <Button size="sm" text="게시" color="green" />
                   </>
                 )}
               </div>

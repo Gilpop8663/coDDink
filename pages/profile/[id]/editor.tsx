@@ -2,10 +2,11 @@ import type { NextPage } from 'next';
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
-import useSWR, { mutate } from 'swr';
+import useSWR from 'swr';
 import useMutation from '@libs/client/useMutation';
 import useUser from '@libs/client/useUser';
 import { makeImageURL } from '@libs/client/utils';
+import Button from '@components/common/Button';
 import ErrorMessage from '@components/error';
 import HeadMeta from '@components/headMeta';
 import Input from '@components/input';
@@ -13,7 +14,6 @@ import Layout from '@components/layout';
 import CategoryTabMenu from '@components/profile/categoryTabMenu';
 import ProfileWeb from '@components/profile/profileWeb';
 import TextArea from '@components/textArea';
-import NextButton from '@components/upload/NextButton';
 import UploadButton from '@components/uploadButton';
 
 interface LocationResponse {
@@ -214,16 +214,16 @@ const ProfileEditor: NextPage = () => {
         <div className="fixed z-10 flex h-16 w-screen items-center justify-center space-x-4 bg-white shadow-sm">
           <Link href={`/profile/${user?.id}`}>
             <a className="w-40">
-              <NextButton
+              <Button
                 size="sm"
                 color="green"
                 type="button"
-                label="프로필로 돌아가기"
+                text="프로필로 돌아가기"
               />
             </a>
           </Link>
           <div className="w-40">
-            <NextButton size="sm" color="blue" text="저장하기" />
+            <Button size="sm" color="blue" text="저장하기" />
           </div>
           <div className="absolute flex justify-center text-xs">
             <span className="relative left-64">

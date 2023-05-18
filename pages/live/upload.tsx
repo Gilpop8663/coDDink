@@ -9,7 +9,6 @@ import useUser, { useUserState } from '@libs/client/useUser';
 import Button from '@components/button';
 import Input from '@components/input';
 import Layout from '@components/layout';
-import NextButton from '@components/upload/NextButton';
 
 interface FormProps {
   title: string;
@@ -60,7 +59,7 @@ const LiveUpload: NextPage = () => {
           name="description"
           type="text"
         ></Input>
-        <NextButton color="blue" text="만들기" />
+        <Button color="blue" text="만들기" />
       </form>
     </Layout>
   );

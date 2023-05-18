@@ -10,13 +10,12 @@ import useMutation from '@libs/client/useMutation';
 import { cls } from '@libs/client/utils';
 import FacebookBtn from '@components/auth/facebookBtn';
 import GoogleBtn from '@components/auth/googleBtn';
-import Button from '@components/button';
+import Button from '@components/common/Button';
 import ErrorMessage from '@components/error';
 import HeadMeta from '@components/headMeta';
 import Input from '@components/input';
 import InputPassword from '@components/inputPassword';
 import Layout from '@components/layout';
-import NextButton from '@components/upload/NextButton';
 import APPLE_LOGO from '@public/apple.png';
 import FACEBOOK_LOGO from '@public/facebook.svg';
 import GOOGLE_LOGO from '@public/google.svg';
@@ -239,7 +238,7 @@ export default function Create() {
             을 읽었으며 이에 동의한다고 확인합니다.
           </div>
           <div className="flex w-32 self-end py-8">
-            <NextButton color="blue" text="계정 만들기" size="sm" py="2" />
+            <Button color="blue" text="계정 만들기" size="sm" py="2" />
           </div>
         </form>
       </div>

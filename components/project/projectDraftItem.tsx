@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { CoddinkFollow } from '@prisma/client';
 import { OwnerProps } from 'pages';
 import { makeImageURL } from '@libs/client/utils';
-import NextButton from '@components/upload/NextButton';
+import Button from '@components/common/Button';
 import OwnerInfo from './ownerInfo';
 
 interface ItemProps {
@@ -74,8 +74,8 @@ export default function ProjectDraftItem({
         {isContentTouch && (
           <div className="absolute bottom-0 flex h-full w-full flex-col items-center justify-center rounded-md bg-black/40  px-4 ">
             <div className="flex flex-col space-y-2">
-              <NextButton onClick={onClick} color="blue" text="프로젝트 편집" />
-              <NextButton
+              <Button onClick={onClick} color="blue" text="프로젝트 편집" />
+              <Button
                 color="gray"
                 onClick={onDeleteModalClick}
                 text="프로젝트 삭제"

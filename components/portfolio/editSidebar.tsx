@@ -1,8 +1,8 @@
 import React from 'react';
 import { UseFormRegister } from 'react-hook-form';
 import { ContentProps, UploadProps } from 'pages/portfolio/editor';
+import Button from '@components/common/Button';
 import SubUploadButton from '@components/subUploadButton';
-import NextButton from '@components/upload/NextButton';
 
 interface EditSidebarProps {
   onSetting: () => void;
@@ -116,13 +116,13 @@ export default function EditSidebar({
         <div className="mt-20 space-y-4 border bg-white py-7 px-4 shadow-md">
           {content.length && !isDraft ? (
             <>
-              <NextButton
+              <Button
                 color="green"
                 text="계속"
                 type="button"
                 onClick={onSetting}
               />
-              <NextButton
+              <Button
                 text="초안으로 저장"
                 color="blue"
                 type="button"
@@ -153,8 +153,8 @@ export default function EditSidebar({
             </>
           ) : (
             <>
-              <NextButton type="button" color="disabled" text="계속" />
-              <NextButton
+              <Button type="button" color="disabled" text="계속" />
+              <Button
                 type="button"
                 text={isDraft ? '로딩중' : '초안으로 저장'}
                 color="disabled"

@@ -7,9 +7,8 @@ import { CoddinkUser } from '@prisma/client';
 import useSWR from 'swr';
 import useMutation from '@libs/client/useMutation';
 import { cls, makeImageURL } from '@libs/client/utils';
-import Button from './button';
+import Button from '@components/common/Button';
 import SearchBar from './searchBar';
-import NextButton from './upload/NextButton';
 
 interface HeaderProps {
   isLogin: boolean;
@@ -186,7 +185,7 @@ export default function Header({
                   />
                 </svg>
                 {isLogin ? (
-                  <NextButton
+                  <Button
                     color="white"
                     text="내 작업 공유"
                     onClick={onInfoClick}
@@ -363,7 +362,7 @@ export default function Header({
               onMouseOver={onMouseOver}
               onMouseOut={onMouseLeave}
             >
-              <NextButton color="white" text="내 작업 공유"></NextButton>
+              <Button color="white" text="내 작업 공유"></Button>
               {isWorkOn && (
                 <div className="absolute h-24 w-96">
                   <div className="absolute top-12  w-[350px] rounded-md border bg-white p-5 shadow-md ">

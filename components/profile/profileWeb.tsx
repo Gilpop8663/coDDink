@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
 import { cls } from '@libs/client/utils';
-import NextButton from '@components/upload/NextButton';
+import Button from '@components/common/Button';
 
 interface ProfileWebProps {
   name: string;
@@ -125,7 +125,7 @@ export default function ProfileWeb({
         </div>
       ) : (
         <div className={cls('w-14', isVisible ? 'hidden' : '')}>
-          <NextButton
+          <Button
             onClick={onClick}
             size="xs"
             color="blue"

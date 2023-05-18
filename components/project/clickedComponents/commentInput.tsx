@@ -3,8 +3,8 @@ import { UseFormRegisterReturn } from 'react-hook-form';
 import Image from 'next/image';
 import Link from 'next/link';
 import { makeImageURL } from '@libs/client/utils';
+import Button from '@components/common/Button';
 import TextArea from '@components/textArea';
-import NextButton from '@components/upload/NextButton';
 
 interface CommentInputProps {
   id: number;
@@ -38,7 +38,7 @@ export default function CommentInput({
         </div>
       </div>
       <div className="mt-2 w-24 self-end text-sm">
-        <NextButton color="gray" text="댓글 게시" />
+        <Button color="gray" text="댓글 게시" />
       </div>
     </>
   );

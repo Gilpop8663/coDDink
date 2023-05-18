@@ -1,49 +1,47 @@
 import React from 'react';
+import { cls } from '@libs/client/utils';
 
-interface ButtonProps {
-  kind: 'white' | 'blue';
-  value: string;
-  onClick?: () => void;
-  onFocus?: () => void;
-  onMouseLeave?: () => void;
-  onMouseEnter?: () => void;
-  onMouseOver?: () => void;
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  color: 'blue' | 'green' | 'white' | 'gray' | 'red' | 'disabled';
+  text: string;
+  hoverText?: string;
+  py?: string;
+  size?: 'xs' | 'sm' | 'base' | 'lg';
 }
 
+const BUTTON_STYLES: Record<ButtonProps['color'], string> = {
+  white: 'bg-gray-50 text-gray-400 hover:underline',
+  blue: 'bg-blue-500 text-white  hover:bg-blue-600',
+  disabled: 'bg-gray-200 text-white select-none',
+  gray: 'bg-gray-50 text-black bg-white hover:bg-gray-100',
+  red: 'bg-white text-black  hover:bg-red-600 hover:text-white',
+  green: 'text-white bg-green-600 hover:bg-green-700',
+};
+
 export default function Button({
-  kind,
-  value,
-  onClick,
-  onFocus,
-  onMouseLeave,
-  onMouseEnter,
-  onMouseOver,
+  color,
+  text,
+  size = 'base',
+  py = '1',
+  hoverText = text,
+  ...rest
 }: ButtonProps) {
   return (
-    <>
-      {kind === 'white' && (
-        <button
-          onClick={onClick}
-          onMouseOver={onMouseOver}
-          onMouseLeave={onMouseLeave}
-          onMouseEnter={onMouseEnter}
-          onFocus={onFocus}
-          className="cursor-pointer rounded-full border px-4 py-2 text-sm font-semibold transition-colors hover:bg-gray-100"
-        >
-          {value}
-        </button>
+    <button
+      className={cls(
+        `text-${size} ${BUTTON_STYLES[color]} ${
+          color === 'disabled' ? 'cursor-not-allowed' : 'cursor-pointer'
+        } py-${py}`,
+        'cursor group relative flex w-full  items-center justify-center rounded-full px-2 font-semibold transition-colors'
       )}
-      {kind == 'blue' && (
-        <button
-          onClick={onClick}
-          onMouseLeave={onMouseLeave}
-          onMouseEnter={onMouseEnter}
-          onFocus={onFocus}
-          className="mt-4 flex cursor-pointer items-center justify-center self-end rounded-full bg-blue-500 px-6 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-600"
-        >
-          {value}
-        </button>
-      )}
-    </>
+      {...rest}
+    >
+      <span className="text-center group-hover:invisible group-hover:absolute">
+        {text}
+      </span>
+      <span className="invisible absolute text-center group-hover:visible group-hover:relative">
+        {hoverText}
+      </span>
+    </button>
   );
 }
