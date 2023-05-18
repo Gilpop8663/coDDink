@@ -9,6 +9,7 @@ import useUser, { useUserState } from '@libs/client/useUser';
 import Button from '@components/button';
 import Input from '@components/input';
 import Layout from '@components/layout';
+import NextButton from '@components/upload/NextButton';
 
 interface FormProps {
   title: string;
@@ -45,18 +46,21 @@ const LiveUpload: NextPage = () => {
           register={register('title')}
           label="제목"
           name="title"
-          type="text"></Input>
+          type="text"
+        ></Input>
         <Input
           register={register('tools')}
           label="도구"
           name="tools"
-          type="text"></Input>
+          type="text"
+        ></Input>
         <Input
           register={register('description')}
           label="설명"
           name="description"
-          type="text"></Input>
-        <Button kind="blue" value="만들기"></Button>
+          type="text"
+        ></Input>
+        <NextButton color="blue" text="만들기" />
       </form>
     </Layout>
   );

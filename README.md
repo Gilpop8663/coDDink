@@ -2,6 +2,8 @@
 
 ## <a href="https://www.coddink.com/">사이트 바로가기</a>
 
+## <a href="https://6465495e6e05f8b5b62f4c3c-mqrkpezgdf.chromatic.com/">스토리북 바로가기</a>
+
 ## 프로젝트 설명
 
 개발자들이 포트폴리오를 올려 서로의 프로젝트를 구경할 수 있는 사이트를 만들고 싶었습니다.

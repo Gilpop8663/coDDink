@@ -16,6 +16,7 @@ import HeadMeta from '@components/headMeta';
 import Input from '@components/input';
 import InputPassword from '@components/inputPassword';
 import Layout from '@components/layout';
+import NextButton from '@components/upload/NextButton';
 import APPLE_LOGO from '@public/apple.png';
 import FACEBOOK_LOGO from '@public/facebook.svg';
 import GOOGLE_LOGO from '@public/google.svg';
@@ -52,7 +53,7 @@ export default function Create() {
     useMutation<SNSMutationResult>('/api/auth/googleLogin');
 
   const onGoogleLoginClick = useGoogleLogin({
-    onSuccess: async tokenResponse => {
+    onSuccess: async (tokenResponse) => {
       googleLogin({ tokenResponse });
     },
   });
@@ -108,13 +109,15 @@ export default function Create() {
           alt="background"
           src={NATURE_IMAGE}
           layout="fill"
-          objectFit="cover"></Image>
+          objectFit="cover"
+        ></Image>
       </div>
       <div className="flex h-screen items-center justify-evenly">
         <div className="hidden text-4xl text-white xl:flex">coDDink</div>
         <form
           onSubmit={handleSubmit(onValid)}
-          className="z-10 flex h-full w-screen flex-col  bg-white py-12 px-10 sm:h-fit sm:w-[520px]">
+          className="z-10 flex h-full w-screen flex-col  bg-white py-12 px-10 sm:h-fit sm:w-[520px]"
+        >
           <span className="mb-4 font-bold">coDDink</span>
           <h2 className="text-3xl font-semibold ">계정 만들기</h2>
           <div className="flex items-center pt-4">
@@ -129,7 +132,8 @@ export default function Create() {
             <div className="rounded-ful flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border bg-white hover:ring-2 hover:ring-gray-300">
               <GoogleBtn
                 onGoogleLoginClick={onGoogleLoginClick}
-                kind="icon"></GoogleBtn>
+                kind="icon"
+              ></GoogleBtn>
             </div>
             <FacebookBtn kind="icon" facebookLogin={snsLogin}></FacebookBtn>
 
@@ -160,7 +164,8 @@ export default function Create() {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                   message: '옳지 않은 방식의 이메일입니다',
                 },
-              })}></Input>
+              })}
+            ></Input>
 
             {errors.email && (
               <ErrorMessage>{errors.email.message}</ErrorMessage>
@@ -182,7 +187,8 @@ export default function Create() {
                   value: 20,
                   message: '너무 깁니다.',
                 },
-              })}></Input>
+              })}
+            ></Input>
 
             {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
             <InputPassword
@@ -195,7 +201,8 @@ export default function Create() {
                   value: 8,
                   message: '최소 8개 이상의 문자 포함해야 합니다.',
                 },
-              })}></InputPassword>
+              })}
+            ></InputPassword>
             {errors.password && (
               <ErrorMessage>{errors.password.message}</ErrorMessage>
             )}
@@ -231,8 +238,8 @@ export default function Create() {
             </Link>
             을 읽었으며 이에 동의한다고 확인합니다.
           </div>
-          <div className="flex self-end pb-8">
-            <Button kind="blue" value="계정 만들기"></Button>
+          <div className="flex w-32 self-end py-8">
+            <NextButton color="blue" text="계정 만들기" size="sm" py="2" />
           </div>
         </form>
       </div>

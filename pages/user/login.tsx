@@ -16,6 +16,7 @@ import ErrorMessage from '@components/error';
 import HeadMeta from '@components/headMeta';
 import Input from '@components/input';
 import InputPassword from '@components/inputPassword';
+import NextButton from '@components/upload/NextButton';
 import NATURE_IMAGE from '@public/user-login.jpg';
 
 interface ILoginProps {
@@ -78,7 +79,7 @@ export default function Login() {
   };
 
   const onGoogleLoginClick = useGoogleLogin({
-    onSuccess: async tokenResponse => {
+    onSuccess: async (tokenResponse) => {
       googleLogin({ tokenResponse });
     },
   });
@@ -138,13 +139,15 @@ export default function Login() {
           alt="background"
           src={NATURE_IMAGE}
           layout="fill"
-          objectFit="cover"></Image>
+          objectFit="cover"
+        ></Image>
       </div>
       <div className="flex h-screen items-center justify-evenly">
         <div className="hidden text-4xl text-white xl:flex">coDDink</div>
         <form
           onSubmit={handleSubmit(onValid)}
-          className="z-10 flex h-screen w-screen  flex-col bg-white py-12 px-10 sm:h-fit sm:w-[520px]">
+          className="z-10 flex h-screen w-screen  flex-col bg-white py-12 px-10 sm:h-fit sm:w-[520px]"
+        >
           {isCheckingEmail === false ? (
             <>
               <h2 className="text-3xl font-semibold ">로그인</h2>
@@ -168,14 +171,17 @@ export default function Login() {
                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                     message: '옳지 않은 방식의 이메일입니다',
                   },
-                })}></Input>
+                })}
+              ></Input>
               {mailData?.ok == false && (
                 <ErrorMessage>{mailData?.message}</ErrorMessage>
               )}
               {errors.email && (
                 <ErrorMessage>{errors.email.message}</ErrorMessage>
               )}
-              <Button kind="blue" value="계속"></Button>
+              <div className="mt-4 w-20 self-end">
+                <NextButton color="blue" text="계속" size="sm" py="2" />
+              </div>
               <div className="relative flex items-center justify-center">
                 <div className="mt-10 h-[0.1px] w-full bg-gray-300"></div>
                 <div className="absolute top-7 bg-white px-2">또는</div>
@@ -183,7 +189,8 @@ export default function Login() {
               <div className="mt-8 flex flex-col space-y-6">
                 <GoogleBtn
                   kind="text"
-                  onGoogleLoginClick={onGoogleLoginClick}></GoogleBtn>
+                  onGoogleLoginClick={onGoogleLoginClick}
+                ></GoogleBtn>
                 <FacebookBtn kind="text" facebookLogin={snsLogin}></FacebookBtn>
                 {/* <div className="flex h-16 w-full cursor-pointer items-center justify-center rounded-full bg-black hover:ring-4 hover:ring-gray-300">
                   <Image
@@ -210,7 +217,8 @@ export default function Login() {
                     src={makeImageURL(mailData?.avatar!, 'bigAvatar')}
                     alt="avatar"
                     width={500}
-                    height={500}></Image>
+                    height={500}
+                  ></Image>
                 </div>
                 <div className="flex flex-col">
                   <span className="text-xs">개인 계정</span>
@@ -227,19 +235,22 @@ export default function Login() {
                     value: 8,
                     message: '최소 8개 이상의 문자 포함해야 합니다.',
                   },
-                })}></InputPassword>
+                })}
+              ></InputPassword>
               {isWrong === true && data?.ok === false && (
                 <ErrorMessage>{data?.message}</ErrorMessage>
               )}
               {errors.password && (
                 <ErrorMessage>{errors.password.message}</ErrorMessage>
               )}
-              <Button kind="blue" value="계속"></Button>
-
+              <div className="mt-4  w-20 self-end">
+                <NextButton color="blue" text="계속" size="sm" py="2" />
+              </div>
               <hr className="mt-12" />
               <span
                 onClick={onOtherIdClick}
-                className="mt-8 cursor-pointer text-sm text-blue-600">
+                className="mt-8 cursor-pointer text-sm text-blue-600"
+              >
                 다른 계정으로 로그인
               </span>
             </>

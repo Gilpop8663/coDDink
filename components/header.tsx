@@ -9,6 +9,7 @@ import useMutation from '@libs/client/useMutation';
 import { cls, makeImageURL } from '@libs/client/utils';
 import Button from './button';
 import SearchBar from './searchBar';
+import NextButton from './upload/NextButton';
 
 interface HeaderProps {
   isLogin: boolean;
@@ -45,15 +46,15 @@ export default function Header({
   const [isShowProfile, setIsShowProfile] = useState(false);
 
   const onProfileClick = () => {
-    setIsShowProfile(prev => !prev);
+    setIsShowProfile((prev) => !prev);
   };
 
   const onInfoClick = () => {
-    setIsShowInfo(prev => !prev);
+    setIsShowInfo((prev) => !prev);
   };
 
   const onMenuClick = () => {
-    setIsShowModal(prev => !prev);
+    setIsShowModal((prev) => !prev);
   };
   const onLogoutClick = () => {
     logout({});
@@ -90,7 +91,8 @@ export default function Header({
         isTop && kind === 'profile'
           ? 'bg-black/0 text-white'
           : 'bg-white text-black'
-      )}>
+      )}
+    >
       <div className="item-center hidden  h-16 space-x-5 py-5 lg:flex">
         <Link href="/">
           {/* <a className="relative top-[1px] flex h-[20px] w-[82.58px] cursor-pointer items-center text-lg font-bold">
@@ -105,7 +107,8 @@ export default function Header({
             className={cls(
               path === '/' ? 'border-b-2 border-gray-800' : '',
               'h-full cursor-pointer pb-10 text-base font-semibold transition-all hover:border-b-2 hover:border-gray-800'
-            )}>
+            )}
+          >
             {isLogin ? '당신을 위한' : '탐색'}
           </a>
         </Link>
@@ -149,7 +152,8 @@ export default function Header({
           viewBox="0 0 24 24"
           strokeWidth={2.5}
           stroke="currentColor"
-          className="h-5 w-5 cursor-pointer">
+          className="h-5 w-5 cursor-pointer"
+        >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -172,7 +176,8 @@ export default function Header({
                   viewBox="0 0 24 24"
                   strokeWidth={2}
                   stroke="currentColor"
-                  className="h-6 w-6 cursor-pointer">
+                  className="h-6 w-6 cursor-pointer"
+                >
                   <title>Close</title>
                   <path
                     strokeLinecap="round"
@@ -181,16 +186,18 @@ export default function Header({
                   />
                 </svg>
                 {isLogin ? (
-                  <Button
-                    kind="white"
-                    value="내 작업 공유"
-                    onClick={onInfoClick}></Button>
+                  <NextButton
+                    color="white"
+                    text="내 작업 공유"
+                    onClick={onInfoClick}
+                  />
                 ) : (
                   <Link href="/user/login">
                     <a
                       className={
                         'cursor-pointer rounded-full border bg-white px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-gray-100'
-                      }>
+                      }
+                    >
                       로그인
                     </a>
                   </Link>
@@ -198,7 +205,8 @@ export default function Header({
                 {isShowInfo && (
                   <div
                     className="absolute  top-14 right-2 flex flex-col rounded border border-red-400 bg-red-100 px-4 py-3 text-red-700"
-                    role="alert">
+                    role="alert"
+                  >
                     <strong className="mb-2 font-bold">
                       화면이 너무 작습니다!
                     </strong>
@@ -207,12 +215,14 @@ export default function Header({
                     </span>
                     <span
                       className="absolute top-0 bottom-0 right-0 px-4 py-3"
-                      onClick={onInfoClick}>
+                      onClick={onInfoClick}
+                    >
                       <svg
                         className="h-6 w-6 fill-current text-red-500"
                         role="button"
                         xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20">
+                        viewBox="0 0 20 20"
+                      >
                         <title>Close</title>
                         <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
                       </svg>
@@ -226,7 +236,8 @@ export default function Header({
                     className={cls(
                       path === '/' ? ' border-l-4 border-gray-800 px-4' : '',
                       'h-full cursor-pointer text-base font-semibold transition-all '
-                    )}>
+                    )}
+                  >
                     {isLogin ? '당신을 위한' : '탐색'}
                   </a>
                 </Link>
@@ -242,7 +253,8 @@ export default function Header({
               </div>
               <div
                 className="mt-8 flex w-full cursor-pointer justify-between"
-                onClick={onProfileClick}>
+                onClick={onProfileClick}
+              >
                 {profile?.avatar && (
                   <div className="flex items-center">
                     <div className="relative h-9 w-9 rounded-full">
@@ -251,7 +263,8 @@ export default function Header({
                         src={makeImageURL(profile.avatar, 'smAvatar')}
                         layout="fill"
                         alt="avatar"
-                        priority={true}></Image>
+                        priority={true}
+                      ></Image>
                     </div>
                     <span className="ml-2 cursor-pointer text-base font-semibold transition-all ">
                       나
@@ -264,7 +277,8 @@ export default function Header({
                         viewBox="0 0 24 24"
                         strokeWidth={1.5}
                         stroke="currentColor"
-                        className="ml-2 h-4 w-4">
+                        className="ml-2 h-4 w-4"
+                      >
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -278,7 +292,8 @@ export default function Header({
                         viewBox="0 0 24 24"
                         strokeWidth={1.5}
                         stroke="currentColor"
-                        className="ml-2 h-4 w-4">
+                        className="ml-2 h-4 w-4"
+                      >
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -298,7 +313,8 @@ export default function Header({
                   </Link>
                   <span
                     onClick={onLogoutClick}
-                    className="cursor-pointer text-sm hover:underline">
+                    className="cursor-pointer text-sm hover:underline"
+                  >
                     로그아웃
                   </span>
                 </div>
@@ -307,7 +323,8 @@ export default function Header({
           </div>
           <div
             className="fixed left-0 top-0 z-10 h-screen w-screen bg-black/25 lg:hidden"
-            onClick={onMenuClick}></div>
+            onClick={onMenuClick}
+          ></div>
         </>
       )}
 
@@ -315,7 +332,8 @@ export default function Header({
         register={register('search')}
         isTop={isTop}
         handleSubmit={handleSubmit}
-        onValid={onValid}></SearchBar>
+        onValid={onValid}
+      ></SearchBar>
 
       <div className="hidden space-x-2 lg:flex">
         {isLogin === false ? (
@@ -324,7 +342,8 @@ export default function Header({
               <a
                 className={
                   'cursor-pointer rounded-full border bg-white px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-gray-100'
-                }>
+                }
+              >
                 로그인
               </a>
             </Link>
@@ -342,8 +361,9 @@ export default function Header({
             <div
               className="relative mr-12 flex justify-center rounded-full bg-white text-black"
               onMouseOver={onMouseOver}
-              onMouseOut={onMouseLeave}>
-              <Button kind="white" value="내 작업 공유"></Button>
+              onMouseOut={onMouseLeave}
+            >
+              <NextButton color="white" text="내 작업 공유"></NextButton>
               {isWorkOn && (
                 <div className="absolute h-24 w-96">
                   <div className="absolute top-12  w-[350px] rounded-md border bg-white p-5 shadow-md ">
@@ -358,7 +378,8 @@ export default function Header({
                               fill="none"
                               viewBox="0 0 24 24"
                               stroke="currentColor"
-                              strokeWidth={2}>
+                              strokeWidth={2}
+                            >
                               <path
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
@@ -381,7 +402,8 @@ export default function Header({
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
-                            strokeWidth={2}>
+                            strokeWidth={2}
+                          >
                             <path
                               strokeLinecap="round"
                               strokeLinejoin="round"
@@ -448,7 +470,8 @@ export default function Header({
             <div
               className="relative m-auto flex h-7 w-7 justify-center"
               onMouseOver={onProfileOver}
-              onMouseOut={onProfileLeave}>
+              onMouseOut={onProfileLeave}
+            >
               {profile?.avatar && (
                 <div className="relative h-7 w-7 rounded-full">
                   <Image
@@ -456,7 +479,8 @@ export default function Header({
                     src={makeImageURL(profile.avatar, 'smAvatar')}
                     layout="fill"
                     alt="avatar"
-                    priority={true}></Image>
+                    priority={true}
+                  ></Image>
                 </div>
               )}
               {isProfileOn && profile?.avatar && (
@@ -470,7 +494,8 @@ export default function Header({
                           src={makeImageURL(profile?.avatar!, 'bigAvatar')}
                           width={180}
                           height={180}
-                          alt="avatar"></Image>
+                          alt="avatar"
+                        ></Image>
                       </a>
                     </Link>
                     <div className="mt-4 text-lg font-semibold">
@@ -488,7 +513,8 @@ export default function Header({
                     </Link>
                     <div
                       onClick={onLogoutClick}
-                      className="flex w-full cursor-pointer justify-center rounded-md py-2 text-sm font-semibold transition-colors hover:bg-gray-100">
+                      className="flex w-full cursor-pointer justify-center rounded-md py-2 text-sm font-semibold transition-colors hover:bg-gray-100"
+                    >
                       로그아웃
                     </div>
                   </div>
