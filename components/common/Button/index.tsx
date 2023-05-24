@@ -32,7 +32,7 @@ export default function Button({
         `text-${size} ${BUTTON_STYLES[color]} ${
           color === 'disabled' ? 'cursor-not-allowed' : 'cursor-pointer'
         } py-${py}`,
-        'cursor group relative flex w-full  items-center justify-center rounded-full px-2 font-semibold transition-colors'
+        'group relative flex w-full  items-center justify-center rounded-full px-2 font-semibold transition-colors'
       )}
       {...rest}
     >

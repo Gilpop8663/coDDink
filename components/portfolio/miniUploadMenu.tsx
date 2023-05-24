@@ -7,8 +7,8 @@ interface MiniUploadMenuProps {
     e: React.ChangeEvent<HTMLInputElement>,
     idx?: number
   ) => void;
-  onAddTextArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
-  onAddCodeArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
+  onAddTextArea: () => void;
+  onAddCodeArea: () => void;
 }
 
 export default function MiniUploadMenu({
@@ -19,32 +19,36 @@ export default function MiniUploadMenu({
 }: MiniUploadMenuProps) {
   const [isCreateOver, setIsCreateOver] = useState(false);
   const onCreateHover = () => {
-    setIsCreateOver(prev => !prev);
+    setIsCreateOver((prev) => !prev);
   };
   return (
     <div
       onMouseOver={onCreateHover}
       onMouseOut={onCreateHover}
-      className=" flex h-8 items-center justify-center  border border-dashed border-white transition-all hover:border-blue-600">
+      className=" flex h-8 items-center justify-center  border border-dashed border-white transition-all hover:border-blue-600"
+    >
       {isCreateOver && (
         <div className="z-10 flex items-center space-x-3 rounded-md bg-gray-900 py-2 px-8 text-white">
           <span>미디어 삽입:</span>
           <SubUploadButton
             idx={idx}
             kind="miniImage"
-            onChange={e => onPreviewImage(e, idx)}></SubUploadButton>
+            onChange={(e) => onPreviewImage(e, idx)}
+          ></SubUploadButton>
 
           <div
-            onClick={e => onAddTextArea(e, idx)}
+            onClick={onAddTextArea}
             className="cursor-pointer rounded-md p-1 hover:bg-gray-400"
-            title="텍스트">
+            title="텍스트"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              strokeWidth={2}>
+              strokeWidth={2}
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -53,16 +57,18 @@ export default function MiniUploadMenu({
             </svg>
           </div>
           <div
-            onClick={e => onAddCodeArea(e, idx)}
+            onClick={onAddCodeArea}
             className="cursor-pointer rounded-md p-1 hover:bg-gray-400"
-            title="코드">
+            title="코드"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              strokeWidth={2}>
+              strokeWidth={2}
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"

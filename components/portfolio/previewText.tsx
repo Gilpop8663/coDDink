@@ -21,8 +21,8 @@ interface PreivewTextProps {
     idx?: number
   ) => void;
   textValue: string;
-  onAddTextArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
-  onAddCodeArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
+  onAddTextArea: () => void;
+  onAddCodeArea: () => void;
   onChange: ChangeEventHandler<HTMLTextAreaElement>;
   onClearClick: (idx: number) => void;
   draftFontSize?: string | null;
@@ -71,7 +71,7 @@ export default function PreivewText({
   const onOptionChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setFontSize(e.target.value);
 
-    setContent(prev => {
+    setContent((prev) => {
       const curContent = { ...prev[idx], fontSize: e.target.value };
 
       let newContent;
@@ -95,7 +95,7 @@ export default function PreivewText({
       kind === 1 ? 'text-left' : kind === 2 ? 'text-center' : 'text-right';
     setAlignText(result);
 
-    setContent(prev => {
+    setContent((prev) => {
       const curContent = { ...prev[idx], alignText: result };
 
       let newContent;
@@ -138,7 +138,8 @@ export default function PreivewText({
       className={cls(
         !isWrite && textValue.length === 0 ? 'hidden h-0' : 'visible',
         'relative'
-      )}>
+      )}
+    >
       {(isWrite || textValue.length > 0) && (
         <MiniUploadMenu
           onAddCodeArea={onAddCodeArea}
@@ -150,14 +151,16 @@ export default function PreivewText({
       {isOver && (
         <div
           onMouseOver={onWrite}
-          className="absolute -top-4 flex items-center space-x-4 rounded-md bg-gray-700  px-4 py-2 text-white">
+          className="absolute -top-4 flex items-center space-x-4 rounded-md bg-gray-700  px-4 py-2 text-white"
+        >
           <select
             title="서식 지정 스타일"
             className="cursor-pointer  rounded-sm bg-gray-700 text-white ring-blue-600 hover:ring-2 focus:bg-gray-700"
             name="fontOption"
             id=""
             value={fontSize}
-            onChange={onOptionChange}>
+            onChange={onOptionChange}
+          >
             <option className="bg-gray-700 " value="text-2xl">
               헤더
             </option>
@@ -170,14 +173,16 @@ export default function PreivewText({
           <div
             title="왼쪽 정렬"
             onClick={() => onAlignText(1)}
-            className=" cursor-pointer rounded-md p-1 hover:bg-gray-400">
+            className=" cursor-pointer rounded-md p-1 hover:bg-gray-400"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-4 w-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              strokeWidth={2}>
+              strokeWidth={2}
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -188,14 +193,16 @@ export default function PreivewText({
           <div
             title="중앙"
             onClick={() => onAlignText(2)}
-            className="cursor-pointer rounded-md p-1 hover:bg-gray-400">
+            className="cursor-pointer rounded-md p-1 hover:bg-gray-400"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-4 w-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              strokeWidth={2}>
+              strokeWidth={2}
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -206,14 +213,16 @@ export default function PreivewText({
           <div
             title="오른쪽 정렬"
             onClick={() => onAlignText(3)}
-            className="cursor-pointer rounded-md p-1 hover:bg-gray-400">
+            className="cursor-pointer rounded-md p-1 hover:bg-gray-400"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-4 w-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              strokeWidth={2}>
+              strokeWidth={2}
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -224,14 +233,16 @@ export default function PreivewText({
           <div
             className="cursor-pointer"
             title="삭제하기"
-            onClick={() => onClearClick(idx)}>
+            onClick={() => onClearClick(idx)}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="h-6 w-6">
+              className="h-6 w-6"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -269,7 +280,8 @@ export default function PreivewText({
             alignText && `${alignText}`,
             'h-fit w-4/5 resize-none justify-center whitespace-pre-wrap  border-blue-600 scrollbar-hide placeholder:text-xl hover:border focus:border focus:outline-none'
           )}
-          {...rest}></textarea>
+          {...rest}
+        ></textarea>
       </div>
     </div>
   );

@@ -26,8 +26,8 @@ interface PreivewCodeProps {
     idx?: number
   ) => void;
   textValue: string;
-  onAddTextArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
-  onAddCodeArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
+  onAddTextArea: () => void;
+  onAddCodeArea: () => void;
   onChange: ChangeEventHandler<HTMLTextAreaElement>;
   onClearClick: (idx: number) => void;
   draftFontSize?: string | null;
@@ -64,7 +64,7 @@ export default function PreviewCode({
   const onLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLanguage(e.currentTarget.value);
 
-    setContent(prev => {
+    setContent((prev) => {
       const curContent = { ...prev[idx], language: e.currentTarget.value };
 
       let newContent;
@@ -86,7 +86,7 @@ export default function PreviewCode({
   const onOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFontSize(e.target.value);
 
-    setContent(prev => {
+    setContent((prev) => {
       const curContent = { ...prev[idx], fontSize: e.target.value };
 
       let newContent;
@@ -109,7 +109,8 @@ export default function PreviewCode({
     <div
       className="relative mt-16"
       onMouseOut={onOutArea}
-      onMouseOver={onOverArea}>
+      onMouseOver={onOverArea}
+    >
       {isOver && (
         <div className="absolute -top-4 flex items-center justify-between space-x-2 rounded-md bg-gray-700 px-4 py-2 text-white">
           <select
@@ -118,7 +119,8 @@ export default function PreviewCode({
             onChange={onLanguageChange}
             value={language}
             color="white"
-            name="langOption">
+            name="langOption"
+          >
             <option value="abap">Language: abap</option>
             <option value="aes">Language: aes</option>
             <option value="apex">Language: apex</option>
@@ -220,7 +222,8 @@ export default function PreviewCode({
               name="fontSize"
               id=""
               value={fontSize}
-              className="cursor-pointer  rounded-sm bg-gray-700 text-white ring-blue-600 hover:ring-2 focus:bg-gray-700">
+              className="cursor-pointer  rounded-sm bg-gray-700 text-white ring-blue-600 hover:ring-2 focus:bg-gray-700"
+            >
               <option className="bg-gray-700 " value="text-2xl">
                 헤더
               </option>
@@ -234,14 +237,16 @@ export default function PreviewCode({
           <div
             className="cursor-pointer"
             title="삭제하기"
-            onClick={() => onClearClick(idx)}>
+            onClick={() => onClearClick(idx)}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="h-6 w-6">
+              className="h-6 w-6"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"

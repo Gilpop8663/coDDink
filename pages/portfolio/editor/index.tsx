@@ -25,7 +25,6 @@ import ClickedProject from '@components/project/clickedProject';
 import SubUploadButton from '@components/subUploadButton';
 import TextArea from '@components/textArea';
 import UploadInput from '@components/upload/UploadInput';
-import UploadButton from '@components/uploadButton';
 
 export interface UploadProps {
   title: string;
@@ -235,7 +234,7 @@ const Editor: NextPage = () => {
     });
   };
 
-  const onAddTextArea = (e: React.MouseEvent<HTMLDivElement>, idx?: number) => {
+  const onAddTextArea = (idx?: number) => {
     const newContent: ContentProps = {
       kind: 'text',
       description: '',
@@ -258,7 +257,7 @@ const Editor: NextPage = () => {
     }
   };
 
-  const onAddCodeArea = (e: React.MouseEvent<HTMLDivElement>, idx?: number) => {
+  const onAddCodeArea = (idx?: number) => {
     const newContent: ContentProps = {
       kind: 'code',
       description: '',
@@ -702,8 +701,8 @@ const Editor: NextPage = () => {
                 <EditFirstScreen
                   register={register}
                   onPreviewImage={onPreviewImage}
-                  onAddTextArea={onAddTextArea}
-                  onAddCodeArea={onAddCodeArea}
+                  onAddTextArea={() => onAddTextArea(0)}
+                  onAddCodeArea={() => onAddCodeArea(0)}
                 />
               ) : (
                 <div className=" flex w-full flex-col px-16 py-12">
@@ -718,9 +717,9 @@ const Editor: NextPage = () => {
                       >
                         {item.kind === 'image' && (
                           <PreviewImage
-                            onAddTextArea={onAddTextArea}
+                            onAddTextArea={() => onAddTextArea(idx)}
                             onPreviewImage={onPreviewImage}
-                            onAddCodeArea={onAddCodeArea}
+                            onAddCodeArea={() => onAddCodeArea(idx)}
                             src={item}
                             idx={idx}
                             onClearClick={onClearAttatchment}
@@ -729,9 +728,9 @@ const Editor: NextPage = () => {
                         {item.kind === 'text' && (
                           <PreviewText
                             onClearClick={onClearAttatchment}
-                            onAddTextArea={onAddTextArea}
+                            onAddTextArea={() => onAddTextArea(idx)}
                             onPreviewImage={onPreviewImage}
-                            onAddCodeArea={onAddCodeArea}
+                            onAddCodeArea={() => onAddCodeArea(idx)}
                             setContent={setContent}
                             idx={idx}
                             textValue={item.description}
@@ -744,9 +743,9 @@ const Editor: NextPage = () => {
                           <PreviewCode
                             onClearClick={onClearAttatchment}
                             textValue={item.description}
-                            onAddTextArea={onAddTextArea}
+                            onAddTextArea={() => onAddTextArea(idx)}
                             onPreviewImage={onPreviewImage}
-                            onAddCodeArea={onAddCodeArea}
+                            onAddCodeArea={() => onAddCodeArea(idx)}
                             setContent={setContent}
                             idx={idx}
                             draftLang={item.language}
@@ -765,8 +764,8 @@ const Editor: NextPage = () => {
               onPreviewImage={onPreviewImage}
               register={register}
               onSetting={onSetting}
-              onAddTextArea={onAddTextArea}
-              onAddCodeArea={onAddCodeArea}
+              onAddTextArea={() => onAddTextArea(content.length - 1)}
+              onAddCodeArea={() => onAddCodeArea(content.length - 1)}
               onDraftClick={onDraftClick}
               onPreviewClick={onPreviewClick}
             />

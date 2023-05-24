@@ -1,13 +1,13 @@
 import React from 'react';
 import { UseFormRegister } from 'react-hook-form';
 import { UploadProps } from 'pages/portfolio/editor';
-import UploadButton from '@components/uploadButton';
+import UploadButton from '@components/common/UploadButton';
 
 interface EditFirstScreenProps {
   register: UseFormRegister<UploadProps>;
   onPreviewImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onAddTextArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
-  onAddCodeArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
+  onAddTextArea: () => void;
+  onAddCodeArea: () => void;
 }
 
 export default function EditFirstScreen({
@@ -25,15 +25,19 @@ export default function EditFirstScreen({
         <UploadButton
           register={register('images')}
           onChange={onPreviewImage}
-          kind="image"
-          label="이미지">
+          color="skyBlue"
+          name="imageUpload"
+          type="file"
+          text="이미지"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            strokeWidth={2}>
+            strokeWidth={2}
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -42,17 +46,21 @@ export default function EditFirstScreen({
           </svg>
         </UploadButton>
         <UploadButton
-          kind="text"
-          label="텍스트"
+          color="skyBlue"
+          text="텍스트"
+          name="textUpload"
+          type="none"
           register={register('posts')}
-          onClick={onAddTextArea}>
+          onClick={onAddTextArea}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            strokeWidth={2}>
+            strokeWidth={2}
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -61,17 +69,21 @@ export default function EditFirstScreen({
           </svg>
         </UploadButton>
         <UploadButton
-          kind="code"
-          label="코드"
+          color="skyBlue"
+          text="코드"
+          name="codeUpload"
+          type="none"
           register={register('code')}
-          onClick={onAddCodeArea}>
+          onClick={onAddCodeArea}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            strokeWidth={2}>
+            strokeWidth={2}
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"

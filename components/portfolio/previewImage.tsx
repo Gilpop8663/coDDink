@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { ContentProps } from 'pages/portfolio/editor';
 import { cls, makeImageURL } from '@libs/client/utils';
-import SubUploadButton from '@components/subUploadButton';
-import UploadButton from '@components/uploadButton';
 import EditMenu from './editMenu';
 import MiniUploadMenu from './miniUploadMenu';
 
@@ -15,8 +13,8 @@ interface PreviewImageProps {
     e: React.ChangeEvent<HTMLInputElement>,
     idx?: number
   ) => void;
-  onAddTextArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
-  onAddCodeArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
+  onAddTextArea: () => void;
+  onAddCodeArea: () => void;
 }
 
 export default function PreviewImage({
@@ -30,7 +28,7 @@ export default function PreviewImage({
   const [isEditOver, setIsEditOver] = useState(false);
 
   const onEditHover = () => {
-    setIsEditOver(prev => !prev);
+    setIsEditOver((prev) => !prev);
   };
   return (
     <div className="h-full">
@@ -54,13 +52,15 @@ export default function PreviewImage({
             src={makeImageURL(src.imageSrc, 'public')}
             layout="fill"
             className="object-contain"
-            alt="image"></Image>
+            alt="image"
+          ></Image>
         ) : (
           <Image
             src={src.description}
             layout="fill"
             className="object-contain"
-            alt="image"></Image>
+            alt="image"
+          ></Image>
         )}
       </div>
     </div>

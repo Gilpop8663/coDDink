@@ -9,11 +9,11 @@ interface UploadButtonProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   color: 'skyBlue' | 'orange' | 'blue';
   name: string;
+  type?: 'file' | 'none';
   text?: string;
   register?: UseFormRegisterReturn;
   previewImage?: string;
   kind?: 'circle' | 'button' | 'hidden';
-  type: 'file' | 'none';
   subText?: string;
   borderRight?: boolean;
   innerText?: string;
@@ -37,6 +37,7 @@ export default function UploadButton({
   onChange,
   register,
   kind = 'circle',
+  onClick,
   previewImage,
 }: UploadButtonProps) {
   return (
@@ -62,11 +63,12 @@ export default function UploadButton({
           </div>
         ) : (
           <div
+            onClick={onClick}
             className={cls(
               `${BUTTON_STYLES[color]} ${
                 kind === 'circle' ? 'h-24 w-24' : 'w-full py-1'
               } ${kind === 'hidden' ? 'hidden' : ''}`,
-              ' cursor-pointer items-center justify-center  rounded-full  transition-colors duration-200'
+              'flex cursor-pointer items-center justify-center  rounded-full  transition-colors duration-200'
             )}
           >
             {innerText && (
@@ -106,7 +108,6 @@ export default function UploadButton({
           {...register}
         />
       </label>
-
       <span className="mt-4 text-sm font-semibold">{text}</span>
     </div>
   );

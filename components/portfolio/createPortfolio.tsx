@@ -14,8 +14,8 @@ import { cls, makeImageURL } from '@libs/client/utils';
 import Button from '@components/common/Button';
 import ErrorMessage from '@components/common/ErrorMessage';
 import LoadingSpinner from '@components/common/LoadingSpinner';
+import UploadButton from '@components/common/UploadButton';
 import UploadInput from '@components/upload/UploadInput';
-import UploadButton from '@components/uploadButton';
 
 interface CreatePortfoiloProps {
   register: UseFormRegister<UploadProps>;
@@ -102,9 +102,13 @@ export default function CreatePortfolio({
 
                 {!isThumbnailLoading && !previewThumbnailImg ? (
                   <UploadButton
+                    color="blue"
+                    name="thumbnail"
+                    type="file"
+                    kind="button"
+                    innerText="이미지 업로드"
                     onChange={onThumbnailImage}
-                    kind="thumbnail"
-                  ></UploadButton>
+                  />
                 ) : (
                   !isThumbnailLoading && (
                     <>
@@ -128,9 +132,13 @@ export default function CreatePortfolio({
                       )}
                       <div className="absolute -bottom-12 left-2 z-10">
                         <UploadButton
+                          color="blue"
+                          type="file"
+                          name="thumbnailChange"
+                          subText="표지 이미지 변경"
                           onChange={onThumbnailImage}
-                          kind="changeThumb"
-                        ></UploadButton>
+                          kind="hidden"
+                        />
                       </div>
                     </>
                   )

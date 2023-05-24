@@ -10,11 +10,11 @@ import Button from '@components/common/Button';
 import ErrorMessage from '@components/common/ErrorMessage';
 import Input from '@components/common/Input';
 import Layout from '@components/common/Layout';
+import UploadButton from '@components/common/UploadButton';
 import HeadMeta from '@components/headMeta';
 import CategoryTabMenu from '@components/profile/categoryTabMenu';
 import ProfileWeb from '@components/profile/profileWeb';
 import TextArea from '@components/textArea';
-import UploadButton from '@components/uploadButton';
 
 interface LocationResponse {
   ok: boolean;
@@ -64,7 +64,7 @@ const ProfileEditor: NextPage = () => {
     formState: { errors },
   } = useForm<FormProps>();
 
-  const [avatarPreveiw, setAvatarPreview] = useState('');
+  const [avatarPreview, setAvatarPreview] = useState('');
 
   const [isChange, setIsChange] = useState(false);
   const [scrollY, setScrollY] = useState(0);
@@ -257,10 +257,14 @@ const ProfileEditor: NextPage = () => {
                 <h6 className="text-sm font-semibold">기본 정보</h6>
                 <div className="mt-2 flex">
                   <UploadButton
-                    previewImage={avatarPreveiw}
+                    name="avatarUpload"
+                    previewImage={avatarPreview}
                     register={register('avatar')}
-                    kind="profile"
-                  ></UploadButton>
+                    color="orange"
+                    type="file"
+                    subText="업로드"
+                    borderRight={true}
+                  />
                   <div className="flex flex-col px-2 lg:px-8">
                     <Input
                       register={register('name', {

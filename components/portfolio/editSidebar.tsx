@@ -9,8 +9,8 @@ interface EditSidebarProps {
   content: ContentProps[];
   register: UseFormRegister<UploadProps>;
   onPreviewImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onAddTextArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
-  onAddCodeArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
+  onAddTextArea: () => void;
+  onAddCodeArea: () => void;
   onDraftClick: () => void;
   onPreviewClick: () => void;
   isDraft: boolean;
