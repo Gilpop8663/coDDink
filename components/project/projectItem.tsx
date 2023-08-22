@@ -1,12 +1,10 @@
-import NextButton from "@components/upload/nextButton";
-import UploadButton from "@components/uploadButton";
-import { cls, makeImageURL } from "@libs/client/utils";
-import { CoddinkFollow, CoddinkProjectOwner } from "@prisma/client";
-import Image from "next/image";
-import Link from "next/link";
-import { OwnerProps } from "pages";
-import { useState } from "react";
-import OwnerInfo from "./ownerInfo";
+import { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { CoddinkFollow } from '@prisma/client';
+import { OwnerProps } from 'pages';
+import { cls, makeImageURL } from '@libs/client/utils';
+import OwnerInfo from './ownerInfo';
 
 interface ItemProps {
   projectId: number;
@@ -61,7 +59,7 @@ export default function ProjectItem({
         <div className="relative  h-64 max-h-80 w-auto  rounded-md  border hover:visible"></div>
 
         <Image
-          src={makeImageURL(thumbnail, "public")}
+          src={makeImageURL(thumbnail, 'public')}
           priority={true}
           alt="thumbnail"
           className="rounded-md object-cover"
@@ -76,8 +74,8 @@ export default function ProjectItem({
                   onMouseOver={() => onSettingTouch(true)}
                   onMouseOut={() => onSettingTouch(false)}
                   className={cls(
-                    isSetting ? "bg-black/50" : "bg-black/30",
-                    "absolute left-3 top-3 flex items-center rounded-full p-2 text-white"
+                    isSetting ? 'bg-black/50' : 'bg-black/30',
+                    'absolute left-3 top-3 flex items-center rounded-full p-2 text-white'
                   )}
                 >
                   <svg

@@ -1,6 +1,6 @@
-import { withIronSessionSsr } from "iron-session/next";
+import { withIronSessionSsr } from 'iron-session/next';
 
-declare module "iron-session" {
+declare module 'iron-session' {
   interface IronSessionData {
     user?: {
       id: number;
@@ -9,10 +9,10 @@ declare module "iron-session" {
 }
 
 const sessionOption = {
-  cookieName: "coDDink",
+  cookieName: 'coDDink',
   password: process.env.COOKIE_PASSWORD!,
   cookieOptions: {
-    secure: process.env.NODE_ENV === "production",
+    secure: process.env.NODE_ENV === 'production',
   },
 };
 

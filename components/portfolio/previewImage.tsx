@@ -1,11 +1,9 @@
-import SubUploadButton from "@components/subUploadButton";
-import UploadButton from "@components/uploadButton";
-import { cls, makeImageURL } from "@libs/client/utils";
-import Image from "next/image";
-import { ContentProps } from "pages/portfolio/editor";
-import React, { useState } from "react";
-import EditMenu from "./editMenu";
-import MiniUploadMenu from "./miniUploadMenu";
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { ContentProps } from 'pages/portfolio/editor';
+import { cls, makeImageURL } from '@libs/client/utils';
+import EditMenu from './editMenu';
+import MiniUploadMenu from './miniUploadMenu';
 
 interface PreviewImageProps {
   src: ContentProps;
@@ -15,8 +13,8 @@ interface PreviewImageProps {
     e: React.ChangeEvent<HTMLInputElement>,
     idx?: number
   ) => void;
-  onAddTextArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
-  onAddCodeArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
+  onAddTextArea: () => void;
+  onAddCodeArea: () => void;
 }
 
 export default function PreviewImage({
@@ -51,7 +49,7 @@ export default function PreviewImage({
         />
         {src.imageSrc ? (
           <Image
-            src={makeImageURL(src.imageSrc, "public")}
+            src={makeImageURL(src.imageSrc, 'public')}
             layout="fill"
             className="object-contain"
             alt="image"

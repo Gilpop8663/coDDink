@@ -1,9 +1,9 @@
-import UploadTagValue from "@components/portfolio/uploadTagValue";
-import { makeImageURL } from "@libs/client/utils";
-import Image from "next/image";
-import { UserDataProps } from "pages/portfolio/editor";
-import React, { useEffect, useRef, useState } from "react";
-import { UseFormRegisterReturn } from "react-hook-form";
+import React, { useEffect, useRef, useState } from 'react';
+import { UseFormRegisterReturn } from 'react-hook-form';
+import Image from 'next/image';
+import { UserDataProps } from 'pages/portfolio/editor';
+import { makeImageURL } from '@libs/client/utils';
+import UploadTagValue from '@components/portfolio/uploadTagValue';
 
 interface UploadProps {
   label: string;
@@ -20,7 +20,7 @@ interface UploadProps {
   userData?: UserDataProps[];
   deleteContentTags?: (
     e: React.MouseEvent<SVGSVGElement, MouseEvent>,
-    kind: "tags" | "category" | "tools" | "owner" | string,
+    kind: 'tags' | 'category' | 'tools' | 'owner' | string,
     idx: number
   ) => void;
   onUserClick?: (
@@ -50,12 +50,12 @@ export default function UploadInput({
 
   useEffect(() => {
     if (curRef.current === null) return;
-    curRef.current.addEventListener("focusout", () => {
+    curRef.current.addEventListener('focusout', () => {
       setTimeout(() => {
         setIsOver(false);
       }, 300);
     });
-    curRef.current.addEventListener("focusin", () => {
+    curRef.current.addEventListener('focusin', () => {
       setIsOver(true);
     });
   }, []);
@@ -96,7 +96,7 @@ export default function UploadInput({
           autoComplete="off"
           onKeyDown={onKeyPress}
           required={required}
-          placeholder={contentArr && contentArr.length > 0 ? "" : placeholder}
+          placeholder={contentArr && contentArr.length > 0 ? '' : placeholder}
           {...register}
           id={name}
           type={type}
@@ -113,7 +113,7 @@ export default function UploadInput({
             >
               <div className="relative h-10 w-10">
                 <Image
-                  src={makeImageURL(item.avatar!, "smAvatar")}
+                  src={makeImageURL(item.avatar!, 'smAvatar')}
                   layout="fill"
                   className="rounded-full"
                   alt="avater"

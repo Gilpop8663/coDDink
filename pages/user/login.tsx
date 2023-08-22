@@ -1,22 +1,21 @@
-import Link from "next/link";
-import React, { useEffect, useRef, useState } from "react";
-import NATURE_IMAGE from "@public/user-login.jpg";
-import Image from "next/image";
-import Button from "@components/button";
-import { useForm } from "react-hook-form";
-import ErrorMessage from "@components/error";
-import useMutation from "@libs/client/useMutation";
-import { useRouter } from "next/router";
-import InputPassword from "@components/inputPassword";
-import Input from "@components/input";
-import { makeImageURL } from "@libs/client/utils";
-import GoogleBtn from "@components/auth/googleBtn";
-import Script from "next/script";
-import HeadMeta from "@components/headMeta";
-import { ProfileResponse } from "@libs/client/useUser";
-import useSWR from "swr";
-import FacebookBtn from "@components/auth/facebookBtn";
-import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useGoogleLogin } from '@react-oauth/google';
+import useSWR from 'swr';
+import useMutation from '@libs/client/useMutation';
+import { ProfileResponse } from '@libs/client/useUser';
+import { makeImageURL } from '@libs/client/utils';
+import FacebookBtn from '@components/auth/facebookBtn';
+import GoogleBtn from '@components/auth/googleBtn';
+import Button from '@components/common/Button';
+import ErrorMessage from '@components/common/ErrorMessage';
+import Input from '@components/common/Input';
+import InputPassword from '@components/common/InputPassword';
+import HeadMeta from '@components/headMeta';
+import NATURE_IMAGE from '@public/user-login.jpg';
 
 interface ILoginProps {
   email: string;
@@ -37,7 +36,7 @@ interface MutationResult {
 export interface SNSMutationResult {
   ok: boolean;
   message: string;
-  kind: "create" | "login";
+  kind: 'create' | 'login';
 }
 
 export default function Login() {
@@ -45,7 +44,7 @@ export default function Login() {
     data: userData,
     error: userError,
     mutate: userMutate,
-  } = useSWR<ProfileResponse>("/api/users/me");
+  } = useSWR<ProfileResponse>('/api/users/me');
   const router = useRouter();
   const {
     register,
@@ -54,13 +53,13 @@ export default function Login() {
     formState: { errors },
   } = useForm<ILoginProps>();
   const [mailCheck, { loading: mailLoading, data: mailData }] =
-    useMutation<EmailResult>("/api/users/emailCheck");
+    useMutation<EmailResult>('/api/users/emailCheck');
   const [login, { loading, data, error }] =
-    useMutation<MutationResult>("/api/users/login");
+    useMutation<MutationResult>('/api/users/login');
   const [snsLogin, { data: snsLoginData }] =
-    useMutation<SNSMutationResult>("/api/auth/snsLogin");
+    useMutation<SNSMutationResult>('/api/auth/snsLogin');
   const [googleLogin, { data: googleLoginData }] =
-    useMutation<SNSMutationResult>("/api/auth/googleLogin");
+    useMutation<SNSMutationResult>('/api/auth/googleLogin');
 
   const [isCheckingEmail, setIsCheckingEmail] = useState(false);
 
@@ -74,7 +73,7 @@ export default function Login() {
     login(value);
   };
   const onCreateClick = () => {
-    router.push("/user/create");
+    router.push('/user/create');
   };
 
   const onGoogleLoginClick = useGoogleLogin({
@@ -83,8 +82,8 @@ export default function Login() {
     },
   });
 
-  const curEmail = watch("email");
-  const curPassword = watch("password");
+  const curEmail = watch('email');
+  const curPassword = watch('password');
 
   const onOtherIdClick = () => {
     router.reload();
@@ -92,7 +91,7 @@ export default function Login() {
 
   useEffect(() => {
     if (data?.ok) {
-      router.push("/");
+      router.push('/');
     } else {
       setIsWrong(true);
     }
@@ -109,22 +108,22 @@ export default function Login() {
 
   useEffect(() => {
     if (userData && userData.ok) {
-      router.push("/");
+      router.push('/');
     }
   }, [userData, router]);
 
   useEffect(() => {
-    if (snsLoginData && snsLoginData.kind === "create") {
-      router.push("/user/login");
-    } else if (snsLoginData && snsLoginData.kind === "login") {
+    if (snsLoginData && snsLoginData.kind === 'create') {
+      router.push('/user/login');
+    } else if (snsLoginData && snsLoginData.kind === 'login') {
       userMutate();
     }
   }, [snsLoginData, router, userMutate]);
 
   useEffect(() => {
-    if (googleLoginData && googleLoginData.kind === "create") {
-      router.push("/user/login");
-    } else if (googleLoginData && googleLoginData.kind === "login") {
+    if (googleLoginData && googleLoginData.kind === 'create') {
+      router.push('/user/login');
+    } else if (googleLoginData && googleLoginData.kind === 'login') {
       userMutate();
     }
   }, [googleLoginData, router, userMutate]);
@@ -158,27 +157,26 @@ export default function Login() {
                   </a>
                 </Link>
               </div>
-
               <Input
                 label="이메일 주소"
                 type="email"
                 required
                 name="email"
-                register={register("email", {
-                  required: "이메일 주소를 입력해 주십시오.",
+                register={register('email', {
+                  required: '이메일 주소를 입력해 주십시오.',
                   pattern: {
                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: "옳지 않은 방식의 이메일입니다",
+                    message: '옳지 않은 방식의 이메일입니다',
                   },
                 })}
               ></Input>
               {mailData?.ok == false && (
-                <ErrorMessage>{mailData?.message}</ErrorMessage>
+                <ErrorMessage text={mailData?.message} />
               )}
-              {errors.email && (
-                <ErrorMessage>{errors.email.message}</ErrorMessage>
-              )}
-              <Button kind="blue" value="계속"></Button>
+              {errors.email && <ErrorMessage text={errors.email.message} />}
+              <div className="mt-4 w-20 self-end">
+                <Button color="blue" text="계속" size="sm" py="2" />
+              </div>
               <div className="relative flex items-center justify-center">
                 <div className="mt-10 h-[0.1px] w-full bg-gray-300"></div>
                 <div className="absolute top-7 bg-white px-2">또는</div>
@@ -211,7 +209,7 @@ export default function Login() {
                 <div className="mr-4 h-16 w-16 rounded-full bg-slate-500">
                   <Image
                     className="rounded-full"
-                    src={makeImageURL(mailData?.avatar!, "bigAvatar")}
+                    src={makeImageURL(mailData?.avatar!, 'bigAvatar')}
                     alt="avatar"
                     width={500}
                     height={500}
@@ -226,22 +224,23 @@ export default function Login() {
                 label="암호"
                 name="password"
                 required
-                register={register("password", {
-                  required: "암호를 입력해 주십시오.",
+                register={register('password', {
+                  required: '암호를 입력해 주십시오.',
                   minLength: {
                     value: 8,
-                    message: "최소 8개 이상의 문자 포함해야 합니다.",
+                    message: '최소 8개 이상의 문자 포함해야 합니다.',
                   },
                 })}
-              ></InputPassword>
+              />
               {isWrong === true && data?.ok === false && (
-                <ErrorMessage>{data?.message}</ErrorMessage>
+                <ErrorMessage text={data?.message} />
               )}
               {errors.password && (
-                <ErrorMessage>{errors.password.message}</ErrorMessage>
+                <ErrorMessage text={errors.password.message} />
               )}
-              <Button kind="blue" value="계속"></Button>
-
+              <div className="mt-4  w-20 self-end">
+                <Button color="blue" text="계속" size="sm" py="2" />
+              </div>
               <hr className="mt-12" />
               <span
                 onClick={onOtherIdClick}

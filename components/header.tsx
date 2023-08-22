@@ -1,29 +1,24 @@
-import useMutation from "@libs/client/useMutation";
-import { cls, makeImageURL } from "@libs/client/utils";
-import { CoddinkUser } from "@prisma/client";
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import useSWR from "swr";
-import Button from "./button";
-import SearchBar from "./searchBar";
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { CoddinkUser } from '@prisma/client';
+import useSWR from 'swr';
+import useMutation from '@libs/client/useMutation';
+import { cls, makeImageURL } from '@libs/client/utils';
+import Button from '@components/common/Button';
+import SearchBar from '@components/common/SearchBar';
 
 interface HeaderProps {
   isLogin: boolean;
   profile?: CoddinkUser;
-  kind?: "normal" | "profile";
+  kind?: 'normal' | 'profile';
   userId: number | undefined;
   isTop?: boolean;
 }
 
 interface LogoutResult {
   ok: boolean;
-}
-
-export interface SerachProps {
-  search: string;
 }
 
 export default function Header({
@@ -34,12 +29,11 @@ export default function Header({
   isTop,
 }: HeaderProps) {
   const router = useRouter();
-  const { register, handleSubmit } = useForm<SerachProps>();
   const path = router.pathname;
   const [isWorkOn, setIsWorkOn] = useState(false);
   const [isProfileOn, setIsProfileOn] = useState(false);
-  const [logout, { loading, error, data }] = useMutation("/api/users/logout");
-  const { data: searchData, mutate } = useSWR("/api/projects/search");
+  const [logout, { loading, error, data }] = useMutation('/api/users/logout');
+  const { data: searchData, mutate } = useSWR('/api/projects/search');
   const [isShowMenu, setIsShowModal] = useState(false);
   const [isShowInfo, setIsShowInfo] = useState(false);
   const [isShowProfile, setIsShowProfile] = useState(false);
@@ -73,10 +67,6 @@ export default function Header({
     setIsProfileOn(false);
   };
 
-  const onValid = (value: SerachProps) => {
-    router.push(`/search/projects?search=${value.search}`);
-  };
-
   useEffect(() => {
     if (data && data.ok) {
       router.reload();
@@ -86,10 +76,10 @@ export default function Header({
   return (
     <div
       className={cls(
-        "fixed z-50 flex h-16 w-full items-center justify-between border-b px-6 transition-all lg:z-20 ",
-        isTop && kind === "profile"
-          ? "bg-black/0 text-white"
-          : "bg-white text-black"
+        'fixed z-50 flex h-16 w-full items-center justify-between border-b px-6 transition-all lg:z-20 ',
+        isTop && kind === 'profile'
+          ? 'bg-black/0 text-white'
+          : 'bg-white text-black'
       )}
     >
       <div className="item-center hidden  h-16 space-x-5 py-5 lg:flex">
@@ -104,11 +94,11 @@ export default function Header({
         <Link href="/">
           <a
             className={cls(
-              path === "/" ? "border-b-2 border-gray-800" : "",
-              "h-full cursor-pointer pb-10 text-base font-semibold transition-all hover:border-b-2 hover:border-gray-800"
+              path === '/' ? 'border-b-2 border-gray-800' : '',
+              'h-full cursor-pointer pb-10 text-base font-semibold transition-all hover:border-b-2 hover:border-gray-800'
             )}
           >
-            {isLogin ? "당신을 위한" : "탐색"}
+            {isLogin ? '당신을 위한' : '탐색'}
           </a>
         </Link>
 
@@ -186,15 +176,15 @@ export default function Header({
                 </svg>
                 {isLogin ? (
                   <Button
-                    kind="white"
-                    value="내 작업 공유"
+                    color="white"
+                    text="내 작업 공유"
                     onClick={onInfoClick}
-                  ></Button>
+                  />
                 ) : (
                   <Link href="/user/login">
                     <a
                       className={
-                        "cursor-pointer rounded-full border bg-white px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-gray-100"
+                        'cursor-pointer rounded-full border bg-white px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-gray-100'
                       }
                     >
                       로그인
@@ -233,11 +223,11 @@ export default function Header({
                 <Link href="/">
                   <a
                     className={cls(
-                      path === "/" ? " border-l-4 border-gray-800 px-4" : "",
-                      "h-full cursor-pointer text-base font-semibold transition-all "
+                      path === '/' ? ' border-l-4 border-gray-800 px-4' : '',
+                      'h-full cursor-pointer text-base font-semibold transition-all '
                     )}
                   >
-                    {isLogin ? "당신을 위한" : "탐색"}
+                    {isLogin ? '당신을 위한' : '탐색'}
                   </a>
                 </Link>
               </div>
@@ -259,7 +249,7 @@ export default function Header({
                     <div className="relative h-9 w-9 rounded-full">
                       <Image
                         className="rounded-full"
-                        src={makeImageURL(profile.avatar, "smAvatar")}
+                        src={makeImageURL(profile.avatar, 'smAvatar')}
                         layout="fill"
                         alt="avatar"
                         priority={true}
@@ -327,12 +317,7 @@ export default function Header({
         </>
       )}
 
-      <SearchBar
-        register={register("search")}
-        isTop={isTop}
-        handleSubmit={handleSubmit}
-        onValid={onValid}
-      ></SearchBar>
+      <SearchBar isTop={isTop} />
 
       <div className="hidden space-x-2 lg:flex">
         {isLogin === false ? (
@@ -340,7 +325,7 @@ export default function Header({
             <Link href="/user/login">
               <a
                 className={
-                  "cursor-pointer rounded-full border bg-white px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-gray-100"
+                  'cursor-pointer rounded-full border bg-white px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-gray-100'
                 }
               >
                 로그인
@@ -362,7 +347,7 @@ export default function Header({
               onMouseOver={onMouseOver}
               onMouseOut={onMouseLeave}
             >
-              <Button kind="white" value="내 작업 공유"></Button>
+              <Button color="white" text="내 작업 공유"></Button>
               {isWorkOn && (
                 <div className="absolute h-24 w-96">
                   <div className="absolute top-12  w-[350px] rounded-md border bg-white p-5 shadow-md ">
@@ -475,7 +460,7 @@ export default function Header({
                 <div className="relative h-7 w-7 rounded-full">
                   <Image
                     className="rounded-full"
-                    src={makeImageURL(profile.avatar, "smAvatar")}
+                    src={makeImageURL(profile.avatar, 'smAvatar')}
                     layout="fill"
                     alt="avatar"
                     priority={true}
@@ -490,7 +475,7 @@ export default function Header({
                       <a className="z-10 flex h-24 w-24 cursor-pointer rounded-full bg-black ring-2 ring-gray-300">
                         <Image
                           className="rounded-full hover:opacity-90"
-                          src={makeImageURL(profile?.avatar!, "bigAvatar")}
+                          src={makeImageURL(profile?.avatar!, 'bigAvatar')}
                           width={180}
                           height={180}
                           alt="avatar"

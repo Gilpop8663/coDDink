@@ -1,7 +1,7 @@
-import bcrypt from "bcrypt";
-import { NextApiRequest, NextApiResponse } from "next";
-import withHandler, { ResponseType } from "@libs/server/withHandler";
-import client from "@libs/server/client";
+import { NextApiRequest, NextApiResponse } from 'next';
+import bcrypt from 'bcrypt';
+import client from '@libs/server/client';
+import withHandler, { ResponseType } from '@libs/server/withHandler';
 
 async function handler(
   req: NextApiRequest,
@@ -49,7 +49,7 @@ async function handler(
 }
 
 export default withHandler({
-  methods: ["POST"],
+  methods: ['POST'],
   handler,
   isPrivate: true,
 });

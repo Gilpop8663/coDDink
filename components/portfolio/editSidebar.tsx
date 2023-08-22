@@ -1,16 +1,16 @@
-import SubUploadButton from "@components/subUploadButton";
-import NextButton from "@components/upload/nextButton";
-import { ContentProps, UploadProps } from "pages/portfolio/editor";
-import React from "react";
-import { UseFormRegister } from "react-hook-form";
+import React from 'react';
+import { UseFormRegister } from 'react-hook-form';
+import { ContentProps, UploadProps } from 'pages/portfolio/editor';
+import Button from '@components/common/Button';
+import SubUploadButton from '@components/subUploadButton';
 
 interface EditSidebarProps {
   onSetting: () => void;
   content: ContentProps[];
   register: UseFormRegister<UploadProps>;
   onPreviewImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onAddTextArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
-  onAddCodeArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
+  onAddTextArea: () => void;
+  onAddCodeArea: () => void;
   onDraftClick: () => void;
   onPreviewClick: () => void;
   isDraft: boolean;
@@ -116,10 +116,16 @@ export default function EditSidebar({
         <div className="mt-20 space-y-4 border bg-white py-7 px-4 shadow-md">
           {content.length && !isDraft ? (
             <>
-              <NextButton color="greenDiv" label="계속" onClick={onSetting} />
-              <NextButton
-                label="초안으로 저장"
-                color="blueBtn"
+              <Button
+                color="green"
+                text="계속"
+                type="button"
+                onClick={onSetting}
+              />
+              <Button
+                text="초안으로 저장"
+                color="blue"
+                type="button"
                 onClick={onDraftClick}
               />
               <div
@@ -147,9 +153,10 @@ export default function EditSidebar({
             </>
           ) : (
             <>
-              <NextButton color="disabled" label="계속" />
-              <NextButton
-                label={isDraft ? "로딩중" : "초안으로 저장"}
+              <Button type="button" color="disabled" text="계속" />
+              <Button
+                type="button"
+                text={isDraft ? '로딩중' : '초안으로 저장'}
                 color="disabled"
               />
               <div className="mt-4 flex justify-center text-gray-200">

@@ -1,29 +1,16 @@
-import HeadMeta from "@components/headMeta";
-import Layout from "@components/layout";
-import CategoryButton from "@components/profile/categoryButton";
-import DeleteModal from "@components/profile/deleteModal";
-import ClickedProject from "@components/project/clickedProject";
-import ProjectDraftItem from "@components/project/projectDraftItem";
-import ProjectItem from "@components/project/projectItem";
-import NextButton from "@components/upload/nextButton";
-import useMutation from "@libs/client/useMutation";
-import { ProfileResponse, useUserState } from "@libs/client/useUser";
-import {
-  cfImageUpload,
-  cls,
-  makeImageURL,
-  timeConverter,
-} from "@libs/client/utils";
+import type { NextPage } from 'next';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import {
   CoddinkFollow,
   CoddinkLike,
   CoddinkProject,
   CoddinkUser,
-} from "@prisma/client";
-import type { NextPage } from "next";
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/router";
+} from '@prisma/client';
+import useSWR from 'swr';
 import {
   CommentProps,
   CommentResponse,
@@ -32,10 +19,23 @@ import {
   GETCommentResponse,
   OwnerProps,
   ProjectWithCountWithUser,
-} from "pages";
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import useSWR from "swr";
+} from 'pages';
+import useMutation from '@libs/client/useMutation';
+import { ProfileResponse, useUserState } from '@libs/client/useUser';
+import {
+  cfImageUpload,
+  cls,
+  makeImageURL,
+  timeConverter,
+} from '@libs/client/utils';
+import Button from '@components/common/Button';
+import Layout from '@components/common/Layout';
+import HeadMeta from '@components/headMeta';
+import CategoryButton from '@components/profile/categoryButton';
+import DeleteModal from '@components/profile/deleteModal';
+import ClickedProject from '@components/project/clickedProject';
+import ProjectDraftItem from '@components/project/projectDraftItem';
+import ProjectItem from '@components/project/projectItem';
 
 interface ProfileWithCount extends CoddinkUser {
   _count: {
@@ -90,16 +90,16 @@ const Profile: NextPage = () => {
   } = useForm<CommentProps>();
   const [isTop, setIsTop] = useState(true);
   const [updateProfile, { loading, data: ProfileData }] =
-    useMutation<ToggleResponse>("/api/profile");
+    useMutation<ToggleResponse>('/api/profile');
   const [banner, setBanner] = useState<BannerProps>({
-    previewSrc: "",
-    imageSrc: "",
-    position: "",
+    previewSrc: '',
+    imageSrc: '',
+    position: '',
   });
   const [isBannerLoading, setIsBannerLoading] = useState(false);
   const [isBannerOver, setIsBannerOver] = useState(false);
   const [isBannerClick, setIsBannerClick] = useState(false);
-  const [isDelete, setIsDelete] = useState<null | "comment" | "project">(null);
+  const [isDelete, setIsDelete] = useState<null | 'comment' | 'project'>(null);
   const [deleteProjectTarget, setDeleteProjectTarget] = useState<number | null>(
     null
   );
@@ -110,14 +110,14 @@ const Profile: NextPage = () => {
     data,
     error,
     mutate: myDataMutate,
-  } = useSWR<ProfileResponse>("/api/users/me");
+  } = useSWR<ProfileResponse>('/api/users/me');
   const router = useRouter();
   const path = router.asPath;
-  const isGallery = path.slice(1, 8) === "gallery";
+  const isGallery = path.slice(1, 8) === 'gallery';
   const [isDetail, setIsDetail] = useState(false);
-  const isAppreciated = path.slice(-11) === "appreciated";
+  const isAppreciated = path.slice(-11) === 'appreciated';
 
-  const isDraftPath = path.slice(-6) === "drafts";
+  const isDraftPath = path.slice(-6) === 'drafts';
   const { data: userData, mutate: userMutate } =
     useSWR<ProfileUserInfoResponse | null>(
       router.query.id ? `/api/users/${router.query.id}` : null
@@ -139,14 +139,14 @@ const Profile: NextPage = () => {
     );
 
   const [kind, setKind] = useState<
-    "projects" | "moodboards" | "appreciated" | "drafts"
-  >("projects");
+    'projects' | 'moodboards' | 'appreciated' | 'drafts'
+  >('projects');
 
   const [sendView, { loading: viewLoading, data: viewData }] =
-    useMutation("/api/projects/view");
+    useMutation('/api/projects/view');
 
   const [sendFollow, { data: followData, loading: followLoading }] =
-    useMutation<CommentResponse>("/api/users/follow");
+    useMutation<CommentResponse>('/api/users/follow');
 
   const onFollowClick = (id: number | undefined) => {
     if (followLoading || !id) return;
@@ -174,12 +174,12 @@ const Profile: NextPage = () => {
 
   const onDeleteModalClick = (
     id: number | null,
-    kind: null | "comment" | "project"
+    kind: null | 'comment' | 'project'
   ) => {
     setIsDelete(kind);
-    if (kind === "project") {
+    if (kind === 'project') {
       setDeleteProjectTarget(id);
-    } else if (kind === "comment") {
+    } else if (kind === 'comment') {
       setDeleteCommentTarget(id);
     }
   };
@@ -192,33 +192,33 @@ const Profile: NextPage = () => {
   };
 
   const onDraftsClick = () => {
-    setKind("drafts");
+    setKind('drafts');
     router.push(
-      { pathname: "/profile/[id]", query: { id: router.query.id } },
+      { pathname: '/profile/[id]', query: { id: router.query.id } },
       `/profile/${router.query.id}/drafts`
     );
   };
 
   const onProjectClick = () => {
-    setKind("projects");
+    setKind('projects');
     router.push(
-      { pathname: "/profile/[id]", query: { id: router.query.id } },
+      { pathname: '/profile/[id]', query: { id: router.query.id } },
       `/profile/${router.query.id}/projects`
     );
   };
 
   const onAppreciatedClick = () => {
     router.push(
-      { pathname: "/profile/[id]", query: { id: router.query.id } },
+      { pathname: '/profile/[id]', query: { id: router.query.id } },
       `/profile/${router.query.id}/appreciated`
     );
-    setKind("appreciated");
+    setKind('appreciated');
   };
 
   const onBoxClicked = (id: number) => {
     sendView({ projectId: id });
     router.push(
-      { pathname: "/profile/[id]", query: { id: router.query.id } },
+      { pathname: '/profile/[id]', query: { id: router.query.id } },
       `/gallery/${id}`
     );
   };
@@ -244,7 +244,7 @@ const Profile: NextPage = () => {
   );
 
   const [deleteProject, { data: deleteData }] = useMutation<CommentResponse>(
-    "/api/projects/delete"
+    '/api/projects/delete'
   );
 
   const [commentPage, setCommentPage] = useState(1);
@@ -337,8 +337,8 @@ const Profile: NextPage = () => {
 
     setBanner({
       previewSrc: URL.createObjectURL(file),
-      imageSrc: "",
-      position: "object-center",
+      imageSrc: '',
+      position: 'object-center',
       fileData: file,
     });
     setIsBannerLoading(false);
@@ -347,15 +347,15 @@ const Profile: NextPage = () => {
   const imagePotisionClick = (position: number) => {
     if (position === 1) {
       setBanner((prev) => {
-        return { ...prev, position: "object-top" };
+        return { ...prev, position: 'object-top' };
       });
     } else if (position === 2) {
       setBanner((prev) => {
-        return { ...prev, position: "object-center" };
+        return { ...prev, position: 'object-center' };
       });
     } else if (position === 3) {
       setBanner((prev) => {
-        return { ...prev, position: "object-bottom" };
+        return { ...prev, position: 'object-bottom' };
       });
     }
   };
@@ -372,15 +372,15 @@ const Profile: NextPage = () => {
     setIsBannerLoading(false);
   };
 
-  const bannerCancleClick = () => {
+  const bannerCancelClick = () => {
     setIsBannerClick(false);
-    setBanner({ previewSrc: "", imageSrc: "", position: "" });
+    setBanner({ previewSrc: '', imageSrc: '', position: '' });
   };
 
   const bannerResetClick = () => {
     setIsBannerClick(false);
-    setBanner({ previewSrc: "", imageSrc: "", position: "" });
-    updateProfile({ banner: { imageSrc: "", position: "" } });
+    setBanner({ previewSrc: '', imageSrc: '', position: '' });
+    updateProfile({ banner: { imageSrc: '', position: '' } });
   };
 
   const onDraftRouterClick = (id: number) => {
@@ -395,7 +395,7 @@ const Profile: NextPage = () => {
 
   useEffect(() => {
     if (userData && !userData.ok) {
-      router.push("/");
+      router.push('/');
     }
   }, [router, userData]);
 
@@ -421,10 +421,10 @@ const Profile: NextPage = () => {
   };
 
   useEffect(() => {
-    window.addEventListener("scroll", handleFollow);
+    window.addEventListener('scroll', handleFollow);
 
     return () => {
-      window.removeEventListener("scroll", handleFollow);
+      window.removeEventListener('scroll', handleFollow);
     };
   }, []);
 
@@ -484,16 +484,16 @@ const Profile: NextPage = () => {
           className="absolute top-0  flex h-[260px] w-screen items-end justify-center bg-black pb-14 "
         >
           <Image
-            src={makeImageURL(userData.userInfo?.bannerSrc, "banner")}
+            src={makeImageURL(userData.userInfo?.bannerSrc, 'banner')}
             alt="bannerr"
             priority={true}
             layout="fill"
             className={cls(
               `${userData.userInfo.bannerPosition}`,
-              "object-cover transition-opacity",
+              'object-cover transition-opacity',
               isBannerOver && data?.profile?.id === Number(router?.query?.id)
-                ? "opacity-60"
-                : ""
+                ? 'opacity-60'
+                : ''
             )}
           ></Image>
           {!(isBannerLoading || loading) &&
@@ -519,17 +519,13 @@ const Profile: NextPage = () => {
                       // {...register}
                     />
                   </label>
-                  <NextButton
-                    onClick={bannerResetClick}
-                    color="grayBtn"
-                    label="제거"
-                  />
+                  <Button onClick={bannerResetClick} color="gray" text="제거" />
                 </div>
               </div>
             )}
         </div>
       )}
-      {kind === "drafts" && isDelete === "project" && (
+      {kind === 'drafts' && isDelete === 'project' && (
         <DeleteModal
           title="초안 삭제"
           description="이 초안을 삭제하시겠습니까?"
@@ -537,7 +533,7 @@ const Profile: NextPage = () => {
           onProjectDeleteClick={() => onProjectDeleteClick(deleteProjectTarget)}
         ></DeleteModal>
       )}
-      {kind !== "drafts" && isDelete === "project" && (
+      {kind !== 'drafts' && isDelete === 'project' && (
         <DeleteModal
           title="프로젝트 삭제"
           description="이 프로젝트를 삭제하시겠습니까?"
@@ -545,7 +541,7 @@ const Profile: NextPage = () => {
           onProjectDeleteClick={() => onProjectDeleteClick(deleteProjectTarget)}
         ></DeleteModal>
       )}
-      {isDelete === "comment" && (
+      {isDelete === 'comment' && (
         <DeleteModal
           title="댓글 삭제"
           description="이 댓글을 삭제하시겠습니까?"
@@ -608,7 +604,7 @@ const Profile: NextPage = () => {
                 src={banner.previewSrc}
                 alt="banner"
                 layout="fill"
-                className={cls(`${banner.position}`, "object-cover")}
+                className={cls(`${banner.position}`, 'object-cover')}
               ></Image>
             )}
           </div>
@@ -637,18 +633,15 @@ const Profile: NextPage = () => {
               </div>
 
               <div className="w-16">
-                <NextButton
+                <Button
                   onClick={bannerFinishClick}
-                  color="blueDiv"
-                  label="완료"
-                ></NextButton>
+                  color="blue"
+                  type="button"
+                  text="완료"
+                />
               </div>
               <div className="w-16">
-                <NextButton
-                  onClick={bannerCancleClick}
-                  color="grayBtn"
-                  label="취소"
-                ></NextButton>
+                <Button onClick={bannerCancelClick} color="gray" text="취소" />
               </div>
             </div>
           </div>
@@ -660,8 +653,8 @@ const Profile: NextPage = () => {
             className="rounded-full"
             src={makeImageURL(
               userData?.userInfo.avatar ||
-                "8b9dd122-cda2-4183-e41e-2c8d9259ac00",
-              "smAvatar"
+                '8b9dd122-cda2-4183-e41e-2c8d9259ac00',
+              'smAvatar'
             )}
             alt="avatar"
             layout="fill"
@@ -708,10 +701,7 @@ const Profile: NextPage = () => {
             {userData?.userInfo.id === data?.profile?.id && (
               <Link href={`/profile/${userData?.userInfo?.id}/editor`}>
                 <a>
-                  <NextButton
-                    color="blueDiv"
-                    label="내 프로필 편집"
-                  ></NextButton>
+                  <Button color="blue" type="button" text="내 프로필 편집" />
                 </a>
               </Link>
             )}
@@ -721,19 +711,20 @@ const Profile: NextPage = () => {
                   (ele: CoddinkFollow) =>
                     ele.followerId === userData?.userInfo.id
                 ) ? (
-                  <NextButton
+                  <Button
                     onClick={() => onFollowClick(userData?.userInfo.id)}
-                    color="followDelBtn"
-                    label={"팔로잉"}
-                  ></NextButton>
+                    color="red"
+                    text="팔로잉"
+                    hoverText="팔로우 취소"
+                  />
                 ) : (
-                  <NextButton
+                  <Button
                     onClick={() => onFollowClick(userData?.userInfo.id)}
-                    color="blueBtn"
-                    label={"팔로우"}
-                  ></NextButton>
+                    color="blue"
+                    text="팔로우"
+                  />
                 )}
-                {/* <NextButton color="grayBtn" label="메세지"></NextButton> */}
+                {/* <Button color="grayBtn" label="메세지"/> */}
               </>
             )}
           </div>
@@ -743,22 +734,22 @@ const Profile: NextPage = () => {
                 <CategoryButton
                   onClick={onProjectClick}
                   label="작업"
-                  isSame={kind === "projects"}
+                  isSame={kind === 'projects'}
                 />
                 <CategoryButton
                   onClick={onDraftsClick}
                   label="초안"
-                  isSame={kind === "drafts"}
+                  isSame={kind === 'drafts'}
                 />
                 <CategoryButton
                   onClick={onAppreciatedClick}
                   label="평가"
-                  isSame={kind === "appreciated"}
+                  isSame={kind === 'appreciated'}
                 />
               </div>
 
               <div className="mt-6 grid w-full grid-cols-1 place-items-center gap-6 sm:grid-cols-2  md:grid-cols-3 ">
-                {kind === "projects" &&
+                {kind === 'projects' &&
                   userProjects?.projects?.map((item) => (
                     <ProjectItem
                       projectId={item.id}
@@ -774,11 +765,11 @@ const Profile: NextPage = () => {
                       owner={item.owner}
                       onClick={() => onBoxClicked(item.id)}
                       onDeleteModalClick={() =>
-                        onDeleteModalClick(item?.id, "project")
+                        onDeleteModalClick(item?.id, 'project')
                       }
                     />
                   ))}
-                {kind === "drafts" &&
+                {kind === 'drafts' &&
                   draftProjects?.projects?.map((item) => (
                     <ProjectDraftItem
                       followingData={data?.profile?.followings}
@@ -792,11 +783,11 @@ const Profile: NextPage = () => {
                       owner={item.owner}
                       onClick={() => onDraftRouterClick(item.id)}
                       onDeleteModalClick={() =>
-                        onDeleteModalClick(item?.id, "project")
+                        onDeleteModalClick(item?.id, 'project')
                       }
                     />
                   ))}
-                {kind === "appreciated" &&
+                {kind === 'appreciated' &&
                   likeProjects?.projects?.map((item) => (
                     <ProjectItem
                       visible={item.project.visible}
@@ -812,7 +803,7 @@ const Profile: NextPage = () => {
                       owner={item.project.owner}
                       onClick={() => onBoxClicked(item.id)}
                       onDeleteModalClick={() =>
-                        onDeleteModalClick(item?.id, "project")
+                        onDeleteModalClick(item?.id, 'project')
                       }
                     />
                   ))}
@@ -829,8 +820,8 @@ const Profile: NextPage = () => {
               className="rounded-full"
               src={makeImageURL(
                 userData?.userInfo.avatar ||
-                  "8b9dd122-cda2-4183-e41e-2c8d9259ac00",
-                "smAvatar"
+                  '8b9dd122-cda2-4183-e41e-2c8d9259ac00',
+                'smAvatar'
               )}
               alt="avatar"
               layout="fill"
@@ -879,10 +870,7 @@ const Profile: NextPage = () => {
             {userData?.userInfo.id === data?.profile?.id && (
               <Link href={`/profile/${userData?.userInfo?.id}/editor`}>
                 <a>
-                  <NextButton
-                    color="blueDiv"
-                    label="내 프로필 편집"
-                  ></NextButton>
+                  <Button color="blue" type="button" text="내 프로필 편집" />
                 </a>
               </Link>
             )}
@@ -892,19 +880,20 @@ const Profile: NextPage = () => {
                   (ele: CoddinkFollow) =>
                     ele.followerId === userData?.userInfo.id
                 ) ? (
-                  <NextButton
+                  <Button
                     onClick={() => onFollowClick(userData?.userInfo.id)}
-                    color="followDelBtn"
-                    label={"팔로잉"}
-                  ></NextButton>
+                    color="red"
+                    text="팔로잉"
+                    hoverText="팔로우 취소"
+                  />
                 ) : (
-                  <NextButton
+                  <Button
                     onClick={() => onFollowClick(userData?.userInfo.id)}
-                    color="blueBtn"
-                    label={"팔로우"}
-                  ></NextButton>
+                    color="blue"
+                    text="팔로우"
+                  />
                 )}
-                {/* <NextButton color="grayBtn" label="메세지"></NextButton> */}
+                {/* <Button color="grayBtn" label="메세지"/> */}
               </>
             )}
           </div>
@@ -1125,7 +1114,7 @@ const Profile: NextPage = () => {
                       onClick={onDescriptionClick}
                       className="cursor-pointer text-xs font-semibold text-gray-500"
                     >
-                      {isDetail ? "간단히 보기" : "자세히 보기"}
+                      {isDetail ? '간단히 보기' : '자세히 보기'}
                     </span>
                   )}
               </div>
@@ -1176,22 +1165,22 @@ const Profile: NextPage = () => {
               <CategoryButton
                 onClick={onProjectClick}
                 label="작업"
-                isSame={kind === "projects"}
+                isSame={kind === 'projects'}
               />
               <CategoryButton
                 onClick={onDraftsClick}
                 label="초안"
-                isSame={kind === "drafts"}
+                isSame={kind === 'drafts'}
               />
               <CategoryButton
                 onClick={onAppreciatedClick}
                 label="평가"
-                isSame={kind === "appreciated"}
+                isSame={kind === 'appreciated'}
               />
             </div>
             {/* grid w-full grid-cols-1 place-items-center gap-6 px-6 py-6 sm:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 */}
             <div className="mt-6 grid w-full place-items-center gap-6 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-              {kind === "projects" &&
+              {kind === 'projects' &&
                 userProjects?.projects?.map((item) => (
                   <ProjectItem
                     projectId={item.id}
@@ -1207,11 +1196,11 @@ const Profile: NextPage = () => {
                     owner={item.owner}
                     onClick={() => onBoxClicked(item.id)}
                     onDeleteModalClick={() =>
-                      onDeleteModalClick(item?.id, "project")
+                      onDeleteModalClick(item?.id, 'project')
                     }
                   />
                 ))}
-              {kind === "drafts" &&
+              {kind === 'drafts' &&
                 draftProjects?.projects?.map((item) => (
                   <ProjectDraftItem
                     followingData={data?.profile?.followings}
@@ -1225,11 +1214,11 @@ const Profile: NextPage = () => {
                     owner={item.owner}
                     onClick={() => onDraftRouterClick(item.id)}
                     onDeleteModalClick={() =>
-                      onDeleteModalClick(item?.id, "project")
+                      onDeleteModalClick(item?.id, 'project')
                     }
                   />
                 ))}
-              {kind === "appreciated" &&
+              {kind === 'appreciated' &&
                 likeProjects?.projects?.map((item) => (
                   <ProjectItem
                     visible={item.project.visible}
@@ -1245,7 +1234,7 @@ const Profile: NextPage = () => {
                     owner={item.project.owner}
                     onClick={() => onBoxClicked(item.id)}
                     onDeleteModalClick={() =>
-                      onDeleteModalClick(item?.id, "project")
+                      onDeleteModalClick(item?.id, 'project')
                     }
                   />
                 ))}

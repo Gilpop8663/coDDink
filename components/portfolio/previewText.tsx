@@ -1,5 +1,3 @@
-import { cls } from "@libs/client/utils";
-import { ContentProps } from "pages/portfolio/editor";
 import {
   ChangeEvent,
   ChangeEventHandler,
@@ -8,8 +6,10 @@ import {
   useEffect,
   useRef,
   useState,
-} from "react";
-import MiniUploadMenu from "./miniUploadMenu";
+} from 'react';
+import { ContentProps } from 'pages/portfolio/editor';
+import { cls } from '@libs/client/utils';
+import MiniUploadMenu from './miniUploadMenu';
 
 interface PreivewTextProps {
   label?: string;
@@ -21,10 +21,12 @@ interface PreivewTextProps {
     idx?: number
   ) => void;
   textValue: string;
-  onAddTextArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
-  onAddCodeArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
+  onAddTextArea: () => void;
+  onAddCodeArea: () => void;
   onChange: ChangeEventHandler<HTMLTextAreaElement>;
   onClearClick: (idx: number) => void;
+  draftFontSize?: string | null;
+  draftAlign?: string | null;
   [key: string]: any;
 }
 
@@ -37,6 +39,8 @@ export default function PreivewText({
   onPreviewImage,
   textValue,
   onChange,
+  draftFontSize,
+  draftAlign,
   onAddCodeArea,
   onClearClick,
   ...rest
@@ -44,8 +48,12 @@ export default function PreivewText({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   // const [currentValue, setCurrentValue] = useState(textValue);
   const [isWrite, setIsWrite] = useState(true);
-  const [fontSize, setFontSize] = useState("text-base");
-  const [alignText, setAlignText] = useState("text-left");
+  const [fontSize, setFontSize] = useState(
+    draftFontSize ? draftFontSize : 'text-base'
+  );
+  const [alignText, setAlignText] = useState(
+    draftAlign ? draftAlign : 'text-left'
+  );
   const [isOver, setIsOver] = useState(false);
 
   const onOverArea = () => {
@@ -84,7 +92,7 @@ export default function PreivewText({
 
   const onAlignText = (kind: number) => {
     const result =
-      kind === 1 ? "text-left" : kind === 2 ? "text-center" : "text-right";
+      kind === 1 ? 'text-left' : kind === 2 ? 'text-center' : 'text-right';
     setAlignText(result);
 
     setContent((prev) => {
@@ -108,17 +116,17 @@ export default function PreivewText({
 
   useEffect(() => {
     if (textareaRef.current === null) return;
-    textareaRef.current.style.height = "0px";
+    textareaRef.current.style.height = '0px';
     const scrollHeight = textareaRef.current.scrollHeight;
-    textareaRef.current.style.height = scrollHeight + "px";
+    textareaRef.current.style.height = scrollHeight + 'px';
   }, [textValue, fontSize]);
 
   useEffect(() => {
     if (textareaRef.current === null) return;
-    textareaRef.current.addEventListener("focusout", () => {
+    textareaRef.current.addEventListener('focusout', () => {
       setIsWrite(false);
     });
-    textareaRef.current.addEventListener("focusin", () => {
+    textareaRef.current.addEventListener('focusin', () => {
       setIsWrite(true);
     });
   }, []);
@@ -128,8 +136,8 @@ export default function PreivewText({
       onMouseOut={onOutArea}
       onMouseOver={onOverArea}
       className={cls(
-        !isWrite && textValue.length === 0 ? "hidden h-0" : "visible",
-        "relative"
+        !isWrite && textValue.length === 0 ? 'hidden h-0' : 'visible',
+        'relative'
       )}
     >
       {(isWrite || textValue.length > 0) && (
@@ -244,9 +252,9 @@ export default function PreivewText({
           </div>
         </div>
       )}
-      <div className={cls("flex h-fit justify-center ")}>
+      <div className={cls('flex h-fit justify-center ')}>
         <label htmlFor={name}>{label}</label>
-        <textarea
+        {/* <textarea
           ref={textareaRef}
           id={name}
           value={textValue}
@@ -257,6 +265,20 @@ export default function PreivewText({
             fontSize && `${fontSize} placeholder:${fontSize}`,
             alignText && `${alignText}`,
             "h-fit w-4/5 resize-none justify-center whitespace-pre-wrap  border-blue-600 scrollbar-hide placeholder:text-xl hover:border focus:border focus:outline-none"
+          )}
+          {...rest}
+        ></textarea> */}
+        <textarea
+          ref={textareaRef}
+          id={name}
+          value={textValue}
+          onChange={onChange}
+          autoFocus
+          placeholder={'여기에 텍스트 입력...'}
+          className={cls(
+            fontSize && `${fontSize} placeholder:${fontSize}`,
+            alignText && `${alignText}`,
+            'h-fit w-4/5 resize-none justify-center whitespace-pre-wrap  border-blue-600 scrollbar-hide placeholder:text-xl hover:border focus:border focus:outline-none'
           )}
           {...rest}
         ></textarea>

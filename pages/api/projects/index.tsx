@@ -1,12 +1,12 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import withHandler from "@libs/server/withHandler";
-import client from "@libs/server/client";
-import { withApiSession } from "@libs/server/withSession";
-import { ContentProps, UserDataProps } from "pages/portfolio/editor";
-import { CoddinkProject } from "@prisma/client";
+import { NextApiRequest, NextApiResponse } from 'next';
+import { CoddinkProject } from '@prisma/client';
+import { ContentProps, UserDataProps } from 'pages/portfolio/editor';
+import client from '@libs/server/client';
+import withHandler from '@libs/server/withHandler';
+import { withApiSession } from '@libs/server/withSession';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === "GET") {
+  if (req.method === 'GET') {
     const {
       query: { page = 1 },
     } = req;
@@ -17,7 +17,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         visible: true,
       },
       orderBy: {
-        createdAt: "desc",
+        createdAt: 'desc',
       },
       include: {
         user: {
@@ -34,7 +34,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         },
         owner: {
           orderBy: {
-            ownerIdx: "asc",
+            ownerIdx: 'asc',
           },
           select: {
             name: true,
@@ -64,7 +64,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     });
   }
 
-  if (req.method === "POST") {
+  if (req.method === 'POST') {
     const {
       body: {
         title,
@@ -96,11 +96,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           id: Number(projectId),
         },
         data: {
-          title: title ? title : "",
-          linkURL: linkURL ? linkURL : "",
-          description: description ? description : "",
+          title: title ? title : '',
+          linkURL: linkURL ? linkURL : '',
+          description: description ? description : '',
           visible,
-          thumbnail: thumbnail ? thumbnail : "",
+          thumbnail: thumbnail ? thumbnail : '',
           isDraft: isDraft,
           user: {
             connect: {
@@ -142,11 +142,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     } else {
       project = await client.coddinkProject.create({
         data: {
-          title: title ? title : "",
-          linkURL: linkURL ? linkURL : "",
-          description: description ? description : "",
+          title: title ? title : '',
+          linkURL: linkURL ? linkURL : '',
+          description: description ? description : '',
           visible,
-          thumbnail: thumbnail ? thumbnail : "",
+          thumbnail: thumbnail ? thumbnail : '',
           isDraft: isDraft,
           user: {
             connect: {
@@ -177,16 +177,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     });
 
     content.forEach(async (item: ContentProps, idx: number) => {
-      if (item.description === "" || !item.description) return;
+      if (item.description === '' || !item.description) return;
       const projectContent = await client.coddinkProjectContent.create({
         data: {
           kind: item.kind,
           contentIdx: idx,
-          imageSrc: item.kind === "image" ? item.imageSrc : null,
-          content: item.kind !== "image" ? item.description : null,
-          fontSize: item.kind !== "image" ? item.fontSize : null,
-          alignText: item.kind === "text" ? item.alignText : null,
-          language: item.kind === "code" ? item.language : null,
+          imageSrc: item.kind === 'image' ? item.imageSrc : null,
+          content: item.kind !== 'image' ? item.description : null,
+          fontSize: item.kind !== 'image' ? item.fontSize : null,
+          alignText: item.kind === 'text' ? item.alignText : null,
+          language: item.kind === 'code' ? item.language : null,
           description: item.description,
           project: {
             connect: {
@@ -198,7 +198,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     });
 
     tagArr.forEach(async (item: string) => {
-      if (item === "" || item.length > 50) return;
+      if (item === '' || item.length > 50) return;
       const tagContent = await client.coddinkProjectTag.create({
         data: {
           name: item,
@@ -212,7 +212,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     });
 
     categoryArr.forEach(async (item: string) => {
-      if (item === "" || item.length > 50) return;
+      if (item === '' || item.length > 50) return;
       const categoryContent = await client.coddinkProjectCategory.create({
         data: {
           name: item,
@@ -226,7 +226,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     });
 
     toolArr.forEach(async (item: string) => {
-      if (item === "" || item.length > 50) return;
+      if (item === '' || item.length > 50) return;
       const categoryContent = await client.coddinkProjectTool.create({
         data: {
           name: item,
@@ -247,5 +247,5 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 }
 
 export default withApiSession(
-  withHandler({ methods: ["GET", "POST"], handler, isPrivate: false })
+  withHandler({ methods: ['GET', 'POST'], handler, isPrivate: false })
 );

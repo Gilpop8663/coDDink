@@ -1,5 +1,5 @@
-import { cls } from "@libs/client/utils";
-import React from "react";
+import React from 'react';
+import { cls } from '@libs/client/utils';
 
 interface TabMenuProps {
   isWatch: boolean;
@@ -17,11 +17,10 @@ export default function CategoryTabMenu({
       onClick={onClick}
       className={cls(
         isWatch
-          ? "w-72 rounded-t-sm border-l-2 border-blue-600 bg-white py-2 pl-4 text-base font-semibold text-blue-600"
-          : "w-72 rounded-t-sm border-t bg-white py-2 pl-4 text-base text-black",
-        "cursor-pointer transition-colors hover:bg-gray-100"
-      )}
-    >
+          ? 'w-72 rounded-t-sm border-l-2 border-blue-600 bg-white py-2 pl-4 text-base font-semibold text-blue-600'
+          : 'w-72 rounded-t-sm border-t bg-white py-2 pl-4 text-base text-black',
+        'cursor-pointer transition-colors hover:bg-gray-100'
+      )}>
       <span>{label}</span>
     </div>
   );

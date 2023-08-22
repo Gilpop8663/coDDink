@@ -1,5 +1,5 @@
-import NextButton from "@components/upload/nextButton";
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
+import Button from '@components/common/Button';
 
 interface DeleteModalProps {
   title: string;
@@ -22,8 +22,8 @@ export default function DeleteModal({
           width: 100%;`;
     return () => {
       const scrollY = document.body.style.top;
-      document.body.style.cssText = "";
-      window.scrollTo(0, parseInt(scrollY || "0", 10) * -1);
+      document.body.style.cssText = '';
+      window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
     };
   }, []);
 
@@ -42,18 +42,20 @@ export default function DeleteModal({
             <span className="mt-2 text-sm font-thin">{description}</span>
           </div>
           <div className="flex w-32">
-            <NextButton
+            <Button
               onClick={onProjectDeleteClick}
               size="sm"
-              color="blueDiv"
-              label="삭제"
-            ></NextButton>
-            <NextButton
+              type="button"
+              color="blue"
+              text="삭제"
+            />
+            <Button
               onClick={onDeleteModalClick}
               size="sm"
-              color="whiteDiv"
-              label="취소"
-            ></NextButton>
+              type="button"
+              color="white"
+              text="취소"
+            />
           </div>
         </div>
         <div className="cursor-pointer p-3" onClick={onDeleteModalClick}>

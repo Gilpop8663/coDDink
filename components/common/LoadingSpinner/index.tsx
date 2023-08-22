@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export default function LoadingSpinner() {
   return (
@@ -19,7 +19,6 @@ export default function LoadingSpinner() {
           fill="currentFill"
         />
       </svg>
-      <span className="sr-only">Loading...</span>
     </div>
   );
 }

@@ -1,8 +1,8 @@
-import { cls } from "@libs/client/utils";
-import React from "react";
+import React from 'react';
+import { cls } from '@libs/client/utils';
 
 interface ButtonProps {
-  color: "blue" | "white";
+  color: 'blue' | 'white';
   icon: string;
   label: string;
 }
@@ -12,18 +12,16 @@ export default function InteractionButton({ color, label, icon }: ButtonProps) {
     <div className="flex flex-col items-center">
       <div
         className={cls(
-          color === "blue"
-            ? "bg-blue-600 text-white"
-            : "border bg-white text-black",
-          "flex h-10 w-10 cursor-pointer items-center justify-center rounded-full"
-        )}
-      >
+          color === 'blue'
+            ? 'bg-blue-600 text-white'
+            : 'border bg-white text-black',
+          'flex h-10 w-10 cursor-pointer items-center justify-center rounded-full'
+        )}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-4 w-4"
           viewBox="0 0 20 20"
-          fill="currentColor"
-        >
+          fill="currentColor">
           <path d={icon} />
         </svg>
       </div>

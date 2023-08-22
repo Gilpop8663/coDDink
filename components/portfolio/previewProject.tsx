@@ -1,16 +1,16 @@
-import ClickedCodeView from "@components/project/clickedComponents/clickedCodeView";
-import ClickedFooter from "@components/project/clickedComponents/clickedFooter";
-import ClickedInfo from "@components/project/clickedComponents/clickedInfo";
-import { cls, makeImageURL } from "@libs/client/utils";
-import { CoddinkFollow } from "@prisma/client";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { ContentProps, UserDataProps } from "pages/portfolio/editor";
-import PreviewCommentInput from "./previewCommentInput";
-import PreviewFooter from "./previewFooter";
-import PreviewHeader from "./previewHeader";
-import PreviewOwnerTab from "./previewOwnerTab";
-import PreviewSideInfos from "./previewSideInfos";
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { CoddinkFollow } from '@prisma/client';
+import { ContentProps, UserDataProps } from 'pages/portfolio/editor';
+import { cls, makeImageURL } from '@libs/client/utils';
+import ClickedCodeView from '@components/project/clickedComponents/clickedCodeView';
+import ClickedFooter from '@components/project/clickedComponents/clickedFooter';
+import ClickedInfo from '@components/project/clickedComponents/clickedInfo';
+import PreviewCommentInput from './previewCommentInput';
+import PreviewFooter from './previewFooter';
+import PreviewHeader from './previewHeader';
+import PreviewOwnerTab from './previewOwnerTab';
+import PreviewSideInfos from './previewSideInfos';
 
 interface ItemProps {
   title: string;
@@ -51,65 +51,57 @@ export default function PreviewProject({
 }: ItemProps) {
   return (
     <div
-      className={cls("absolute left-0 top-0", "flex w-screen justify-center")}
-    >
+      className={cls('absolute left-0 top-0', 'flex w-screen justify-center')}>
       <div
         className="fixed top-0 left-0 z-20 h-screen w-screen bg-black/80"
-        onClick={onClick}
-      ></div>
+        onClick={onClick}></div>
 
-      <div className={cls("z-20", "relative top-5 z-20 flex flex-col")}>
+      <div className={cls('z-20', 'relative top-5 z-20 flex flex-col')}>
         <PreviewHeader
           title={title}
           name={name}
-          avatar={avatar}
-        ></PreviewHeader>
+          avatar={avatar}></PreviewHeader>
         <div className="w-[1400px]">
           <div className="flex flex-col  space-y-8 bg-white px-24 py-16">
-            {contents.map((item) => {
+            {contents.map(item => {
               const contentFontSize = item.fontSize;
               return (
                 <div
                   key={item.id}
                   className={cls(
-                    item.kind === "image" ? "h-screen w-full" : ""
-                  )}
-                >
-                  {item.kind === "image" && (
+                    item.kind === 'image' ? 'h-screen w-full' : ''
+                  )}>
+                  {item.kind === 'image' && (
                     <div className="relative h-5/6 w-full  ">
                       {item.imageSrc ? (
                         <Image
                           className="object-contain"
                           alt={item.id.toString()}
                           layout="fill"
-                          src={makeImageURL(item.imageSrc!, "public")}
-                        ></Image>
+                          src={makeImageURL(item.imageSrc!, 'public')}></Image>
                       ) : (
                         <Image
                           className="object-contain"
                           alt={item.id.toString()}
                           layout="fill"
-                          src={item.description!}
-                        ></Image>
+                          src={item.description!}></Image>
                       )}
                     </div>
                   )}
-                  {item.kind === "text" && (
+                  {item.kind === 'text' && (
                     <div
                       className={cls(
                         `${item?.fontSize} ${item?.alignText}`,
-                        "relative whitespace-pre-wrap"
-                      )}
-                    >
+                        'relative whitespace-pre-wrap'
+                      )}>
                       {item.description}
                     </div>
                   )}
-                  {item.kind === "code" && (
+                  {item.kind === 'code' && (
                     <ClickedCodeView
                       content={item.description}
                       language={item.language!}
-                      fontSize={item.fontSize!}
-                    ></ClickedCodeView>
+                      fontSize={item.fontSize!}></ClickedCodeView>
                   )}
                 </div>
               );
@@ -136,8 +128,7 @@ export default function PreviewProject({
                   city={city}
                   country={country}
                   name={name}
-                  avatar={avatar}
-                ></PreviewOwnerTab>
+                  avatar={avatar}></PreviewOwnerTab>
                 <div className="mt-4 border bg-white p-8">
                   <ClickedInfo
                     kind="sidebar"
@@ -146,8 +137,7 @@ export default function PreviewProject({
                     createdAt={new Date(Date.now())}
                     likes={likes}
                     views={views}
-                    description={description}
-                  ></ClickedInfo>
+                    description={description}></ClickedInfo>
                 </div>
                 {tools.length > 0 && (
                   <PreviewSideInfos data={tools} label="툴" />

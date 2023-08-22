@@ -1,15 +1,15 @@
-import NextButton from "@components/upload/nextButton";
-import { cls, makeImageURL } from "@libs/client/utils";
-import { CoddinkFollow } from "@prisma/client";
-import Image from "next/image";
-import Link from "next/link";
-import { OwnerProps } from "pages";
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { CoddinkFollow } from '@prisma/client';
+import { OwnerProps } from 'pages';
+import { cls, makeImageURL } from '@libs/client/utils';
+import Button from '@components/common/Button';
 
 interface InfoProps {
-  kind: "home" | "detail";
+  kind: 'home' | 'detail';
   owner: OwnerProps[];
-  path: "home" | "gallery";
+  path: 'home' | 'gallery';
   onFollowClick: (id: number) => void;
   loginId: number | undefined;
   followingData: CoddinkFollow[] | undefined;
@@ -35,18 +35,18 @@ export default function OwnerInfo({
       onMouseOver={onOwnerOver}
       onMouseOut={onOwnerOut}
       className={cls(
-        kind === "detail" ? "text-white" : "text-gray-700",
-        "mt-2 flex items-center pb-2 text-sm font-semibold"
+        kind === 'detail' ? 'text-white' : 'text-gray-700',
+        'mt-2 flex items-center pb-2 text-sm font-semibold'
       )}
     >
       {owner.length === 1 ? (
         <Link href={`/profile/${owner[0]?.userId}`}>
           <a className="flex items-center">
-            {kind === "home" && (
+            {kind === 'home' && (
               <div className="h-4 w-4 rounded-full bg-orange-500">
                 <Image
                   className="rounded-full"
-                  src={makeImageURL(owner[0]?.user?.avatar, "smAvatar")}
+                  src={makeImageURL(owner[0]?.user?.avatar, 'smAvatar')}
                   height={50}
                   width={50}
                   alt="avatar"
@@ -55,10 +55,10 @@ export default function OwnerInfo({
             )}
             <span
               className={cls(
-                path === "gallery" || kind === "home"
-                  ? "text-xs lg:text-gray-700"
-                  : "text-sm lg:text-white",
-                "ml-1 text-black hover:underline"
+                path === 'gallery' || kind === 'home'
+                  ? 'text-xs lg:text-gray-700'
+                  : 'text-sm lg:text-white',
+                'ml-1 text-black hover:underline'
               )}
             >
               {owner[0].user.name}
@@ -70,10 +70,10 @@ export default function OwnerInfo({
           <div className="relative flex cursor-pointer items-center hover:underline">
             <span
               className={cls(
-                path === "gallery" || kind === "home"
-                  ? "text-xs text-gray-700"
-                  : "text-sm text-white",
-                "mr-1 text-black hover:underline"
+                path === 'gallery' || kind === 'home'
+                  ? 'text-xs text-gray-700'
+                  : 'text-sm text-white',
+                'mr-1 text-black hover:underline'
               )}
             >
               여러 소유자
@@ -85,10 +85,10 @@ export default function OwnerInfo({
               strokeWidth={1.5}
               stroke="currentColor"
               className={cls(
-                path === "gallery" || kind === "home"
-                  ? "text-xs text-gray-700"
-                  : "text-white",
-                "h-4 w-4 text-black hover:underline"
+                path === 'gallery' || kind === 'home'
+                  ? 'text-xs text-gray-700'
+                  : 'text-white',
+                'h-4 w-4 text-black hover:underline'
               )}
             >
               <path
@@ -109,7 +109,7 @@ export default function OwnerInfo({
                     <Link href={`/profile/${item.userId}`}>
                       <a className="relative mr-2 h-10 w-10 cursor-pointer rounded-full bg-black">
                         <Image
-                          src={makeImageURL(item?.user?.avatar, "smAvatar")}
+                          src={makeImageURL(item?.user?.avatar, 'smAvatar')}
                           alt="userAvater"
                           layout="fill"
                           className=" rounded-full object-cover transition-all hover:opacity-90"
@@ -151,19 +151,20 @@ export default function OwnerInfo({
                       {followingData?.find(
                         (ele) => ele.followerId === item.userId
                       ) ? (
-                        <NextButton
+                        <Button
                           onClick={() => onFollowClick(item.userId)}
                           size="xs"
-                          color="followDelBtn"
-                          label={"팔로잉"}
-                        ></NextButton>
+                          color="red"
+                          text="팔로잉"
+                          hoverText="팔로우 취소"
+                        />
                       ) : (
-                        <NextButton
+                        <Button
                           onClick={() => onFollowClick(item.userId)}
                           size="xs"
-                          color="blueBtn"
-                          label={"팔로우"}
-                        ></NextButton>
+                          color="blue"
+                          text="팔로우"
+                        />
                       )}
                     </div>
                   )}

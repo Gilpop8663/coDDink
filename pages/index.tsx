@@ -1,10 +1,7 @@
-import HeadMeta from "@components/headMeta";
-import Layout from "@components/layout";
-import DeleteModal from "@components/profile/deleteModal";
-import ClickedProject from "@components/project/clickedProject";
-import ProjectItem from "@components/project/projectItem";
-import useMutation from "@libs/client/useMutation";
-import { ProfileResponse } from "@libs/client/useUser";
+import type { NextPage } from 'next';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/router';
 import {
   CoddinkComment,
   CoddinkProject,
@@ -12,15 +9,18 @@ import {
   CoddinkProjectContent,
   CoddinkProjectTag,
   CoddinkProjectTool,
-} from "@prisma/client";
-import type { NextPage } from "next";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import useSWR, { SWRConfig } from "swr";
-import useSWRInfinite from "swr/infinite";
-import client from "@libs/server/client";
-import LoadingSpinner from "@components/loadingSpinner";
+} from '@prisma/client';
+import useSWR, { SWRConfig } from 'swr';
+import useSWRInfinite from 'swr/infinite';
+import useMutation from '@libs/client/useMutation';
+import { ProfileResponse } from '@libs/client/useUser';
+import client from '@libs/server/client';
+import Layout from '@components/common/Layout';
+import LoadingSpinner from '@components/common/LoadingSpinner';
+import HeadMeta from '@components/headMeta';
+import DeleteModal from '@components/profile/deleteModal';
+import ClickedProject from '@components/project/clickedProject';
+import ProjectItem from '@components/project/projectItem';
 
 export interface ProjectWithCountWithUser extends CoddinkProject {
   _count: {
@@ -111,7 +111,7 @@ const Home: NextPage = () => {
     data,
     error,
     mutate: userMutate,
-  } = useSWR<ProfileResponse>("/api/users/me");
+  } = useSWR<ProfileResponse>('/api/users/me');
   const path = router.asPath;
   const {
     register,
@@ -119,11 +119,11 @@ const Home: NextPage = () => {
     reset,
     formState: { errors },
   } = useForm<CommentProps>();
-  const isGallery = path.slice(1, 8) === "gallery";
+  const isGallery = path.slice(1, 8) === 'gallery';
 
   const clickedId = path.slice(9);
   const [isFinishData, setIsFinishData] = useState(true);
-  const [isDelete, setIsDelete] = useState<null | "comment" | "project">(null);
+  const [isDelete, setIsDelete] = useState<null | 'comment' | 'project'>(null);
   const [deleteProjectTarget, setDeleteProjectTarget] = useState<number | null>(
     null
   );
@@ -131,7 +131,7 @@ const Home: NextPage = () => {
     null
   );
   const [deleteProject, { data: deleteData }] = useMutation<CommentResponse>(
-    "/api/projects/delete"
+    '/api/projects/delete'
   );
 
   const [commentPage, setCommentPage] = useState(1);
@@ -153,7 +153,7 @@ const Home: NextPage = () => {
   };
 
   const [sendFollow, { data: followData, loading: followLoading }] =
-    useMutation<CommentResponse>("/api/users/follow");
+    useMutation<CommentResponse>('/api/users/follow');
 
   const onFollowClick = (id: number) => {
     if (followLoading) return;
@@ -162,7 +162,7 @@ const Home: NextPage = () => {
   };
 
   const { data: defaultProjectsData, mutate: defaultProjectsMutate } =
-    useSWR<ProjectsResponse>("/api/projects");
+    useSWR<ProjectsResponse>('/api/projects');
 
   const getKey = (pageIndex: number, previousPageData: ProjectsResponse) => {
     if (previousPageData && previousPageData.projects.length < 20) {
@@ -206,7 +206,7 @@ const Home: NextPage = () => {
     `/api/projects/${detailData?.project.id}/commentDelete`
   );
 
-  const [sendView] = useMutation("/api/projects/view");
+  const [sendView] = useMutation('/api/projects/view');
 
   const [commentArr, setCommentArr] = useState<CommentWithUser[]>([]);
 
@@ -281,12 +281,12 @@ const Home: NextPage = () => {
 
   const onDeleteModalClick = (
     id: number | null,
-    kind: null | "comment" | "project"
+    kind: null | 'comment' | 'project'
   ) => {
     setIsDelete(kind);
-    if (kind === "project") {
+    if (kind === 'project') {
       setDeleteProjectTarget(id);
-    } else if (kind === "comment") {
+    } else if (kind === 'comment') {
       setDeleteCommentTarget(id);
     }
   };
@@ -308,9 +308,9 @@ const Home: NextPage = () => {
   }
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -361,7 +361,7 @@ const Home: NextPage = () => {
       userId={data?.profile?.id}
     >
       <HeadMeta></HeadMeta>
-      {isDelete === "project" && (
+      {isDelete === 'project' && (
         <DeleteModal
           title="프로젝트 삭제"
           description="이 프로젝트를 삭제하시겠습니까?"
@@ -369,7 +369,7 @@ const Home: NextPage = () => {
           onProjectDeleteClick={() => onProjectDeleteClick(deleteProjectTarget)}
         ></DeleteModal>
       )}
-      {isDelete === "comment" && (
+      {isDelete === 'comment' && (
         <DeleteModal
           title="댓글 삭제"
           description="이 댓글을 삭제하시겠습니까?"
@@ -392,7 +392,7 @@ const Home: NextPage = () => {
             owner={item?.owner}
             onClick={() => onBoxClicked(item?.id)}
             onFollowClick={onFollowClick}
-            onDeleteModalClick={() => onDeleteModalClick(item?.id, "project")}
+            onDeleteModalClick={() => onDeleteModalClick(item?.id, 'project')}
           />
         ))}
         {detailData && (
@@ -446,7 +446,7 @@ const Page: NextPage<{ projects: ProjectWithCountWithUser[] }> = ({
     <SWRConfig
       value={{
         fallback: {
-          "/api/projects": {
+          '/api/projects': {
             ok: true,
             projects,
           },
@@ -465,7 +465,7 @@ export async function getServerSideProps() {
       visible: true,
     },
     orderBy: {
-      createdAt: "desc",
+      createdAt: 'desc',
     },
     include: {
       user: {
@@ -482,7 +482,7 @@ export async function getServerSideProps() {
       },
       owner: {
         orderBy: {
-          ownerIdx: "asc",
+          ownerIdx: 'asc',
         },
         select: {
           name: true,

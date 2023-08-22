@@ -1,9 +1,7 @@
-import NextButton from "@components/upload/nextButton";
-import { cls } from "@libs/client/utils";
-import { FormProps } from "pages/profile/[id]/editor";
-import React, { useEffect, useState } from "react";
-import { UseFormRegisterReturn, UseFormSetValue } from "react-hook-form";
-import { KeyedMutator, mutate, SWRConfig } from "swr";
+import React, { useEffect, useState } from 'react';
+import { UseFormRegisterReturn } from 'react-hook-form';
+import { cls } from '@libs/client/utils';
+import Button from '@components/common/Button';
 
 interface ProfileWebProps {
   name: string;
@@ -30,7 +28,7 @@ export default function ProfileWeb({
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    if (typeof label === typeof "string" && label !== "") {
+    if (typeof label === typeof 'string' && label !== '') {
       setIsVisible(true);
       setSnsId(label);
     }
@@ -44,7 +42,7 @@ export default function ProfileWeb({
 
   const onResetClick = () => {
     setIsVisible(false);
-    setValue("Facebook", "");
+    setValue('Facebook', '');
   };
   return (
     <div className="flex items-center justify-between border-b">
@@ -126,13 +124,14 @@ export default function ProfileWeb({
           </svg>
         </div>
       ) : (
-        <div className={cls("w-14", isVisible ? "hidden" : "")}>
-          <NextButton
+        <div className={cls('w-14', isVisible ? 'hidden' : '')}>
+          <Button
             onClick={onClick}
             size="xs"
-            color="blueBtn"
-            label="링크"
-          ></NextButton>
+            color="blue"
+            type="button"
+            text="링크"
+          />
         </div>
       )}
     </div>

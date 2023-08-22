@@ -1,11 +1,11 @@
-import Layout from "@components/layout";
-import { useUserState } from "@libs/client/useUser";
-import type { NextPage } from "next";
-import { useRouter } from "next/router";
-import useSWR from "swr";
+import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import useSWR from 'swr';
+import { useUserState } from '@libs/client/useUser';
+import Layout from '@components/common/Layout';
 
 const Joblist: NextPage = () => {
-  const { data, error }: useUserState = useSWR("/api/users/me");
+  const { data, error }: useUserState = useSWR('/api/users/me');
 
   return (
     <Layout

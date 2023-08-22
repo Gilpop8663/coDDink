@@ -1,5 +1,5 @@
-import { cls } from "@libs/client/utils";
-import React from "react";
+import React from 'react';
+import { cls } from '@libs/client/utils';
 
 interface CategoryBtnProps {
   isSame: boolean;
@@ -17,10 +17,9 @@ export default function CategoryButton({
       onClick={onClick}
       className={cls(
         isSame
-          ? "cursor-pointer rounded-full bg-black py-2 px-4 text-sm font-semibold text-white"
-          : "cursor-pointer rounded-full bg-white py-2 px-4 text-sm font-semibold text-black transition-colors hover:bg-gray-100"
-      )}
-    >
+          ? 'cursor-pointer rounded-full bg-black py-2 px-4 text-sm font-semibold text-white'
+          : 'cursor-pointer rounded-full bg-white py-2 px-4 text-sm font-semibold text-black transition-colors hover:bg-gray-100'
+      )}>
       {label}
     </span>
   );

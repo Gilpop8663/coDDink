@@ -1,5 +1,5 @@
-import HeadMeta from "@components/headMeta";
-import React from "react";
+import React from 'react';
+import HeadMeta from '@components/headMeta';
 
 function Privacy() {
   return (

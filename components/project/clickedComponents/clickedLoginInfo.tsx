@@ -1,11 +1,11 @@
-import NextButton from "@components/upload/nextButton";
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
-import GOOGLE_LOGO from "@public/google.svg";
-import FACEBOOK_LOGO from "@public/facebook.svg";
-import APPLE_LOGO from "@public/apple.png";
-import { OwnerProps } from "pages";
+import React from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { OwnerProps } from 'pages';
+import Button from '@components/common/Button';
+import APPLE_LOGO from '@public/apple.png';
+import FACEBOOK_LOGO from '@public/facebook.svg';
+import GOOGLE_LOGO from '@public/google.svg';
 
 interface InfoProps {
   owner: OwnerProps[];
@@ -24,7 +24,7 @@ export default function ClickedLoginInfo({ owner }: InfoProps) {
       <div className="mt-5 flex items-center space-x-2">
         <Link href="/user/login">
           <a className="w-32 text-sm">
-            <NextButton color="blueBtn" label="이메일로 등록"></NextButton>
+            <Button color="blue" text="이메일로 등록" />
           </a>
         </Link>
         <span className="text-sm font-semibold text-gray-400">또는</span>

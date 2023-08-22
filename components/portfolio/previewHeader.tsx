@@ -1,7 +1,7 @@
-import { cls, makeImageURL } from "@libs/client/utils";
-import Image from "next/image";
-import { UserDataProps } from "pages/portfolio/editor";
-import React from "react";
+import React from 'react';
+import Image from 'next/image';
+import { UserDataProps } from 'pages/portfolio/editor';
+import { cls, makeImageURL } from '@libs/client/utils';
 
 interface ItemProps {
   title: string;
@@ -11,16 +11,15 @@ interface ItemProps {
 
 export default function PreviewHeader({ title, avatar, name }: ItemProps) {
   return (
-    <div className={cls("text-white", "flex")}>
+    <div className={cls('text-white', 'flex')}>
       <div className="mb-5 flex items-center">
         <div>
           <Image
-            src={makeImageURL(avatar!, "smAvatar")}
+            src={makeImageURL(avatar!, 'smAvatar')}
             className="cursor-pointer rounded-full hover:opacity-90"
             height={40}
             width={40}
-            alt="profile"
-          ></Image>
+            alt="profile"></Image>
         </div>
         <div className="ml-3 flex flex-col">
           <span className="font-semibold">{title}</span>

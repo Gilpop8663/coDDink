@@ -1,7 +1,7 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import withHandler from "@libs/server/withHandler";
-import client from "@libs/server/client";
-import { withApiSession } from "@libs/server/withSession";
+import { NextApiRequest, NextApiResponse } from 'next';
+import client from '@libs/server/client';
+import withHandler from '@libs/server/withHandler';
+import { withApiSession } from '@libs/server/withSession';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const {
@@ -28,4 +28,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   return res.status(200).json({ ok: true, user });
 }
 
-export default withApiSession(withHandler({ methods: ["GET"], handler }));
+export default withApiSession(withHandler({ methods: ['GET'], handler }));

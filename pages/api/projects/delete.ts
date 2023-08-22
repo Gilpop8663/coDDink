@@ -1,11 +1,11 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import withHandler from "@libs/server/withHandler";
-import client from "@libs/server/client";
-import { withApiSession } from "@libs/server/withSession";
-import { ContentProps, UserDataProps } from "pages/portfolio/editor";
+import { NextApiRequest, NextApiResponse } from 'next';
+import { ContentProps, UserDataProps } from 'pages/portfolio/editor';
+import client from '@libs/server/client';
+import withHandler from '@libs/server/withHandler';
+import { withApiSession } from '@libs/server/withSession';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === "POST") {
+  if (req.method === 'POST') {
     const {
       body: { projectId },
       session: { user },
@@ -23,4 +23,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default withApiSession(withHandler({ methods: ["POST"], handler }));
+export default withApiSession(withHandler({ methods: ['POST'], handler }));

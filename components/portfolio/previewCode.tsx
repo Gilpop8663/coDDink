@@ -4,17 +4,17 @@ import React, {
   SetStateAction,
   useEffect,
   useState,
-} from "react";
-import "@uiw/react-textarea-code-editor/dist.css";
-import dynamic from "next/dynamic";
-import { TextareaCodeEditorProps } from "@uiw/react-textarea-code-editor";
-import { ContentProps } from "pages/portfolio/editor";
-import MiniUploadMenu from "./miniUploadMenu";
-import { cls } from "@libs/client/utils";
+} from 'react';
+import '@uiw/react-textarea-code-editor/dist.css';
+import dynamic from 'next/dynamic';
+import { TextareaCodeEditorProps } from '@uiw/react-textarea-code-editor';
+import { ContentProps } from 'pages/portfolio/editor';
+import { cls } from '@libs/client/utils';
+import MiniUploadMenu from './miniUploadMenu';
 
 const CodeEditor: any = dynamic(
   () =>
-    import("@uiw/react-textarea-code-editor").then((mod: any) => mod.default),
+    import('@uiw/react-textarea-code-editor').then((mod: any) => mod.default),
   { ssr: false }
 );
 
@@ -26,10 +26,12 @@ interface PreivewCodeProps {
     idx?: number
   ) => void;
   textValue: string;
-  onAddTextArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
-  onAddCodeArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
+  onAddTextArea: () => void;
+  onAddCodeArea: () => void;
   onChange: ChangeEventHandler<HTMLTextAreaElement>;
   onClearClick: (idx: number) => void;
+  draftFontSize?: string | null;
+  draftLang?: string | null;
   [key: string]: any;
 }
 
@@ -41,11 +43,15 @@ export default function PreviewCode({
   onAddTextArea,
   onChange,
   onClearClick,
+  draftFontSize,
+  draftLang,
   textValue,
 }: PreivewCodeProps) {
   const [isOver, setIsOver] = useState(false);
-  const [language, setLanguage] = useState("jsx");
-  const [fontSize, setFontSize] = useState("text-base");
+  const [language, setLanguage] = useState(draftLang ? draftLang : 'jsx');
+  const [fontSize, setFontSize] = useState(
+    draftFontSize ? draftFontSize : 'text-base'
+  );
 
   const onOverArea = () => {
     setIsOver(true);
@@ -258,19 +264,19 @@ export default function PreviewCode({
           onPreviewImage={onPreviewImage}
         />
       )}
-      <div className={cls(fontSize && `${fontSize}`, "p-4 ")}>
+      <div className={cls(fontSize && `${fontSize}`, 'p-4 ')}>
         <CodeEditor
           autoFocus
           style={{
             fontFamily:
-              "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
-            backgroundColor: "#f5f5f5",
+              'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace',
+            backgroundColor: '#f5f5f5',
             fontSize:
-              fontSize === "text-2xl"
+              fontSize === 'text-2xl'
                 ? 18
-                : fontSize === "text-lg"
+                : fontSize === 'text-lg'
                 ? 16
-                : fontSize === "text-base"
+                : fontSize === 'text-base'
                 ? 14
                 : 12,
           }}

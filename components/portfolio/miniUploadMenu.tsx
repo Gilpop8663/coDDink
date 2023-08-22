@@ -1,5 +1,5 @@
-import SubUploadButton from "@components/subUploadButton";
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import SubUploadButton from '@components/subUploadButton';
 
 interface MiniUploadMenuProps {
   idx: number;
@@ -7,8 +7,8 @@ interface MiniUploadMenuProps {
     e: React.ChangeEvent<HTMLInputElement>,
     idx?: number
   ) => void;
-  onAddTextArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
-  onAddCodeArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
+  onAddTextArea: () => void;
+  onAddCodeArea: () => void;
 }
 
 export default function MiniUploadMenu({
@@ -37,7 +37,7 @@ export default function MiniUploadMenu({
           ></SubUploadButton>
 
           <div
-            onClick={(e) => onAddTextArea(e, idx)}
+            onClick={onAddTextArea}
             className="cursor-pointer rounded-md p-1 hover:bg-gray-400"
             title="텍스트"
           >
@@ -57,7 +57,7 @@ export default function MiniUploadMenu({
             </svg>
           </div>
           <div
-            onClick={(e) => onAddCodeArea(e, idx)}
+            onClick={onAddCodeArea}
             className="cursor-pointer rounded-md p-1 hover:bg-gray-400"
             title="코드"
           >

@@ -1,22 +1,17 @@
-import React, { useRef, useState } from "react";
-import { UseFormRegisterReturn } from "react-hook-form";
+import React, {  useState } from 'react';
+import { UseFormRegisterReturn } from 'react-hook-form';
 
-interface InputProps {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   name: string;
   register?: UseFormRegisterReturn;
-  placeholder?: string;
-  required?: boolean;
-  onClick?: () => void;
 }
 
 export default function InputPassword({
   label,
   name,
   register,
-  required = false,
-  placeholder,
-  onClick,
+  ...rest
 }: InputProps) {
   const [isBlind, setIsBlind] = useState(true);
   const onIconClick = () => {
@@ -31,10 +26,9 @@ export default function InputPassword({
         <input
           id={name}
           {...register}
-          required={required}
-          placeholder={placeholder}
-          type={isBlind == true ? "password" : "text"}
+          type={isBlind == true ? 'password' : 'text'}
           className="w-full border-b-2 py-2 transition-colors hover:border-black/50 focus:border-blue-500 focus:outline-none"
+          {...rest}
         />
         {isBlind == false ? (
           <svg

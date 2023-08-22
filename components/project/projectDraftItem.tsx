@@ -1,13 +1,10 @@
-import DeleteModal from "@components/profile/deleteModal";
-import NextButton from "@components/upload/nextButton";
-import UploadButton from "@components/uploadButton";
-import { makeImageURL } from "@libs/client/utils";
-import { CoddinkFollow, CoddinkProjectOwner } from "@prisma/client";
-import Image from "next/image";
-import Link from "next/link";
-import { OwnerProps } from "pages";
-import { useState } from "react";
-import OwnerInfo from "./ownerInfo";
+import { useState } from 'react';
+import Image from 'next/image';
+import { CoddinkFollow } from '@prisma/client';
+import { OwnerProps } from 'pages';
+import { makeImageURL } from '@libs/client/utils';
+import Button from '@components/common/Button';
+import OwnerInfo from './ownerInfo';
 
 interface ItemProps {
   title: string;
@@ -65,9 +62,9 @@ export default function ProjectDraftItem({
             />
           </svg>
         </div>
-        {thumbnail !== "" && (
+        {thumbnail !== '' && (
           <Image
-            src={makeImageURL(thumbnail, "public")}
+            src={makeImageURL(thumbnail, 'public')}
             priority={true}
             alt="thumbnail"
             className="rounded-md object-cover"
@@ -77,16 +74,12 @@ export default function ProjectDraftItem({
         {isContentTouch && (
           <div className="absolute bottom-0 flex h-full w-full flex-col items-center justify-center rounded-md bg-black/40  px-4 ">
             <div className="flex flex-col space-y-2">
-              <NextButton
-                onClick={onClick}
-                color="blueDiv"
-                label="프로젝트 편집"
-              ></NextButton>
-              <NextButton
-                color="grayBtn"
+              <Button onClick={onClick} color="blue" text="프로젝트 편집" />
+              <Button
+                color="gray"
                 onClick={onDeleteModalClick}
-                label="프로젝트 삭제"
-              ></NextButton>
+                text="프로젝트 삭제"
+              />
             </div>
             <span className="absolute bottom-5 font-semibold text-white hover:underline">
               {title}

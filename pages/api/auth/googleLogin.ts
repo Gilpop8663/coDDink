@@ -1,9 +1,9 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import withHandler from "@libs/server/withHandler";
-import client from "@libs/server/client";
-import { withApiSession } from "@libs/server/withSession";
-import { v4 as uuidv4 } from "uuid";
-import { NextResponse } from "next/server";
+import { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
+import { v4 as uuidv4 } from 'uuid';
+import client from '@libs/server/client';
+import withHandler from '@libs/server/withHandler';
+import { withApiSession } from '@libs/server/withSession';
 
 interface UserInfoResponse {
   sub: string;
@@ -43,9 +43,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   } = req;
 
   const userInfo = await fetch(
-    "https://www.googleapis.com/oauth2/v3/userinfo",
+    'https://www.googleapis.com/oauth2/v3/userinfo',
     {
-      method: "GET",
+      method: 'GET',
       headers: {
         Authorization: `Bearer ${tokenResponse.access_token}`,
       },
@@ -65,8 +65,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   const number = Math.floor(Math.random() * 2);
 
   const avatarURL = [
-    "f0787368-2456-4b9e-6ae4-a8841f70b300",
-    "8b9dd122-cda2-4183-e41e-2c8d9259ac00",
+    'f0787368-2456-4b9e-6ae4-a8841f70b300',
+    '8b9dd122-cda2-4183-e41e-2c8d9259ac00',
   ];
 
   if (!user) {
@@ -83,8 +83,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     res.json({
       ok: true,
-      message: "회원가입이 완료되었습니다",
-      kind: "create",
+      message: '회원가입이 완료되었습니다',
+      kind: 'create',
     });
 
     return res.status(200).end;
@@ -99,8 +99,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     res.json({
       ok: true,
-      message: "회원 로그인 완료",
-      kind: "login",
+      message: '회원 로그인 완료',
+      kind: 'login',
     });
 
     return res.status(200).end();
@@ -108,5 +108,5 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 }
 
 export default withApiSession(
-  withHandler({ methods: ["POST"], handler, isPrivate: false })
+  withHandler({ methods: ['POST'], handler, isPrivate: false })
 );

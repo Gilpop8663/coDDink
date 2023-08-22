@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import HeadMeta from "@components/headMeta";
+import React, { useEffect, useState } from 'react';
+import HeadMeta from '@components/headMeta';
 
 function Conditions() {
   const [render, setRender] = useState(false);

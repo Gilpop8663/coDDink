@@ -1,10 +1,10 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import withHandler from "@libs/server/withHandler";
-import client from "@libs/server/client";
-import { withApiSession } from "@libs/server/withSession";
+import { NextApiRequest, NextApiResponse } from 'next';
+import client from '@libs/server/client';
+import withHandler from '@libs/server/withHandler';
+import { withApiSession } from '@libs/server/withSession';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === "GET") {
+  if (req.method === 'GET') {
     const {
       query: { search, page = 1 },
     } = req;
@@ -60,7 +60,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         ],
       },
       orderBy: {
-        createdAt: "desc",
+        createdAt: 'desc',
       },
       include: {
         user: {
@@ -77,7 +77,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         },
         owner: {
           orderBy: {
-            ownerIdx: "asc",
+            ownerIdx: 'asc',
           },
           select: {
             name: true,
@@ -109,5 +109,5 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 }
 
 export default withApiSession(
-  withHandler({ methods: ["GET"], handler, isPrivate: false })
+  withHandler({ methods: ['GET'], handler, isPrivate: false })
 );

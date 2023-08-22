@@ -1,13 +1,13 @@
-import UploadButton from "@components/uploadButton";
-import { UploadProps } from "pages/portfolio/editor";
-import React from "react";
-import { UseFormRegister } from "react-hook-form";
+import React from 'react';
+import { UseFormRegister } from 'react-hook-form';
+import { UploadProps } from 'pages/portfolio/editor';
+import UploadButton from '@components/common/UploadButton';
 
 interface EditFirstScreenProps {
   register: UseFormRegister<UploadProps>;
   onPreviewImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onAddTextArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
-  onAddCodeArea: (e: React.MouseEvent<HTMLDivElement>, idx?: number) => void;
+  onAddTextArea: () => void;
+  onAddCodeArea: () => void;
 }
 
 export default function EditFirstScreen({
@@ -23,10 +23,12 @@ export default function EditFirstScreen({
       </h3>
       <div className="absolute flex space-x-5">
         <UploadButton
-          register={register("images")}
+          register={register('images')}
           onChange={onPreviewImage}
-          kind="image"
-          label="이미지"
+          color="skyBlue"
+          name="imageUpload"
+          type="file"
+          text="이미지"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -44,9 +46,11 @@ export default function EditFirstScreen({
           </svg>
         </UploadButton>
         <UploadButton
-          kind="text"
-          label="텍스트"
-          register={register("posts")}
+          color="skyBlue"
+          text="텍스트"
+          name="textUpload"
+          type="none"
+          register={register('posts')}
           onClick={onAddTextArea}
         >
           <svg
@@ -65,9 +69,11 @@ export default function EditFirstScreen({
           </svg>
         </UploadButton>
         <UploadButton
-          kind="code"
-          label="코드"
-          register={register("code")}
+          color="skyBlue"
+          text="코드"
+          name="codeUpload"
+          type="none"
+          register={register('code')}
           onClick={onAddCodeArea}
         >
           <svg
