@@ -459,27 +459,53 @@ const Page: NextPage<{ projects: ProjectWithCountWithUser[] }> = ({
 };
 
 export async function getServerSideProps() {
+  // const projects = await client.coddinkProject.findMany({
+  //   where: {
+  //     isDraft: false,
+  //     visible: true,
+  //   },
+  //   orderBy: {
+  //     createdAt: 'desc',
+  //   },
+  //   include: {
+  //     user: {
+  //       select: {
+  //         avatar: true,
+  //         name: true,
+  //       },
+  //     },
+  //     _count: {
+  //       select: {
+  //         like: true,
+  //         view: true,
+  //       },
+  //     },
+  //     owner: {
+  //       orderBy: {
+  //         ownerIdx: 'asc',
+  //       },
+  //       select: {
+  //         name: true,
+  //         userId: true,
+  //         user: {
+  //           select: {
+  //             name: true,
+  //             avatar: true,
+  //             city: true,
+  //             country: true,
+  //           },
+  //         },
+  //       },
+  //     },
+  //   },
+  //   take: 20,
+  // });
+
+  const users = await client.coddinkUser.findMany();
+  console.log(users);
+
   const projects = await client.coddinkProject.findMany({
-    where: {
-      isDraft: false,
-      visible: true,
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
     include: {
-      user: {
-        select: {
-          avatar: true,
-          name: true,
-        },
-      },
-      _count: {
-        select: {
-          like: true,
-          view: true,
-        },
-      },
       owner: {
         orderBy: {
           ownerIdx: 'asc',
@@ -498,8 +524,9 @@ export async function getServerSideProps() {
         },
       },
     },
-    take: 20,
   });
+
+  console.log(projects[0].owner);
 
   return {
     props: {
