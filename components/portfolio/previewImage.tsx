@@ -49,7 +49,7 @@ export default function PreviewImage({
         />
         {src.imageSrc ? (
           <Image
-            src={makeImageURL(src.imageSrc, 'public')}
+            src={makeImageURL(src.imageSrc)}
             layout="fill"
             className="object-contain"
             alt="image"

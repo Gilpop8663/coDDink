@@ -64,7 +64,7 @@ export default function ProjectDraftItem({
         </div>
         {thumbnail !== '' && (
           <Image
-            src={makeImageURL(thumbnail, 'public')}
+            src={makeImageURL(thumbnail)}
             priority={true}
             alt="thumbnail"
             className="rounded-md object-cover"

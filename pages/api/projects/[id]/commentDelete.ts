@@ -10,8 +10,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       session: { user },
     } = req;
 
-    console.log(commentId);
-
     await client.coddinkComment.delete({
       where: {
         id: commentId,

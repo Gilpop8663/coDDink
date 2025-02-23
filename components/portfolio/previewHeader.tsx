@@ -15,11 +15,12 @@ export default function PreviewHeader({ title, avatar, name }: ItemProps) {
       <div className="mb-5 flex items-center">
         <div>
           <Image
-            src={makeImageURL(avatar!, 'smAvatar')}
+            src={makeImageURL(avatar!)}
             className="cursor-pointer rounded-full hover:opacity-90"
             height={40}
             width={40}
-            alt="profile"></Image>
+            alt="profile"
+          ></Image>
         </div>
         <div className="ml-3 flex flex-col">
           <span className="font-semibold">{title}</span>

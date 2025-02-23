@@ -131,22 +131,26 @@ export default function ClickedProject({
       className={cls(
         kind === 'home' ? 'absolute top-0 right-0 mx-auto lg:left-0' : '',
         'flex w-full justify-center lg:w-auto'
-      )}>
+      )}
+    >
       <HeadMeta
         title={title}
         description={description}
         url={`https://www.coddink.com/gallery/${id}`}
-        image={makeImageURL(thumbnail, 'bigAvatar')}></HeadMeta>
+        image={makeImageURL(thumbnail)}
+      ></HeadMeta>
       {kind === 'home' && (
         <div
           className="fixed top-0 left-0 z-20 hidden h-screen w-screen bg-black/80 lg:flex"
-          onClick={onBackClick}></div>
+          onClick={onBackClick}
+        ></div>
       )}
       <div
         className={cls(
           kind === 'home' ? 'z-20' : 'z-0',
           'relative top-16 flex w-full flex-col md:mx-0 lg:top-5  lg:mx-20 xl:mx-48 2xl:mx-56'
-        )}>
+        )}
+      >
         <ClickedHeader
           followingData={followingData}
           loginId={loginId}
@@ -154,22 +158,25 @@ export default function ClickedProject({
           kind={kind}
           title={title}
           owner={owner}
-          projectId={id}></ClickedHeader>
+          projectId={id}
+        ></ClickedHeader>
         <div className="">
           <div className="flex  flex-col space-y-8 bg-white px-6 py-16 lg:space-y-8 lg:px-24">
-            {contents.map(item => {
+            {contents.map((item) => {
               const contentFontSize = item.fontSize;
               return (
                 <div
                   key={item.id}
-                  className={cls(item.kind === 'image' ? 'h-full' : '')}>
+                  className={cls(item.kind === 'image' ? 'h-full' : '')}
+                >
                   {item.kind === 'image' && (
                     <div className="relative aspect-video w-full">
                       <Image
                         className="object-contain"
                         alt={item.id.toString()}
                         layout="fill"
-                        src={makeImageURL(item.imageSrc!, 'public')}></Image>
+                        src={makeImageURL(item.imageSrc!)}
+                      ></Image>
                     </div>
                   )}
 
@@ -178,7 +185,8 @@ export default function ClickedProject({
                       className={cls(
                         `${item?.fontSize} ${item?.alignText}`,
                         'relative   whitespace-pre-wrap '
-                      )}>
+                      )}
+                    >
                       {item.content}
                     </div>
                   )}
@@ -186,7 +194,8 @@ export default function ClickedProject({
                     <ClickedCodeView
                       content={item.content}
                       language={item.language}
-                      fontSize={item.fontSize}></ClickedCodeView>
+                      fontSize={item.fontSize}
+                    ></ClickedCodeView>
                   )}
                 </div>
               );
@@ -223,7 +232,8 @@ export default function ClickedProject({
                 {isLogin ? (
                   <form
                     onSubmit={handleSubmit(onCommentValid)}
-                    className="flex max-h-52 flex-col border bg-white p-8">
+                    className="flex max-h-52 flex-col border bg-white p-8"
+                  >
                     <CommentInput
                       id={id}
                       avatar={avatar}
@@ -234,7 +244,8 @@ export default function ClickedProject({
                           message:
                             '이 필드는 1자리부터 800자리까지 적을 수 있습니다.',
                         },
-                      })}></CommentInput>
+                      })}
+                    ></CommentInput>
                   </form>
                 ) : (
                   <ClickedLoginInfo owner={owner} />
@@ -242,7 +253,7 @@ export default function ClickedProject({
 
                 {projectComments?.length > 0 && (
                   <div className="relative bottom-1 flex flex-col space-y-8 border border-b-0 bg-white p-8">
-                    {projectComments.map(item => (
+                    {projectComments.map((item) => (
                       <CommentMsg
                         key={item.id}
                         id={item.user.id}
@@ -253,14 +264,16 @@ export default function ClickedProject({
                         currentUserId={currentUserId}
                         onCommentDeleteClick={() =>
                           onDeleteModalClick(item.id, 'comment')
-                        }></CommentMsg>
+                        }
+                      ></CommentMsg>
                     ))}
                   </div>
                 )}
                 {commentCount > projectComments?.length && (
                   <div
                     onClick={onMoreCommentClick}
-                    className=" relative bottom-1 flex w-full cursor-pointer items-center justify-center border border-t-0 bg-white py-6 text-sm text-blue-600 transition-colors hover:bg-black/5">
+                    className=" relative bottom-1 flex w-full cursor-pointer items-center justify-center border border-t-0 bg-white py-6 text-sm text-blue-600 transition-colors hover:bg-black/5"
+                  >
                     <span className="mr-2">댓글 더보기</span>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -268,7 +281,8 @@ export default function ClickedProject({
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
                       stroke="currentColor"
-                      className="h-4 w-4">
+                      className="h-4 w-4"
+                    >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -288,7 +302,8 @@ export default function ClickedProject({
                       createdAt={createdAt}
                       likes={likes}
                       views={views}
-                      description={description}></ClickedInfo>
+                      description={description}
+                    ></ClickedInfo>
                   </div>
                   {tools?.length > 0 && (
                     <ClickedSideInfos data={tools} label="툴" />
@@ -315,7 +330,8 @@ export default function ClickedProject({
                     createdAt={createdAt}
                     likes={likes}
                     views={views}
-                    description={description}></ClickedInfo>
+                    description={description}
+                  ></ClickedInfo>
                 </div>
                 {tools?.length > 0 && (
                   <ClickedSideInfos data={tools} label="툴" />

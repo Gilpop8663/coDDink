@@ -59,7 +59,7 @@ export default function ProjectItem({
         <div className="relative  h-64 max-h-80 w-auto  rounded-md  border hover:visible"></div>
 
         <Image
-          src={makeImageURL(thumbnail, 'public')}
+          src={makeImageURL(thumbnail)}
           priority={true}
           alt="thumbnail"
           className="rounded-md object-cover"

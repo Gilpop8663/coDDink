@@ -13,7 +13,7 @@ export default function PreviewCommentInput({ avatar }: CommentInputProps) {
       <div className="grid grid-cols-10">
         <div className="col-span-1 mr-4 mt-4 cursor-pointer">
           <Image
-            src={makeImageURL(avatar, 'smAvatar')}
+            src={makeImageURL(avatar)}
             alt="profile"
             width={50}
             height={50}

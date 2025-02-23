@@ -19,10 +19,10 @@ export default function FacebookBtn({ facebookLogin, kind }: facebookBtnProps) {
   return (
     <FacebookLogin
       appId={ID}
-      onSuccess={res => {
+      onSuccess={(res) => {
         console.log('로그인 성공!');
       }}
-      onFail={error => {
+      onFail={(error) => {
         console.log('로그인 실패!');
       }}
       onProfileSuccess={(res: any) => {
@@ -34,12 +34,14 @@ export default function FacebookBtn({ facebookLogin, kind }: facebookBtnProps) {
             <div
               title="페이스북"
               onClick={onClick}
-              className="flex h-16 w-full cursor-pointer items-center justify-center rounded-full border-2  hover:border-gray-300">
+              className="flex h-16 w-full cursor-pointer items-center justify-center rounded-full border-2  hover:border-gray-300"
+            >
               <Image
                 src={FACEBOOK_LOGO}
                 alt="facebook"
                 height={16}
-                width={16}></Image>
+                width={16}
+              ></Image>
               <span className="ml-4 font-semibold">Facebook으로 계속</span>
             </div>
           );
@@ -48,15 +50,18 @@ export default function FacebookBtn({ facebookLogin, kind }: facebookBtnProps) {
             <div
               title="페이스북"
               onClick={onClick}
-              className="flex h-16 w-16 cursor-pointer items-center justify-center rounded-full  hover:ring-2 hover:ring-gray-300">
+              className="flex h-16 w-16 cursor-pointer items-center justify-center rounded-full  hover:ring-2 hover:ring-gray-300"
+            >
               <Image
                 src={FACEBOOK_LOGO}
                 alt="facebook"
                 height={60}
-                width={60}></Image>
+                width={60}
+              ></Image>
             </div>
           );
         }
-      }}></FacebookLogin>
+      }}
+    ></FacebookLogin>
   );
 }

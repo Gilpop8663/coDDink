@@ -249,7 +249,7 @@ export default function Header({
                     <div className="relative h-9 w-9 rounded-full">
                       <Image
                         className="rounded-full"
-                        src={makeImageURL(profile.avatar, 'smAvatar')}
+                        src={makeImageURL(profile.avatar)}
                         layout="fill"
                         alt="avatar"
                         priority={true}
@@ -460,7 +460,7 @@ export default function Header({
                 <div className="relative h-7 w-7 rounded-full">
                   <Image
                     className="rounded-full"
-                    src={makeImageURL(profile.avatar, 'smAvatar')}
+                    src={makeImageURL(profile.avatar)}
                     layout="fill"
                     alt="avatar"
                     priority={true}
@@ -475,7 +475,7 @@ export default function Header({
                       <a className="z-10 flex h-24 w-24 cursor-pointer rounded-full bg-black ring-2 ring-gray-300">
                         <Image
                           className="rounded-full hover:opacity-90"
-                          src={makeImageURL(profile?.avatar!, 'bigAvatar')}
+                          src={makeImageURL(profile?.avatar!)}
                           width={180}
                           height={180}
                           alt="avatar"

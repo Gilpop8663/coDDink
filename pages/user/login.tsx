@@ -209,7 +209,7 @@ export default function Login() {
                 <div className="mr-4 h-16 w-16 rounded-full bg-slate-500">
                   <Image
                     className="rounded-full"
-                    src={makeImageURL(mailData?.avatar!, 'bigAvatar')}
+                    src={makeImageURL(mailData?.avatar!)}
                     alt="avatar"
                     width={500}
                     height={500}

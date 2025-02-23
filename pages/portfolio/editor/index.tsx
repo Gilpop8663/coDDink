@@ -3,28 +3,22 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { CoddinkProject, CoddinkUser } from '@prisma/client';
+import { CoddinkProject } from '@prisma/client';
 import useSWR from 'swr';
 import { v4 as uuidv4 } from 'uuid';
 import { DetailProjectResponse } from 'pages';
 import useMutation from '@libs/client/useMutation';
-import useUser, { useUserState } from '@libs/client/useUser';
-import { cls } from '@libs/client/utils';
+import useUser from '@libs/client/useUser';
+import { cls, uploadFile } from '@libs/client/utils';
 import Layout from '@components/common/Layout';
 import LoadingSpinner from '@components/common/LoadingSpinner';
 import CreatePortfolio from '@components/portfolio/createPortfolio';
 import EditFirstScreen from '@components/portfolio/editFirstScreen';
-import EditMenu from '@components/portfolio/editMenu';
 import EditSidebar from '@components/portfolio/editSidebar';
 import PreviewCode from '@components/portfolio/previewCode';
 import PreviewImage from '@components/portfolio/previewImage';
 import PreviewProject from '@components/portfolio/previewProject';
 import PreviewText from '@components/portfolio/previewText';
-import DeleteModal from '@components/profile/deleteModal';
-import ClickedProject from '@components/project/clickedProject';
-import SubUploadButton from '@components/subUploadButton';
-import TextArea from '@components/textArea';
-import UploadInput from '@components/upload/UploadInput';
 
 export interface UploadProps {
   title: string;
@@ -146,27 +140,6 @@ const Editor: NextPage = () => {
   const descriptionValue = watch('description');
   const linkURLValue = watch('linkURL');
 
-  // const { data: tagData, error: tagError } = useSWR(
-  //   `/api/projects/tags?value=${tagValue}`
-  // );
-
-  const cfImageUpload = async (file: File) => {
-    const { uploadURL } = await (await fetch('/api/files')).json();
-
-    const form = new FormData();
-    form.append('file', file);
-
-    const {
-      result: { id },
-    }: CFImageResult = await (
-      await fetch(uploadURL, {
-        method: 'POST',
-        body: form,
-      })
-    ).json();
-
-    return id;
-  };
   const onValid = async (value: UploadProps) => {
     if (loading) return;
     if (content.length === 0) {
@@ -189,7 +162,7 @@ const Editor: NextPage = () => {
       content.map(async (item) => {
         if (item.kind === 'image') {
           if (item.fileData && !item.imageSrc) {
-            const imageSrc = await cfImageUpload(item.fileData);
+            const imageSrc = await uploadFile(item.fileData);
             return { ...item, imageSrc };
           } else {
             return item;
@@ -203,7 +176,7 @@ const Editor: NextPage = () => {
     if (thumbnail && thumbnail.imageSrc) {
       thumbnailSrc = thumbnail.imageSrc;
     } else if (thumbnail && thumbnail.fileData) {
-      const imageSrc = await cfImageUpload(thumbnail.fileData);
+      const imageSrc = await uploadFile(thumbnail.fileData);
       thumbnailSrc = imageSrc;
     }
 
@@ -320,7 +293,7 @@ const Editor: NextPage = () => {
     setIsThumbnailLoading(true);
     const file = files[0];
     setThumbnailLoadingImg(URL.createObjectURL(file));
-    // const imageSrc = await cfImageUpload(file);
+    // const imageSrc = await uploadFile(file);
 
     setThumbnail({
       description: URL.createObjectURL(file),
@@ -347,7 +320,7 @@ const Editor: NextPage = () => {
     const arr: ContentProps[] = [];
     for (let i = 0; i < n; i++) {
       setLoadingImg(URL.createObjectURL(files[i]));
-      // const imageSrc = await cfImageUpload(files[i]);
+      // const imageSrc = await uploadFile(files[i]);
 
       arr.push({
         kind: 'image',
@@ -471,7 +444,7 @@ const Editor: NextPage = () => {
       content.map(async (item) => {
         if (item.kind === 'image') {
           if (item.fileData) {
-            const imageSrc = await cfImageUpload(item.fileData);
+            const imageSrc = await uploadFile(item.fileData);
             return { ...item, imageSrc };
           } else {
             return item;
@@ -485,7 +458,7 @@ const Editor: NextPage = () => {
     if (thumbnail && thumbnail.imageSrc) {
       thumbnailSrc = thumbnail.imageSrc;
     } else if (thumbnail && thumbnail.fileData) {
-      const imageSrc = await cfImageUpload(thumbnail.fileData);
+      const imageSrc = await uploadFile(thumbnail.fileData);
       thumbnailSrc = imageSrc;
     }
 

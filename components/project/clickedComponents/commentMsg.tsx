@@ -29,10 +29,11 @@ export default function CommentMsg({
           <Link href={`/profile/${id}`}>
             <a className="relative mr-4 flex h-8 w-8 rounded-full">
               <Image
-                src={makeImageURL(avatar, 'smAvatar')}
+                src={makeImageURL(avatar)}
                 alt="avatar"
                 layout="fill"
-                className="rounded-full"></Image>
+                className="rounded-full"
+              ></Image>
             </a>
           </Link>
           <div className="flex w-full flex-col">
@@ -58,7 +59,8 @@ export default function CommentMsg({
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
-            strokeWidth={2}>
+            strokeWidth={2}
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"

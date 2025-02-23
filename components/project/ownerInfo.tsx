@@ -46,7 +46,7 @@ export default function OwnerInfo({
               <div className="h-4 w-4 rounded-full bg-orange-500">
                 <Image
                   className="rounded-full"
-                  src={makeImageURL(owner[0]?.user?.avatar, 'smAvatar')}
+                  src={makeImageURL(owner[0]?.user?.avatar)}
                   height={50}
                   width={50}
                   alt="avatar"
@@ -109,7 +109,7 @@ export default function OwnerInfo({
                     <Link href={`/profile/${item.userId}`}>
                       <a className="relative mr-2 h-10 w-10 cursor-pointer rounded-full bg-black">
                         <Image
-                          src={makeImageURL(item?.user?.avatar, 'smAvatar')}
+                          src={makeImageURL(item?.user?.avatar)}
                           alt="userAvater"
                           layout="fill"
                           className=" rounded-full object-cover transition-all hover:opacity-90"

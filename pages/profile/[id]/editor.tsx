@@ -162,7 +162,7 @@ const ProfileEditor: NextPage = () => {
     if (user?.LinkedIn) setValue('LinkedIn', user?.LinkedIn);
     if (user?.Twitch) setValue('Twitch', user?.Twitch);
     if (user?.Dribble) setValue('Dribble', user?.Dribble);
-    if (user?.avatar) setAvatarPreview(makeImageURL(user?.avatar, 'bigAvatar'));
+    if (user?.avatar) setAvatarPreview(makeImageURL(user?.avatar));
   }, [user, setValue]);
 
   useEffect(() => {

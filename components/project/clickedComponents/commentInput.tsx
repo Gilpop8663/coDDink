@@ -23,7 +23,7 @@ export default function CommentInput({
         <Link href={`/gallery/${id}`}>
           <a className="relative mr-4 h-10 w-12 cursor-pointer md:h-12 lg:col-span-1 lg:mr-4 ">
             <Image
-              src={makeImageURL(avatar, 'smAvatar')}
+              src={makeImageURL(avatar)}
               alt="profile"
               layout="fill"
               className="rounded-full"

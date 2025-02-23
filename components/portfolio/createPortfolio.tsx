@@ -114,10 +114,7 @@ export default function CreatePortfolio({
                     <>
                       {previewThumbnailImg?.imageSrc ? (
                         <Image
-                          src={makeImageURL(
-                            previewThumbnailImg?.imageSrc,
-                            'bigAvatar'
-                          )}
+                          src={makeImageURL(previewThumbnailImg?.imageSrc)}
                           alt="thumbnail"
                           className="rounded-sm object-contain p-2"
                           layout="fill"

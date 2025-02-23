@@ -1,11 +1,11 @@
 /** @type {import('next').NextConfig} */
 
-const removeImports = require("next-remove-imports")();
+const removeImports = require('next-remove-imports')();
 
 const nextConfig = removeImports({
   reactStrictMode: true,
   images: {
-    domains: ["user-images.githubusercontent.com", "imagedelivery.net"],
+    domains: ['d3319kcxpye19t.cloudfront.net'],
   },
   experimental: { esmExternals: true },
   env: {

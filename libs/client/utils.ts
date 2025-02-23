@@ -4,16 +4,15 @@ export function cls(...classnames: string[]) {
   return classnames.join(' ');
 }
 
-interface makeImageURLProps {
-  id: string | null;
-  variants?: 'public' | 'bigAvatar' | 'smAvatar';
-}
+export function makeImageURL(id: string) {
+  if (!id)
+    return 'https://d3319kcxpye19t.cloudfront.net/images/f0787368-2456-4b9e-6ae4-a8841f70b300.jpg';
 
-export function makeImageURL(
-  id: string,
-  variants?: 'public' | 'bigAvatar' | 'smAvatar' | 'banner'
-) {
-  return `https://imagedelivery.net/mPhC7i6OFJEhfh-kdGX8yQ/${id}/${variants}`;
+  if (id.match(/\.\w+$/)) {
+    return `https://d3319kcxpye19t.cloudfront.net/images/${id}`;
+  }
+
+  return `https://d3319kcxpye19t.cloudfront.net/images/${id}.jpg`;
 }
 
 export function timeConverter(time: Date) {
@@ -92,6 +91,47 @@ export const cfImageUpload = async (file: File) => {
   ).json();
 
   return id;
+};
+
+export const uploadFile = async (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+    reader.onloadend = async () => {
+      if (reader.result) {
+        try {
+          const base64data = (reader.result as string).split(',')[1];
+
+          const res = await fetch('/api/files', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              file: base64data,
+              name: file.name,
+              type: file.type,
+            }),
+          });
+
+          const data = await res.json();
+
+          if (res.ok) {
+            resolve(data.id); // 성공 시 파일 ID 반환
+          } else {
+            reject(
+              new Error(`Upload failed: ${data.error || 'Unknown error'}`)
+            );
+          }
+        } catch (error) {
+          reject(error);
+        }
+      } else {
+        reject(new Error('FileReader result is null'));
+      }
+    };
+
+    reader.onerror = () => reject(new Error('File reading failed'));
+  });
 };
 
 export function parseJwt(token: string) {

@@ -21,12 +21,12 @@ import {
   ProjectWithCountWithUser,
 } from 'pages';
 import useMutation from '@libs/client/useMutation';
-import { ProfileResponse, useUserState } from '@libs/client/useUser';
+import { ProfileResponse } from '@libs/client/useUser';
 import {
-  cfImageUpload,
   cls,
   makeImageURL,
   timeConverter,
+  uploadFile,
 } from '@libs/client/utils';
 import Button from '@components/common/Button';
 import Layout from '@components/common/Layout';
@@ -366,7 +366,7 @@ const Profile: NextPage = () => {
 
     setIsBannerClick(false);
     setIsBannerLoading(true);
-    const imageSrc = await cfImageUpload(banner.fileData);
+    const imageSrc = await uploadFile(banner.fileData);
 
     updateProfile({ banner: { ...banner, imageSrc } });
     setIsBannerLoading(false);
@@ -484,7 +484,7 @@ const Profile: NextPage = () => {
           className="absolute top-0  flex h-[260px] w-screen items-end justify-center bg-black pb-14 "
         >
           <Image
-            src={makeImageURL(userData.userInfo?.bannerSrc, 'banner')}
+            src={makeImageURL(userData.userInfo?.bannerSrc)}
             alt="bannerr"
             priority={true}
             layout="fill"
@@ -653,8 +653,7 @@ const Profile: NextPage = () => {
             className="rounded-full"
             src={makeImageURL(
               userData?.userInfo.avatar ||
-                '8b9dd122-cda2-4183-e41e-2c8d9259ac00',
-              'smAvatar'
+                '8b9dd122-cda2-4183-e41e-2c8d9259ac00'
             )}
             alt="avatar"
             layout="fill"
@@ -820,8 +819,7 @@ const Profile: NextPage = () => {
               className="rounded-full"
               src={makeImageURL(
                 userData?.userInfo.avatar ||
-                  '8b9dd122-cda2-4183-e41e-2c8d9259ac00',
-                'smAvatar'
+                  '8b9dd122-cda2-4183-e41e-2c8d9259ac00'
               )}
               alt="avatar"
               layout="fill"

@@ -113,7 +113,7 @@ export default function UploadInput({
             >
               <div className="relative h-10 w-10">
                 <Image
-                  src={makeImageURL(item.avatar!, 'smAvatar')}
+                  src={makeImageURL(item.avatar!)}
                   layout="fill"
                   className="rounded-full"
                   alt="avater"
