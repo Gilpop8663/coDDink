@@ -52,6 +52,8 @@ const Editor: NextPage = () => {
     descriptionValue,
     isPreview,
     titleValue,
+    handleYoutubeEmbed,
+    embedCode,
   } = useCreatePortfolio();
 
   return (
@@ -103,6 +105,7 @@ const Editor: NextPage = () => {
                 <EditFirstScreen
                   register={register}
                   onPreviewImage={onPreviewImage}
+                  handleYoutubeEmbed={handleYoutubeEmbed}
                   onAddTextArea={() => onAddTextArea(0)}
                   onAddCodeArea={() => onAddCodeArea(0)}
                 />
@@ -142,6 +145,20 @@ const Editor: NextPage = () => {
                           />
                         )}
                         {item.kind === 'code' && (
+                          <PreviewCode
+                            onClearClick={onClearAttachment}
+                            textValue={item.description}
+                            onAddTextArea={() => onAddTextArea(idx)}
+                            onPreviewImage={onPreviewImage}
+                            onAddCodeArea={() => onAddCodeArea(idx)}
+                            setContent={setContent}
+                            idx={idx}
+                            draftLang={item.language}
+                            draftFontSize={item.fontSize}
+                            onChange={(e) => onChange(e, idx)}
+                          ></PreviewCode>
+                        )}
+                        {item.kind === 'youtube' && (
                           <PreviewCode
                             onClearClick={onClearAttachment}
                             textValue={item.description}

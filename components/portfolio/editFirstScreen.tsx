@@ -2,12 +2,14 @@ import React, { ChangeEvent } from 'react';
 import { UseFormRegister } from 'react-hook-form';
 import { UploadProps } from '@hooks/useCreatePortfolio';
 import UploadButton from '@components/common/UploadButton';
+import YoutubeUploadButton from '@components/common/YoutubeUploadButton';
 
 interface EditFirstScreenProps {
   register: UseFormRegister<UploadProps>;
   onPreviewImage: (event: ChangeEvent<HTMLInputElement>) => void;
   onAddTextArea: () => void;
   onAddCodeArea: () => void;
+  handleYoutubeEmbed: (embedCode: string) => void;
 }
 
 export default function EditFirstScreen({
@@ -15,6 +17,7 @@ export default function EditFirstScreen({
   onPreviewImage,
   onAddTextArea,
   onAddCodeArea,
+  handleYoutubeEmbed,
 }: EditFirstScreenProps) {
   return (
     <>
@@ -44,6 +47,30 @@ export default function EditFirstScreen({
             />
           </svg>
         </UploadButton>
+        <UploadButton
+          color="skyBlue"
+          text="유튜브"
+          name="youtubeUpload"
+          type="none"
+          register={register('posts')}
+          onClick={onAddTextArea}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="h-6 w-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z"
+            />
+          </svg>
+        </UploadButton>
+        <YoutubeUploadButton onEmbed={handleYoutubeEmbed} />
         <UploadButton
           color="skyBlue"
           text="텍스트"

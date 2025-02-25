@@ -31,7 +31,7 @@ interface UploadProjectMutation {
 }
 
 export interface ContentProps {
-  kind: 'image' | 'text' | 'code' | '';
+  kind: 'image' | 'text' | 'code' | 'youtube';
   description: string;
   imageSrc?: string | null;
   id: string;
@@ -69,6 +69,12 @@ export interface thumbnailProps {
   fileData?: File;
 }
 
+interface AddContentParams {
+  type: 'text' | 'code' | 'image';
+  data?: any;
+  idx?: number;
+}
+
 export const useCreatePortfolio = () => {
   const router = useRouter();
   const {
@@ -98,6 +104,7 @@ export const useCreatePortfolio = () => {
   const [thumbnail, setThumbnail] = useState<thumbnailProps | null>(null);
   const [loadingImg, setLoadingImg] = useState('');
   const [finishProjectId, setFinishProjectId] = useState<null | number>(null);
+  const [embedCode, setEmbedCode] = useState('');
   const { data: detailData } = useSWR<DetailProjectResponse | null>(
     finishProjectId
       ? [`/api/projects/${finishProjectId}`, finishProjectId]
@@ -125,6 +132,10 @@ export const useCreatePortfolio = () => {
   const titleValue = watch('title');
   const descriptionValue = watch('description');
   const linkURLValue = watch('linkURL');
+
+  const handleYoutubeEmbed = (code: string) => {
+    setEmbedCode(code);
+  };
 
   const onValid = async (value: UploadProps) => {
     if (loading) return;
@@ -193,51 +204,68 @@ export const useCreatePortfolio = () => {
     });
   };
 
-  const onAddTextArea = (idx?: number) => {
-    const newContent: ContentProps = {
-      kind: 'text',
-      description: '',
-      id: uuidv4(),
-      fontSize: 'text-base',
-      alignText: 'text-left',
-    };
-    if (!idx && idx !== 0) {
-      setContent((prev) => [...prev, newContent]);
+  const onAddContent = ({ type, data, idx }: AddContentParams) => {
+    let newContent: ContentProps;
+
+    if (type === 'text') {
+      newContent = {
+        kind: 'text',
+        description: '',
+        id: uuidv4(),
+        fontSize: 'text-base',
+        alignText: 'text-left',
+      };
+    } else if (type === 'code') {
+      newContent = {
+        kind: 'code',
+        description: '',
+        id: uuidv4(),
+        language: 'jsx',
+        fontSize: 'text-base',
+      };
+    } else if (type === 'image' && data) {
+      newContent = {
+        kind: 'image',
+        description: URL.createObjectURL(data.file),
+        imageSrc: '',
+        fileData: data.file,
+        id: uuidv4(),
+      };
     } else {
-      if (idx === 0) {
-        setContent((prev) => [newContent, ...prev]);
-      } else {
-        setContent((prev) => [
-          ...prev.slice(0, idx),
-          newContent,
-          ...prev.slice(idx),
-        ]);
-      }
+      return;
     }
+
+    setContent((prev) => {
+      if (idx === undefined) return [...prev, newContent];
+      return [...prev.slice(0, idx), newContent, ...prev.slice(idx)];
+    });
+  };
+
+  const onAddTextArea = (idx?: number) => {
+    onAddContent({ type: 'text', idx });
   };
 
   const onAddCodeArea = (idx?: number) => {
-    const newContent: ContentProps = {
-      kind: 'code',
-      description: '',
-      id: uuidv4(),
-      language: 'jsx',
-      fontSize: 'text-base',
-    };
+    onAddContent({ type: 'code', idx });
+  };
 
-    if (!idx && idx !== 0) {
-      setContent((prev) => [...prev, newContent]);
-    } else {
-      if (idx === 0) {
-        setContent((prev) => [newContent, ...prev]);
-      } else {
-        setContent((prev) => [
-          ...prev.slice(0, idx),
-          newContent,
-          ...prev.slice(idx),
-        ]);
-      }
-    }
+  const onPreviewImage = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    idx?: number
+  ) => {
+    const {
+      target: { files },
+    } = e;
+    if (!files) return;
+
+    setIsUpload(true);
+
+    Array.from(files).forEach((file) => {
+      setLoadingImg(URL.createObjectURL(file));
+      onAddContent({ type: 'image', data: { file }, idx });
+    });
+
+    setIsUpload(false);
   };
 
   const onChange = async (e: ChangeEvent<HTMLTextAreaElement>, idx: number) => {
@@ -285,50 +313,6 @@ export const useCreatePortfolio = () => {
       fileData: file,
     });
     setIsThumbnailLoading(false);
-  };
-
-  const onPreviewImage = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-    idx?: number
-  ) => {
-    const {
-      target: { files },
-    } = e;
-    if (!files) return;
-
-    console.log('hi');
-
-    setIsUpload(true);
-
-    const n = files.length;
-    const arr: ContentProps[] = [];
-    for (let i = 0; i < n; i++) {
-      setLoadingImg(URL.createObjectURL(files[i]));
-      // const imageSrc = await uploadFile(files[i]);
-
-      arr.push({
-        kind: 'image',
-        description: URL.createObjectURL(files[i]),
-        imageSrc: '',
-        fileData: files[i],
-        id: uuidv4(),
-      });
-    }
-
-    if (!idx && idx !== 0) {
-      setContent((prev) => [...prev, ...arr]);
-    } else {
-      if (idx === 0) {
-        setContent((prev) => [...arr, ...prev]);
-      } else {
-        setContent((prev) => {
-          const newArr = [...prev.slice(0, idx), ...arr, ...prev.slice(idx)];
-
-          return newArr;
-        });
-      }
-    }
-    setIsUpload(false);
   };
 
   const onKeyPress = (
@@ -648,5 +632,7 @@ export const useCreatePortfolio = () => {
     isPreview,
     titleValue,
     descriptionValue,
+    handleYoutubeEmbed,
+    embedCode,
   };
 };

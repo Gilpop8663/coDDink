@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { ContentProps } from 'pages/portfolio/editor';
-import { cls, makeImageURL } from '@libs/client/utils';
+import { makeImageURL } from '@libs/client/utils';
+import { ContentProps } from '@hooks/useCreatePortfolio';
 import EditMenu from './editMenu';
 import MiniUploadMenu from './miniUploadMenu';
 

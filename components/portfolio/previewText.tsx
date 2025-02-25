@@ -7,11 +7,11 @@ import {
   useRef,
   useState,
 } from 'react';
-import { ContentProps } from 'pages/portfolio/editor';
 import { cls } from '@libs/client/utils';
+import { ContentProps } from '@hooks/useCreatePortfolio';
 import MiniUploadMenu from './miniUploadMenu';
 
-interface PreivewTextProps {
+interface PreviewTextProps {
   label?: string;
   name?: string;
   idx: number;
@@ -30,7 +30,7 @@ interface PreivewTextProps {
   [key: string]: any;
 }
 
-export default function PreivewText({
+export default function PreviewText({
   label,
   name,
   idx,
@@ -44,9 +44,8 @@ export default function PreivewText({
   onAddCodeArea,
   onClearClick,
   ...rest
-}: PreivewTextProps) {
+}: PreviewTextProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  // const [currentValue, setCurrentValue] = useState(textValue);
   const [isWrite, setIsWrite] = useState(true);
   const [fontSize, setFontSize] = useState(
     draftFontSize ? draftFontSize : 'text-base'
@@ -254,20 +253,6 @@ export default function PreivewText({
       )}
       <div className={cls('flex h-fit justify-center ')}>
         <label htmlFor={name}>{label}</label>
-        {/* <textarea
-          ref={textareaRef}
-          id={name}
-          value={textValue}
-          onChange={onChange}
-          autoFocus
-          placeholder={"여기에 텍스트 입력..."}
-          className={cls(
-            fontSize && `${fontSize} placeholder:${fontSize}`,
-            alignText && `${alignText}`,
-            "h-fit w-4/5 resize-none justify-center whitespace-pre-wrap  border-blue-600 scrollbar-hide placeholder:text-xl hover:border focus:border focus:outline-none"
-          )}
-          {...rest}
-        ></textarea> */}
         <textarea
           ref={textareaRef}
           id={name}

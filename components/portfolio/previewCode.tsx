@@ -2,14 +2,12 @@ import React, {
   ChangeEventHandler,
   Dispatch,
   SetStateAction,
-  useEffect,
   useState,
 } from 'react';
 import '@uiw/react-textarea-code-editor/dist.css';
 import dynamic from 'next/dynamic';
-import { TextareaCodeEditorProps } from '@uiw/react-textarea-code-editor';
-import { ContentProps } from 'pages/portfolio/editor';
 import { cls } from '@libs/client/utils';
+import { ContentProps } from '@hooks/useCreatePortfolio';
 import MiniUploadMenu from './miniUploadMenu';
 
 const CodeEditor: any = dynamic(
