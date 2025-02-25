@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { UseFormRegister } from 'react-hook-form';
-import { UploadProps } from 'pages/portfolio/editor';
+import { UploadProps } from '@hooks/useCreatePortfolio';
 import UploadButton from '@components/common/UploadButton';
 
 interface EditFirstScreenProps {
   register: UseFormRegister<UploadProps>;
-  onPreviewImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onPreviewImage: (event: ChangeEvent<HTMLInputElement>) => void;
   onAddTextArea: () => void;
   onAddCodeArea: () => void;
 }
@@ -23,7 +23,6 @@ export default function EditFirstScreen({
       </h3>
       <div className="absolute flex space-x-5">
         <UploadButton
-          register={register('images')}
           onChange={onPreviewImage}
           color="skyBlue"
           name="imageUpload"

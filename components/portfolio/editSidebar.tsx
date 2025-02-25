@@ -1,6 +1,6 @@
 import React from 'react';
 import { UseFormRegister } from 'react-hook-form';
-import { ContentProps, UploadProps } from 'pages/portfolio/editor';
+import { ContentProps, UploadProps } from '@hooks/useCreatePortfolio';
 import Button from '@components/common/Button';
 import SubUploadButton from '@components/subUploadButton';
 
