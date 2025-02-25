@@ -26,6 +26,7 @@ interface PreivewCodeProps {
   textValue: string;
   onAddTextArea: () => void;
   onAddCodeArea: () => void;
+  onAddYoutubeArea: () => void;
   onChange: ChangeEventHandler<HTMLTextAreaElement>;
   onClearClick: (idx: number) => void;
   draftFontSize?: string | null;
@@ -38,6 +39,7 @@ export default function PreviewCode({
   idx,
   onAddCodeArea,
   onPreviewImage,
+  onAddYoutubeArea,
   onAddTextArea,
   onChange,
   onClearClick,
@@ -256,6 +258,7 @@ export default function PreviewCode({
       )}
       {textValue.length > 0 && (
         <MiniUploadMenu
+          onAddYoutubeArea={onAddYoutubeArea}
           onAddCodeArea={onAddCodeArea}
           onAddTextArea={onAddTextArea}
           idx={idx}

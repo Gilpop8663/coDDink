@@ -23,6 +23,7 @@ interface PreviewTextProps {
   textValue: string;
   onAddTextArea: () => void;
   onAddCodeArea: () => void;
+  onAddYoutubeArea: () => void;
   onChange: ChangeEventHandler<HTMLTextAreaElement>;
   onClearClick: (idx: number) => void;
   draftFontSize?: string | null;
@@ -43,6 +44,7 @@ export default function PreviewText({
   draftAlign,
   onAddCodeArea,
   onClearClick,
+  onAddYoutubeArea,
   ...rest
 }: PreviewTextProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -141,6 +143,7 @@ export default function PreviewText({
     >
       {(isWrite || textValue.length > 0) && (
         <MiniUploadMenu
+          onAddYoutubeArea={onAddYoutubeArea}
           onAddCodeArea={onAddCodeArea}
           onAddTextArea={onAddTextArea}
           idx={idx}

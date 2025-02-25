@@ -4,10 +4,12 @@ import { cls } from '@libs/client/utils';
 import { useCreatePortfolio } from '@hooks/useCreatePortfolio';
 import Layout from '@components/common/Layout';
 import LoadingSpinner from '@components/common/LoadingSpinner';
+import YoutubeUploadButton from '@components/common/YoutubeUploadButton';
 import CreatePortfolio from '@components/portfolio/createPortfolio';
 import EditFirstScreen from '@components/portfolio/editFirstScreen';
 import EditSidebar from '@components/portfolio/editSidebar';
 import PreviewCode from '@components/portfolio/previewCode';
+import PreviewIframe from '@components/portfolio/PreviewIframe';
 import PreviewImage from '@components/portfolio/previewImage';
 import PreviewProject from '@components/portfolio/previewProject';
 import PreviewText from '@components/portfolio/previewText';
@@ -53,7 +55,7 @@ const Editor: NextPage = () => {
     isPreview,
     titleValue,
     handleYoutubeEmbed,
-    embedCode,
+    onAddYoutubeArea,
   } = useCreatePortfolio();
 
   return (
@@ -105,7 +107,7 @@ const Editor: NextPage = () => {
                 <EditFirstScreen
                   register={register}
                   onPreviewImage={onPreviewImage}
-                  handleYoutubeEmbed={handleYoutubeEmbed}
+                  onAddYoutubeArea={() => onAddYoutubeArea(0)}
                   onAddTextArea={() => onAddTextArea(0)}
                   onAddCodeArea={() => onAddCodeArea(0)}
                 />
@@ -125,6 +127,7 @@ const Editor: NextPage = () => {
                             onAddTextArea={() => onAddTextArea(idx)}
                             onPreviewImage={onPreviewImage}
                             onAddCodeArea={() => onAddCodeArea(idx)}
+                            onAddYoutubeArea={() => onAddYoutubeArea(idx)}
                             src={item}
                             idx={idx}
                             onClearClick={onClearAttachment}
@@ -136,6 +139,7 @@ const Editor: NextPage = () => {
                             onAddTextArea={() => onAddTextArea(idx)}
                             onPreviewImage={onPreviewImage}
                             onAddCodeArea={() => onAddCodeArea(idx)}
+                            onAddYoutubeArea={() => onAddYoutubeArea(idx)}
                             setContent={setContent}
                             idx={idx}
                             textValue={item.description}
@@ -151,6 +155,7 @@ const Editor: NextPage = () => {
                             onAddTextArea={() => onAddTextArea(idx)}
                             onPreviewImage={onPreviewImage}
                             onAddCodeArea={() => onAddCodeArea(idx)}
+                            onAddYoutubeArea={() => onAddYoutubeArea(idx)}
                             setContent={setContent}
                             idx={idx}
                             draftLang={item.language}
@@ -158,20 +163,26 @@ const Editor: NextPage = () => {
                             onChange={(e) => onChange(e, idx)}
                           ></PreviewCode>
                         )}
-                        {item.kind === 'youtube' && (
-                          <PreviewCode
-                            onClearClick={onClearAttachment}
-                            textValue={item.description}
-                            onAddTextArea={() => onAddTextArea(idx)}
-                            onPreviewImage={onPreviewImage}
-                            onAddCodeArea={() => onAddCodeArea(idx)}
-                            setContent={setContent}
-                            idx={idx}
-                            draftLang={item.language}
-                            draftFontSize={item.fontSize}
-                            onChange={(e) => onChange(e, idx)}
-                          ></PreviewCode>
-                        )}
+                        {item.kind === 'youtube' &&
+                          item.description.length > 0 && (
+                            <PreviewIframe
+                              videoSrc={item.description}
+                              onClearClick={onClearAttachment}
+                              onAddTextArea={() => onAddTextArea(idx)}
+                              onPreviewImage={onPreviewImage}
+                              onAddCodeArea={() => onAddCodeArea(idx)}
+                              onAddYoutubeArea={() => onAddYoutubeArea(idx)}
+                              idx={idx}
+                            />
+                          )}
+                        {item.kind === 'youtube' &&
+                          item.description.length === 0 && (
+                            <YoutubeUploadButton
+                              idx={idx}
+                              onClearAttachment={onClearAttachment}
+                              onEmbed={handleYoutubeEmbed}
+                            />
+                          )}
                       </div>
                     ))}
                 </div>
@@ -183,8 +194,9 @@ const Editor: NextPage = () => {
               onPreviewImage={onPreviewImage}
               register={register}
               onSetting={onSetting}
-              onAddTextArea={() => onAddTextArea(content.length - 1)}
-              onAddCodeArea={() => onAddCodeArea(content.length - 1)}
+              onAddYoutubeArea={() => onAddYoutubeArea()}
+              onAddTextArea={() => onAddTextArea()}
+              onAddCodeArea={() => onAddCodeArea()}
               onDraftClick={onDraftClick}
               onPreviewClick={onPreviewClick}
             />

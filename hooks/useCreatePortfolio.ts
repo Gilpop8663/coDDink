@@ -70,7 +70,7 @@ export interface thumbnailProps {
 }
 
 interface AddContentParams {
-  type: 'text' | 'code' | 'image';
+  type: 'text' | 'code' | 'image' | 'youtube';
   data?: any;
   idx?: number;
 }
@@ -104,7 +104,6 @@ export const useCreatePortfolio = () => {
   const [thumbnail, setThumbnail] = useState<thumbnailProps | null>(null);
   const [loadingImg, setLoadingImg] = useState('');
   const [finishProjectId, setFinishProjectId] = useState<null | number>(null);
-  const [embedCode, setEmbedCode] = useState('');
   const { data: detailData } = useSWR<DetailProjectResponse | null>(
     finishProjectId
       ? [`/api/projects/${finishProjectId}`, finishProjectId]
@@ -132,10 +131,6 @@ export const useCreatePortfolio = () => {
   const titleValue = watch('title');
   const descriptionValue = watch('description');
   const linkURLValue = watch('linkURL');
-
-  const handleYoutubeEmbed = (code: string) => {
-    setEmbedCode(code);
-  };
 
   const onValid = async (value: UploadProps) => {
     if (loading) return;
@@ -231,9 +226,15 @@ export const useCreatePortfolio = () => {
         fileData: data.file,
         id: uuidv4(),
       };
-    } else {
-      return;
+    } else if (type === 'youtube') {
+      newContent = {
+        kind: 'youtube',
+        description: ``,
+        id: uuidv4(),
+      };
     }
+
+    console.log(content, type, data, idx);
 
     setContent((prev) => {
       if (idx === undefined) return [...prev, newContent];
@@ -247,6 +248,22 @@ export const useCreatePortfolio = () => {
 
   const onAddCodeArea = (idx?: number) => {
     onAddContent({ type: 'code', idx });
+  };
+
+  const onAddYoutubeArea = (idx?: number) => {
+    onAddContent({ type: 'youtube', idx });
+  };
+
+  const handleYoutubeEmbed = (code: string, idx: number) => {
+    onAddContent({ type: 'youtube', idx });
+
+    const newContent = content.map((item, index) => {
+      if (idx !== index) return item;
+
+      return { ...item, description: code };
+    });
+
+    setContent(newContent);
   };
 
   const onPreviewImage = async (
@@ -270,7 +287,6 @@ export const useCreatePortfolio = () => {
 
   const onChange = async (e: ChangeEvent<HTMLTextAreaElement>, idx: number) => {
     if (!e.target) return;
-    // setCurrentValue(e.target.value);
 
     setContent((prev) => {
       const curValue = { ...prev[idx], description: e.target.value };
@@ -628,11 +644,11 @@ export const useCreatePortfolio = () => {
     onPublicClick,
     onVisibleClick,
     deleteContentTags,
+    onAddYoutubeArea,
     ownerArr,
     isPreview,
     titleValue,
     descriptionValue,
     handleYoutubeEmbed,
-    embedCode,
   };
 };

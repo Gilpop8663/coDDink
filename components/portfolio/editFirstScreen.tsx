@@ -2,14 +2,13 @@ import React, { ChangeEvent } from 'react';
 import { UseFormRegister } from 'react-hook-form';
 import { UploadProps } from '@hooks/useCreatePortfolio';
 import UploadButton from '@components/common/UploadButton';
-import YoutubeUploadButton from '@components/common/YoutubeUploadButton';
 
 interface EditFirstScreenProps {
   register: UseFormRegister<UploadProps>;
   onPreviewImage: (event: ChangeEvent<HTMLInputElement>) => void;
   onAddTextArea: () => void;
   onAddCodeArea: () => void;
-  handleYoutubeEmbed: (embedCode: string) => void;
+  onAddYoutubeArea: () => void;
 }
 
 export default function EditFirstScreen({
@@ -17,7 +16,7 @@ export default function EditFirstScreen({
   onPreviewImage,
   onAddTextArea,
   onAddCodeArea,
-  handleYoutubeEmbed,
+  onAddYoutubeArea,
 }: EditFirstScreenProps) {
   return (
     <>
@@ -53,7 +52,7 @@ export default function EditFirstScreen({
           name="youtubeUpload"
           type="none"
           register={register('posts')}
-          onClick={onAddTextArea}
+          onClick={onAddYoutubeArea}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -70,7 +69,6 @@ export default function EditFirstScreen({
             />
           </svg>
         </UploadButton>
-        <YoutubeUploadButton onEmbed={handleYoutubeEmbed} />
         <UploadButton
           color="skyBlue"
           text="텍스트"

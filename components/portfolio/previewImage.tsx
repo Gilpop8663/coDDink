@@ -15,6 +15,7 @@ interface PreviewImageProps {
   ) => void;
   onAddTextArea: () => void;
   onAddCodeArea: () => void;
+  onAddYoutubeArea: () => void;
 }
 
 export default function PreviewImage({
@@ -24,6 +25,7 @@ export default function PreviewImage({
   onPreviewImage,
   onAddTextArea,
   onAddCodeArea,
+  onAddYoutubeArea,
 }: PreviewImageProps) {
   const [isEditOver, setIsEditOver] = useState(false);
 
@@ -37,6 +39,7 @@ export default function PreviewImage({
         idx={idx}
         onPreviewImage={onPreviewImage}
         onAddCodeArea={onAddCodeArea}
+        onAddYoutubeArea={onAddYoutubeArea}
       />
 
       <div className="relative aspect-video w-full border-blue-600 hover:border">

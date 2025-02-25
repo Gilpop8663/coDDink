@@ -11,6 +11,7 @@ interface EditSidebarProps {
   onPreviewImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onAddTextArea: () => void;
   onAddCodeArea: () => void;
+  onAddYoutubeArea: () => void;
   onDraftClick: () => void;
   onPreviewClick: () => void;
   isDraft: boolean;
@@ -26,6 +27,7 @@ export default function EditSidebar({
   onDraftClick,
   onPreviewClick,
   isDraft,
+  onAddYoutubeArea,
 }: EditSidebarProps) {
   return (
     <div className="grid-cols-2 2xl:grid-cols-1">
@@ -34,7 +36,7 @@ export default function EditSidebar({
           <div className="flex h-8 items-center bg-gray-100 pl-2 text-xs font-semibold text-gray-500">
             콘텐츠 추가
           </div>
-          <div className="grid grid-cols-3 place-content-center gap-[1.5px]">
+          <div className="grid grid-cols-2 place-content-center gap-[1.5px]">
             <SubUploadButton
               label="이미지"
               kind="image"
@@ -84,6 +86,22 @@ export default function EditSidebar({
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+                />
+              </svg>
+            </SubUploadButton>
+            <SubUploadButton label="유튜브" onClick={onAddYoutubeArea}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="h-6 w-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z"
                 />
               </svg>
             </SubUploadButton>
