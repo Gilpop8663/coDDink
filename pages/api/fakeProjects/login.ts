@@ -1,7 +1,4 @@
-import { IncomingMessage } from 'http';
-import { ServerResponse } from 'http';
 import { NextApiRequest, NextApiResponse } from 'next';
-import Cors from 'micro-cors';
 
 const users = [
   {
@@ -30,11 +27,19 @@ const users = [
   },
 ];
 
-const cors = Cors({
-  origin: '*',
-  allowMethods: ['GET', 'POST'],
-  allowCredentials: true,
-});
+const cors = (req: NextApiRequest, res: NextApiResponse, next: () => void) => {
+  res.setHeader('Access-Control-Allow-Origin', '*'); // 요청을 허용할 도메인
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST'); // 허용할 HTTP 메서드
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type'); // 허용할 요청 헤더
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 자격 증명 허용
+
+  // OPTIONS 메서드에 대한 응답 처리 (브라우저의 preflight 요청)
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  next(); // 미들웨어가 끝나면 핸들러로 넘김
+};
 
 function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -60,8 +65,8 @@ function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-const corsHandler = (req: IncomingMessage, res: ServerResponse) => {
-  cors(() => handler(req as NextApiRequest, res as NextApiResponse));
+const corsHandler = (req: NextApiRequest, res: NextApiResponse) => {
+  cors(req, res, () => handler(req, res));
 };
 
 export default corsHandler;

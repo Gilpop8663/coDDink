@@ -21,7 +21,6 @@
     "bcrypt": "^5.0.1",
     "dotenv": "^16.0.2",
     "iron-session": "^6.2.1",
-    "micro-cors": "^0.1.1",
     "next": "12.3.1",
     "next-connect": "^0.13.0",
     "next-sitemap": "^3.1.22",
