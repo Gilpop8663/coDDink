@@ -71,7 +71,7 @@ export default function Header({
     if (data && data.ok) {
       router.reload();
     }
-  }, [data]);
+  }, [data, router]);
 
   return (
     <div
@@ -84,9 +84,6 @@ export default function Header({
     >
       <div className="item-center hidden  h-16 space-x-5 py-5 lg:flex">
         <Link href="/">
-          {/* <a className="relative top-[1px] flex h-[20px] w-[82.58px] cursor-pointer items-center text-lg font-bold">
-            <Image src={LOGO} layout="fill" alt="logo"></Image>
-          </a> */}
           <span className="relative bottom-[3px] cursor-pointer text-xl font-semibold transition-colors">
             coDDink
           </span>
@@ -101,37 +98,6 @@ export default function Header({
             {isLogin ? '당신을 위한' : '탐색'}
           </a>
         </Link>
-
-        {/* <Link href="/gallery">
-          <a
-            className={cls(
-              path === "/galleries" ? "border-b-2 border-gray-800" : "",
-              "h-full cursor-pointer pb-10 text-base font-semibold transition-all hover:border-b-2 hover:border-gray-800"
-            )}
-          >
-            탐색
-          </a>
-        </Link>
-        <Link href="/live">
-          <a
-            className={cls(
-              path === "/live" ? "border-b-2 border-gray-800" : "",
-              "h-full cursor-pointer pb-10 text-base font-semibold transition-all hover:border-b-2 hover:border-gray-800"
-            )}
-          >
-            라이브스트림
-          </a>
-        </Link>
-        <Link href="/joblist">
-          <a
-            className={cls(
-              path === "/joblist" ? "border-b-2 border-gray-800" : "",
-              "h-full cursor-pointer pb-10 text-base font-semibold transition-all hover:border-b-2 hover:border-gray-800"
-            )}
-          >
-            직업
-          </a>
-        </Link> */}
       </div>
       <div className="flex items-center lg:hidden">
         <svg
@@ -397,53 +363,6 @@ export default function Header({
                         </div>
                       </a>
                     </Link>
-                    {/* <Link href="/live/upload">
-                    <div className="flex w-auto cursor-pointer  items-center justify-between rounded-md border border-blue-200 bg-[#F5F8FF] p-2 text-blue-600 transition-all hover:bg-[#DEE8FF]">
-                      <span className="flex h-10 items-center justify-center ">
-                        <div className="border-r border-r-blue-200 px-2">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-                            />
-                          </svg>
-                        </div>
-
-                        <div className="ml-4 flex flex-col">
-                          <div className="text-sm font-semibold">
-                            라이브스트림
-                          </div>
-                          <div className="text-xs">
-                            데스크탑에서 라이브 방송
-                          </div>
-                        </div>
-                      </span>
-                      <div className="pr-2">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth={2}
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M14 5l7 7m0 0l-7 7m7-7H3"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </Link> */}
                   </div>
                 </div>
               )}

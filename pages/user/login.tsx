@@ -41,11 +41,8 @@ export interface SNSMutationResult {
 }
 
 export default function Login() {
-  const {
-    data: userData,
-    error: userError,
-    mutate: userMutate,
-  } = useSWR<ProfileResponse>('/api/users/me');
+  const { data: userData, mutate: userMutate } =
+    useSWR<ProfileResponse>('/api/users/me');
   const router = useRouter();
   const {
     register,
@@ -55,7 +52,7 @@ export default function Login() {
   } = useForm<ILoginProps>();
   const [mailCheck, { loading: mailLoading, data: mailData }] =
     useMutation<EmailResult>('/api/users/emailCheck');
-  const [login, { loading, data, error }] =
+  const [login, { loading, data }] =
     useMutation<MutationResult>('/api/users/login');
   const [snsLogin, { data: snsLoginData }] =
     useMutation<SNSMutationResult>('/api/auth/snsLogin');
@@ -72,9 +69,6 @@ export default function Login() {
     if (isCheckingEmail === false) return;
     if (loading) return;
     login(value);
-  };
-  const onCreateClick = () => {
-    router.push('/user/create');
   };
 
   const onGoogleLoginClick = useGoogleLogin({

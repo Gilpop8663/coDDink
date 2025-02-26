@@ -1,9 +1,6 @@
-// pages/sitemap.xml.tsx
 import { GetServerSidePropsContext } from 'next';
 import { getServerSideSitemap } from 'next-sitemap'; //(1)
 import client from '@libs/server/client';
-
-//(2)
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const projects: any = await client?.coddinkProject.findMany({
@@ -19,8 +16,6 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   });
 
   const lastmod = new Date().toISOString();
-
-  //(3), (4)
 
   const URL = process.env.NEXT_PUBLIC_SITE_URL as string;
 
