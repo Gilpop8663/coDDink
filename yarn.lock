@@ -3799,6 +3799,20 @@
   resolved "https://registry.npmjs.org/@types/mdx/-/mdx-2.0.5.tgz"
   integrity sha512-76CqzuD6Q7LC+AtbPqrvD9AqsN0k8bsYo2bM2J8pmNldP1aIPAbzUQ7QbobyXL4eLr1wK5x8FZFe8eF/ubRuBg==
 
+"@types/micro-cors@^0.1.5":
+  version "0.1.5"
+  resolved "https://registry.npmjs.org/@types/micro-cors/-/micro-cors-0.1.5.tgz"
+  integrity sha512-BTHpXEz+yC/7/Jv2BfDFbGtgnwdKUDVX2PY+Cd2k4Jx9+uUfVooAxhlGEy6p0Uvm0+yM5FgSyc1n2tdVHyCDbw==
+  dependencies:
+    "@types/micro" "^7.3.7"
+
+"@types/micro@^7.3.7":
+  version "7.3.7"
+  resolved "https://registry.npmjs.org/@types/micro/-/micro-7.3.7.tgz"
+  integrity sha512-MFsX7eCj0Tg3TtphOQvANNvNtFpya+s/rYOCdV6o+DFjOQPFi2EVRbBALjbbgZTXUaJP1Q281MJiJOD40d0UxQ==
+  dependencies:
+    "@types/node" "*"
+
 "@types/mime-types@^2.1.0":
   version "2.1.1"
   resolved "https://registry.npmjs.org/@types/mime-types/-/mime-types-2.1.1.tgz"
@@ -8282,6 +8296,11 @@ methods@~1.1.2:
   version "1.1.2"
   resolved "https://registry.npmjs.org/methods/-/methods-1.1.2.tgz"
   integrity sha512-iclAHeNqNm68zFtnZ0e+1L2yUIdvzNoauKU4WBA3VvH/vPFieF7qfRlwUZU+DA9P9bPXIS90ulxoUoCH23sV2w==
+
+micro-cors@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.npmjs.org/micro-cors/-/micro-cors-0.1.1.tgz"
+  integrity sha512-6WqIahA5sbQR1Gjexp1VuWGFDKbZZleJb/gy1khNGk18a6iN1FdTcr3Q8twaxkV5H94RjxIBjirYbWCehpMBFw==
 
 micromatch@^4.0.2, micromatch@^4.0.4, micromatch@^4.0.5:
   version "4.0.5"

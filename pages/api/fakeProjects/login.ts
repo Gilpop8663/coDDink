@@ -1,4 +1,7 @@
+import { IncomingMessage } from 'http';
+import { ServerResponse } from 'http';
 import { NextApiRequest, NextApiResponse } from 'next';
+import Cors from 'micro-cors';
 
 const users = [
   {
@@ -27,7 +30,13 @@ const users = [
   },
 ];
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+const cors = Cors({
+  origin: '*',
+  allowMethods: ['GET', 'POST'],
+  allowCredentials: true,
+});
+
+function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
@@ -50,3 +59,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       .json({ message: '로그인 실패: ID 또는 비밀번호가 틀렸습니다.' });
   }
 }
+
+const corsHandler = (req: IncomingMessage, res: ServerResponse) => {
+  cors(() => handler(req as NextApiRequest, res as NextApiResponse));
+};
+
+export default corsHandler;
