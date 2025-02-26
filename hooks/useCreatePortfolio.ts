@@ -234,8 +234,6 @@ export const useCreatePortfolio = () => {
       };
     }
 
-    console.log(content, type, data, idx);
-
     setContent((prev) => {
       if (idx === undefined) return [...prev, newContent];
       return [...prev.slice(0, idx), newContent, ...prev.slice(idx)];

@@ -183,11 +183,20 @@ export default function ClickedProject({
                   {item.kind === 'text' && (
                     <div
                       className={cls(
-                        `${item?.fontSize} ${item?.alignText}`,
+                        `${contentFontSize} ${item?.alignText}`,
                         'relative   whitespace-pre-wrap '
                       )}
                     >
                       {item.content}
+                    </div>
+                  )}
+                  {item.kind === 'youtube' && (
+                    <div className="aspect-video w-full">
+                      <iframe
+                        className="h-full w-full"
+                        src={item.description}
+                        allowFullScreen
+                      ></iframe>
                     </div>
                   )}
                   {item.kind === 'code' && (

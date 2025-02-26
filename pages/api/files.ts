@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
-import withHandler from '@libs/server/withHandler';
-import { withApiSession } from '@libs/server/withSession';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 const s3Client = new S3Client({
   region: process.env.AWS_REGION,
@@ -12,35 +11,29 @@ const s3Client = new S3Client({
 });
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === 'POST') {
-    try {
-      const { file, name, type } = req.body; // 클라이언트에서 전송한 파일
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method Not Allowed' });
+  }
 
-      const buffer = Buffer.from(file, 'base64'); // base64 문자열을 버퍼로 변환합니다.
+  try {
+    const { name, type } = req.body;
 
-      const fileName = `${Date.now()}_${name}`;
-      const Key = `images/${fileName}`;
-      const uploadParams = {
-        Bucket: process.env.AWS_BUCKET_NAME,
-        Key, // 파일명을 고유하게 지정합니다.
-        Body: buffer,
-        ContentType: type,
-      };
+    const fileName = `${Date.now()}_${name}`;
+    const Key = `images/${fileName}`;
 
-      const command = new PutObjectCommand(uploadParams);
-      await s3Client.send(command);
+    const command = new PutObjectCommand({
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key,
+      ContentType: type,
+    });
 
-      res
-        .status(200)
-        .json({ message: 'File uploaded successfully', id: fileName });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Error uploading file' });
-    }
-  } else {
-    res.status(405).json({ error: 'Method Not Allowed' });
+    const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 60 }); // 60초 동안 유효한 URL
+
+    res.status(200).json({ url: signedUrl, fileName });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error generating signed URL' });
   }
 }
-export default withApiSession(
-  withHandler({ methods: ['GET', 'POST'], handler })
-);
+
+export default handler;

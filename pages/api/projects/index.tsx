@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { CoddinkProject } from '@prisma/client';
-import { ContentProps, UserDataProps } from 'pages/portfolio/editor';
 import client from '@libs/server/client';
 import withHandler from '@libs/server/withHandler';
 import { withApiSession } from '@libs/server/withSession';
+import { ContentProps, UserDataProps } from '@hooks/useCreatePortfolio';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {

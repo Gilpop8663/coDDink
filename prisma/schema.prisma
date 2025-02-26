@@ -167,7 +167,7 @@ model CoddinkProjectContent{
   projectId Int
   kind contentKind
   contentIdx Int
-  description String @db.MediumText() @default("")
+  description String @db.MediumText()
   content String? @db.LongText
   imageSrc String?
   fontSize String?
@@ -237,6 +237,7 @@ enum contentKind{
   text
   image
   code
+  youtube
 }
 
 enum Kind{

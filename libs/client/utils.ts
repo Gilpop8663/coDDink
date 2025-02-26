@@ -1,4 +1,4 @@
-import { CFImageResult } from 'pages/portfolio/editor';
+import { CFImageResult } from '@hooks/useCreatePortfolio';
 
 export function cls(...classnames: string[]) {
   return classnames.join(' ');
@@ -92,46 +92,31 @@ export const cfImageUpload = async (file: File) => {
 
   return id;
 };
-
 export const uploadFile = async (file: File): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-
-    reader.readAsDataURL(file);
-    reader.onloadend = async () => {
-      if (reader.result) {
-        try {
-          const base64data = (reader.result as string).split(',')[1];
-
-          const res = await fetch('/api/files', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              file: base64data,
-              name: file.name,
-              type: file.type,
-            }),
-          });
-
-          const data = await res.json();
-
-          if (res.ok) {
-            resolve(data.id); // 성공 시 파일 ID 반환
-          } else {
-            reject(
-              new Error(`Upload failed: ${data.error || 'Unknown error'}`)
-            );
-          }
-        } catch (error) {
-          reject(error);
-        }
-      } else {
-        reject(new Error('FileReader result is null'));
-      }
-    };
-
-    reader.onerror = () => reject(new Error('File reading failed'));
+  // 1. 서버에서 Presigned URL 요청
+  const res = await fetch('/api/files', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: file.name,
+      type: file.type,
+    }),
   });
+
+  const { url, fileName } = await res.json();
+
+  // 2. Presigned URL을 사용하여 파일을 S3에 직접 업로드
+  const uploadRes = await fetch(url, {
+    method: 'PUT',
+    headers: { 'Content-Type': file.type },
+    body: file,
+  });
+
+  if (!uploadRes.ok) {
+    throw new Error('Upload failed');
+  }
+
+  return fileName; // 성공 시 업로드된 파일명 반환
 };
 
 export function parseJwt(token: string) {
