@@ -6,6 +6,7 @@ import Script from 'next/script';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { SWRConfig } from 'swr';
 import * as ga from '@libs/client/useGoogleAnalytic';
+import PortalToastContainer from '@components/PortalToastContainer';
 
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string;
 
@@ -26,10 +27,13 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <SWRConfig
       value={{
-        fetcher: (url: string) => fetch(url).then(response => response.json()),
-      }}>
+        fetcher: (url: string) =>
+          fetch(url).then((response) => response.json()),
+      }}
+    >
       <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
         <Component {...pageProps} />
+        <PortalToastContainer />
       </GoogleOAuthProvider>
     </SWRConfig>
   );

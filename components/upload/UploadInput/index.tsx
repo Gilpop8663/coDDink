@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
 import Image from 'next/image';
-import { UserDataProps } from 'pages/portfolio/editor';
 import { makeImageURL } from '@libs/client/utils';
+import { UserDataProps } from '@hooks/useCreatePortfolio';
 import UploadTagValue from '@components/portfolio/uploadTagValue';
 
 interface UploadProps {

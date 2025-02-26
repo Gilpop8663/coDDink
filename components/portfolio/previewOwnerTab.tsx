@@ -1,8 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { OwnerProps } from 'pages';
-import { UserDataProps } from 'pages/portfolio/editor';
 import { makeImageURL } from '@libs/client/utils';
 
 interface OwnerTabProps {

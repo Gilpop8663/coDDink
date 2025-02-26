@@ -1,0 +1,15 @@
+# *
+User-agent: *
+Disallow: /404
+
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: portfolio.coddink.com
+
+# Sitemaps
+Sitemap: portfolio.coddink.com/sitemap.xml
+Sitemap: portfolio.coddink.comsitemap.xml
+Sitemap: portfolio.coddink.comserver-sitemap.xml

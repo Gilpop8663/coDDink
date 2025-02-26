@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import {
@@ -183,12 +183,14 @@ const Home: NextPage = () => {
     mutate: projectsMutate,
   } = useSWRInfinite<ProjectsResponse>(getKey, fetcher);
 
-  const projectsData = projectsInfiniteData
-    ? {
-        ok: true,
-        projects: projectsInfiniteData.map((item) => item.projects).flat(),
-      }
-    : defaultProjectsData;
+  const projectsData = useMemo(() => {
+    return projectsInfiniteData
+      ? {
+          ok: true,
+          projects: projectsInfiniteData.map((item) => item.projects).flat(),
+        }
+      : defaultProjectsData;
+  }, [defaultProjectsData, projectsInfiniteData]);
 
   const [toggleLike, { loading: likeLoading }] = useMutation(
     `/api/projects/${clickedId}/like`
@@ -298,21 +300,21 @@ const Home: NextPage = () => {
     setIsDelete(null);
   };
 
-  function handleScroll() {
+  const handleScroll = useCallback(() => {
     if (
       document.documentElement.scrollTop + window.innerHeight ===
       document.documentElement.scrollHeight
     ) {
       setSize((p) => p + 1);
     }
-  }
+  }, [setSize]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [handleScroll]);
 
   useEffect(() => {
     if (commentData && commentData.ok) {

@@ -1,6 +1,5 @@
 import React from 'react';
 import Image from 'next/image';
-import { UserDataProps } from 'pages/portfolio/editor';
 import { cls, makeImageURL } from '@libs/client/utils';
 
 interface ItemProps {

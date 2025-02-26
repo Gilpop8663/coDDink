@@ -1,10 +1,7 @@
 import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { CoddinkFollow } from '@prisma/client';
-import { ContentProps, UserDataProps } from 'pages/portfolio/editor';
 import { cls, makeImageURL } from '@libs/client/utils';
+import { ContentProps } from '@hooks/useCreatePortfolio';
 import ClickedCodeView from '@components/project/clickedComponents/clickedCodeView';
-import ClickedFooter from '@components/project/clickedComponents/clickedFooter';
 import ClickedInfo from '@components/project/clickedComponents/clickedInfo';
 import PreviewCommentInput from './previewCommentInput';
 import PreviewFooter from './previewFooter';

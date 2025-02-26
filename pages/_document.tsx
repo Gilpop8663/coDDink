@@ -32,6 +32,7 @@ class CustomDocument extends Document {
         <body>
           <Main></Main>
           <NextScript></NextScript>
+          <div id="toast-root"></div>
         </body>
       </Html>
     );

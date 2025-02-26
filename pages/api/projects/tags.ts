@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { ContentProps } from 'pages/portfolio/editor';
 import client from '@libs/server/client';
 import withHandler from '@libs/server/withHandler';
 import { withApiSession } from '@libs/server/withSession';

@@ -944,7 +944,7 @@ const Profile: NextPage = () => {
               )}
               {userData?.userInfo.Youtube && (
                 <Link
-                  href={`https://www.youtube.com/${userData?.userInfo.Youtube}`}
+                  href={`https://www.youtube.com/@${userData?.userInfo.Youtube}`}
                 >
                   <a
                     title="youtube"

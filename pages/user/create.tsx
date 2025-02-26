@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
 import { useGoogleLogin } from '@react-oauth/google';
+import { showToast } from '@libs/client/toast';
 import useMutation from '@libs/client/useMutation';
 import { cls } from '@libs/client/utils';
 import FacebookBtn from '@components/auth/facebookBtn';
@@ -67,36 +68,17 @@ export default function Create() {
   useEffect(() => {
     if (data?.ok) {
       router.push('/user/login');
+      showToast('회원가입에 성공했습니다! 🎉', 'success');
     }
   }, [data, router]);
 
   useEffect(() => {
-    if (snsLoginData && snsLoginData.ok && snsLoginData.kind === 'create') {
-      router.push('/user/login');
-    } else if (
-      snsLoginData &&
-      snsLoginData.ok &&
-      snsLoginData.kind === 'login'
-    ) {
-      router.push('/');
+    const loginData = snsLoginData || googleLoginData;
+    if (loginData?.ok) {
+      router.push(loginData.kind === 'create' ? '/user/login' : '/');
+      showToast('회원가입에 성공했습니다! 🎉', 'success');
     }
-  }, [snsLoginData, router]);
-
-  useEffect(() => {
-    if (
-      googleLoginData &&
-      googleLoginData.ok &&
-      googleLoginData.kind === 'create'
-    ) {
-      router.push('/user/login');
-    } else if (
-      googleLoginData &&
-      googleLoginData.ok &&
-      googleLoginData.kind === 'login'
-    ) {
-      router.push('/');
-    }
-  }, [googleLoginData, router]);
+  }, [snsLoginData, googleLoginData, router]);
 
   return (
     <div className="">

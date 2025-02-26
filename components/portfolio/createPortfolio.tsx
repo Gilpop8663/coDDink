@@ -5,12 +5,12 @@ import {
   UseFormRegister,
 } from 'react-hook-form';
 import Image from 'next/image';
+import { cls, makeImageURL } from '@libs/client/utils';
 import {
   thumbnailProps,
   UploadProps,
   UserDataProps,
-} from 'pages/portfolio/editor';
-import { cls, makeImageURL } from '@libs/client/utils';
+} from '@hooks/useCreatePortfolio';
 import Button from '@components/common/Button';
 import ErrorMessage from '@components/common/ErrorMessage';
 import LoadingSpinner from '@components/common/LoadingSpinner';

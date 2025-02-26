@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useGoogleLogin } from '@react-oauth/google';
 import useSWR from 'swr';
+import { showToast } from '@libs/client/toast';
 import useMutation from '@libs/client/useMutation';
 import { ProfileResponse } from '@libs/client/useUser';
 import { makeImageURL } from '@libs/client/utils';
@@ -91,6 +92,7 @@ export default function Login() {
 
   useEffect(() => {
     if (data?.ok) {
+      showToast('로그인에 성공했습니다! 🎉', 'success');
       router.push('/');
     } else {
       setIsWrong(true);
@@ -108,6 +110,8 @@ export default function Login() {
 
   useEffect(() => {
     if (userData && userData.ok) {
+      showToast('로그인에 성공했습니다! 🎉', 'success');
+
       router.push('/');
     }
   }, [userData, router]);
@@ -115,6 +119,7 @@ export default function Login() {
   useEffect(() => {
     if (snsLoginData && snsLoginData.kind === 'create') {
       router.push('/user/login');
+      showToast('회원가입에 성공했습니다! 🎉', 'success');
     } else if (snsLoginData && snsLoginData.kind === 'login') {
       userMutate();
     }
@@ -123,6 +128,7 @@ export default function Login() {
   useEffect(() => {
     if (googleLoginData && googleLoginData.kind === 'create') {
       router.push('/user/login');
+      showToast('회원가입에 성공했습니다! 🎉', 'success');
     } else if (googleLoginData && googleLoginData.kind === 'login') {
       userMutate();
     }
