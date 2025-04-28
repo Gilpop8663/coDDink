@@ -25,6 +25,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       Bucket: process.env.AWS_BUCKET_NAME,
       Key,
       ContentType: type,
+      CacheControl: 'public, max-age=31536000',
     });
 
     const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 60 }); // 60초 동안 유효한 URL
